@@ -1,0 +1,39 @@
+{
+  "_comment": "if you change this file, do: yarn i18 NB:You must keep all files in sync(the same)",
+  "header": {
+    "_comment": "Main title Internationalization Strings",
+    "title": "Quibi",
+    "dashboard": "Dashboard"
+  },
+  "common": {
+    "yes": "Yes",
+    "cancel": "Cancel"
+  },
+  "footer": {
+    "_comment": "Main Footer UI Internationalization Strings",
+    "link_1": "Developer",
+    "link_2": "Help"
+  },
+  "pages": {
+    "_comment": "Pages UI Internationalization Strings",
+    "login": {},
+    "home": {
+      "feedTitle": ""
+    },
+    "chat": {
+      "title": ""
+    },
+    "settings": {}
+  },
+  "modules": {
+    "chat": {
+      "sendMessage": "Send Message"
+    }
+  },
+  "components": {
+    "search": {
+      "placeholder": "Search for topics, users and more",
+      "placeholderShort": "Search"
+    }
+  }
+}

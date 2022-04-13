@@ -1,0 +1,138 @@
+@import url("https://cdnjs.cloudflare.com/ajax/libs/inter-ui/3.18.0/inter.css");
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+h1,
+h2,
+h3,
+h4,
+p {
+  line-height: 1.6;
+}
+
+h1,
+h2,
+h3,
+h4,
+p.bold {
+  font-weight: 700;
+}
+
+h1 {
+  font-size: 4rem;
+}
+
+h2 {
+  font-size: 2.8rem;
+}
+
+h3 {
+  font-size: 2rem;
+}
+
+h4 {
+  font-size: 1.4rem;
+}
+
+p {
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+p.small {
+  font-size: 0.85rem;
+}
+
+:root {
+  --color-bg-white: #fff;
+  --color-bg-black: #000;
+  --color-primary-50: #f0fdf4;
+  --color-primary-100: #dcfce7;
+  --color-primary-200: #bbf7d0;
+  --color-primary-300: #86efac;
+  --color-primary-400: #4ade80;
+  --color-primary-500: #22c55e;
+  --color-primary-600: #16a34a;
+}
+
+/* for firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-bg-black) rgba(0, 0, 0, 0);
+}
+
+/* for non-firefox */
+::-webkit-scrollbar {
+  overflow: overlay;
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  display: initial;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: var(--color-bg-black);
+  border-radius: 5px;
+}
+
+html,
+body,
+#__next {
+  background-color: var(--color-bg-white);
+  height: 100%;
+  width: 100%;
+  display: flex;
+}
+
+html {
+  position: fixed;
+}
+
+#__next {
+  overflow-y: auto;
+}
+
+::-webkit-resizer {
+  background: var(--color-primary-300);
+}
+
+.landingPage__loginCard {
+  width: clamp(15rem, 22rem, 25rem);
+  border-radius: 5px;
+}
+
+@media only screen and (max-width: 420px) {
+  .landingPage__loginCard {
+    width: 100%;
+  }
+}
+
+#nprogress {
+  position: relative;
+  z-index: 9999999;
+}
+
+#nprogress .bar {
+  background: var(--color-primary-300) !important;
+  height: 5px !important;
+}
+
+img.emoji {
+  height: 1em;
+  width: 1em;
+  margin: 0 0.05em 0 0.1em;
+  vertical-align: -0.1em;
+  display: inline;
+}
+
+#nprogress .peg {
+  box-shadow: 0 0 10px var(--color-primary-300),
+    0 0 5px var(--color-primary-300) !important;
+}
+
+#nprogress .spinner-icon {
+  border-top-color: var(--color-primary-300) !important;
+  border-left-color: var(--color-primary-300) !important;
+}

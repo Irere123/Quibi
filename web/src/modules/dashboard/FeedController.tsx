@@ -1,0 +1,47 @@
+import React from "react";
+import { useScreenType } from "../../hooks/useScreenType";
+
+import { FeedCard } from "../../ui/FeedCard";
+import { FeedHeader } from "../../ui/FeedHeader";
+import { MiddlePanel } from "../layouts/GridPanels";
+
+const Page: React.FC = () => {
+  return (
+    <>
+      <FeedCard
+        subtitle="Alice messages your in the wags group"
+        title="Alice message you"
+        date="2 hours ago"
+      />
+      <FeedCard
+        title="Maths assignment"
+        subtitle="The maths teacher left questions about linear algebra"
+        date="1 day ago"
+      />
+      <FeedCard
+        title="The S2 Marks are out"
+        subtitle="Marks of the second term are out you can now view them..."
+        date="2 days ago"
+      />
+    </>
+  );
+};
+
+export const FeedController: React.FC = () => {
+  const screenType = useScreenType();
+
+  let mb = "mb-7";
+  if (screenType === "fullscreen") {
+    mb = "mb-8";
+  }
+
+  return (
+    <MiddlePanel stickyChildren={<FeedHeader title="Your Feed" />}>
+      <div className={`flex flex-1 flex-col ${mb}`}>
+        <div className="flex flex-col space-y-4">
+          <Page />
+        </div>
+      </div>
+    </MiddlePanel>
+  );
+};
