@@ -43,14 +43,11 @@ export const LoginPage: React.FC = () => {
             <span className="text-3xl font-bold">Welcome</span>
             <div className="flex-wrap">
               By logging in you accept our&nbsp;
-              <a
-                href="/privacy-policy.html"
-                className="text-accent hover:underline"
-              >
+              <a href="/privacy-policy.html" className=" hover:underline">
                 Privacy Policy
               </a>
               &nbsp;and&nbsp;
-              <a href="/terms.html" className="text-accent hover:underline">
+              <a href="/terms.html" className="hover:underline">
                 Terms of Service
               </a>
               .
