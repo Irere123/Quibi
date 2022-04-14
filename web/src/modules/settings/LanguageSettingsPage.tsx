@@ -1,5 +1,6 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
+import { useTypeSafeTranslation } from "../../hooks/useTypeSafeTranslation";
 import { NativeCheckbox } from "../../ui/NativeCheckbox";
 import { SettingsWrapper } from "../../ui/SettingsWrapper";
 import { HeaderController } from "../components/HeaderController";
@@ -8,6 +9,8 @@ import { SettingsLayout } from "../layouts/SettingsLayout";
 interface Props {}
 
 export const LanguageSettingsPage: React.FC<Props> = () => {
+  const { t } = useTypeSafeTranslation();
+
   const languages = [
     { value: "en", label: "English", example: "Hello world" }, // English
     { value: "fr", label: "Français", example: "Cette platforme est cool" }, // French
@@ -22,9 +25,9 @@ export const LanguageSettingsPage: React.FC<Props> = () => {
 
   return (
     <SettingsLayout>
-      <HeaderController title="Languages" embed={{}} />
+      <HeaderController title={t("pages.settings.language.title")} embed={{}} />
       <SettingsWrapper>
-        <p>Languages</p>
+        <p>{t("pages.settings.language.label")}</p>
         <div className="space-y-3 mt-3">
           {languages.map((e, i) => (
             <NativeCheckbox

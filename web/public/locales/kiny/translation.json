@@ -30,7 +30,16 @@
       "add_members": "Add Members",
       "messages": "Ubutumwa {{messageNum}}"
     },
-    "settings": {}
+    "settings": {
+      "account": { "title": "Igenamiterere rya Konte", "label": "Konte" },
+      "language": { "title": "Igenamiterere ry'Urimi", "label": "Ururimi" },
+      "appearance": { "title": "Igenamiterere ry'Isura", "label": "Isura" },
+      "notifications": {
+        "title": "Igenamiterere ry'Imenyesha",
+        "label": "Imenyesha"
+      },
+      "keybinds": { "title": "Shortcuts Settings", "label": "Shortcuts" }
+    }
   },
   "footer": {
     "_comment": "Main Footer UI Internationalization Strings",

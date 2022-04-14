@@ -1,4 +1,5 @@
 import React from "react";
+import { useTypeSafeTranslation } from "../../hooks/useTypeSafeTranslation";
 import { NativeCheckbox } from "../../ui/NativeCheckbox";
 import { SettingsWrapper } from "../../ui/SettingsWrapper";
 import { HeaderController } from "../components/HeaderController";
@@ -7,9 +8,11 @@ import { SettingsLayout } from "../layouts/SettingsLayout";
 interface Props {}
 
 export const AppearanceSettingsPage: React.FC<Props> = () => {
+  const { t } = useTypeSafeTranslation();
+
   return (
     <SettingsLayout>
-      <HeaderController title="Appearance Settings" />
+      <HeaderController title={t("pages.settings.appearance.title")} />
       <SettingsWrapper>
         <p>Themes</p>
         <div className="space-y-3 mt-4">

@@ -30,7 +30,19 @@
       "add_members": "Ajouter des membres",
       "messages": "{{messageNum}} Messages"
     },
-    "settings": {}
+    "settings": {
+      "account": { "title": "Paramètres du compte", "label": "Compte" },
+      "language": { "title": "Paramètres du langues", "label": "Langues" },
+      "appearance": { "title": "Paramètres d'apparence", "label": "Apparence" },
+      "notifications": {
+        "title": "Paramètres du notifications",
+        "label": "Notifications"
+      },
+      "keybinds": {
+        "title": "Paramètres du raccourcis clavier",
+        "label": "Clavier"
+      }
+    }
   },
   "footer": {
     "_comment": "Main Footer UI Internationalization Strings",

@@ -91,6 +91,7 @@ export const RightPanel: React.FC = () => {
 
 export const SettingsLeftPanel: React.FC = () => {
   const { pathname } = useRouter();
+  const { t } = useTypeSafeTranslation();
   const activeCSS = (link: string) => {
     if (pathname === link) {
       return "bg-primary-300 px-3 rounded py-1 ";
@@ -104,12 +105,12 @@ export const SettingsLeftPanel: React.FC = () => {
         <p className="font-bold">USER SETTINGS</p>
         <Link href={"/settings"} passHref>
           <p className={`mt-4 cursor-pointer ${activeCSS("/settings")}`}>
-            Account
+            {t("pages.settings.account.label")}
           </p>
         </Link>
         <Link href={"/settings/languages"} passHref>
           <p className={`cursor-pointer ${activeCSS("/settings/languages")}`}>
-            Languages
+            {t("pages.settings.language.label")}
           </p>
         </Link>
       </div>
@@ -117,19 +118,19 @@ export const SettingsLeftPanel: React.FC = () => {
         <p className="font-bold mr-2">APP SETTINGS </p>
         <Link href={"/settings/appearance"} passHref>
           <p className={`cursor-pointer ${activeCSS("/settings/appearance")}`}>
-            Appearance
+            {t("pages.settings.appearance.label")}
           </p>
         </Link>
         <Link href={"/settings/notifications"} passHref>
           <p
             className={`cursor-pointer ${activeCSS("/settings/notifications")}`}
           >
-            Notifications
+            {t("pages.settings.notifications.label")}
           </p>
         </Link>
         <Link href={"/settings/keybinds"} passHref>
           <p className={`cursor-pointer ${activeCSS("/settings/keybinds")}`}>
-            Keybinds
+            {t("pages.settings.keybinds.label")}
           </p>
         </Link>
       </div>
