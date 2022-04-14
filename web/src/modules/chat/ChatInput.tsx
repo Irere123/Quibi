@@ -5,8 +5,8 @@ import { EmojiPicker } from "../../ui/EmojiPicker";
 import { Input } from "../../ui/Input";
 import { customEmojis } from "./EmoteData";
 import { navigateThroughQueriedEmojis } from "./navigateThroughQueriedEmojis";
-import { useChatStore } from "./store/useChatStore";
-import { useEmojiPickerStore } from "./store/useEmojiPickerStore";
+import { useChatStore } from "../../store/useChatStore";
+import { useEmojiPickerStore } from "../../store/useEmojiPickerStore";
 
 export const ChatInput: React.FC = () => {
   const { message, setMessage } = useChatStore();

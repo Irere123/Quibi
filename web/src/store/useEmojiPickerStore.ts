@@ -1,4 +1,4 @@
-import { CustomEmote } from "../EmoteData";
+import { CustomEmote } from "../modules/chat/EmoteData";
 import create from "zustand";
 import { combine } from "zustand/middleware";
 

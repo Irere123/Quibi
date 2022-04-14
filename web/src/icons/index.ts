@@ -21,3 +21,4 @@ export { default as Discord } from "./Discord";
 export { default as OutlineGlobe } from "./OutlineGlobe";
 export { default as LogOutIcon } from "./LogOutIcon";
 export { default as CompassIcon } from "./CompassIcon";
+export { default as KeyboardIcon } from "./KeyboardIcon";

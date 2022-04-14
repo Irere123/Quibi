@@ -3,9 +3,10 @@ import create from "zustand";
 import { combine } from "zustand/middleware";
 
 const keyMap: KeyMap = {
-  HOME: "Control+Shift+h",
+  HOME: "Control+/",
   ACCOUNT: "Control+Shift+6",
-  CHAT: "Control+Alt+h",
+  CHAT: "Shift+Alt+c",
+  SETTINGS: "Shift+Alt+s",
 };
 
 export const useKeyMapStore = create(
@@ -21,12 +22,17 @@ export const useKeyMapStore = create(
       },
       setAccountKeybind: (id: string) => {
         set((x) => ({
-          keyMap: { ...x.keyMap, Account: id },
+          keyMap: { ...x.keyMap, ACCOUNT: id },
         }));
       },
       setChatKeybind: (id: string) => {
         set((x) => ({
-          keyMap: { ...x.keyMap, Account: id },
+          keyMap: { ...x.keyMap, CHAT: id },
+        }));
+      },
+      setSettingsKeybind: (id: string) => {
+        set((x) => ({
+          keyMap: { ...x.keyMap, SETTINGS: id },
         }));
       },
     })

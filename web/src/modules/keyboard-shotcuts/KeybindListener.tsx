@@ -21,6 +21,9 @@ function ListenerBrowser() {
           CHAT: () => {
             push("/chat");
           },
+          SETTINGS: () => {
+            push("/settings");
+          },
         };
       }, [push])}
     />

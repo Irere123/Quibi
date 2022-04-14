@@ -13,7 +13,7 @@ export const LanguageSettingsPage: React.FC<Props> = () => {
 
   const languages = [
     { value: "en", label: "English", example: "Hello world" }, // English
-    { value: "fr", label: "Français", example: "Cette platforme est cool" }, // French
+    { value: "fr", label: "Français", example: "Cet platforme est cool" }, // French
     {
       value: "kiny",
       label: "Ikinyarwanda",

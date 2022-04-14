@@ -15,6 +15,7 @@ const colorClassnames = {
   outline: "border-2 border-black font-bold",
   primary:
     "text-button bg-primary-300 transition duration-200 ease-in-out  disabled:text-green-200 disabled:bg-primary-200",
+  transparent: "text-button bg-transparent transition duration-200 ease-in-out",
 };
 
 export type ButtonProps = DetailedHTMLProps<
