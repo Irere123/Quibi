@@ -8,7 +8,12 @@
   },
   "pages": {
     "_comment": "Pages UI Internationalization Strings",
-    "login": {},
+    "login": {
+      "welcome": "Murakaza neza",
+      "you_accept": "Niwinjira urabawemeye ama {{privacy}} na {{terms}}",
+      "terms_of_service": "amatekegeko ya serivisi",
+      "privacy_policy": "amabwiriza"
+    },
     "home": {
       "feedTitle": ""
     },

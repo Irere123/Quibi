@@ -10,7 +10,6 @@ interface Props {}
 export const LanguageSettingsPage: React.FC<Props> = () => {
   const languages = [
     { value: "en", label: "English", example: "Hello world" }, // English
-    { value: "en-US", label: "English (US)", example: "Hello world" }, // English
     { value: "fr", label: "Français", example: "Comment ca va bien" }, // French
     {
       value: "kiny",

@@ -8,7 +8,12 @@
   },
   "pages": {
     "_comment": "Pages UI Internationalization Strings",
-    "login": {},
+    "login": {
+      "welcome": "Bienvenue",
+      "you_accept": "En vous connectant, tu acceptez nos {{privacy}} avec {{terms}}",
+      "terms_of_service": "Conditions d'utilisation",
+      "privacy_policy": "Politique de confidentialité"
+    },
     "home": {
       "feedTitle": ""
     },
@@ -19,8 +24,8 @@
   },
   "footer": {
     "_comment": "Main Footer UI Internationalization Strings",
-    "link_1": "Developer",
-    "link_2": "Help"
+    "link_1": "Développeur",
+    "link_2": "Aider"
   },
   "modules": { "chat": { "sendMessage": "Send Message" } },
   "components": {

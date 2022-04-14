@@ -16,9 +16,14 @@
   },
   "pages": {
     "_comment": "Pages UI Internationalization Strings",
-    "login": {},
+    "login": {
+      "welcome": "Welcome",
+      "you_accept": "By logging in you accept our {{privacy}} and {{terms}}",
+      "terms_of_service": "Terms of Service",
+      "privacy_policy": "Privacy Policy"
+    },
     "home": {
-      "feedTitle": ""
+      "your_feed": "Your Feed"
     },
     "chat": {
       "title": ""
