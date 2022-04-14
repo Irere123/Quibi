@@ -4,6 +4,11 @@ import avatar2 from "../../img/avatar2.jpg";
 import avatar3 from "../../img/avatar3.jpg";
 import { useTypeSafeTranslation } from "../../hooks/useTypeSafeTranslation";
 import { PreviewElement } from "../../ui/PreviewElement";
+import { BoxedIcon } from "../../ui/BoxedIcon";
+import { PlusIcon } from "../../icons";
+import { useModalStore } from "../../stores/useModalStore";
+import { AddGroupModal } from "./group/AddGroupModal";
+import { AddPersonModal } from "./person/AddPersonModal";
 
 const groups = [
   {
@@ -74,10 +79,16 @@ export const LeftPanel: React.FC = () => {
 const Groups: React.FC<{ groups: any }> = ({ groups }) => {
   const { push } = useRouter();
   const { t } = useTypeSafeTranslation();
+  const { openAddGroupModal, setAddGroupModal } = useModalStore();
 
   return (
-    <div className="space-y-3 bg-primary-300 p-3 rounded">
-      <p>{t("pages.chat.groups")}</p>
+    <div className="space-y-3 bg-primary-300 p-3 rounded shadow-md">
+      <div className="flex items-center">
+        <p className="flex flex-1">{t("pages.chat.groups")}</p>
+        <BoxedIcon shadow onClick={() => setAddGroupModal(!openAddGroupModal)}>
+          <PlusIcon />
+        </BoxedIcon>
+      </div>
       {groups.map((g: any, idx: number) => (
         <PreviewElement
           avatar={g.avatar}
@@ -87,6 +98,12 @@ const Groups: React.FC<{ groups: any }> = ({ groups }) => {
           onClick={() => push(`/chat/group/${g.id}`)}
         />
       ))}
+      {openAddGroupModal && (
+        <AddGroupModal
+          isOpen={openAddGroupModal}
+          onRequestClose={() => setAddGroupModal(!openAddGroupModal)}
+        />
+      )}
     </div>
   );
 };
@@ -94,10 +111,19 @@ const Groups: React.FC<{ groups: any }> = ({ groups }) => {
 const People: React.FC<{ users: any }> = ({ users }) => {
   const { push } = useRouter();
   const { t } = useTypeSafeTranslation();
+  const { openAddPersonModal, setAddPersonModal } = useModalStore();
 
   return (
-    <div className="bg-primary-300 p-3 rounded">
-      <p>{t("pages.chat.people")}</p>
+    <div className="bg-primary-300 p-3 rounded shadow-md">
+      <div className="flex items-center mb-3">
+        <p className="flex flex-1">{t("pages.chat.people")}</p>
+        <BoxedIcon
+          shadow
+          onClick={() => setAddPersonModal(!openAddPersonModal)}
+        >
+          <PlusIcon />
+        </BoxedIcon>
+      </div>
       <div className="space-y-3">
         {users.map((u: any, idx: number) => (
           <PreviewElement
@@ -110,6 +136,12 @@ const People: React.FC<{ users: any }> = ({ users }) => {
           />
         ))}
       </div>
+      {openAddPersonModal && (
+        <AddPersonModal
+          isOpen={openAddPersonModal}
+          onRequestClose={() => setAddPersonModal(!openAddPersonModal)}
+        />
+      )}
     </div>
   );
 };
