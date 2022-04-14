@@ -23,7 +23,8 @@ export const AppearanceSettingsPage: React.FC<Props> = () => {
           />
           <NativeCheckbox
             subtitle="Caring about your eyes since 2022"
-            title="Nightly(Dark)"
+            title="Nightly (Cooming soon)"
+            disabled={true}
           />
         </div>
       </SettingsWrapper>

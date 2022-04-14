@@ -8,14 +8,14 @@ export const Switch: React.FC<SwitchProps> = ({ checked }) => {
   return (
     <div
       className={`w-9 h-5 relative rounded-full border px-1 transition duration-400 ease-in-out-hard ${
-        checked ? "border-primary-500" : "border-primary-400"
+        checked ? "border-primary-600" : "border-primary-400"
       }`}
     >
       <div
         className={`w-3 h-3  rounded-full transition duration-400 ease-in-out-hard absolute top-2/4 left-2/4 transform -translate-y-1/2 ${
           checked
-            ? "translate-x-0 bg-primary-500"
-            : "-translate-x-full bg-primary-500"
+            ? "translate-x-0 bg-primary-600"
+            : "-translate-x-full bg-primary-400"
         }`}
       />
     </div>
@@ -28,6 +28,7 @@ export interface NativeCheckboxProps {
   onClick?: (num: number | undefined) => void;
   checked?: boolean;
   num?: number;
+  disabled?: boolean;
 }
 
 export const NativeCheckbox: React.FC<NativeCheckboxProps> = ({
@@ -36,10 +37,13 @@ export const NativeCheckbox: React.FC<NativeCheckboxProps> = ({
   onClick,
   checked = false,
   num,
+  disabled = false,
 }) => {
   return (
     <button
-      className="w-full flex px-3 py-2 bg-primary-300 rounded-md justify-between group"
+      className={`w-full flex px-3 py-2 ${
+        !disabled ? "bg-primary-200" : "bg-primary-100"
+      } rounded-md justify-between group`}
       onClick={onClick ? () => onClick(num) : undefined}
     >
       <div className="flex flex-col items-start">

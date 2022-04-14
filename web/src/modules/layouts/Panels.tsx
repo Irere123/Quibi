@@ -1,7 +1,7 @@
 import React from "react";
 import Link from "next/link";
 
-import { AccountIcon, HomeIcon, LocationIcon, SchoolIcon } from "../../icons";
+import { AccountIcon, CompassIcon, HomeIcon, SchoolIcon } from "../../icons";
 import AtIcon from "../../icons/AtIcon";
 import { BoxedIcon } from "../../ui/BoxedIcon";
 import Tooltip from "../../ui/Tooltip";
@@ -19,6 +19,13 @@ export const LeftPannel: React.FC = () => {
         <Link href={"/dash"} passHref>
           <BoxedIcon circle shadow>
             <HomeIcon />
+          </BoxedIcon>
+        </Link>
+      </Tooltip>
+      <Tooltip text={t("components.panels.right.discovery")}>
+        <Link href={"/discovery"} passHref>
+          <BoxedIcon circle shadow>
+            <CompassIcon />
           </BoxedIcon>
         </Link>
       </Tooltip>
@@ -40,13 +47,6 @@ export const LeftPannel: React.FC = () => {
         <Link href={"/account"} passHref>
           <BoxedIcon circle shadow>
             <AccountIcon />
-          </BoxedIcon>
-        </Link>
-      </Tooltip>
-      <Tooltip text={t("components.panels.right.discovery")}>
-        <Link href={"/discovery"} passHref>
-          <BoxedIcon circle shadow>
-            <LocationIcon />
           </BoxedIcon>
         </Link>
       </Tooltip>
