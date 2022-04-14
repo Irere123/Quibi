@@ -8,18 +8,12 @@
   },
   "pages": {
     "_comment": "Pages UI Internationalization Strings",
-    "login": {
-      "welcome": "Bienvenue",
-      "you_accept": "En vous connectant, tu acceptez nos {{privacy}} avec {{terms}}",
-      "terms_of_service": "Conditions d'utilisation",
-      "privacy_policy": "Politique de confidentialité"
-    },
     "home": {
-      "feedTitle": ""
+      "your_feed": "Votre sélection",
+      "cantacts": "Cantacts",
+      "sponsored": "Sponsorisé"
     },
-    "chat": {
-      "title": ""
-    },
+    "chat": {},
     "settings": {}
   },
   "footer": {

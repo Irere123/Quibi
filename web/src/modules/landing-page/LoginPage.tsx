@@ -74,7 +74,7 @@ export const LoginPage: React.FC = () => {
           <h3>Quibi</h3>
         </div>
         <div className="flex flex-row gap-3">
-          <p>English (US)</p>
+          <p>English</p>
           <a href="/developer" className="ml-2">
             {t("footer.link_1")}
           </a>

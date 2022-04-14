@@ -16,18 +16,12 @@
   },
   "pages": {
     "_comment": "Pages UI Internationalization Strings",
-    "login": {
-      "welcome": "Welcome",
-      "you_accept": "By logging in you accept our {{privacy}} and {{terms}}",
-      "terms_of_service": "Terms of Service",
-      "privacy_policy": "Privacy Policy"
-    },
     "home": {
-      "your_feed": "Your Feed"
+      "your_feed": "Your Feed",
+      "cantacts": "Cantacts",
+      "sponsored": "Sponsored"
     },
-    "chat": {
-      "title": ""
-    },
+    "chat": {},
     "settings": {}
   },
   "modules": {
