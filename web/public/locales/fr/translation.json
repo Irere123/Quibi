@@ -1,6 +1,19 @@
 {
   "_comment": "if you change this file, do: yarn i18",
-  "common": { "yes": "Qui", "cancel": "Cancel" },
+  "common": {
+    "loadMore": "Charger Plus",
+    "loading": "Chargement...",
+    "noUsersFound": "Aucun utilisateur trouvé!",
+    "ok": "Ok",
+    "yes": "Oui",
+    "no": "Non",
+    "cancel": "Annuler",
+    "save": "Sauvegarder",
+    "edit": "Éditer",
+    "delete": "Supprimer",
+    "copyLink": "Copier le Lien",
+    "copied": "Copié!"
+  },
   "header": {
     "_comment": "Main title Internationalization Strings",
     "title": "Quibi",
@@ -8,12 +21,15 @@
   },
   "pages": {
     "_comment": "Pages UI Internationalization Strings",
-    "home": {
-      "your_feed": "Votre sélection",
-      "cantacts": "Cantacts",
-      "sponsored": "Sponsorisé"
+    "home": { "your_feed": "Votre sélection" },
+    "chat": {
+      "title": "Chat",
+      "groups": "Groupes",
+      "people": "Personnes",
+      "members": "{{membersNum}} Membres",
+      "add_members": "Ajouter des membres",
+      "messages": "{{messageNum}} Messages"
     },
-    "chat": {},
     "settings": {}
   },
   "footer": {
@@ -21,11 +37,22 @@
     "link_1": "Développeur",
     "link_2": "Aider"
   },
-  "modules": { "chat": { "sendMessage": "Send Message" } },
+  "modules": { "chat": { "sendMessage": "Envoyer le message" } },
   "components": {
     "search": {
-      "placeholder": "Search for topics, users and more",
-      "placeholderShort": "Search"
+      "placeholder": "Chercher des messages, personnes et plus",
+      "placeholderShort": "Chercher"
+    },
+    "panels": {
+      "cantacts": "Cantacts",
+      "sponsored": "Sponsorisé",
+      "right": {
+        "home": "Accueil",
+        "chat": "Chat",
+        "works": "Oeuvres",
+        "account": "Compte",
+        "discovery": "Explorer"
+      }
     }
   }
 }

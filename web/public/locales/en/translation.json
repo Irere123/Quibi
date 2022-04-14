@@ -6,8 +6,18 @@
     "dashboard": "Dashboard"
   },
   "common": {
+    "loadMore": "Load More",
+    "loading": "Loading...",
+    "noUsersFound": "No users found !",
+    "ok": "Ok",
     "yes": "Yes",
-    "cancel": "Cancel"
+    "no": "No",
+    "cancel": "Cancel",
+    "save": "Save",
+    "edit": "Edit",
+    "delete": "Delete",
+    "copyLink": "Copy Link",
+    "copied": "Copy"
   },
   "footer": {
     "_comment": "Main Footer UI Internationalization Strings",
@@ -17,11 +27,16 @@
   "pages": {
     "_comment": "Pages UI Internationalization Strings",
     "home": {
-      "your_feed": "Your Feed",
-      "cantacts": "Cantacts",
-      "sponsored": "Sponsored"
+      "your_feed": "Your Feed"
     },
-    "chat": {},
+    "chat": {
+      "title": "Chat",
+      "groups": "Groups",
+      "people": "People",
+      "members": "{{membersNum}} Members",
+      "add_members": "Add Members",
+      "messages": "{{messageNum}} Messages"
+    },
     "settings": {}
   },
   "modules": {
@@ -33,6 +48,17 @@
     "search": {
       "placeholder": "Search for topics, users and more",
       "placeholderShort": "Search"
+    },
+    "panels": {
+      "cantacts": "Cantacts",
+      "sponsored": "Sponsored",
+      "right": {
+        "home": "Home",
+        "chat": "Chat",
+        "works": "Works",
+        "account": "Account",
+        "discovery": "Discovery"
+      }
     }
   }
 }

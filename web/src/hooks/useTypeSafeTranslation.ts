@@ -4,6 +4,8 @@ import { TranslationKeys } from "../generated/translationKeys";
 interface DateTranslationType {
   time?: Date;
   date?: Date;
+  membersNum?: any;
+  messageNum?: any;
 }
 
 export const useTypeSafeTranslation = () => {

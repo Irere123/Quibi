@@ -10,6 +10,7 @@ import { Button } from "../../ui/Button";
 import { BoxedIcon } from "../../ui/BoxedIcon";
 import { AccountIcon, SettingsIcon } from "../../icons";
 import { AccountModal } from "./person/AccountModal";
+import { useTypeSafeTranslation } from "../../hooks/useTypeSafeTranslation";
 
 const groups = [
   {
@@ -79,10 +80,11 @@ export const LeftPanel: React.FC = () => {
 
 const Groups: React.FC<{ groups: any }> = ({ groups }) => {
   const { push } = useRouter();
+  const { t } = useTypeSafeTranslation();
 
   return (
     <div className="space-y-3 bg-primary-300 p-3 rounded">
-      <p>Groups</p>
+      <p>{t("pages.chat.groups")}</p>
       {groups.map((g: any, idx: number) => (
         <PreviewElement
           avatar={g.avatar}
@@ -98,10 +100,11 @@ const Groups: React.FC<{ groups: any }> = ({ groups }) => {
 
 const People: React.FC<{ users: any }> = ({ users }) => {
   const { push } = useRouter();
+  const { t } = useTypeSafeTranslation();
 
   return (
     <div className="bg-primary-300 p-3 rounded">
-      <p>People</p>
+      <p>{t("pages.chat.people")}</p>
       <div className="space-y-3">
         {users.map((u: any, idx: number) => (
           <PreviewElement
@@ -135,15 +138,16 @@ export const RightPanel: React.FC = () => {
 
 const RightPanelGroup: React.FC = () => {
   const { query } = useRouter();
+  const { t } = useTypeSafeTranslation();
   const groupId = query.id;
 
   return (
     <div className="flex flex-col justify-center items-center">
       <SingleUser src={avatar.src} />
       <p>Group#{groupId}</p>
-      <div>
-        <p>{kFormatter(1500000000)} Members</p>
-        <Button>Add members</Button>
+      <div className="flex flex-col items-center">
+        <p>{t("pages.chat.members", { membersNum: kFormatter(1500000000) })}</p>
+        <Button>{t("pages.chat.add_members")}</Button>
       </div>
     </div>
   );
@@ -152,6 +156,7 @@ const RightPanelGroup: React.FC = () => {
 const RightPanelPerson: React.FC = () => {
   const [openAccount, setOpenAccount] = useState<boolean>(false);
   const { query } = useRouter();
+  const { t } = useTypeSafeTranslation();
   const personId = query.id;
 
   return (
@@ -159,7 +164,7 @@ const RightPanelPerson: React.FC = () => {
       <SingleUser src={avatar.src} />
       <p>Person#{personId}</p>
       <div>
-        <p>{kFormatter(5000)} Messages</p>
+        <p>{t("pages.chat.messages", { messageNum: kFormatter(5000) })}</p>
         <div className="flex flex-1 justify-center gap-3">
           <BoxedIcon shadow>
             <SettingsIcon />

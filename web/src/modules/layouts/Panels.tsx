@@ -8,39 +8,42 @@ import Tooltip from "../../ui/Tooltip";
 import { SingleUser } from "../../ui/UserAvatar";
 import avatar from "../../img/avatar.jpg";
 import { useRouter } from "next/router";
+import { useTypeSafeTranslation } from "../../hooks/useTypeSafeTranslation";
 
 export const LeftPannel: React.FC = () => {
+  const { t } = useTypeSafeTranslation();
+
   return (
     <div className="flex flex-col items-center gap-5">
-      <Tooltip text="Home">
+      <Tooltip text={t("components.panels.right.home")}>
         <Link href={"/dash"} passHref>
           <BoxedIcon circle shadow>
             <HomeIcon />
           </BoxedIcon>
         </Link>
       </Tooltip>
-      <Tooltip text="Chat">
+      <Tooltip text={t("components.panels.right.chat")}>
         <Link href={"/chat"} passHref>
           <BoxedIcon circle shadow>
             <AtIcon />
           </BoxedIcon>
         </Link>
       </Tooltip>
-      <Tooltip text="Works">
+      <Tooltip text={t("components.panels.right.works")}>
         <Link href={"/works"} passHref>
           <BoxedIcon circle shadow>
             <SchoolIcon />
           </BoxedIcon>
         </Link>
       </Tooltip>
-      <Tooltip text="Account">
+      <Tooltip text={t("components.panels.right.account")}>
         <Link href={"/account"} passHref>
           <BoxedIcon circle shadow>
             <AccountIcon />
           </BoxedIcon>
         </Link>
       </Tooltip>
-      <Tooltip text="Discovery">
+      <Tooltip text={t("components.panels.right.discovery")}>
         <Link href={"/discovery"} passHref>
           <BoxedIcon circle shadow>
             <LocationIcon />
@@ -52,10 +55,12 @@ export const LeftPannel: React.FC = () => {
 };
 
 export const RightPanel: React.FC = () => {
+  const { t } = useTypeSafeTranslation();
+
   return (
     <div className="flex flex-col gap-2">
       <div>
-        <p>Sponsored</p>
+        <p>{t("components.panels.sponsored")}</p>
         <div className="bg-primary-300 p-3 rounded">
           <p>Riviera High School</p>
           <p>
@@ -64,7 +69,7 @@ export const RightPanel: React.FC = () => {
         </div>
       </div>
       <div>
-        <p>Contacts</p>
+        <p>{t("components.panels.cantacts")}</p>
         <div className="flex flex-col gap-3 mt-4">
           <div className="flex gap-2 items-center">
             <SingleUser size="sm" src={avatar.src} />

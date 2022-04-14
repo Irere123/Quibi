@@ -1,5 +1,6 @@
 import { useRouter } from "next/router";
 import React from "react";
+import { useTypeSafeTranslation } from "../../hooks/useTypeSafeTranslation";
 import { FeedHeader } from "../../ui/FeedHeader";
 import { HeaderController } from "../components/HeaderController";
 import { MiddlePanel } from "../layouts/GridPanels";
@@ -9,9 +10,11 @@ import { WorksController } from "./WorksController";
 
 export const WorksPage: React.FC = () => {
   const { push } = useRouter();
+  const { t } = useTypeSafeTranslation();
+
   return (
     <MainLayout leftPanel={<LeftPannel />} rightPanel={<RightPanel />}>
-      <HeaderController title="Works" embed={{}} />
+      <HeaderController title={t("components.panels.right.works")} embed={{}} />
       <MiddlePanel
         stickyChildren={
           <FeedHeader

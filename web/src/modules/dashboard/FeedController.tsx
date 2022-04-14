@@ -1,5 +1,6 @@
 import React from "react";
 import { useScreenType } from "../../hooks/useScreenType";
+import { useTypeSafeTranslation } from "../../hooks/useTypeSafeTranslation";
 
 import { FeedCard } from "../../ui/FeedCard";
 import { FeedHeader } from "../../ui/FeedHeader";
@@ -28,6 +29,7 @@ const Page: React.FC = () => {
 };
 
 export const FeedController: React.FC = () => {
+  const { t } = useTypeSafeTranslation();
   const screenType = useScreenType();
 
   let mb = "mb-7";
@@ -36,7 +38,9 @@ export const FeedController: React.FC = () => {
   }
 
   return (
-    <MiddlePanel stickyChildren={<FeedHeader title="Your Feed" />}>
+    <MiddlePanel
+      stickyChildren={<FeedHeader title={t("pages.home.your_feed")} />}
+    >
       <div className={`flex flex-1 flex-col ${mb}`}>
         <div className="flex flex-col space-y-4">
           <Page />
