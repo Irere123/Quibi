@@ -1,6 +1,6 @@
 import React from "react";
 import { useTypeSafeTranslation } from "../../hooks/useTypeSafeTranslation";
-import { useKeyMapStore } from "../../store/useKeyMapStore";
+import { useKeyMapStore } from "../../stores/useKeyMapStore";
 import { KeybindCard } from "../../ui/KeybindCard";
 import { SettingsWrapper } from "../../ui/SettingsWrapper";
 import { HeaderController } from "../components/HeaderController";

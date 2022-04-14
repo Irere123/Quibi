@@ -1,9 +1,9 @@
 /* eslint-disable jsx-a11y/alt-text */
 /* eslint-disable @next/next/no-img-element */
 import React, { useEffect } from "react";
-import { useEmojiPickerStore } from "../store/useEmojiPickerStore";
+import { useEmojiPickerStore } from "../stores/useEmojiPickerStore";
 import { CustomEmote } from "../modules/chat/EmoteData";
-import { useChatStore } from "../store/useChatStore";
+import { useChatStore } from "../stores/useChatStore";
 interface EmojiPickerProps {
   emojiSet: CustomEmote[];
   onEmojiSelect: (emoji: CustomEmote) => void;

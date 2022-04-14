@@ -1,9 +1,18 @@
 import React from "react";
+import { Modal } from "../../../ui/Modal";
 
-export const MembersModal: React.FC = () => {
+interface MembersModalProps {
+  onRequestClose: () => void;
+  isOpen: boolean;
+}
+
+export const MembersModal: React.FC<MembersModalProps> = ({
+  isOpen,
+  onRequestClose,
+}) => {
   return (
-    <div>
+    <Modal isOpen={isOpen} onRequestClose={onRequestClose}>
       <h1>Modal members</h1>
-    </div>
+    </Modal>
   );
 };

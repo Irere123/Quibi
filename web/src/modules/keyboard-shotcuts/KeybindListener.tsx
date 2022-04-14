@@ -1,7 +1,7 @@
 import { useRouter } from "next/router";
 import { useMemo } from "react";
 import { GlobalHotKeys } from "react-hotkeys";
-import { useKeyMapStore } from "../../store/useKeyMapStore";
+import { useKeyMapStore } from "../../stores/useKeyMapStore";
 
 function ListenerBrowser() {
   const { push } = useRouter();
