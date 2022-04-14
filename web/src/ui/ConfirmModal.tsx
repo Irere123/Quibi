@@ -2,8 +2,8 @@ import * as React from "react";
 import create from "zustand";
 import { combine } from "zustand/middleware";
 import { useTypeSafeTranslation } from "../hooks/useTypeSafeTranslation";
-import { Button } from "./Button";
-import { ButtonLink } from "./ButtonLink";
+import { Button } from "../ui/Button";
+import { ButtonLink } from "../ui/ButtonLink";
 import { Modal } from "../ui/Modal";
 
 interface Props {}
@@ -33,7 +33,7 @@ export const ConfirmModal: React.FC<Props> = () => {
   return (
     <Modal isOpen={!!onConfirm} onRequestClose={() => close()}>
       <div className="flex flex-col">
-        <div className={`flex`}>{message}</div>
+        <div className={`flex text-primary-100`}>{message}</div>
         <div className={`flex mt-6 items-center`}>
           <Button
             onClick={() => {
@@ -44,7 +44,12 @@ export const ConfirmModal: React.FC<Props> = () => {
           >
             {t("common.yes")}
           </Button>
-          <ButtonLink type="button" onClick={close} className={`ml-4`}>
+          <ButtonLink
+            type="button"
+            onClick={close}
+            className={`ml-4`}
+            color="secondary"
+          >
             {t("common.cancel")}
           </ButtonLink>
         </div>

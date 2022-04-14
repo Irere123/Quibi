@@ -60,9 +60,6 @@ export interface AvatarProps {
   size?: keyof typeof onlineIndicatorStyleMap;
   className?: string;
   isOnline?: boolean;
-  muted?: boolean;
-  deafened?: boolean;
-  activeSpeaker?: boolean;
   username?: string;
   hover?: boolean;
   isBot?: boolean;

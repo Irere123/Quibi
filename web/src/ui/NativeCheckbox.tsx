@@ -54,7 +54,7 @@ export const NativeCheckbox: React.FC<NativeCheckboxProps> = ({
         >
           {title}
         </div>
-        <div className="font-extralight text-sm">{subtitle}</div>
+        <div className="text-sm">{subtitle}</div>
       </div>
       <div className="flex items-center justify-center">
         <Switch checked={checked} />
