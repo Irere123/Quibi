@@ -1,5 +1,4 @@
 import React from "react";
-
 import { apiBaseUrl } from "../../lib/constants";
 import { Twitter, Google, Discord } from "../../icons";
 import { HeaderController } from "../components/HeaderController";
@@ -15,7 +14,7 @@ const LoginButton: React.FC<LoginButtonProps> = ({ oauthUrl, children }) => {
     <button
       className="flex items-center gap-3 border-2 border-black rounded justify-center text-base py-2 mt-2"
       onClick={() => {
-        window.location.href = `${apiBaseUrl}${oauthUrl}`;
+        window.location.href = `${oauthUrl}`;
       }}
     >
       <span>{children[0]}</span>
@@ -54,15 +53,15 @@ export const LoginPage: React.FC = () => {
             </div>
           </div>
           <div className="flex flex-col gap-4 mt-4">
-            <LoginButton oauthUrl="/auth/google">
+            <LoginButton oauthUrl="/dash">
               <Google />
               Login with Google
             </LoginButton>
-            <LoginButton oauthUrl="/auth/discord">
+            <LoginButton oauthUrl="/dash">
               <Discord />
               Login with Discord
             </LoginButton>
-            <LoginButton oauthUrl="/auth/twitter">
+            <LoginButton oauthUrl="/dash">
               <Twitter />
               Login with Twitter
             </LoginButton>
