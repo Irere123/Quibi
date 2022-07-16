@@ -1,8 +1,9 @@
-import React from "react";
+import React, { ReactElement } from "react";
 import { FeedCardHeading } from "./FeedCardHeading";
 import { MultipleUsers, SingleUser } from "./UserAvatar";
 
 export interface FeedCardProps {
+  headIcon: ReactElement;
   title: string;
   subtitle: string;
   date?: string;
@@ -18,6 +19,7 @@ export const FeedCard: React.FC<FeedCardProps> = ({
   date,
   avatars,
   onClick,
+  headIcon,
 }) => {
   return (
     <button
@@ -25,7 +27,7 @@ export const FeedCard: React.FC<FeedCardProps> = ({
       className="flex flex-col w-full p-4 rounded-lg transition duration-200 ease-in-out bg-primary-800 hover:bg-primary-700"
     >
       <div className="flex justify-between w-full space-x-4">
-        <FeedCardHeading text={title} />
+        <FeedCardHeading text={title} icon={headIcon} />
         <div className="flex text-secondary-300 flex-shrink-0">
           <span>{date}</span>
         </div>

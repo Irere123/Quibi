@@ -7,6 +7,7 @@ import { FeedCard } from "../../ui/FeedCard";
 import { FeedHeader } from "../../ui/FeedHeader";
 import { MiddlePanel } from "../layouts/GridPanels";
 import { Povs } from "../../ui/UserAvatar/Povs";
+import { DoneIcon, Notification, SchoolIcon } from "../../icons";
 
 const Page: React.FC = () => {
   return (
@@ -15,26 +16,31 @@ const Page: React.FC = () => {
         subtitle="Alice messages your in the wags group"
         title="Alice message you"
         date="2 hours ago"
+        headIcon={<Notification />}
       />
       <FeedCard
         title="Maths assignment"
         subtitle="The maths teacher left questions about linear algebra"
         date="1 day ago"
+        headIcon={<SchoolIcon />}
       />
       <FeedCard
         title="The S2 Marks are out"
         subtitle="Marks of the second term are out you can now view them..."
         date="2 days ago"
+        headIcon={<DoneIcon />}
       />
       <FeedCard
         title="The S2 Marks are out"
         subtitle="Marks of the second term are out you can now view them..."
         date="2 days ago"
+        headIcon={<DoneIcon />}
       />
       <FeedCard
         title="The S2 Marks are out"
         subtitle="Marks of the second term are out you can now view them..."
         date="2 days ago"
+        headIcon={<DoneIcon />}
       />
     </>
   );
