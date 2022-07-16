@@ -9,7 +9,10 @@
     "resolveJsonModule": true,
     "importHelpers": true,
     "strict": true,
-    "lib": ["ESNext", "DOM"],
+    "lib": [
+      "ESNext",
+      "DOM"
+    ],
     "module": "commonjs",
     "esModuleInterop": true,
     "preserveSymlinks": true,
@@ -20,7 +23,15 @@
     "noEmit": true,
     "isolatedModules": true
     // "baseUrl": "src"
+    ,
+    "incremental": true
   },
-  "include": ["next-env.d.ts", "src/**/*.ts", "src/**/*.tsx"],
-  "exclude": ["node_modules"]
+  "include": [
+    "next-env.d.ts",
+    "src/**/*.ts",
+    "src/**/*.tsx"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
 }

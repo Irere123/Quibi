@@ -7,7 +7,7 @@ const LeftHeader: React.FC<LeftHeaderProps> = ({}) => {
   return (
     <Link href="/dash">
       <a data-testid="logo-link" className="w-full">
-        <h3 className="text-center">Quibi</h3>
+        <h3 className="text-center text-secondary-300">Quibi</h3>
       </a>
     </Link>
   );

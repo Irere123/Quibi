@@ -12,10 +12,17 @@ const sizeClassnames = {
 };
 
 const colorClassnames = {
-  outline: "border-2 border-black font-bold",
   primary:
-    "text-button bg-primary-300 transition duration-200 ease-in-out  disabled:text-green-200 disabled:bg-primary-200",
-  transparent: "text-button bg-transparent transition duration-200 ease-in-out",
+    "text-button bg-accent transition duration-200 ease-in-out hover:bg-accent-hover disabled:text-accent-disabled disabled:bg-accent-hover",
+  secondary:
+    "text-button bg-primary-700 hover:bg-primary-600 disabled:text-primary-300",
+  "secondary-800":
+    "text-button bg-primary-800 hover:bg-primary-600 disabled:text-primary-300",
+  "primary-300":
+    "text-button bg-primary-700 hover:bg-primary-600 disabled:text-primary-300",
+  transparent: "text-button bg-transparent",
+  "accent-secondary":
+    "text-button bg-secondary hover:bg-secondary-washed-out disabled:text-secondary-washed-out",
 };
 
 export type ButtonProps = DetailedHTMLProps<

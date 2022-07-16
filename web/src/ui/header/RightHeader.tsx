@@ -32,7 +32,7 @@ const RightHeader: React.FC<RightHeaderProps> = ({ actionButton }) => {
       ) : (
         <Link href={"/settings"} passHref>
           <button>
-            <SettingsIcon />
+            <SettingsIcon fill="--color-primary-100" />
           </button>
         </Link>
       )}

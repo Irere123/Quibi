@@ -14,7 +14,7 @@ export const FeedHeader: React.FC<FeedHeaderProps> = ({
 }) => {
   return (
     <div className="flex justify-between items-end mb-5 ">
-      <h4>{title}</h4>
+      <h4 className="text-primary-100">{title}</h4>
       {actionTitle && (
         <Button transition onClick={onActionClicked}>
           {actionTitle}

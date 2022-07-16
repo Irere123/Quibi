@@ -22,11 +22,11 @@ export const FeedCard: React.FC<FeedCardProps> = ({
   return (
     <button
       onClick={onClick}
-      className="flex flex-col w-full p-4 rounded transition duration-200 ease-in-out border-2 border-primary-400"
+      className="flex flex-col w-full p-4 rounded-lg transition duration-200 ease-in-out bg-primary-800 hover:bg-primary-700"
     >
       <div className="flex justify-between w-full space-x-4">
         <FeedCardHeading text={title} />
-        <div className="flex flex-shrink-0">
+        <div className="flex text-secondary-300 flex-shrink-0">
           <span>{date}</span>
         </div>
       </div>
@@ -36,7 +36,7 @@ export const FeedCard: React.FC<FeedCardProps> = ({
         ) : avatar ? (
           <SingleUser src={avatar} />
         ) : null}
-        <div className="text-left break-all truncate whitespace-pre-wrap line-clamp-2 text-black">
+        <div className="text-left break-all truncate whitespace-pre-wrap line-clamp-2 text-primary-300">
           {subtitle}
         </div>
       </div>

@@ -60,8 +60,8 @@ export const RightPanel: React.FC = () => {
   return (
     <div className="flex flex-col gap-2">
       <div>
-        <p>{t("components.panels.sponsored")}</p>
-        <div className="bg-primary-300 p-3 rounded">
+        <p className="text-secondary-200">{t("components.panels.sponsored")}</p>
+        <div className="bg-secondary-300 p-3 rounded text-primary-900">
           <p>Riviera High School</p>
           <p>
             Privacy policy we only own your username and email so dont worry
@@ -69,8 +69,8 @@ export const RightPanel: React.FC = () => {
         </div>
       </div>
       <div>
-        <p>{t("components.panels.cantacts")}</p>
-        <div className="flex flex-col gap-3 mt-4">
+        <p className="text-primary-100">{t("components.panels.cantacts")}</p>
+        <div className="flex flex-col gap-3 mt-4 bg-primary-800 border border-accent rounded-lg p-4  max-w-md w-full">
           <div className="flex gap-2 items-center">
             <SingleUser size="sm" src={avatar.src} />
             <p>John Doe</p>

@@ -23,12 +23,12 @@ const Tooltip: React.FC<TooltipProps> = ({ children, text }) => {
       onMouseLeave={handleMouseLeave}
     >
       <div
-        className="absolute whitespace-no-wrap bg-gradient-to-r from-primary-300 to-primary-200 text-black px-3 py-1 rounded flex items-center transition-all duration-150"
+        className="absolute whitespace-no-wrap bg-gradient-to-r from-secondary-300 to-secondary-200 text-black px-3 py-1 rounded flex items-center transition-all duration-150"
         style={{ left: "100%", opacity: 0 }}
         ref={tipRef}
       >
         <div
-          className="bg-primary-300 h-3 w-3 absolute"
+          className="bg-secondary-300 h-3 w-3 absolute"
           style={{ left: "-6px", transform: "rotate(45deg)" }}
         />
         {text}
