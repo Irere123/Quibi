@@ -1,10 +1,12 @@
 import React from "react";
+import img from "../../img/avatar2.jpg";
 import { useScreenType } from "../../hooks/useScreenType";
 import { useTypeSafeTranslation } from "../../hooks/useTypeSafeTranslation";
 
 import { FeedCard } from "../../ui/FeedCard";
 import { FeedHeader } from "../../ui/FeedHeader";
 import { MiddlePanel } from "../layouts/GridPanels";
+import { Povs } from "../../ui/UserAvatar/Povs";
 
 const Page: React.FC = () => {
   return (
@@ -18,6 +20,16 @@ const Page: React.FC = () => {
         title="Maths assignment"
         subtitle="The maths teacher left questions about linear algebra"
         date="1 day ago"
+      />
+      <FeedCard
+        title="The S2 Marks are out"
+        subtitle="Marks of the second term are out you can now view them..."
+        date="2 days ago"
+      />
+      <FeedCard
+        title="The S2 Marks are out"
+        subtitle="Marks of the second term are out you can now view them..."
+        date="2 days ago"
       />
       <FeedCard
         title="The S2 Marks are out"
@@ -39,7 +51,23 @@ export const FeedController: React.FC = () => {
 
   return (
     <MiddlePanel
-      stickyChildren={<FeedHeader title={t("pages.home.your_feed")} />}
+      stickyChildren={
+        <FeedHeader
+          title={t("pages.home.your_feed")}
+          content={
+            <div className="flex gap-3">
+              <Povs
+                povArray={[
+                  { avatar: img.src, id: 2, username: "Hello" },
+                  { avatar: img.src, id: 2, username: "Hello" },
+                  { avatar: img.src, id: 2, username: "Hello" },
+                  { avatar: img.src, id: 2, username: "Hello" },
+                ]}
+              />
+            </div>
+          }
+        />
+      }
     >
       <div className={`flex flex-1 flex-col ${mb}`}>
         <div className="flex flex-col space-y-4">

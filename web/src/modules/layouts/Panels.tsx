@@ -94,7 +94,7 @@ export const SettingsLeftPanel: React.FC = () => {
   const { t } = useTypeSafeTranslation();
   const activeCSS = (link: string) => {
     if (pathname === link) {
-      return "bg-primary-300 px-3 rounded py-1 ";
+      return "bg-secondary-300 px-3 rounded py-1 ";
     }
     return "";
   };

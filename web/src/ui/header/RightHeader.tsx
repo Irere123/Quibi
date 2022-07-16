@@ -1,7 +1,12 @@
 import React from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { DownloadIcon, HomeIcon, SettingsIcon } from "../../icons";
+import {
+  DownloadIcon,
+  HomeIcon,
+  Notification,
+  SettingsIcon,
+} from "../../icons";
 import { SingleUser } from "../UserAvatar";
 import src from "../../img/avatar.jpg";
 import { Button } from "../Button";
@@ -23,6 +28,9 @@ const RightHeader: React.FC<RightHeaderProps> = ({ actionButton }) => {
 
   return (
     <div className="flex space-x-4 items-center justify-end focus:outline-no-chrome w-full">
+      <BoxedIcon circle>
+        <Notification />
+      </BoxedIcon>
       {showHome ? (
         <Link href={"/dash"} passHref>
           <BoxedIcon circle shadow>
@@ -31,9 +39,9 @@ const RightHeader: React.FC<RightHeaderProps> = ({ actionButton }) => {
         </Link>
       ) : (
         <Link href={"/settings"} passHref>
-          <button>
-            <SettingsIcon fill="--color-primary-100" />
-          </button>
+          <BoxedIcon circle>
+            <SettingsIcon />
+          </BoxedIcon>
         </Link>
       )}
 

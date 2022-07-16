@@ -64,6 +64,7 @@ p.small {
   --color-accent-glow: rgba(253, 77, 77, 0.3);
   --color-accent: #86efac;
   --color-accent-hover: #bbf7d0;
+  --screen-height-reduction: 0px;
   --color-accent-disabled: #dcfce7;
 }
 /* for firefox */
