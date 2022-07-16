@@ -155,3 +155,16 @@ img.emoji {
 button:focus {
   outline: none;
 }
+
+.landingPage__loginCard {
+  width: clamp(14rem, 22rem, 25rem);
+  background-color: var(--color-primary-800);
+  padding: 40px 20px;
+  border-radius: 8px;
+}
+
+@media only screen and (max-width: 420px) {
+  .landingPage__loginCard {
+    width: 100%;
+  }
+}
