@@ -12,14 +12,18 @@ export interface HeaderControllerProps {
 
 export const HeaderController: NextPage<HeaderControllerProps> = ({
   title,
-  description = "We are Quibi we make the communication and collaboration easy...",
+  description = "Quibi, an open world for you to communicate, collaborate and manage. Now you can share skills and learn new skills easily than ever",
   owner,
   additionalKeywords = [],
   embed,
 }) => {
   return (
     <Header>
-      {title ? <title>{title} | Quibi</title> : <title>Quibi</title>}
+      {title ? (
+        <title>{title} | Quibi</title>
+      ) : (
+        <title>Quibi - Open world</title>
+      )}
       <meta name="description" content={description} />
       {owner ? <meta name="author" content={owner} /> : ""}
       <meta
@@ -29,9 +33,9 @@ export const HeaderController: NextPage<HeaderControllerProps> = ({
       <meta name="theme-color" content={embed?.hexColor || "#EFE7DD"} />
       {embed ? (
         <>
-          <meta name="og:title" content={title || "Quibi"} />
+          <meta name="og:title" content={title || "Quibi - Open world"} />
           <meta name="og:description" content={description} />
-          <meta name="og:site_name" content="Quibi" />
+          <meta name="og:site_name" content="Quibi - Open world" />
           <meta name="og:image" content={embed.image} />
         </>
       ) : (
