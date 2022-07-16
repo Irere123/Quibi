@@ -166,5 +166,6 @@ button:focus {
 @media only screen and (max-width: 420px) {
   .landingPage__loginCard {
     width: 100%;
+    border-radius: 0px;
   }
 }
