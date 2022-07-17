@@ -4,7 +4,7 @@ export interface TooltipProps {
   text: string;
 }
 
-const Tooltip: React.FC<TooltipProps> = ({ children, text }) => {
+export const Tooltip: React.FC<TooltipProps> = ({ children, text }) => {
   let tipRef = useRef<HTMLDivElement>(null);
 
   function handleMouseEnter() {
@@ -37,5 +37,3 @@ const Tooltip: React.FC<TooltipProps> = ({ children, text }) => {
     </div>
   );
 };
-
-export default Tooltip;

@@ -5,7 +5,7 @@ import { FeedHeader } from "../../ui/FeedHeader";
 import { HeaderController } from "../components/HeaderController";
 import { MiddlePanel } from "../layouts/GridPanels";
 import { MainLayout } from "../layouts/MainLayout";
-import { LeftPannel, RightPanel } from "../layouts/Panels";
+import { LeftPannel, RightPanel } from "../dashboard/Panels";
 import { WorksController } from "./WorksController";
 
 export const WorksPage: React.FC = () => {

@@ -18,7 +18,7 @@ export const Povs: React.FC<AvatarProps> = ({ povArray, className = "" }) => {
   return (
     <>
       <div
-        className={`flex justify-center shadow-md shadow-primary-300 items-center cursor-pointer bg-secondary-300 w-12 h-12 rounded-full`}
+        className={`bg-gradient-to-r from-secondary-300 to-secondary-200 flex justify-center shadow-md shadow-primary-300 items-center cursor-pointer bg-secondary-300 w-12 h-12 rounded-full`}
       >
         <PlusIcon />
       </div>

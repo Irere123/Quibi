@@ -1,3 +1,4 @@
+import Link from "next/link";
 import React, { FC } from "react";
 import { FixedGridPanel, GridPanel } from "../../ui/GridPanel";
 import LeftHeader from "../../ui/header/LeftHeader";
@@ -16,6 +17,19 @@ export const LeftPanel: React.FC<LeftPanelProps> = ({ children }) => {
       <HeaderWrapper>
         <LeftHeader />
       </HeaderWrapper>
+      {children}
+    </FixedGridPanel>
+  );
+};
+
+export const ChatLeftPanel: React.FC<LeftPanelProps> = ({ children }) => {
+  return (
+    <FixedGridPanel>
+      <Link href="/dash">
+        <a data-testid="logo-link" className="w-full">
+          <h3 className="text-secondary-300">Quibi</h3>
+        </a>
+      </Link>
       {children}
     </FixedGridPanel>
   );

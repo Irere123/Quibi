@@ -46,7 +46,7 @@ export const ChatInput: React.FC = () => {
       </div>
       <div className="flex items-stretch">
         <div className="flex-1">
-          <div className="flex flex-1 lg:mr-0 items-center border-2 border-black rounded">
+          <div className="flex flex-1 mr-2 lg:mr-0 items-center bg-primary-700 rounded">
             <Input
               maxLength={512}
               placeholder={t("modules.chat.sendMessage")}
