@@ -8,6 +8,7 @@ import { ChatInput } from "../ChatInput";
 import { GroupMessages } from "./GroupMessages";
 import { useModalStore } from "../../../stores/useModalStore";
 import { MembersModal } from "./MembersModals";
+import { CommandIcon, HashIcon } from "../../../icons";
 
 export const GroupChatController: React.FC = () => {
   const { query } = useRouter();
@@ -33,8 +34,16 @@ const ChatContainer: React.FC<ChatContainerProps> = ({ groupId }) => {
         <div className="flex flex-1">
           <p className="text-primary-100">Group#{groupId}</p>
         </div>
-        <div onClick={() => setOpenMembersModal(!openMembersModal)}>
-          <MultipleUsers srcArray={[avatar.src, avatar2.src, avatar3.src]} />
+        <div className="flex gap-2 items-center">
+          <span className="cursor-pointer fill-current text-primary-200">
+            <HashIcon />
+          </span>
+          <span className="cursor-pointer fill-current text-primary-200">
+            <CommandIcon />
+          </span>
+          <span onClick={() => setOpenMembersModal(!openMembersModal)}>
+            <MultipleUsers srcArray={[avatar.src, avatar2.src, avatar3.src]} />
+          </span>
         </div>
       </div>
       <div className="flex flex-col flex-1 w-full h-full ">

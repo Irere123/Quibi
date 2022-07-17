@@ -23,3 +23,4 @@ export { default as LogOutIcon } from "./LogOutIcon";
 export { default as CompassIcon } from "./CompassIcon";
 export { default as TrashIcon } from "./TrashIcon";
 export { default as KeyboardIcon } from "./KeyboardIcon";
+export { default as CommandIcon } from "./CommandIcon";
