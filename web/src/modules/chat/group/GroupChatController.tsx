@@ -29,12 +29,11 @@ const ChatContainer: React.FC<ChatContainerProps> = ({ groupId }) => {
 
   return (
     <div className="flex flex-col  rounded w-full h-full flex-1  md:mb-7 overflow-y-auto bg-primary-900 md:bg-primary-800">
-      <div className="flex  p-3 bg-primary-700">
-        <p>Group#{groupId}</p>
-        <div
-          className="flex flex-1 justify-end"
-          onClick={() => setOpenMembersModal(!openMembersModal)}
-        >
+      <div className="flex p-3 bg-primary-700">
+        <div className="flex flex-1">
+          <p className="text-primary-100">Group#{groupId}</p>
+        </div>
+        <div onClick={() => setOpenMembersModal(!openMembersModal)}>
           <MultipleUsers srcArray={[avatar.src, avatar2.src, avatar3.src]} />
         </div>
       </div>
