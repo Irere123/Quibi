@@ -9,6 +9,8 @@ import { PlusIcon } from "../../icons";
 import { useModalStore } from "../../stores/useModalStore";
 import { AddGroupModal } from "./group/AddGroupModal";
 import { AddPersonModal } from "./person/AddPersonModal";
+import { SingleUser } from "../../ui/UserAvatar";
+import { Tooltip } from "../../ui/Tooltip";
 
 const groups = [
   {
@@ -40,108 +42,18 @@ const groups = [
   },
 ];
 
-const users = [
-  {
-    id: 1,
-    avatar: avatar.src,
-    isOnline: false,
-    name: "William",
-    msg: {
-      t: "4:00AM",
-      text: "What's up man",
-    },
-  },
-  {
-    id: 2,
-    isOnline: true,
-    avatar: avatar3.src,
-    name: "Jackson",
-    msg: {
-      t: "5:00AM",
-      text: "ok, brother",
-    },
-  },
-];
-
-const LeftPanelLayout: React.FC = ({ children }) => {
-  return <div className="space-y-3 mt-8">{children}</div>;
-};
-
 export const LeftPanel: React.FC = () => {
-  return (
-    <LeftPanelLayout>
-      <Groups groups={groups} />
-      <People users={users} />
-    </LeftPanelLayout>
-  );
-};
-
-const Groups: React.FC<{ groups: any }> = ({ groups }) => {
   const { push } = useRouter();
   const { t } = useTypeSafeTranslation();
-  const { openAddGroupModal, setAddGroupModal } = useModalStore();
 
   return (
-    <div className="space-y-3 bg-primary-300 p-3 rounded shadow-md">
-      <div className="flex items-center">
-        <p className="flex flex-1">{t("pages.chat.groups")}</p>
-        <BoxedIcon shadow onClick={() => setAddGroupModal(!openAddGroupModal)}>
-          <PlusIcon />
-        </BoxedIcon>
-      </div>
-      {groups.map((g: any, idx: number) => (
-        <PreviewElement
-          avatar={g.avatar}
-          name={g.name}
-          msg={g.msg}
-          key={idx}
-          onClick={() => push(`/chat/group/${g.id}`)}
-        />
+    <div className="flex flex-col items-center gap-5 cursor-pointer ">
+      {groups.map((u: any, idx: number) => (
+        <SingleUser key={idx + u.name} src={u.avatar} size="sm" outline />
       ))}
-      {openAddGroupModal && (
-        <AddGroupModal
-          isOpen={openAddGroupModal}
-          onRequestClose={() => setAddGroupModal(!openAddGroupModal)}
-        />
-      )}
-    </div>
-  );
-};
-
-const People: React.FC<{ users: any }> = ({ users }) => {
-  const { push } = useRouter();
-  const { t } = useTypeSafeTranslation();
-  const { openAddPersonModal, setAddPersonModal } = useModalStore();
-
-  return (
-    <div className="bg-primary-300 p-3 rounded shadow-md">
-      <div className="flex items-center mb-3">
-        <p className="flex flex-1">{t("pages.chat.people")}</p>
-        <BoxedIcon
-          shadow
-          onClick={() => setAddPersonModal(!openAddPersonModal)}
-        >
-          <PlusIcon />
-        </BoxedIcon>
-      </div>
-      <div className="space-y-3">
-        {users.map((u: any, idx: number) => (
-          <PreviewElement
-            key={idx}
-            avatar={u.avatar}
-            isOnline={u.isOnline}
-            name={u.name}
-            msg={u.msg}
-            onClick={() => push(`/chat/dm/${u.id}`)}
-          />
-        ))}
-      </div>
-      {openAddPersonModal && (
-        <AddPersonModal
-          isOpen={openAddPersonModal}
-          onRequestClose={() => setAddPersonModal(!openAddPersonModal)}
-        />
-      )}
+      <BoxedIcon circle>
+        <PlusIcon />
+      </BoxedIcon>
     </div>
   );
 };

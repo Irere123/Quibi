@@ -4,7 +4,7 @@ import Link from "next/link";
 import { AccountIcon, CompassIcon, HomeIcon, SchoolIcon } from "../../icons";
 import AtIcon from "../../icons/AtIcon";
 import { BoxedIcon } from "../../ui/BoxedIcon";
-import Tooltip from "../../ui/Tooltip";
+import { Tooltip } from "../../ui/Tooltip";
 import { SingleUser } from "../../ui/UserAvatar";
 import avatar from "../../img/avatar.jpg";
 import { useRouter } from "next/router";

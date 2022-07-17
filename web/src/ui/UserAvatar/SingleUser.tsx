@@ -60,6 +60,7 @@ export interface AvatarProps {
   size?: keyof typeof onlineIndicatorStyleMap;
   className?: string;
   isOnline?: boolean;
+  outline?: boolean;
   username?: string;
   hover?: boolean;
   isBot?: boolean;
@@ -71,6 +72,7 @@ export const SingleUser: React.FC<AvatarProps> = ({
   className = "",
   isOnline = false,
   username,
+  outline,
 }) => {
   const [isError, setError] = useState(false);
   const sizeStyle = onlineIndicatorStyleMap[size];
@@ -81,11 +83,12 @@ export const SingleUser: React.FC<AvatarProps> = ({
         width: avatarSizeMap[size],
         height: avatarSizeMap[size],
       }}
-      data-testid="single-user-avatar"
     >
       <img
         alt={username ? `${username}-s-avatar` : "your-avatar"}
-        className={`rounded-full w-full h-full object-cover`}
+        className={`rounded-full w-full h-full object-cover ${
+          outline && "border-4 border-secondary-300 hover:scale-105"
+        }`}
         onError={() => setError(true)}
         src={
           isError
@@ -99,7 +102,7 @@ export const SingleUser: React.FC<AvatarProps> = ({
       {isOnline && (
         <span
           className={
-            "rounded-full absolute box-content bg-secondary-300 border-secondary-400"
+            "rounded-full animate-pulse absolute box-content bg-secondary-300 border-secondary-400"
           }
           style={sizeStyle}
           data-testid="online-indictor"

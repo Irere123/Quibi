@@ -1,7 +1,7 @@
 import React from "react";
 import { MiddlePanel } from "../layouts/GridPanels";
 import { MainLayout } from "../layouts/MainLayout";
-import { RightPanel } from "../layouts/Panels";
+import { RightPanel } from "../dashboard/Panels";
 import { LeftPanel } from "./Panels";
 
 export const AccountLayout: React.FC = ({ children }) => {

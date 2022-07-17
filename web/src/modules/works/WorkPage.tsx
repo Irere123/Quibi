@@ -6,7 +6,7 @@ import { BoxedIcon } from "../../ui/BoxedIcon";
 import { SingleUser } from "../../ui/UserAvatar";
 import { MiddlePanel } from "../layouts/GridPanels";
 import { MainLayout } from "../layouts/MainLayout";
-import { LeftPannel } from "../layouts/Panels";
+import { LeftPannel } from "../dashboard/Panels";
 import { WorkController } from "./WorkController";
 import { HeaderController } from "../components/HeaderController";
 
