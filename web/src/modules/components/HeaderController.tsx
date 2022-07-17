@@ -37,6 +37,11 @@ export const HeaderController: NextPage<HeaderControllerProps> = ({
           <meta name="og:description" content={description} />
           <meta name="og:site_name" content="Quibi - Open world" />
           <meta name="og:image" content={embed.image} />
+          <meta name="twitter:card" content="summary" />
+          <meta name="twitter:title" content={title || "Quibi - Open world"} />
+          <meta name="twitter:description" content={description} />
+          <meta name="twitter:site" content="@quibi_rw" />
+          <meta name="twitter:image" content={embed.image} />
         </>
       ) : (
         ""
