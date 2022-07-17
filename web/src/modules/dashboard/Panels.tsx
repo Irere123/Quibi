@@ -43,13 +43,6 @@ export const LeftPannel: React.FC = () => {
           </BoxedIcon>
         </Link>
       </Tooltip>
-      <Tooltip text={t("components.panels.right.account")}>
-        <Link href={"/account"} passHref>
-          <BoxedIcon circle shadow>
-            <AccountIcon />
-          </BoxedIcon>
-        </Link>
-      </Tooltip>
     </div>
   );
 };

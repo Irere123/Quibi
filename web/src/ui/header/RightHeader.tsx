@@ -2,6 +2,7 @@ import React from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import {
+  AccountIcon,
   DownloadIcon,
   HomeIcon,
   Notification,
@@ -29,7 +30,7 @@ const RightHeader: React.FC<RightHeaderProps> = ({ actionButton }) => {
   return (
     <div className="flex space-x-4 items-center justify-end focus:outline-no-chrome w-full">
       <BoxedIcon circle>
-        <Notification />
+        <AccountIcon />
       </BoxedIcon>
       {showHome ? (
         <Link href={"/dash"} passHref>

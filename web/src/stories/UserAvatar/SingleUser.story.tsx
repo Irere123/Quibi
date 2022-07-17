@@ -15,9 +15,4 @@ export const Default: Story<AvatarProps> = ({ ...props }) => (
   <SingleUser {...props} src={src as any} />
 );
 
-export const Online: Story<AvatarProps> = ({ ...props }) => (
-  <SingleUser {...props} src={src as any} isOnline />
-);
-
 Default.bind({});
-Online.bind({});

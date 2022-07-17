@@ -63,6 +63,7 @@ p.small {
   --color-primary-900: #0b0e11;
   --color-accent-glow: rgba(253, 77, 77, 0.3);
   --color-accent: #86efac;
+  --color-error: #fd4d4d;
   --color-accent-hover: #bbf7d0;
   --screen-height-reduction: 0px;
   --color-accent-disabled: #dcfce7;
