@@ -79,7 +79,7 @@ export const UserRole: React.FC<Props> = ({ nextStep, prevStep }) => {
       </div>
       <div className="flex">
         <div className="flex flex-1">
-          <Button color="outline" size="medium" onClick={back}>
+          <Button color="primary" size="medium" onClick={back}>
             Back
           </Button>
         </div>
@@ -111,7 +111,7 @@ export const UserSchool: React.FC<Props> = ({ nextStep, prevStep }) => {
       </div>
       <div className="flex">
         <div className="flex flex-1">
-          <Button color="outline" size="medium" onClick={back}>
+          <Button color="primary" size="medium" onClick={back}>
             Back
           </Button>
         </div>

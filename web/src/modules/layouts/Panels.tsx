@@ -72,16 +72,31 @@ export const RightPanel: React.FC = () => {
         <p className="text-primary-100">{t("components.panels.cantacts")}</p>
         <div className="flex flex-col gap-3 mt-4 bg-primary-800 border border-accent rounded-lg p-4  max-w-md w-full">
           <div className="flex gap-2 items-center">
-            <SingleUser size="sm" src={avatar.src} />
-            <p>John Doe</p>
+            <SingleUser size="md" isOnline={true} src={avatar.src} />
+            <div className="flex flex-col">
+              <p className="truncate text-primary-100">John Doe</p>
+              <p className="truncate text-primary-300 text-sm">
+                Hi, i love everyone
+              </p>
+            </div>
           </div>
           <div className="flex gap-2 items-center">
-            <SingleUser size="sm" src={avatar.src} />
-            <p>Mike Angel</p>
+            <SingleUser size="md" isOnline={true} src={avatar.src} />
+            <div className="flex flex-col">
+              <p className="truncate text-primary-100">John Doe</p>
+              <p className="truncate text-primary-300 text-sm">
+                Hi, i love everyone
+              </p>
+            </div>
           </div>
           <div className="flex gap-2 items-center">
-            <SingleUser isOnline={true} size="sm" src={avatar.src} />
-            <p>Mark Zack</p>
+            <SingleUser isOnline={true} size="md" src={avatar.src} />
+            <div className="flex flex-col">
+              <p className="truncate text-primary-100">John Doe</p>
+              <p className="truncate text-primary-300 text-sm">
+                Hi, i love everyone
+              </p>
+            </div>
           </div>
         </div>
       </div>
