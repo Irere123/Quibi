@@ -102,7 +102,7 @@ export const SettingsLeftPanel: React.FC = () => {
   const { t } = useTypeSafeTranslation();
   const activeCSS = (link: string) => {
     if (pathname === link) {
-      return "bg-secondary-300 px-3 rounded py-1 ";
+      return "bg-primary-700 px-3 rounded py-1 ";
     }
     return "";
   };
@@ -110,34 +110,61 @@ export const SettingsLeftPanel: React.FC = () => {
   return (
     <div className="flex flex-col gap-5  items-center mt-5">
       <div>
-        <p className="font-bold">USER SETTINGS</p>
+        <p className="text-primary-300 font-bold">USER SETTINGS</p>
         <Link href={"/settings"} passHref>
-          <p className={`mt-4 cursor-pointer ${activeCSS("/settings")}`}>
+          <p
+            className={`text-primary-200 mt-4 cursor-pointer ${activeCSS(
+              "/settings"
+            )}`}
+          >
             {t("pages.settings.account.label")}
           </p>
         </Link>
         <Link href={"/settings/languages"} passHref>
-          <p className={`cursor-pointer ${activeCSS("/settings/languages")}`}>
+          <p
+            className={`text-primary-200 cursor-pointer ${activeCSS(
+              "/settings/languages"
+            )}`}
+          >
             {t("pages.settings.language.label")}
+          </p>
+        </Link>
+        <Link href={"/settings/languages"} passHref>
+          <p
+            className={`text-primary-200 cursor-pointer ${activeCSS(
+              "/settings/security"
+            )}`}
+          >
+            Security
           </p>
         </Link>
       </div>
       <div>
-        <p className="font-bold mr-2">APP SETTINGS </p>
+        <p className="text-primary-300 font-bold mr-2">APP SETTINGS </p>
         <Link href={"/settings/appearance"} passHref>
-          <p className={`cursor-pointer ${activeCSS("/settings/appearance")}`}>
+          <p
+            className={`text-primary-200 cursor-pointer ${activeCSS(
+              "/settings/appearance"
+            )}`}
+          >
             {t("pages.settings.appearance.label")}
           </p>
         </Link>
         <Link href={"/settings/notifications"} passHref>
           <p
-            className={`cursor-pointer ${activeCSS("/settings/notifications")}`}
+            className={`text-primary-200 cursor-pointer ${activeCSS(
+              "/settings/notifications"
+            )}`}
           >
             {t("pages.settings.notifications.label")}
           </p>
         </Link>
         <Link href={"/settings/keybinds"} passHref>
-          <p className={`cursor-pointer ${activeCSS("/settings/keybinds")}`}>
+          <p
+            className={`text-primary-200 cursor-pointer ${activeCSS(
+              "/settings/keybinds"
+            )}`}
+          >
             {t("pages.settings.keybinds.label")}
           </p>
         </Link>

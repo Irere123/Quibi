@@ -19,10 +19,10 @@ export const AccountSettingspage: React.FC = () => {
     <SettingsLayout>
       <HeaderController title={t("pages.settings.account.title")} embed={{}} />
       <SettingsWrapper>
-        <div className="space-y-3">
-          <BaseSettingsItem outline className="flex flex-col gap-5">
+        <BaseSettingsItem className="flex flex-col gap-5">
+          <p className="text-primary-200 font-bold">User Account</p>
+          <div className="space-y-3">
             <p>Profile Picture</p>
-
             <div className="flex gap-5">
               <SingleUser src={avatar.src} size="default" />
               <div>
@@ -59,15 +59,8 @@ export const AccountSettingspage: React.FC = () => {
                 </div>
               </div>
             </div>
-            <div>
-              <p>Transfer school</p>
-              <p className="text-xs">Change your current school and class</p>
-              <Button size="medium" className="mt-2">
-                Transfer school
-              </Button>
-            </div>
-          </BaseSettingsItem>
-        </div>
+          </div>
+        </BaseSettingsItem>
       </SettingsWrapper>
     </SettingsLayout>
   );

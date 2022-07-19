@@ -2,14 +2,9 @@ import React from "react";
 
 export const BaseSettingsItem: React.FC<{
   className?: string;
-  outline?: boolean;
-}> = ({ children, className = "", outline }) => {
+}> = ({ children, className = "" }) => {
   return (
-    <div
-      className={`${
-        outline ? "border-2 border-black" : "bg-primary-200"
-      } p-4 rounded ${className}`}
-    >
+    <div className={`bg-primary-700 p-4 rounded-lg ${className}`}>
       {children}
     </div>
   );
