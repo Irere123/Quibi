@@ -54,43 +54,52 @@ export const RightPanel: React.FC = () => {
     <div className="flex flex-col gap-2">
       <div>
         <p className="text-secondary-200">{t("components.panels.sponsored")}</p>
-        <div className="bg-secondary-300 p-3 rounded text-primary-900">
-          <p>Riviera High School</p>
-          <p>
-            Privacy policy we only own your username and email so dont worry
-          </p>
-        </div>
+        <Link href={"/ads-1"} passHref>
+          <div className="bg-secondary-300 p-3 rounded text-primary-900">
+            <p>Riviera High School</p>
+            <p>
+              Privacy policy we only own your username and email so dont worry
+            </p>
+          </div>
+        </Link>
       </div>
       <div>
         <p className="text-primary-100">{t("components.panels.cantacts")}</p>
+
         <div className="flex flex-col gap-3 mt-4 bg-primary-800 border border-accent rounded-lg p-4  max-w-md w-full">
-          <div className="flex gap-2 items-center">
-            <SingleUser size="md" isOnline={true} src={avatar.src} />
-            <div className="flex flex-col">
-              <p className="truncate text-primary-100">John Doe</p>
-              <p className="truncate text-primary-300 text-sm">
-                Hi, i love everyone
-              </p>
+          <Link href={`/contact/1`} passHref>
+            <div className="cursor-pointer flex gap-2 items-center">
+              <SingleUser size="md" isOnline={true} src={avatar.src} />
+              <div className="flex flex-col">
+                <p className="truncate text-primary-100">John Doe</p>
+                <p className="truncate text-primary-300 text-sm">
+                  Hi, i love everyone
+                </p>
+              </div>
             </div>
-          </div>
-          <div className="flex gap-2 items-center">
-            <SingleUser size="md" isOnline={true} src={avatar.src} />
-            <div className="flex flex-col">
-              <p className="truncate text-primary-100">John Doe</p>
-              <p className="truncate text-primary-300 text-sm">
-                Hi, i love everyone
-              </p>
+          </Link>
+          <Link href={`/contact/1`} passHref>
+            <div className="cursor-pointer flex gap-2 items-center">
+              <SingleUser size="md" isOnline={true} src={avatar.src} />
+              <div className="flex flex-col">
+                <p className="truncate text-primary-100">John Doe</p>
+                <p className="truncate text-primary-300 text-sm">
+                  Hi, i love everyone
+                </p>
+              </div>
             </div>
-          </div>
-          <div className="flex gap-2 items-center">
-            <SingleUser isOnline={true} size="md" src={avatar.src} />
-            <div className="flex flex-col">
-              <p className="truncate text-primary-100">John Doe</p>
-              <p className="truncate text-primary-300 text-sm">
-                Hi, i love everyone
-              </p>
+          </Link>
+          <Link href={`/contact/1`} passHref>
+            <div className="cursor-pointer flex gap-2 items-center">
+              <SingleUser isOnline={true} size="md" src={avatar.src} />
+              <div className="flex flex-col">
+                <p className="truncate text-primary-100">John Doe</p>
+                <p className="truncate text-primary-300 text-sm">
+                  Hi, i love everyone
+                </p>
+              </div>
             </div>
-          </div>
+          </Link>
         </div>
       </div>
     </div>
