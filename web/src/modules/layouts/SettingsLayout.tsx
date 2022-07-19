@@ -1,7 +1,7 @@
 import React from "react";
 import { MiddlePanel } from "./GridPanels";
 import { MainLayout } from "./MainLayout";
-import { RightPanel, SettingsLeftPanel } from "../dashboard/Panels";
+import { RightPanel, SettingsLeftPanel } from "./Panels";
 
 interface SettingsLayoutProps {}
 

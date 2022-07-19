@@ -3,7 +3,7 @@ import React from "react";
 import { PlusIcon } from "../../icons";
 import { BoxedIcon } from "../../ui/BoxedIcon";
 import { HeaderController } from "../components/HeaderController";
-import { LeftPannel } from "../dashboard/Panels";
+import { LeftPannel } from "../layouts/Panels";
 import { MiddlePanel } from "../layouts/GridPanels";
 import { MainLayout } from "../layouts/MainLayout";
 import { CommentsPanel } from "./CommentsPanel";
