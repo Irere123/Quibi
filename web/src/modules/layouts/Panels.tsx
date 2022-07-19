@@ -1,7 +1,7 @@
 import React from "react";
 import Link from "next/link";
 
-import { AccountIcon, CompassIcon, HomeIcon, SchoolIcon } from "../../icons";
+import { CompassIcon, HomeIcon, SchoolIcon } from "../../icons";
 import AtIcon from "../../icons/AtIcon";
 import { BoxedIcon } from "../../ui/BoxedIcon";
 import { Tooltip } from "../../ui/Tooltip";
@@ -16,31 +16,39 @@ export const LeftPannel: React.FC = () => {
   return (
     <div className="flex flex-col items-center gap-5">
       <Tooltip text={t("components.panels.right.home")}>
-        <Link href={"/dash"} passHref>
-          <BoxedIcon circle shadow>
-            <HomeIcon />
-          </BoxedIcon>
+        <Link href={"/dash"}>
+          <a>
+            <BoxedIcon circle shadow>
+              <HomeIcon />
+            </BoxedIcon>
+          </a>
         </Link>
       </Tooltip>
       <Tooltip text={t("components.panels.right.discovery")}>
-        <Link href={"/discovery"} passHref>
-          <BoxedIcon circle shadow>
-            <CompassIcon />
-          </BoxedIcon>
+        <Link href={"/discovery"}>
+          <a>
+            <BoxedIcon circle shadow>
+              <CompassIcon />
+            </BoxedIcon>
+          </a>
         </Link>
       </Tooltip>
       <Tooltip text={t("components.panels.right.chat")}>
-        <Link href={"/chat"} passHref>
-          <BoxedIcon circle shadow>
-            <AtIcon />
-          </BoxedIcon>
+        <Link href={"/chat"}>
+          <a>
+            <BoxedIcon circle shadow>
+              <AtIcon />
+            </BoxedIcon>
+          </a>
         </Link>
       </Tooltip>
       <Tooltip text={t("components.panels.right.works")}>
-        <Link href={"/works"} passHref>
-          <BoxedIcon circle shadow>
-            <SchoolIcon />
-          </BoxedIcon>
+        <Link href={"/works"}>
+          <a>
+            <BoxedIcon circle shadow>
+              <SchoolIcon />
+            </BoxedIcon>
+          </a>
         </Link>
       </Tooltip>
     </div>
@@ -54,51 +62,59 @@ export const RightPanel: React.FC = () => {
     <div className="flex flex-col gap-2">
       <div>
         <p className="text-secondary-200">{t("components.panels.sponsored")}</p>
-        <Link href={"/ads-1"} passHref>
-          <div className="bg-secondary-300 p-3 rounded text-primary-900">
-            <p>Riviera High School</p>
-            <p>
-              Privacy policy we only own your username and email so dont worry
-            </p>
-          </div>
+        <Link href={"/ads-1"}>
+          <a>
+            <div className="bg-secondary-300 p-3 rounded text-primary-900">
+              <p>Riviera High School</p>
+              <p>
+                Privacy policy we only own your username and email so dont worry
+              </p>
+            </div>
+          </a>
         </Link>
       </div>
       <div>
         <p className="text-primary-100">{t("components.panels.cantacts")}</p>
 
         <div className="flex flex-col gap-3 mt-4 bg-primary-800 border border-accent rounded-lg p-4  max-w-md w-full">
-          <Link href={`/contact/1`} passHref>
-            <div className="cursor-pointer flex gap-2 items-center">
-              <SingleUser size="md" isOnline={true} src={avatar.src} />
-              <div className="flex flex-col">
-                <p className="truncate text-primary-100">John Doe</p>
-                <p className="truncate text-primary-300 text-sm">
-                  Hi, i love everyone
-                </p>
+          <Link href={`/contact/1`}>
+            <a>
+              <div className="cursor-pointer flex gap-2 items-center">
+                <SingleUser size="md" isOnline={true} src={avatar.src} />
+                <div className="flex flex-col">
+                  <p className="truncate text-primary-100">John Doe</p>
+                  <p className="truncate text-primary-300 text-sm">
+                    Hi, i love everyone
+                  </p>
+                </div>
               </div>
-            </div>
+            </a>
           </Link>
-          <Link href={`/contact/1`} passHref>
-            <div className="cursor-pointer flex gap-2 items-center">
-              <SingleUser size="md" isOnline={true} src={avatar.src} />
-              <div className="flex flex-col">
-                <p className="truncate text-primary-100">John Doe</p>
-                <p className="truncate text-primary-300 text-sm">
-                  Hi, i love everyone
-                </p>
+          <Link href={`/contact/1`}>
+            <a>
+              <div className="cursor-pointer flex gap-2 items-center">
+                <SingleUser size="md" isOnline={true} src={avatar.src} />
+                <div className="flex flex-col">
+                  <p className="truncate text-primary-100">John Doe</p>
+                  <p className="truncate text-primary-300 text-sm">
+                    Hi, i love everyone
+                  </p>
+                </div>
               </div>
-            </div>
+            </a>
           </Link>
-          <Link href={`/contact/1`} passHref>
-            <div className="cursor-pointer flex gap-2 items-center">
-              <SingleUser isOnline={true} size="md" src={avatar.src} />
-              <div className="flex flex-col">
-                <p className="truncate text-primary-100">John Doe</p>
-                <p className="truncate text-primary-300 text-sm">
-                  Hi, i love everyone
-                </p>
+          <Link href={`/contact/1`}>
+            <a>
+              <div className="cursor-pointer flex gap-2 items-center">
+                <SingleUser isOnline={true} size="md" src={avatar.src} />
+                <div className="flex flex-col">
+                  <p className="truncate text-primary-100">John Doe</p>
+                  <p className="truncate text-primary-300 text-sm">
+                    Hi, i love everyone
+                  </p>
+                </div>
               </div>
-            </div>
+            </a>
           </Link>
         </div>
       </div>
