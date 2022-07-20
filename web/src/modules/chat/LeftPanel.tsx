@@ -7,8 +7,7 @@ import { PreviewElement } from "../../ui/PreviewElement";
 import { BoxedIcon } from "../../ui/BoxedIcon";
 import { PlusIcon } from "../../icons";
 import { useModalStore } from "../../stores/useModalStore";
-import { AddGroupModal } from "./group/AddGroupModal";
-import { AddPersonModal } from "./person/AddPersonModal";
+
 import { SingleUser } from "../../ui/UserAvatar";
 import { Tooltip } from "../../ui/Tooltip";
 

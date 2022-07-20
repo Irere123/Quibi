@@ -1,5 +1,5 @@
 import type { NextPage } from "next";
-import { GroupChat } from "../../../modules/chat/group/GroupChat";
+import { GroupChat } from "../../../modules/chat/room/RoomChat";
 
 const GroupPage: NextPage = () => {
   return <GroupChat />;

@@ -5,12 +5,12 @@ import avatar3 from "../../../img/avatar3.jpg";
 import { useRouter } from "next/router";
 import { MultipleUsers } from "../../../ui/UserAvatar";
 import { ChatInput } from "../ChatInput";
-import { GroupMessages } from "./GroupMessages";
+import { RoomMessages } from "./RoomMessages";
 import { useModalStore } from "../../../stores/useModalStore";
 import { MembersModal } from "./MembersModals";
 import { CommandIcon, HashIcon } from "../../../icons";
 
-export const GroupChatController: React.FC = () => {
+export const RoomChatController: React.FC = () => {
   const { query } = useRouter();
   const groupId = query.id;
 
@@ -48,7 +48,7 @@ const ChatContainer: React.FC<ChatContainerProps> = ({ groupId }) => {
       </div>
       <div className="flex flex-col flex-1 w-full h-full ">
         <div className="flex flex-1 flex-col w-full h-full overflow-y-auto">
-          <GroupMessages />
+          <RoomMessages />
         </div>
         <div>
           <ChatInput />

@@ -3,7 +3,7 @@ import { useTypeSafeTranslation } from "../../hooks/useTypeSafeTranslation";
 import { HeaderController } from "../components/HeaderController";
 import { MiddlePanel } from "../layouts/GridPanels";
 import { MainLayout } from "../layouts/MainLayout";
-import { GroupChatController } from "./group/GroupChatController";
+import { RoomChatController } from "./room/RoomChatController";
 import { LeftPanel } from "./LeftPanel";
 import { RightPanel } from "./RightPanel";
 
@@ -14,7 +14,7 @@ export const ChatPage: React.FC = () => {
     <MainLayout leftPanel={<LeftPanel />} rightPanel={<RightPanel />}>
       <HeaderController embed={{}} title={t("pages.chat.title")} />
       <MiddlePanel>
-        <GroupChatController />
+        <RoomChatController />
       </MiddlePanel>
     </MainLayout>
   );

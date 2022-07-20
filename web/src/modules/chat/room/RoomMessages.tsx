@@ -2,7 +2,7 @@ import React from "react";
 import avatar from "../../../img/avatar2.jpg";
 import { MessageElement } from "../../../ui/MessageElement";
 
-export const GroupMessages: React.FC = () => {
+export const RoomMessages: React.FC = () => {
   return (
     <div className="flex flex-col">
       <MessageElement
