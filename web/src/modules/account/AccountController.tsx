@@ -45,7 +45,10 @@ export const AccountController: React.FC<
     >
       <div className={`flex flex-col w-full`}>
         <div className={`flex justify-end absolute right-3 top-3`}>
-          <button className={`p-1`} onClick={(e) => props?.onRequestClose?.(e)}>
+          <button
+            className={`p-1 text-primary-100`}
+            onClick={(e) => props?.onRequestClose?.(e)}
+          >
             <PlusIcon className={`transform rotate-45`} />
           </button>
         </div>
