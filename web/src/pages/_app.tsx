@@ -25,7 +25,7 @@ Router.events.on("routeChangeError", () => NProgress.done());
 
 ReactModal.setAppElement("#__next");
 
-function MyApp({ Component, pageProps }: AppProps) {
+function App({ Component, pageProps }: AppProps) {
   if (
     isServer &&
     !Component.getInitialProps &&
@@ -43,4 +43,4 @@ function MyApp({ Component, pageProps }: AppProps) {
   );
 }
 
-export default MyApp;
+export default App;

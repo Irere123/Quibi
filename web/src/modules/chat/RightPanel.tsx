@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { kFormatter } from "../../lib/kFormatter";
 import { Tag } from "../../ui/Tag";
 

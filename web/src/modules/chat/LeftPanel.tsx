@@ -1,15 +1,10 @@
-import { useRouter } from "next/router";
 import avatar from "../../img/avatar.jpg";
 import avatar2 from "../../img/avatar2.jpg";
 import avatar3 from "../../img/avatar3.jpg";
-import { useTypeSafeTranslation } from "../../hooks/useTypeSafeTranslation";
-import { PreviewElement } from "../../ui/PreviewElement";
 import { BoxedIcon } from "../../ui/BoxedIcon";
 import { PlusIcon } from "../../icons";
-import { useModalStore } from "../../stores/useModalStore";
 
 import { SingleUser } from "../../ui/UserAvatar";
-import { Tooltip } from "../../ui/Tooltip";
 
 const groups = [
   {
@@ -42,9 +37,6 @@ const groups = [
 ];
 
 export const LeftPanel: React.FC = () => {
-  const { push } = useRouter();
-  const { t } = useTypeSafeTranslation();
-
   return (
     <div className="flex flex-col items-center gap-5 cursor-pointer ">
       {groups.map((u: any, idx: number) => (
