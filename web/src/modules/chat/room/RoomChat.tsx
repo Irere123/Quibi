@@ -1,18 +1,17 @@
 import React from "react";
-import { HeaderController } from "../../display/HeaderController";
-import { MainLayout } from "../../layouts/MainLayout";
-import { RoomChatController } from "./RoomChatController";
-import { RightPanel } from "../RightPanel";
-import { LeftPanel } from "../LeftPanel";
-import { MiddlePanel } from "../../layouts/GridPanels";
+import { ChatInput } from "../ChatInput";
+import { RoomMessages } from "./RoomMessages";
+
+import { RoomChatHeader } from "./RoomChatHeader";
 
 export const RoomChat: React.FC = () => {
   return (
-    <MainLayout leftPanel={<LeftPanel />} rightPanel={<RightPanel />}>
-      <HeaderController title="Group name" embed={{}} />
-      <MiddlePanel>
-        <RoomChatController />
-      </MiddlePanel>
-    </MainLayout>
+    <div className="flex flex-1 overflow-y-auto w-full mb-7 bg-primary-800 h-full rounded-lg">
+      <div className="flex flex-1 w-full flex-col">
+        <RoomChatHeader />
+        <RoomMessages />
+        <ChatInput />
+      </div>
+    </div>
   );
 };
