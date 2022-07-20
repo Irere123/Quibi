@@ -16,11 +16,11 @@ export const PovDetailPage: React.FC = () => {
     <MainLayout leftPanel={<LeftPannel />} rightPanel={<CommentsPanel />}>
       <MiddlePanel
         stickyChildren={
-          <span onClick={() => back()}>
+          <div onClick={() => back()}>
             <BoxedIcon circle>
               <PlusIcon className="transform rotate-45" />
             </BoxedIcon>
-          </span>
+          </div>
         }
       >
         <HeaderController
