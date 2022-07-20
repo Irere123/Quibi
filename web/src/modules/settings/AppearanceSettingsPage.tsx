@@ -3,7 +3,7 @@ import { useTypeSafeTranslation } from "../../hooks/useTypeSafeTranslation";
 import { BaseSettingsItem } from "../../ui/BaseSettingsItem";
 import { NativeCheckbox } from "../../ui/NativeCheckbox";
 import { SettingsWrapper } from "../../ui/SettingsWrapper";
-import { HeaderController } from "../components/HeaderController";
+import { HeaderController } from "../display/HeaderController";
 import { SettingsLayout } from "../layouts/SettingsLayout";
 
 interface Props {}

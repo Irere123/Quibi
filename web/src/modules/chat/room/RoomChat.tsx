@@ -1,5 +1,5 @@
 import React from "react";
-import { HeaderController } from "../../components/HeaderController";
+import { HeaderController } from "../../display/HeaderController";
 import { MainLayout } from "../../layouts/MainLayout";
 import { RoomChatController } from "./RoomChatController";
 import { RightPanel } from "../RightPanel";

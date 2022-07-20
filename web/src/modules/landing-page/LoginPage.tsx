@@ -1,7 +1,6 @@
 import React from "react";
-import { apiBaseUrl } from "../../lib/constants";
 import { Twitter, Google, Discord } from "../../icons";
-import { HeaderController } from "../components/HeaderController";
+import { HeaderController } from "../display/HeaderController";
 import { useTypeSafeTranslation } from "../../hooks/useTypeSafeTranslation";
 
 interface LoginButtonProps {

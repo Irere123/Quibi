@@ -4,7 +4,7 @@ import { useTypeSafeTranslation } from "../../hooks/useTypeSafeTranslation";
 import { BaseSettingsItem } from "../../ui/BaseSettingsItem";
 import { SettingsWrapper } from "../../ui/SettingsWrapper";
 import { SingleUser } from "../../ui/UserAvatar";
-import { HeaderController } from "../components/HeaderController";
+import { HeaderController } from "../display/HeaderController";
 import { SettingsLayout } from "../layouts/SettingsLayout";
 import { Button } from "../../ui/Button";
 import { BoxedIcon } from "../../ui/BoxedIcon";

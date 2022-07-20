@@ -1,7 +1,7 @@
 import React from "react";
 import { useTypeSafeTranslation } from "../../hooks/useTypeSafeTranslation";
 
-import { HeaderController } from "../components/HeaderController";
+import { HeaderController } from "../display/HeaderController";
 import { DesktopLayout } from "../layouts/DesktopLayout";
 import { FeedController } from "./FeedController";
 

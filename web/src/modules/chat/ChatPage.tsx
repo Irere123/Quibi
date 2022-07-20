@@ -1,6 +1,6 @@
 import React from "react";
 import { useTypeSafeTranslation } from "../../hooks/useTypeSafeTranslation";
-import { HeaderController } from "../components/HeaderController";
+import { HeaderController } from "../display/HeaderController";
 import { MiddlePanel } from "../layouts/GridPanels";
 import { MainLayout } from "../layouts/MainLayout";
 import { RoomChatController } from "./room/RoomChatController";

@@ -4,7 +4,7 @@ import { useKeyMapStore } from "../../stores/useKeyMapStore";
 import { BaseSettingsItem } from "../../ui/BaseSettingsItem";
 import { KeybindCard } from "../../ui/KeybindCard";
 import { SettingsWrapper } from "../../ui/SettingsWrapper";
-import { HeaderController } from "../components/HeaderController";
+import { HeaderController } from "../display/HeaderController";
 import { SettingsLayout } from "../layouts/SettingsLayout";
 
 interface Props {}

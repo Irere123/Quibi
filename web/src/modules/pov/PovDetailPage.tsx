@@ -2,7 +2,7 @@ import { useRouter } from "next/router";
 import React from "react";
 import { PlusIcon } from "../../icons";
 import { BoxedIcon } from "../../ui/BoxedIcon";
-import { HeaderController } from "../components/HeaderController";
+import { HeaderController } from "../display/HeaderController";
 import { LeftPannel } from "../layouts/Panels";
 import { MiddlePanel } from "../layouts/GridPanels";
 import { MainLayout } from "../layouts/MainLayout";
