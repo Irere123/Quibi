@@ -12,6 +12,7 @@ import "../styles/globals.css";
 import "nprogress/nprogress.css";
 import { KeybindListener } from "../modules/keyboard-shotcuts/KeybindListener";
 import { ConfirmModal } from "../ui/ConfirmModal";
+import { ErrorToastController } from "../modules/errors/ErrorToastController";
 
 if (!isServer) {
   init_i18n();
@@ -37,6 +38,7 @@ function App({ Component, pageProps }: AppProps) {
   return (
     <QueryClientProvider client={queryClient}>
       <KeybindListener />
+      <ErrorToastController />
       <Component {...pageProps} />
       <ConfirmModal />
     </QueryClientProvider>
