@@ -2,20 +2,8 @@ import React from "react";
 import { Story } from "@storybook/react";
 
 import { BaseOverlay, BaseOverlayProps } from "../ui/BaseOverlay";
-import avatar from "../img/avatar.jpg";
 import { SettingsIcon } from "../ui/SettingsIcon";
 import { ArrowLeftIcon, OutlineGlobe, AccountIcon } from "../icons";
-
-const user = {
-  avatar,
-  username: "TerryOwen",
-  isOnline: true,
-};
-
-const msg = {
-  text: "Hey! I really liked your room, but would like to contribute to dogehouse",
-  ts: 1615116474,
-};
 
 export default {
   title: "BaseOverlay",
