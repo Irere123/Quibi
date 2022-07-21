@@ -1,10 +1,10 @@
 import avatar from "../../img/avatar.jpg";
 import avatar2 from "../../img/avatar2.jpg";
 import avatar3 from "../../img/avatar3.jpg";
-import { BoxedIcon } from "../../ui/BoxedIcon";
-import { PlusIcon } from "../../icons";
+import { BoxedIcon } from "../../../ui/BoxedIcon";
+import { PlusIcon } from "../../../icons";
 
-import { SingleUser } from "../../ui/UserAvatar";
+import { SingleUser } from "../../../ui/UserAvatar";
 
 const groups = [
   {

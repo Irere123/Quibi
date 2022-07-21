@@ -2,8 +2,8 @@ import React from "react";
 import { HeaderController } from "../../display/HeaderController";
 import { MiddlePanel } from "../../layouts/GridPanels";
 import { MainLayout } from "../../layouts/MainLayout";
-import { RightPanel } from "../RightPanel";
-import { LeftPanel } from "../LeftPanel";
+import { RightPanel } from "../room/RightPanel";
+import { LeftPanel } from "../room/LeftPanel";
 import { PersonChatController } from "./PersonChatController";
 
 export const PersonChat: React.FC = () => {

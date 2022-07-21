@@ -3,8 +3,8 @@ import React from "react";
 import { HeaderController } from "../../display/HeaderController";
 import { ChatLayout } from "../../layouts/ChatLayout";
 import { RoomChat } from "./RoomChat";
-import { RightPanel } from "../RightPanel";
-import { LeftPanel } from "../LeftPanel";
+import { RightPanel } from "./RightPanel";
+import { LeftPanel } from "./LeftPanel";
 import { MiddlePanel } from "../../layouts/GridPanels";
 
 export const RoomChatController: React.FC = () => {

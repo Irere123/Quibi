@@ -5,14 +5,14 @@ import {
   PersonAdd,
   PushPin,
   SearchIcon,
-} from "../../icons";
+} from "../../../icons";
 import avatar from "../../img/avatar3.jpg";
-import { kFormatter } from "../../lib/kFormatter";
-import { truncate } from "../../lib/truncate";
-import { BoxedIcon } from "../../ui/BoxedIcon";
-import { DurationTicker } from "../../ui/DurationTicker";
-import { Tag } from "../../ui/Tag";
-import { SingleUser } from "../../ui/UserAvatar";
+import { kFormatter } from "../../../lib/kFormatter";
+import { truncate } from "../../../lib/truncate";
+import { BoxedIcon } from "../../../ui/BoxedIcon";
+import { DurationTicker } from "../../../ui/DurationTicker";
+import { Tag } from "../../../ui/Tag";
+import { SingleUser } from "../../../ui/UserAvatar";
 
 export const RightPanel: React.FC = () => {
   return (
