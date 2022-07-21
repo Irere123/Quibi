@@ -1,6 +1,6 @@
 import React from "react";
 import { useModalStore } from "../../../stores/useModalStore";
-import { CommandIcon, HashIcon } from "../../../icons";
+import { AccountTree, HashIcon } from "../../../icons";
 import { MultipleUsers } from "../../../ui/UserAvatar";
 import avatar from "../../../img/avatar.jpg";
 import avatar2 from "../../../img/avatar2.jpg";
@@ -20,7 +20,7 @@ export const RoomChatHeader: React.FC = () => {
           <HashIcon />
         </span>
         <span className="cursor-pointer fill-current text-primary-200">
-          <CommandIcon />
+          <AccountTree />
         </span>
         <span onClick={() => setOpenMembersModal(!openMembersModal)}>
           <MultipleUsers srcArray={[avatar.src, avatar2.src, avatar3.src]} />

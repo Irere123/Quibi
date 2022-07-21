@@ -1,16 +1,9 @@
 import React from "react";
-import {
-  AccountTree,
-  MoreVert,
-  PersonAdd,
-  PushPin,
-  SearchIcon,
-} from "../../../icons";
+import { AccountTree, MoreVert, PersonAdd, SearchIcon } from "../../../icons";
 import avatar from "../../../img/avatar3.jpg";
 import { kFormatter } from "../../../lib/kFormatter";
 import { truncate } from "../../../lib/truncate";
 import { BoxedIcon } from "../../../ui/BoxedIcon";
-import { DurationTicker } from "../../../ui/DurationTicker";
 import { Tag } from "../../../ui/Tag";
 import { SingleUser } from "../../../ui/UserAvatar";
 
@@ -38,19 +31,6 @@ export const RoomChatRightPanel: React.FC = () => {
           <BoxedIcon>
             <PersonAdd />
           </BoxedIcon>
-        </div>
-      </div>
-      <div className="px-3">
-        <div className="flex items-center gap-4 text-primary-100">
-          <span>
-            <PushPin className="transform rotate-45" />
-          </span>
-          <span className="font-semibold">Pinned</span>
-        </div>
-        <div>
-          <div className="font-bold text-secondary-300">
-            <DurationTicker dt={new Date()} />
-          </div>
         </div>
       </div>
     </div>

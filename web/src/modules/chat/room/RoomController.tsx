@@ -13,7 +13,7 @@ export const RoomController: React.FC = () => {
   let rightPanel = null;
   let middle = null;
 
-  const isGroup = false;
+  const isGroup = true;
 
   if (isGroup) {
     rightPanel = <RoomChatRightPanel />;
