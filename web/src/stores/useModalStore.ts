@@ -17,7 +17,8 @@ export const useModalStore = create(
         set({ openUserAccountModal }),
       setOpenAccountModal: (openAccountModal: boolean) =>
         set({ openAccountModal }),
-      setAddRoomModal: (openAddRoomModal: boolean) => set({ openAddRoomModal }),
+      setOpenAddRoomModal: (openAddRoomModal: boolean) =>
+        set({ openAddRoomModal }),
       setAddPersonModal: (openAddPersonModal: boolean) =>
         set({ openAddPersonModal }),
     })
