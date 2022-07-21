@@ -14,7 +14,7 @@ import { DurationTicker } from "../../../ui/DurationTicker";
 import { Tag } from "../../../ui/Tag";
 import { SingleUser } from "../../../ui/UserAvatar";
 
-export const RightPanel: React.FC = () => {
+export const RoomChatRightPanel: React.FC = () => {
   return (
     <div className="flex flex-col gap-4 py-3 bg-primary-800 rounded">
       <div className="flex flex-1 pb-1 items-center border-b-2 border-primary-700 px-3">

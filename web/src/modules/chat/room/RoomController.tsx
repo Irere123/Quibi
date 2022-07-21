@@ -3,17 +3,29 @@ import React from "react";
 import { HeaderController } from "../../display/HeaderController";
 import { ChatLayout } from "../../layouts/ChatLayout";
 import { RoomChat } from "./RoomChat";
-import { RightPanel } from "./RightPanel";
+import { RoomChatRightPanel } from "./RoomChatRightPanel";
 import { LeftPanel } from "./LeftPanel";
 import { MiddlePanel } from "../../layouts/GridPanels";
+import { RoomForumRightPanel } from "./RoomForumRightPanel";
+import { RoomForum } from "./RoomForum";
 
 export const RoomController: React.FC = () => {
+  let rightPanel = null;
+  let middle = null;
+
+  const isGroup = false;
+
+  if (isGroup) {
+    rightPanel = <RoomChatRightPanel />;
+    middle = <RoomChat />;
+  } else {
+    rightPanel = <RoomForumRightPanel />;
+    middle = <RoomForum />;
+  }
   return (
-    <ChatLayout leftPanel={<LeftPanel />} rightPanel={<RightPanel />}>
+    <ChatLayout leftPanel={<LeftPanel />} rightPanel={rightPanel}>
       <HeaderController title="Group name" embed={{}} />
-      <MiddlePanel>
-        <RoomChat />
-      </MiddlePanel>
+      <MiddlePanel>{middle}</MiddlePanel>
     </ChatLayout>
   );
 };
