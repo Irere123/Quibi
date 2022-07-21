@@ -24,3 +24,7 @@ export { default as CompassIcon } from "./CompassIcon";
 export { default as TrashIcon } from "./TrashIcon";
 export { default as KeyboardIcon } from "./KeyboardIcon";
 export { default as CommandIcon } from "./CommandIcon";
+export { default as MoreVert } from "./MoreVert";
+export { default as PersonAdd } from "./PersonAdd";
+export { default as PushPin } from "./PushPin";
+export { default as AccountTree } from "./AccountTree";

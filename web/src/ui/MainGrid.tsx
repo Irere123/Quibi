@@ -9,8 +9,18 @@ export const ChatInnerGrid: React.FC<DashboardGridProps> = ({
   children,
   className = "",
 }) => {
-  let gridTemplateColumns = "220px 660px 320px";
-  let myClassName = `w-full px-3`;
+  const screenType = useScreenType();
+  let gridTemplateColumns = "160px 700px 320px";
+  let myClassName = ``;
+
+  if (screenType === "2-cols") {
+    gridTemplateColumns = "60px 670px 305px";
+  } else if (screenType === "1-cols") {
+    gridTemplateColumns = "60px 640px";
+  } else if (screenType === "fullscreen") {
+    myClassName = "w-full px-3";
+    gridTemplateColumns = "1fr";
+  }
 
   return (
     <div
@@ -62,10 +72,7 @@ export const MainInnerGrid: React.FC<DashboardGridProps> = ({
 
 export const MainGrid: React.FC<DashboardGridProps> = ({ children }) => {
   return (
-    <div
-      className={`flex justify-center w-full min-h-screen bg-primary-900`}
-      data-testid="main-grid"
-    >
+    <div className={`flex justify-center w-full min-h-screen bg-primary-900`}>
       <MainInnerGrid>{children}</MainInnerGrid>
     </div>
   );
