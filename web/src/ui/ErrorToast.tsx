@@ -32,24 +32,19 @@ export const ErrorToast: React.FC<ErrorMessageProps> = ({
 
   return (
     <div
-      className={`flex rounded-lg p-3 relative w-full items-center justify-center text-button transition-transform duration-300 bg-secondary-300`}
+      className={`flex gap-3 rounded p-3 w-full items-center justify-center text-button transition-transform duration-300 bg-primary-700 border-2 border-secondary-300`}
     >
+      <div className={`flex space-x-4 items-center`}>
+        <div className={`text-primary-100 bold`}>{message}</div>
+      </div>
       {onClose ? (
         <div
-          className={`flex bg-primary-100 absolute cursor-pointer`}
-          style={{
-            top: 5,
-            right: 7,
-            width: 13,
-            height: 13,
-          }}
+          className={`flex text-primary-100 cursor-pointer`}
           onClick={onClose}
         >
           <PlusIcon style={{ transform: "rotate(45deg)" }} />
         </div>
       ) : null}
-
-      <p className={`bold`}>{message}</p>
     </div>
   );
 };

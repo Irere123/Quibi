@@ -1,7 +1,7 @@
 import React, { useMemo } from "react";
-import { isToday, isYesterday } from "date-fns";
 import { generateColorFromString } from "../lib/generateColor";
 import { SingleUser } from "./UserAvatar";
+import { FormattedDate } from "./FormattedDate";
 
 export interface MessageElementProps {
   user: {
@@ -47,13 +47,7 @@ export const MessageElement: React.FC<MessageElementProps> = ({
               {user.username}
             </span>
             <span className="text-xs text-primary-200">
-              {isToday(dt) ? (
-                <>Today</>
-              ) : isYesterday(dt) ? (
-                <>Yesterday</>
-              ) : (
-                <>{dt.getDay()}</>
-              )}
+              <FormattedDate date={dt} />
             </span>
           </div>
         </div>
