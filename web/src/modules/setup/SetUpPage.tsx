@@ -1,5 +1,5 @@
 import React from "react";
-import { HeaderController } from "../components/HeaderController";
+import { HeaderController } from "../display/HeaderController";
 import { MainForm } from "./MainForm";
 
 export const SetUpPage: React.FC = () => {

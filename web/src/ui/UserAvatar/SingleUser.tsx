@@ -63,6 +63,7 @@ export interface AvatarProps {
   outline?: boolean;
   username?: string;
   hover?: boolean;
+  active?: boolean;
   isBot?: boolean;
 }
 
@@ -73,6 +74,7 @@ export const SingleUser: React.FC<AvatarProps> = ({
   isOnline = false,
   username,
   outline,
+  active,
 }) => {
   const [isError, setError] = useState(false);
   const sizeStyle = onlineIndicatorStyleMap[size];
@@ -86,6 +88,9 @@ export const SingleUser: React.FC<AvatarProps> = ({
     >
       <img
         alt={username ? `${username}-s-avatar` : "your-avatar"}
+        style={{
+          boxShadow: active ? "0 0 0 4px var(--color-accent)" : "",
+        }}
         className={`rounded-full w-full h-full object-cover ${
           outline && "border-4 border-secondary-300 hover:scale-105"
         }`}

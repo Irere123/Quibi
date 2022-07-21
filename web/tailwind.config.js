@@ -52,7 +52,7 @@ module.exports = {
       accent: {
         DEFAULT: "var(--color-accent)",
       },
-      black: "#000",
+      error: "var(--color-error)",
     },
   },
   borderWidth: {

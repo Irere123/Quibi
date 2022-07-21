@@ -67,7 +67,7 @@
   },
   "components": {
     "search": {
-      "placeholder": "Search for topics, users and more",
+      "placeholder": "Search for works, users and more",
       "placeholderShort": "Search"
     },
     "panels": {

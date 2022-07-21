@@ -3,7 +3,7 @@ import { create } from "@storybook/theming";
 
 addons.setConfig({
   theme: create({
-    base: "light",
+    base: "dark",
     brandTitle: "QUIBI",
   }),
 });

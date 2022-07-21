@@ -1,5 +1,7 @@
-import React from "react";
+import React, { useMemo } from "react";
+import { generateColorFromString } from "../lib/generateColor";
 import { SingleUser } from "./UserAvatar";
+import { FormattedDate } from "./FormattedDate";
 
 export interface MessageElementProps {
   user: {
@@ -17,6 +19,8 @@ export const MessageElement: React.FC<MessageElementProps> = ({
   user,
   msg,
 }) => {
+  const dt = useMemo(() => new Date(msg.dt), [msg.dt]);
+
   return (
     <div
       className={`flex items-center px-4  py-2 rounded w-full cursor-pointer`}
@@ -25,7 +29,7 @@ export const MessageElement: React.FC<MessageElementProps> = ({
         <SingleUser size="sm" isOnline={user.isOnline} src={user.avatar} />
       </div>
       <div
-        className="flex-col py-3 border-b border-green-300 md:border-none md:py-0"
+        className="flex-col py-3 border-b md:border-none md:py-0"
         style={{
           width: "calc(100% - 50px)",
         }}
@@ -33,18 +37,22 @@ export const MessageElement: React.FC<MessageElementProps> = ({
         <div className="flex justify-between">
           <div className="flex gap-2 items-center">
             <span
-              className="text-button font-bold inline-block truncate mr-1"
+              className="inline hover:underline font-bold focus:outline-none"
               style={{
                 lineHeight: "22px",
+                textDecorationColor: generateColorFromString(user.username),
+                color: generateColorFromString(user.username),
               }}
             >
               {user.username}
             </span>
-            <span className="text-xs">{msg.dt}</span>
+            <span className="text-xs text-primary-200">
+              <FormattedDate date={dt} />
+            </span>
           </div>
         </div>
         <div
-          className="block text-sm text-black font-medium truncate w-9/12"
+          className="block text-sm text-primary-100 font-medium"
           style={{
             lineHeight: "22px",
           }}

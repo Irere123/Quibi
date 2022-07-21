@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useTypeSafeTranslation } from "../../hooks/useTypeSafeTranslation";
 import { Smiley } from "../../icons";
 import { EmojiPicker } from "../../ui/EmojiPicker";
@@ -7,19 +7,45 @@ import { customEmojis } from "./EmoteData";
 import { navigateThroughQueriedEmojis } from "./navigateThroughQueriedEmojis";
 import { useChatStore } from "../../stores/useChatStore";
 import { useEmojiPickerStore } from "../../stores/useEmojiPickerStore";
+import { showErrorToast } from "../../lib/showErrorToast";
 
 export const ChatInput: React.FC = () => {
   const { message, setMessage } = useChatStore();
   const { setOpen, open } = useEmojiPickerStore();
+  const [lastMessageTimestamp, setLastMessageTimestamp] = useState<number>(0);
   const inputRef = useRef<HTMLInputElement>(null);
   const { t } = useTypeSafeTranslation();
 
   let position = 0;
 
+  useEffect(() => {
+    if (!open) inputRef.current?.focus();
+  }, [open]);
+
   const handleSubmit = (
     e: React.FormEvent<HTMLFormElement> | React.MouseEvent<HTMLButtonElement>
   ) => {
     e.preventDefault();
+
+    if (Date.now() - lastMessageTimestamp <= 1000) {
+      showErrorToast(
+        "You have to wait a second before sending another message"
+      );
+
+      return;
+    }
+
+    setMessage("");
+
+    if (
+      !message ||
+      !message.trim() ||
+      !message.replace(/[\u200B-\u200D\uFEFF]/g, "")
+    ) {
+      return;
+    }
+
+    setLastMessageTimestamp(Date.now());
   };
 
   return (

@@ -1,8 +1,8 @@
 import type { NextPage } from "next";
-import { ChatPage } from "../../modules/chat/ChatPage";
+import { RoomController } from "../../modules/chat/room/RoomController";
 
 const Chat: NextPage = () => {
-  return <ChatPage />;
+  return <RoomController />;
 };
 
 export default Chat;

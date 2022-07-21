@@ -6,9 +6,9 @@ import { BoxedIcon } from "../../ui/BoxedIcon";
 import { SingleUser } from "../../ui/UserAvatar";
 import { MiddlePanel } from "../layouts/GridPanels";
 import { MainLayout } from "../layouts/MainLayout";
-import { LeftPannel } from "../dashboard/Panels";
+import { LeftPannel } from "../layouts/Panels";
 import { WorkController } from "./WorkController";
-import { HeaderController } from "../components/HeaderController";
+import { HeaderController } from "../display/HeaderController";
 
 export interface WorkPageHeaderProps {
   user: {

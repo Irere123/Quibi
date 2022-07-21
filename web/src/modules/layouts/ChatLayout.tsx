@@ -7,7 +7,7 @@ interface MainLayoutProps {
   rightPanel?: React.ReactNode;
 }
 
-export const MainLayout: React.FC<MainLayoutProps> = ({
+export const ChatLayout: React.FC<MainLayoutProps> = ({
   children,
   leftPanel = <div />,
   rightPanel = <div />,

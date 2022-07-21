@@ -18,10 +18,10 @@ export const KeybindCard: React.FC<KeybindCardProps> = ({
 
   return (
     <button
-      className={`w-full bg-primary-200 flex px-3 py-2 rounded justify-between transition`}
+      className={`w-full bg-primary-800 flex px-3 py-2 rounded justify-between transition`}
     >
       <div>
-        <div className="text-sm uppercase">{command}</div>
+        <div className="text-primary-200 text-sm uppercase">{command}</div>
       </div>
       <div className="flex items-center">
         <div className="space-x-1 flex">{bind}</div>

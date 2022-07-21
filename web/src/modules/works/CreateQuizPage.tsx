@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import { useRouter } from "next/router";
 import { Button } from "../../ui/Button";
-import { HeaderController } from "../components/HeaderController";
+import { HeaderController } from "../display/HeaderController";
 import { MiddlePanel } from "../layouts/GridPanels";
 import { MainLayout } from "../layouts/MainLayout";
-import { LeftPannel, RightPanel } from "../dashboard/Panels";
+import { LeftPannel, RightPanel } from "../layouts/Panels";
 import { BoxedIcon } from "../../ui/BoxedIcon";
 import { ArrowBackIcon, PlusIcon } from "../../icons";
 import { CreateQuestionModal } from "./createQuestionModal";

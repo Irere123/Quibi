@@ -1,8 +1,9 @@
 import React from "react";
 import { useTypeSafeTranslation } from "../../hooks/useTypeSafeTranslation";
+import { BaseSettingsItem } from "../../ui/BaseSettingsItem";
 import { NativeCheckbox } from "../../ui/NativeCheckbox";
 import { SettingsWrapper } from "../../ui/SettingsWrapper";
-import { HeaderController } from "../components/HeaderController";
+import { HeaderController } from "../display/HeaderController";
 import { SettingsLayout } from "../layouts/SettingsLayout";
 
 interface Props {}
@@ -14,19 +15,21 @@ export const AppearanceSettingsPage: React.FC<Props> = () => {
     <SettingsLayout>
       <HeaderController title={t("pages.settings.appearance.title")} />
       <SettingsWrapper>
-        <p>Themes</p>
-        <div className="space-y-3 mt-4">
-          <NativeCheckbox
-            subtitle="Rethink your life decisions"
-            title="Diurnal(Light)"
-            checked
-          />
-          <NativeCheckbox
-            subtitle="Caring about your eyes since 2022"
-            title="Nightly (Cooming soon)"
-            disabled={true}
-          />
-        </div>
+        <BaseSettingsItem>
+          <p className="text-primary-200">Themes</p>
+          <div className="space-y-3 mt-4">
+            <NativeCheckbox
+              subtitle="Caring about your eyes since 2022"
+              title="Nightly(Dark)"
+              checked
+            />
+            <NativeCheckbox
+              subtitle="Rethink your life decisions"
+              title="Diurnal(Cooming soon)"
+              disabled
+            />
+          </div>
+        </BaseSettingsItem>
       </SettingsWrapper>
     </SettingsLayout>
   );

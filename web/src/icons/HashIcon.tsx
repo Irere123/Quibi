@@ -5,9 +5,9 @@ export default function HashIcon(props: React.SVGProps<SVGSVGElement>) {
     <svg
       xmlns="http://www.w3.org/2000/svg"
       enableBackground="new 0 0 24 24"
-      height={20}
+      height={24}
       viewBox="0 0 24 24"
-      width={20}
+      width={24}
       fill="currentColor"
     >
       <g>
