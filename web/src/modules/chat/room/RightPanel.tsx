@@ -6,7 +6,7 @@ import {
   PushPin,
   SearchIcon,
 } from "../../../icons";
-import avatar from "../../img/avatar3.jpg";
+import avatar from "../../../img/avatar3.jpg";
 import { kFormatter } from "../../../lib/kFormatter";
 import { truncate } from "../../../lib/truncate";
 import { BoxedIcon } from "../../../ui/BoxedIcon";

@@ -7,7 +7,7 @@ import { RightPanel } from "./RightPanel";
 import { LeftPanel } from "./LeftPanel";
 import { MiddlePanel } from "../../layouts/GridPanels";
 
-export const RoomChatController: React.FC = () => {
+export const RoomController: React.FC = () => {
   return (
     <ChatLayout leftPanel={<LeftPanel />} rightPanel={<RightPanel />}>
       <HeaderController title="Group name" embed={{}} />
