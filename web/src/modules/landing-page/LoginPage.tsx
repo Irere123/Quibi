@@ -28,7 +28,10 @@ export const LoginPage: React.FC = () => {
   return (
     <div
       className="grid w-full h-full"
-      style={{ gridTemplateRows: "1fr auto 1fr" }}
+      style={{
+        gridTemplateRows: "1fr auto 1fr",
+        background: "url('/Group.svg')",
+      }}
     >
       <HeaderController embed={{}} title="Login" />
       <div className="hidden sm:flex" />
