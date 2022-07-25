@@ -70,7 +70,7 @@ export const Card: React.FC<CardProps> = ({
           <div className="w-full flex items-center">
             <MultipleUsers srcArray={avatars!} />
             <div className="flex ml-1 text-primary-300 text-sm">
-              {speakers!.join(", ")}
+              {speakers?.join(", ")}
             </div>
           </div>
         </div>

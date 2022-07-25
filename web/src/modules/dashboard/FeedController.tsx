@@ -30,18 +30,6 @@ const Page: React.FC = () => {
         date="2 days ago"
         headIcon={<DoneIcon />}
       />
-      <FeedCard
-        title="The S2 Marks are out"
-        subtitle="Marks of the second term are out you can now view them..."
-        date="2 days ago"
-        headIcon={<DoneIcon />}
-      />
-      <FeedCard
-        title="The S2 Marks are out"
-        subtitle="Marks of the second term are out you can now view them..."
-        date="2 days ago"
-        headIcon={<DoneIcon />}
-      />
     </>
   );
 };
@@ -64,10 +52,10 @@ export const FeedController: React.FC = () => {
             <div className="flex gap-3">
               <Povs
                 povArray={[
-                  { avatar: img.src, id: 2, username: "Hello" },
-                  { avatar: img.src, id: 2, username: "Hello" },
-                  { avatar: img.src, id: 2, username: "Hello" },
-                  { avatar: img.src, id: 2, username: "Hello" },
+                  { avatar: img.src, id: 2, username: "Kevin" },
+                  { avatar: img.src, id: 2, username: "Durant" },
+                  { avatar: img.src, id: 2, username: "James" },
+                  { avatar: img.src, id: 2, username: "Lebron" },
                 ]}
               />
             </div>
