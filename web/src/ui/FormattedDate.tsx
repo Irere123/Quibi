@@ -12,16 +12,13 @@ interface FormattedDateProps {
 }
 
 export const FormattedDate: React.FC<FormattedDateProps> = ({ date }) => {
-  let text = null;
   if (isToday(date)) {
-    text = <>Today</>;
+    return <>Today</>;
   } else if (isYesterday(date)) {
-    text = <>Yesterday</>;
+    return <>Yesterday</>;
   } else if (isThisWeek(date)) {
-    text = <>{formatDistance(date, new Date(date.getMilliseconds()))} ago</>;
+    return <>{formatDistance(date, date)}</>;
   }
-  {
-    text = format(date, `dd/MM/yyyy`);
-  }
-  return <>{text}</>;
+
+  return <>{format(date, `dd/MM/yyyy`)}</>;
 };

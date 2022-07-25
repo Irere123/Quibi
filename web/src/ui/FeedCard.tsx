@@ -1,12 +1,13 @@
-import React, { ReactElement } from "react";
+import React, { ReactElement, useMemo } from "react";
 import { FeedCardHeading } from "./FeedCardHeading";
+import { FormattedDate } from "./FormattedDate";
 import { MultipleUsers } from "./UserAvatar";
 
 export interface FeedCardProps {
   headIcon?: ReactElement;
   title: string;
   subtitle: string;
-  date?: string;
+  date?: number;
   avatars?: string[];
   onClick?: () => void;
 }
@@ -19,6 +20,8 @@ export const FeedCard: React.FC<FeedCardProps> = ({
   onClick,
   headIcon,
 }) => {
+  const dt = useMemo(() => new Date(date!), [date]);
+
   return (
     <button
       onClick={onClick}
@@ -35,7 +38,7 @@ export const FeedCard: React.FC<FeedCardProps> = ({
           icon={headIcon}
         />
         <div className="flex text-secondary-300 flex-shrink-0">
-          <span>{date}</span>
+          <FormattedDate date={dt} />
         </div>
       </div>
       <div className="w-full mt-2 flex flex-col">

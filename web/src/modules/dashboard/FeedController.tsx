@@ -15,19 +15,19 @@ const Page: React.FC = () => {
       <FeedCard
         subtitle="Alice messages your in the wags group"
         title="Alice message you"
-        date="2 hours ago"
+        date={Date.now()}
         avatars={[img.src, img.src]}
       />
       <FeedCard
         title="Maths assignment"
         subtitle="The maths teacher left questions about linear algebra"
-        date="1 day ago"
+        date={Date.now()}
         headIcon={<SchoolIcon />}
       />
       <FeedCard
         title="The S2 Marks are out"
         subtitle="Marks of the second term are out you can now view them..."
-        date="2 days ago"
+        date={Date.now()}
         avatars={[img.src]}
       />
     </>
