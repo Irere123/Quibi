@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import img from "../../img/avatar2.jpg";
 import { useScreenType } from "../../hooks/useScreenType";
 import { useTypeSafeTranslation } from "../../hooks/useTypeSafeTranslation";
@@ -6,8 +6,10 @@ import { useTypeSafeTranslation } from "../../hooks/useTypeSafeTranslation";
 import { FeedCard } from "../../ui/FeedCard";
 import { FeedHeader } from "../../ui/FeedHeader";
 import { MiddlePanel } from "../layouts/GridPanels";
-import { Povs } from "../../ui/UserAvatar/Povs";
+import { Povs } from "../../ui/Povs";
 import { SchoolIcon } from "../../icons";
+import { Modal } from "../../ui/Modal";
+import { Input } from "../../ui/Input";
 
 const Page: React.FC = () => {
   return (
@@ -36,6 +38,7 @@ const Page: React.FC = () => {
 
 export const FeedController: React.FC = () => {
   const { t } = useTypeSafeTranslation();
+  const [povModal, setPovModal] = useState(false);
   const screenType = useScreenType();
 
   let mb = "mb-7";
@@ -51,6 +54,7 @@ export const FeedController: React.FC = () => {
           content={
             <div className="flex gap-3">
               <Povs
+                onClick={() => setPovModal(!povModal)}
                 povArray={[
                   { avatar: img.src, id: 2, username: "Kevin" },
                   { avatar: img.src, id: 2, username: "Durant" },
@@ -68,6 +72,11 @@ export const FeedController: React.FC = () => {
           <Page />
         </div>
       </div>
+      {povModal && (
+        <Modal isOpen={povModal} onRequestClose={() => setPovModal(!povModal)}>
+          <Input textarea={true} className="bg-primary-600" />
+        </Modal>
+      )}
     </MiddlePanel>
   );
 };

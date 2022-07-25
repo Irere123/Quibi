@@ -1,7 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 import Link from "next/link";
 import React from "react";
-import { PlusIcon } from "../../icons";
+import { PlusIcon } from "../icons";
 
 export interface AvatarProps {
   povArray: {
@@ -10,14 +10,20 @@ export interface AvatarProps {
     id: number;
   }[];
   className?: string;
+  onClick: () => void;
 }
 
-export const Povs: React.FC<AvatarProps> = ({ povArray, className = "" }) => {
+export const Povs: React.FC<AvatarProps> = ({
+  povArray,
+  className = "",
+  onClick,
+}) => {
   const [isError, setError] = React.useState(false);
 
   return (
     <>
       <div
+        onClick={onClick}
         className={`bg-gradient-to-r from-secondary-300 to-secondary-200 flex justify-center shadow-md shadow-primary-300 items-center cursor-pointer bg-secondary-300 w-12 h-12 rounded-full`}
       >
         <PlusIcon />
