@@ -3,7 +3,7 @@ import avatar from "../../img/avatar2.jpg";
 import avatar2 from "../../img/avatar3.jpg";
 import { Card } from "../../ui/Card";
 
-export const LiveQuiz: React.FC = () => {
+export const Quizes: React.FC = () => {
   return (
     <>
       <Card
@@ -20,6 +20,15 @@ export const LiveQuiz: React.FC = () => {
         live={true}
         subtitle={"Garry Simon, Peter Thiel"}
         people={20}
+      />
+      <Card
+        title="Monthly test of maths"
+        subtitle={
+          "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Nisi, velit"
+        }
+        avatars={[avatar.src, avatar2.src]}
+        date={Date.now()}
+        speakers={["Garry Simon, Peter Thiel"]}
       />
     </>
   );

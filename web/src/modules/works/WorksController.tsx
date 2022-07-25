@@ -3,7 +3,7 @@ import { PlusIcon } from "../../icons";
 import { BoxedIcon } from "../../ui/BoxedIcon";
 import { PageHeader } from "../../ui/PageHeader";
 import { MiddlePanel } from "../layouts/GridPanels";
-import { LiveQuiz } from "./LiveQuiz";
+import { Quizes } from "./Quizes";
 
 export const WorksController: React.FC = () => {
   return (
@@ -23,7 +23,7 @@ export const WorksController: React.FC = () => {
     >
       <div className="flex flex-1 flex-col mb-7">
         <div className="flex flex-col space-y-4">
-          <LiveQuiz />
+          <Quizes />
         </div>
       </div>
     </MiddlePanel>
