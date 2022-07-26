@@ -4,8 +4,6 @@ node_modules
 # Local Netlify folder
 .netlify
 
-# TODO: will remove this once built the Elixir API
-api/
 
 .idea/
 */.idea/
