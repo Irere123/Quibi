@@ -15,13 +15,13 @@ const customStyles = {
       bottom: "auto",
       marginRight: "-50%",
       borderRadius: 4,
-      padding: "40px 40px 40px 40px",
+      padding: "10px",
       transform: "translate(-50%, -50%)",
       backgroundColor: "var(--color-primary-800)",
       border: "none",
       maxHeight: "80vh",
       width: "90%",
-      maxWidth: 530,
+      maxWidth: 400,
     },
   },
   userPreview: {
@@ -48,8 +48,12 @@ const customStyles = {
 };
 
 export const Modal: React.FC<
-  ReactModal["props"] & { variant?: keyof typeof customStyles }
-> = ({ children, variant = "default", ...props }) => {
+  ReactModal["props"] & {
+    variant?: keyof typeof customStyles;
+    title?: string;
+    subtitle?: string;
+  }
+> = ({ children, variant = "default", title, subtitle, ...props }) => {
   const onKeyDown = (event: React.KeyboardEvent) => {
     const currentActive = document.activeElement;
 
@@ -68,13 +72,21 @@ export const Modal: React.FC<
       {...props}
     >
       <div className={`flex flex-col w-full`}>
-        <div className={`flex justify-end absolute right-3 top-3`}>
-          <button
-            className={`p-1 text-primary-100`}
-            onClick={(e) => props?.onRequestClose?.(e)}
-          >
-            <PlusIcon className={`transform rotate-45`} />
-          </button>
+        <div className={`flex flex-col gap-3`}>
+          <div className="flex">
+            <div className="flex flex-1 flex-col">
+              <h4 className="text-primary-100 font-semibold text-center">
+                {title}
+              </h4>
+            </div>
+            <button
+              className={`cursor-pointer p-1 text-primary-100`}
+              onClick={(e) => props?.onRequestClose?.(e)}
+            >
+              <PlusIcon className={`transform rotate-45`} />
+            </button>
+          </div>
+          <p className="text-primary-200 text-center">{subtitle}</p>
         </div>
         <div
           tabIndex={-1}

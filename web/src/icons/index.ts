@@ -30,3 +30,4 @@ export { default as PushPin } from "./PushPin";
 export { default as AccountTree } from "./AccountTree";
 export { default as Share } from "./Share";
 export { default as Heart } from "./Heart";
+export { default as Friends } from "./Friends";
