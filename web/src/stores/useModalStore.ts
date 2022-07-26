@@ -7,7 +7,7 @@ export const useModalStore = create(
       openMembersModal: false,
       openAccountModal: false,
       openUserAccountModal: false,
-      openAddRoomModal: false,
+      addQuizModal: false,
       openAddPersonModal: false,
     },
     (set) => ({
@@ -17,8 +17,7 @@ export const useModalStore = create(
         set({ openUserAccountModal }),
       setOpenAccountModal: (openAccountModal: boolean) =>
         set({ openAccountModal }),
-      setOpenAddRoomModal: (openAddRoomModal: boolean) =>
-        set({ openAddRoomModal }),
+      setAddQuizModal: (addQuizModal: boolean) => set({ addQuizModal }),
       setAddPersonModal: (openAddPersonModal: boolean) =>
         set({ openAddPersonModal }),
     })

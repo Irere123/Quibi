@@ -33,3 +33,4 @@ export { default as Heart } from "./Heart";
 export { default as Friends } from "./Friends";
 export { default as Rocket } from "./Rocket";
 export { default as Calendar } from "./Calendar";
+export { default as New } from "./New";
