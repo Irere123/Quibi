@@ -14,7 +14,7 @@ export const AccountPageHeader: React.FC<AccountPageHeaderProps> = ({
   title,
   children,
 }) => {
-  const { back } = useRouter();
+  const { push } = useRouter();
   return (
     <div className="flex w-full items-center">
       <div className="flex flex-1 px-4">
@@ -25,7 +25,7 @@ export const AccountPageHeader: React.FC<AccountPageHeaderProps> = ({
         {children}
       </div>
       <div className="flex gap-3">
-        <BoxedIcon circle onClick={() => back()}>
+        <BoxedIcon circle onClick={() => push("/dash")}>
           <PlusIcon className="transform rotate-45" />
         </BoxedIcon>
         <BoxedIcon
