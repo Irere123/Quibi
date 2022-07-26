@@ -6,6 +6,8 @@ import { BoxedIcon } from "../../ui/BoxedIcon";
 import { PlusIcon } from "../../icons";
 
 import { SingleUser } from "../../ui/UserAvatar";
+import { useState } from "react";
+import { Modal } from "../../ui/Modal";
 
 const rooms = [
   {
@@ -29,6 +31,8 @@ const rooms = [
 ];
 
 export const LeftPanel: React.FC = () => {
+  const [createRoomModal, setCreateRoomModal] = useState<boolean>(false);
+
   return (
     <div className="flex flex-col items-center gap-5 cursor-pointer ">
       {rooms.map((r, idx: number) => {
@@ -63,19 +67,19 @@ export const LeftPanel: React.FC = () => {
           </Link>
         );
       })}
-      <div>
+      <div onClick={() => setCreateRoomModal(!createRoomModal)}>
         <BoxedIcon circle>
           <PlusIcon />
         </BoxedIcon>
       </div>
-      {/* {openAddRoomModal && (
+      {createRoomModal && (
         <Modal
-          isOpen={openAddRoomModal}
-          onRequestClose={() => setOpenAddRoomModal(!openAddRoomModal)}
+          isOpen={createRoomModal}
+          onRequestClose={() => setCreateRoomModal(!createRoomModal)}
         >
           <p>Hello world</p>
         </Modal>
-      )} */}
+      )}
     </div>
   );
 };
