@@ -6,16 +6,12 @@ import { SingleUser } from "../UserAvatar";
 import src from "../../img/avatar.jpg";
 import { Button } from "../Button";
 import { BoxedIcon } from "../BoxedIcon";
-import { useModalStore } from "../../stores/useModalStore";
-import { AccountController } from "../../modules/account/AccountController";
-
 export interface RightHeaderProps {
   actionButton?: React.ReactNode;
 }
 
 const RightHeader: React.FC<RightHeaderProps> = ({ actionButton }) => {
-  const { setOpenUserAccountModal, openUserAccountModal } = useModalStore();
-  const { pathname } = useRouter();
+  const { pathname, push } = useRouter();
   let showHome = false;
 
   if (pathname.includes("/chat") || pathname.includes("/settings")) {
@@ -26,7 +22,7 @@ const RightHeader: React.FC<RightHeaderProps> = ({ actionButton }) => {
 
   return (
     <div className="flex space-x-4 items-center justify-end focus:outline-no-chrome w-full">
-      <div onClick={() => setOpenUserAccountModal(!openUserAccountModal)}>
+      <div>
         <BoxedIcon circle>
           <AccountIcon />
         </BoxedIcon>
@@ -49,19 +45,13 @@ const RightHeader: React.FC<RightHeaderProps> = ({ actionButton }) => {
 
       {actionButton}
 
-      <SingleUser
-        className={"focus:outline-no-chrome cursor-pointer"}
-        size="sm"
-        src={src.src}
-      />
-      {openUserAccountModal && (
-        <AccountController
-          isOpen={openUserAccountModal}
-          onRequestClose={() => setOpenUserAccountModal(!openUserAccountModal)}
-        >
-          <h1>Hello world</h1>
-        </AccountController>
-      )}
+      <div onClick={() => push(`/u/irere`)}>
+        <SingleUser
+          className={"focus:outline-no-chrome cursor-pointer"}
+          size="sm"
+          src={src.src}
+        />
+      </div>
     </div>
   );
 };
