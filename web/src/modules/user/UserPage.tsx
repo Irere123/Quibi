@@ -4,6 +4,7 @@ import { HeaderController } from "../display/HeaderController";
 import { MiddlePanel } from "../layouts/GridPanels";
 import { MainLayout } from "../layouts/MainLayout";
 import { LeftPannel, RightPanel } from "../layouts/Panels";
+import { UserProfileController } from "./UserProfileController";
 
 export const UserPage: React.FC = () => {
   const { query } = useRouter();
@@ -13,7 +14,7 @@ export const UserPage: React.FC = () => {
     <MainLayout leftPanel={<LeftPannel />} rightPanel={<RightPanel />}>
       <HeaderController title={username} />
       <MiddlePanel>
-        <p>Hello world</p>
+        <UserProfileController />
       </MiddlePanel>
     </MainLayout>
   );
