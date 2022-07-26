@@ -22,22 +22,28 @@ const RightHeader: React.FC<RightHeaderProps> = ({ actionButton }) => {
 
   return (
     <div className="flex space-x-4 items-center justify-end focus:outline-no-chrome w-full">
-      <div>
-        <BoxedIcon circle>
-          <AccountIcon />
-        </BoxedIcon>
-      </div>
-      {showHome ? (
-        <Link href={"/dash"} passHref>
+      <Link href={"/u/account"}>
+        <a>
           <BoxedIcon circle shadow>
-            <HomeIcon />
+            <AccountIcon />
           </BoxedIcon>
+        </a>
+      </Link>
+      {showHome ? (
+        <Link href={"/dash"}>
+          <a>
+            <BoxedIcon circle shadow>
+              <HomeIcon />
+            </BoxedIcon>
+          </a>
         </Link>
       ) : (
-        <Link href={"/settings"} passHref>
-          <BoxedIcon circle>
-            <SettingsIcon />
-          </BoxedIcon>
+        <Link href={"/settings"}>
+          <a>
+            <BoxedIcon circle>
+              <SettingsIcon />
+            </BoxedIcon>
+          </a>
         </Link>
       )}
 
