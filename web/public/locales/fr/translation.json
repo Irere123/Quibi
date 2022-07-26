@@ -31,7 +31,7 @@
       "messages": "{{messageNum}} Messages"
     },
     "settings": {
-      "account": { "title": "Paramètres du compte", "label": "Compte" },
+      "security": { "title": "Paramètres du securite", "label": "Securite" },
       "language": { "title": "Paramètres du langues", "label": "Langues" },
       "appearance": { "title": "Paramètres d'apparence", "label": "Apparence" },
       "notifications": {

@@ -1,0 +1,6 @@
+web:
+  - web/**/*
+emote:
+  - web/public/emotes/**/*
+translation:
+  - web/public/locales/**/*

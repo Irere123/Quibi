@@ -16,6 +16,7 @@ export interface CardProps {
   people?: number;
   live?: boolean;
   avatars?: string[];
+  speakers?: string[];
   tags?: string[];
   onClick?: () => void;
 }
@@ -26,6 +27,7 @@ export const Card: React.FC<CardProps> = ({
   avatar,
   date,
   avatars,
+  speakers,
   tags,
   onClick,
   icon,
@@ -49,16 +51,30 @@ export const Card: React.FC<CardProps> = ({
           ) : null}
         </div>
       </div>
-      <div className="w-full mt-2 flex">
-        {avatars ? (
-          <MultipleUsers className="mr-2" srcArray={avatars!} />
-        ) : avatar ? (
-          <SingleUser src={avatar} size="md" />
-        ) : null}
-        <div className="text-left break-all truncate whitespace-pre-wrap line-clamp-2 text-primary-300">
-          {subtitle}
+      {live ? (
+        <div className="w-full mt-2 flex">
+          {avatars ? (
+            <MultipleUsers className="mr-2" srcArray={avatars!} />
+          ) : avatar ? (
+            <SingleUser src={avatar} size="md" />
+          ) : null}
+          <div className="text-left break-all truncate whitespace-pre-wrap line-clamp-2 text-primary-300">
+            {subtitle}
+          </div>
         </div>
-      </div>
+      ) : (
+        <div className="w-full mt-2 flex flex-col">
+          <div className="text-left break-all truncate whitespace-pre-wrap line-clamp-2 text-primary-300">
+            {subtitle}
+          </div>
+          <div className="w-full flex items-center">
+            <MultipleUsers srcArray={avatars!} />
+            <div className="flex ml-1 text-primary-300 text-sm">
+              {speakers?.join(", ")}
+            </div>
+          </div>
+        </div>
+      )}
       {tags ? (
         <div className="flex mt-4 space-x-2">
           {tags.map((tag, idx) => (

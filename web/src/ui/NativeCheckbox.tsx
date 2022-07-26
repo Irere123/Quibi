@@ -42,7 +42,7 @@ export const NativeCheckbox: React.FC<NativeCheckboxProps> = ({
   return (
     <button
       className={`w-full flex px-3 py-2 ${
-        !disabled ? "bg-primary-800" : "bg-primary-900"
+        !disabled ? "bg-primary-900" : "bg-primary-800"
       } rounded-md justify-between group`}
       onClick={onClick ? () => onClick(num) : undefined}
     >

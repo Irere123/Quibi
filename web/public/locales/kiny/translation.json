@@ -31,7 +31,10 @@
       "messages": "Ubutumwa {{messageNum}}"
     },
     "settings": {
-      "account": { "title": "Igenamiterere rya Konte", "label": "Konte" },
+      "security": {
+        "title": "Igenamiterere rya Umutekano",
+        "label": "Umutekano"
+      },
       "language": { "title": "Igenamiterere ry'Urimi", "label": "Ururimi" },
       "appearance": { "title": "Igenamiterere ry'Isura", "label": "Isura" },
       "notifications": {

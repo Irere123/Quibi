@@ -38,9 +38,9 @@
       "messages": "{{messageNum}} Messages"
     },
     "settings": {
-      "account": {
-        "title": "Account Settings",
-        "label": "Account"
+      "security": {
+        "title": "Security Settings",
+        "label": "Security"
       },
       "language": {
         "title": "Languages Settings",

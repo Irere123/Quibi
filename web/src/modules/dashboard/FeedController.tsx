@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import img from "../../img/avatar2.jpg";
 import { useScreenType } from "../../hooks/useScreenType";
 import { useTypeSafeTranslation } from "../../hooks/useTypeSafeTranslation";
@@ -6,8 +6,10 @@ import { useTypeSafeTranslation } from "../../hooks/useTypeSafeTranslation";
 import { FeedCard } from "../../ui/FeedCard";
 import { FeedHeader } from "../../ui/FeedHeader";
 import { MiddlePanel } from "../layouts/GridPanels";
-import { Povs } from "../../ui/UserAvatar/Povs";
-import { DoneIcon, Notification, SchoolIcon } from "../../icons";
+import { Povs } from "../../ui/Povs";
+import { SchoolIcon } from "../../icons";
+import { Modal } from "../../ui/Modal";
+import { Input } from "../../ui/Input";
 
 const Page: React.FC = () => {
   return (
@@ -15,32 +17,20 @@ const Page: React.FC = () => {
       <FeedCard
         subtitle="Alice messages your in the wags group"
         title="Alice message you"
-        date="2 hours ago"
-        headIcon={<Notification />}
+        date={Date.now()}
+        avatars={[img.src, img.src]}
       />
       <FeedCard
         title="Maths assignment"
         subtitle="The maths teacher left questions about linear algebra"
-        date="1 day ago"
+        date={Date.now()}
         headIcon={<SchoolIcon />}
       />
       <FeedCard
         title="The S2 Marks are out"
         subtitle="Marks of the second term are out you can now view them..."
-        date="2 days ago"
-        headIcon={<DoneIcon />}
-      />
-      <FeedCard
-        title="The S2 Marks are out"
-        subtitle="Marks of the second term are out you can now view them..."
-        date="2 days ago"
-        headIcon={<DoneIcon />}
-      />
-      <FeedCard
-        title="The S2 Marks are out"
-        subtitle="Marks of the second term are out you can now view them..."
-        date="2 days ago"
-        headIcon={<DoneIcon />}
+        date={Date.now()}
+        avatars={[img.src]}
       />
     </>
   );
@@ -48,6 +38,7 @@ const Page: React.FC = () => {
 
 export const FeedController: React.FC = () => {
   const { t } = useTypeSafeTranslation();
+  const [povModal, setPovModal] = useState(false);
   const screenType = useScreenType();
 
   let mb = "mb-7";
@@ -63,11 +54,12 @@ export const FeedController: React.FC = () => {
           content={
             <div className="flex gap-3">
               <Povs
+                onClick={() => setPovModal(!povModal)}
                 povArray={[
-                  { avatar: img.src, id: 2, username: "Hello" },
-                  { avatar: img.src, id: 2, username: "Hello" },
-                  { avatar: img.src, id: 2, username: "Hello" },
-                  { avatar: img.src, id: 2, username: "Hello" },
+                  { avatar: img.src, id: 2, username: "Kevin" },
+                  { avatar: img.src, id: 2, username: "Durant" },
+                  { avatar: img.src, id: 2, username: "James" },
+                  { avatar: img.src, id: 2, username: "Lebron" },
                 ]}
               />
             </div>
@@ -80,6 +72,11 @@ export const FeedController: React.FC = () => {
           <Page />
         </div>
       </div>
+      {povModal && (
+        <Modal isOpen={povModal} onRequestClose={() => setPovModal(!povModal)}>
+          <Input textarea={true} className="bg-primary-600" />
+        </Modal>
+      )}
     </MiddlePanel>
   );
 };
