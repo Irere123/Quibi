@@ -28,3 +28,5 @@ export { default as MoreVert } from "./MoreVert";
 export { default as PersonAdd } from "./PersonAdd";
 export { default as PushPin } from "./PushPin";
 export { default as AccountTree } from "./AccountTree";
+export { default as Share } from "./Share";
+export { default as Heart } from "./Heart";

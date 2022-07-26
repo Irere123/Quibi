@@ -1,0 +1,12 @@
+{
+  "name": "quibi",
+  "private": true,
+  "workspaces": {
+    "packages": [
+      "web"
+    ],
+    "nohoist": [
+      "**"
+    ]
+  }
+}
