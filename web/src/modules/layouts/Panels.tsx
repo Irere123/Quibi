@@ -138,23 +138,14 @@ export const SettingsLeftPanel: React.FC = () => {
         <p className="text-primary-300 font-bold">USER SETTINGS</p>
         <Link href={"/settings"} passHref>
           <p
-            className={`text-primary-200 mt-4 cursor-pointer ${activeCSS(
-              "/settings"
-            )}`}
-          >
-            {t("pages.settings.account.label")}
-          </p>
-        </Link>
-        <Link href={"/settings/languages"} passHref>
-          <p
             className={`text-primary-200 cursor-pointer ${activeCSS(
-              "/settings/languages"
+              "/settings"
             )}`}
           >
             {t("pages.settings.language.label")}
           </p>
         </Link>
-        <Link href={"/settings/languages"} passHref>
+        <Link href={"/settings/security"} passHref>
           <p
             className={`text-primary-200 cursor-pointer ${activeCSS(
               "/settings/security"

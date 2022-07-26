@@ -1,3 +1,3 @@
-import { AccountSettingspage } from "../../modules/settings/AccountSettingsPage";
+import { LanguageSettingsPage } from "../../modules/settings/LanguageSettingsPage";
 
-export default AccountSettingspage;
+export default LanguageSettingsPage;
