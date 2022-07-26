@@ -1,5 +1,5 @@
 {
-    "elixirLS.projectDir": "kousa",
-    "elixir.projectPath": "kousa",
-    "git.ignoreLimitWarning": true,
+  "elixirLS.projectDir": "api",
+  "elixir.projectPath": "api",
+  "git.ignoreLimitWarning": true
 }
