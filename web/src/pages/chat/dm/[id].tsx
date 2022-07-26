@@ -1,8 +1,3 @@
-import type { NextPage } from "next";
-import { PersonChat } from "../../../modules/chat/person/PersonChat";
+import { DmChatController } from "../../../modules/chat/dm/DmChatController";
 
-const DMPage: NextPage = () => {
-  return <PersonChat />;
-};
-
-export default DMPage;
+export default DmChatController;

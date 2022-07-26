@@ -1,14 +1,14 @@
 import React from "react";
 import { ChatInput } from "../ChatInput";
-import { RoomForumContent } from "./RoomForumContent";
-import { RoomForumHeader } from "./RooomForumHeader";
+import { DmChatHeader } from "./DmChatHeader";
+import { DmMessages } from "./DmMessages";
 
-export const RoomForum: React.FC = () => {
+export const DmChat: React.FC = () => {
   return (
     <div className="flex flex-1 overflow-y-auto w-full mb-7 bg-primary-800 h-full rounded-lg">
       <div className="flex flex-1 w-full flex-col">
-        <RoomForumHeader />
-        <RoomForumContent />
+        <DmChatHeader />
+        <DmMessages />
         <ChatInput />
       </div>
     </div>
