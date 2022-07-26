@@ -39,7 +39,7 @@ export const LoginPage: React.FC = () => {
         <h3 className="text-secondary-300 text-5xl">Quibi</h3>
       </div>
       <div className="flex justify-center items-center w-full">
-        <div className="landingPage__loginCard bg-secondary-300 py-7 px-6 shadow-lg">
+        <div className="landingPage__loginCard bg-secondary-300 py-7 px-6 shadow-2xl">
           <div className="flex gap-2 flex-col">
             <span className="text-3xl font-bold text-primary-100">Welcome</span>
             <div className="flex-wrap text-primary-200">
@@ -77,7 +77,7 @@ export const LoginPage: React.FC = () => {
         <div className="hidden sm:flex">
           <h3 className="text-secondary-300">Quibi</h3>
         </div>
-        <div className="flex flex-row gap-3 text-primary-100">
+        <div className="flex flex-row gap-3 text-secondary-300">
           <p>English</p>
           <a href="/developer" className="ml-2">
             {t("footer.link_1")}
