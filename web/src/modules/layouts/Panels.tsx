@@ -151,7 +151,7 @@ export const SettingsLeftPanel: React.FC = () => {
               "/settings/security"
             )}`}
           >
-            Security
+            {t("pages.settings.security.label")}
           </p>
         </Link>
       </div>

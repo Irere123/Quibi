@@ -1,0 +1,67 @@
+{
+  "_comment": "if you change this file, do: yarn i18 NB:You must keep all files in sync(the same)",
+  "header": {
+    "_comment": "Main title Internationalization Strings",
+    "title": "Quibi",
+    "dashboard": "Dashboard"
+  },
+  "common": {
+    "loadMore": "Load More",
+    "loading": "Loading...",
+    "noUsersFound": "No users found !",
+    "ok": "Ok",
+    "yes": "Yes",
+    "no": "No",
+    "cancel": "Cancel",
+    "save": "Save",
+    "edit": "Edit",
+    "delete": "Delete",
+    "copyLink": "Copy Link",
+    "copied": "Copy"
+  },
+  "footer": {
+    "_comment": "Main Footer UI Internationalization Strings",
+    "link_1": "Developer",
+    "link_2": "Help"
+  },
+  "pages": {
+    "_comment": "Pages UI Internationalization Strings",
+    "home": { "your_feed": "Your Feed" },
+    "chat": {
+      "title": "Chat",
+      "groups": "Groups",
+      "people": "People",
+      "members": "{{membersNum}} Members",
+      "add_members": "Add Members",
+      "messages": "{{messageNum}} Messages"
+    },
+    "settings": {
+      "security": { "title": "Security Settings", "label": "Security" },
+      "language": { "title": "Languages Settings", "label": "Languages" },
+      "appearance": { "title": "Appearance Settings", "label": "Appearance" },
+      "notifications": {
+        "title": "Notifications Settings",
+        "label": "Notifications"
+      },
+      "keybinds": { "title": "Keybinds Settings", "label": "Keybinds" }
+    }
+  },
+  "modules": { "chat": { "sendMessage": "Send Message" } },
+  "components": {
+    "search": {
+      "placeholder": "Search for works, users and more",
+      "placeholderShort": "Search"
+    },
+    "panels": {
+      "cantacts": "Cantacts",
+      "sponsored": "Sponsored",
+      "right": {
+        "home": "Home",
+        "chat": "Chat",
+        "works": "Works",
+        "account": "Account",
+        "discovery": "Discovery"
+      }
+    }
+  }
+}

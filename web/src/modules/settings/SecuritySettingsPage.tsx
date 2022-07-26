@@ -10,7 +10,7 @@ export const SecuritySettingsPage: React.FC = () => {
 
   return (
     <SettingsLayout>
-      <HeaderController title={t("pages.settings.account.title")} embed={{}} />
+      <HeaderController title={t("pages.settings.security.title")} embed={{}} />
       <SettingsWrapper>
         <BaseSettingsItem className="flex flex-col gap-5">
           <p>Hellko world</p>
