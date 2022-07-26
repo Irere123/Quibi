@@ -1,17 +1,13 @@
 import React from "react";
-import { PlusIcon } from "../../icons";
-import { BoxedIcon } from "../../ui/BoxedIcon";
+import { PushPin } from "../../icons";
+import { AccountPageHeader } from "../../ui/AccountPageHeader";
 import { AccountMainPanel } from "../layouts/GridPanels";
 
 export const AccountController: React.FC = () => {
   return (
     <AccountMainPanel
       stickyChildren={
-        <div>
-          <BoxedIcon>
-            <PlusIcon />
-          </BoxedIcon>
-        </div>
+        <AccountPageHeader icon={<PushPin />} title={"Meetups"} />
       }
     >
       <h1>Hello world</h1>

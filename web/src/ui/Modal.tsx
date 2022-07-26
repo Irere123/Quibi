@@ -15,7 +15,7 @@ const customStyles = {
       bottom: "auto",
       marginRight: "-50%",
       borderRadius: 4,
-      padding: "10px",
+      padding: "20px",
       transform: "translate(-50%, -50%)",
       backgroundColor: "var(--color-primary-800)",
       border: "none",
@@ -75,7 +75,7 @@ export const Modal: React.FC<
         <div className={`flex flex-col gap-3`}>
           <div className="flex">
             <div className="flex flex-1 flex-col">
-              <h4 className="text-primary-100 font-semibold text-center">
+              <h4 className="text-primary-100 font-sans font-semibold text-center">
                 {title}
               </h4>
             </div>
