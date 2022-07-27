@@ -1,21 +1,16 @@
-# Api
+# API - Elixir Backend
 
-**TODO: Add description**
+## Running Tests
 
-## Installation
+`mix test`
 
-If [available in Hex](https://hex.pm/docs/publish), the package can be installed
-by adding `api` to your list of dependencies in `mix.exs`:
+Coverage report: `mix coveralls.html`.
+Pretty information outputted into `cover/excoveralls.html`
 
-```elixir
-def deps do
-  [
-    {:api, "~> 0.1.0"}
-  ]
-end
-```
+## Autoformatting
 
-Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_doc)
-and published on [HexDocs](https://hexdocs.pm). Once published, the docs can
-be found at [https://hexdocs.pm/api](https://hexdocs.pm/api).
+`mix format`
 
+## Style ENFORCEMENT
+
+`mix credo --strict`
