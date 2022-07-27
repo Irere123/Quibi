@@ -9,5 +9,4 @@ defmodule Beef.Access.Users do
     |> Query.filter_by_username(username)
     |> Repo.one()
   end
-
 end

@@ -1,10 +1,10 @@
 defmodule Beef.Queries.Users do
-   @moduledoc """
+  @moduledoc """
   all functions in this module should be "Query builder" functions,
   they should not touch the database.
   """
 
-  import  Ecto.Query, warn: false
+  import Ecto.Query, warn: false
   alias Beef.Schemas.User
 
   def start do

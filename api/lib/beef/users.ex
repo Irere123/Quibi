@@ -1,5 +1,5 @@
 defmodule Beef.Users do
-   @moduledoc """
+  @moduledoc """
   Context module for Users.  This module acts as a "gateway" module defining
   the "boundary" for Users database access.  Consider Beef.Users.* modules
   to be "private modules".  If in the future we would like to enforce these
@@ -12,5 +12,4 @@ defmodule Beef.Users do
   """
 
   defdelegate get_by_username(username), to: Beef.Access.Users
-
 end

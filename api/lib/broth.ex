@@ -3,7 +3,7 @@ defmodule Broth do
 
   alias Broth.Routes.Stats
   alias Broth.Routes.DevOnly
-
+  alias Broth.Routes.User
 
   use Plug.Router
   use Sentry.PlugCapture
@@ -17,6 +17,7 @@ defmodule Broth do
   end
 
   forward("/dev", to: DevOnly)
+  forward("/user", to: User)
   forward("/stats", to: Stats)
 
   get _ do

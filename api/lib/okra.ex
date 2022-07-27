@@ -4,7 +4,6 @@ defmodule Okra do
   def start(_type, _args) do
     import Supervisor.Spec, warn: false
 
-
     Okra.Metric.PrometheusExporter.setup()
     Okra.Metric.PipelineInstrumenter.setup()
 
