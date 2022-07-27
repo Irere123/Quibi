@@ -1,21 +1,25 @@
-defmodule Api.MixProject do
+defmodule Okra.MixProject do
   use Mix.Project
 
   def project do
     [
-      app: :api,
+      app: :okra,
       version: "0.1.0",
       elixir: "~> 1.12",
       start_permanent: Mix.env() == :prod,
-      deps: deps()
+      deps: deps(),
+      elixirc_paths: elixirc_paths(Mix.env()),
+      aliases: aliases()
     ]
   end
 
-  # Run "mix help compile.app" to learn about applications.
   def application do
+    dev_only_apps = List.wrap(if Mix.env() == :dev, do: :remix)
+
     [
-      extra_applications: [:logger],
-      mod: {Api.Application, []}
+      extra_applications:
+        [:ueberauth_google, :logger, :ueberauth_facebook, :prometheus_ex] ++ dev_only_apps,
+      mod: {Okra, []}
     ]
   end
 
@@ -46,7 +50,18 @@ defmodule Api.MixProject do
       {:prometheus_plugs, "~> 1.1"},
       {:timex, "~> 3.7"},
       # style ENFORCEMENT
-      {:credo, "~> 1.6"},
+      {:credo, "~> 1.6"}
+    ]
+  end
+
+  defp elixirc_paths(:test), do: ["lib", "test/_support"]
+  defp elixirc_paths(_), do: ["lib"]
+
+  defp aliases do
+    [
+      "ecto.setup": ["ecto.create", "ecto.migrate"],
+      "ecto.reset": ["ecto.drop", "ecto.setup"],
+      test: ["ecto.create --quiet", "ecto.migrate", "test"]
     ]
   end
 end
