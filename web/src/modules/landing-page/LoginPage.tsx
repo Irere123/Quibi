@@ -1,20 +1,36 @@
-import React from "react";
-import { Twitter, Google, Discord } from "../../icons";
+import React, { useCallback } from "react";
+import { Twitter, Google, Discord, Bug } from "../../icons";
 import { HeaderController } from "../display/HeaderController";
 import { useTypeSafeTranslation } from "../../hooks/useTypeSafeTranslation";
+import { apiBaseUrl, __prod__ } from "../../lib/constants";
+import { useRouter } from "next/router";
+import { useTokenStore } from "../auth/useTokenStore";
 
 interface LoginButtonProps {
+  dev?: boolean;
   children: [React.ReactNode, React.ReactNode];
-  oauthUrl: string;
+  oauthUrl?: string;
+  onClick?: () => void;
 }
 
-const LoginButton: React.FC<LoginButtonProps> = ({ oauthUrl, children }) => {
+const LoginButton: React.FC<LoginButtonProps> = ({
+  oauthUrl,
+  children,
+  dev,
+  onClick,
+}) => {
+  const clickHandler = useCallback(() => {
+    window.location.href = oauthUrl as string;
+  }, [oauthUrl]);
+
   return (
     <button
-      className="flex items-center gap-3 bg-primary-700 hover:bg-primary-600 rounded justify-center text-primary-200 py-2 mt-2"
-      onClick={() => {
-        window.location.href = `${oauthUrl}`;
-      }}
+      className={`flex items-center gap-3 ${
+        dev
+          ? "bg-secondary-300 text-primary-900"
+          : "bg-primary-700 hover:bg-primary-600 text-primary-200"
+      } rounded justify-center py-2 mt-2`}
+      onClick={oauthUrl ? clickHandler : onClick}
     >
       <span>{children[0]}</span>
       {children[1]}
@@ -24,6 +40,7 @@ const LoginButton: React.FC<LoginButtonProps> = ({ oauthUrl, children }) => {
 
 export const LoginPage: React.FC = () => {
   const { t } = useTypeSafeTranslation();
+  const { push } = useRouter();
 
   return (
     <div
@@ -70,6 +87,31 @@ export const LoginPage: React.FC = () => {
               <Twitter />
               Login with Twitter
             </LoginButton>
+            {!__prod__ ? (
+              <LoginButton
+                dev
+                onClick={async () => {
+                  // eslint-disable-next-line no-alert
+                  const name = window.prompt("username");
+                  if (!name) {
+                    return;
+                  }
+                  const r = await fetch(
+                    `${apiBaseUrl}/dev/test-info?username=` + name
+                  );
+                  const d = await r.json();
+                  useTokenStore.getState().setTokens({
+                    accessToken: d.accessToken,
+                    refreshToken: d.refreshToken,
+                  });
+                  push("/dash");
+                }}
+                data-testid="create-test-user"
+              >
+                <Bug width={20} height={20} />
+                Create a test user
+              </LoginButton>
+            ) : null}
           </div>
         </div>
       </div>
