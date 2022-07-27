@@ -35,18 +35,8 @@ config :joken,
   refresh_token_secret: System.fetch_env!("REFRESH_TOKEN_SECRET")
 
 config :ueberauth, Ueberauth.Strategy.Google.OAuth,
-  client_id:
-    System.get_env("GOOGLE_CLIENT_ID") ||
-      raise("""
-      environment variable GOOGLE_CLIENT_ID is missing.
-      Create an oauth application on Google to get one
-      """),
-  client_secret:
-    System.get_env("GOOGLE_CLIENT_SECRET") ||
-      raise("""
-        environment variable GOOGLE_CLIENT_SECRET is missing.
-        Create an oauth application on Google to get one
-      """)
+  client_id: "1022380030031-7ttj98r440qo8amanjpssv8r4pdk2heq.apps.googleusercontent.com",
+  client_secret: "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"
 
 config :ueberauth, Ueberauth.Strategy.Twitter.OAuth,
   consumer_key:

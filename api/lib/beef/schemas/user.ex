@@ -34,6 +34,7 @@ defmodule Beef.Schemas.User do
     field(:bannerUrl, :string)
     field(:tokenVersion, :integer)
     field(:online, :boolean)
+    field(:hasLoggedIn, :boolean)
     field(:last_online, :utc_datetime_usec)
 
     timestamps()

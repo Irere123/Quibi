@@ -49,5 +49,4 @@ defmodule Broth.Plugs.CheckAuth do
       conn
     end
   end
-
 end
