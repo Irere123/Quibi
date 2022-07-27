@@ -4,7 +4,12 @@ defmodule Okra do
   def start(_type, _args) do
     import Supervisor.Spec, warn: false
 
+
+    Okra.Metric.PrometheusExporter.setup()
+    Okra.Metric.PipelineInstrumenter.setup()
+
     children = [
+      Onion.StatsCache,
       {Beef.Repo, []},
       {Phoenix.PubSub, name: Onion.PubSub},
       Plug.Cowboy.child_spec(

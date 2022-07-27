@@ -33,7 +33,7 @@ defmodule Broth.Routes.DevOnly do
                     bannerUrl: "https://placekitten.com/1000/300",
                     displayName: String.capitalize(username),
                     bio:
-                      "This is some interesting info about the ex-founder of nothing, welcome to the bio of such a ocol pers on !"
+                      "This is some interesting info about the ex-founder of nothing, welcome to the bio of such a cool person !"
                   },
                   returning: true
                 ),
