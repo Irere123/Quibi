@@ -4,7 +4,7 @@
   "version": "0.3.0",
   "license": "MIT",
   "keywords": [
-    "dogehouse"
+    "quibi"
   ],
   "description": "The official Quibi API client.",
   "main": "lib/index.js",
