@@ -4,9 +4,7 @@ defmodule Okra do
   def start(_type, _args) do
     import Supervisor.Spec, warn: false
 
-
     children = [
-
       {Beef.Repo, []},
       {Phoenix.PubSub, name: Onion.PubSub},
       Plug.Cowboy.child_spec(
@@ -27,6 +25,7 @@ defmodule Okra do
     case Supervisor.start_link(children, opts) do
       {:ok, pid} ->
         {:ok, pid}
+
       error ->
         error
     end
