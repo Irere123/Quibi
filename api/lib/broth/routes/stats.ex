@@ -18,7 +18,7 @@ defmodule Broth.Routes.Stats do
 
     query =
       from(u in User,
-        where: u.lastOnline > ^two_days_ago or u.online
+        where: u.last_online > ^two_days_ago or u.online
       )
 
     numActive = Repo.aggregate(query, :count, :id)
