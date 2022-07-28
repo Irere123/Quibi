@@ -1,6 +1,5 @@
 import React from "react";
 import Header from "next/head";
-import { NextPage } from "next";
 
 export interface HeaderControllerProps {
   title?: string;
@@ -10,7 +9,7 @@ export interface HeaderControllerProps {
   description?: string;
 }
 
-export const HeaderController: NextPage<HeaderControllerProps> = ({
+export const HeaderController: React.FC<HeaderControllerProps> = ({
   title,
   description = "Quibi, an open world for you to communicate, collaborate and manage. Now you can share skills and learn new skills easily than ever",
   owner,

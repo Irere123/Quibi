@@ -1,20 +1,37 @@
-import React from "react";
-import { Twitter, Google, Discord } from "../../icons";
+import React, { useCallback } from "react";
+import { Twitter, Google, Discord, Bug } from "../../icons";
 import { HeaderController } from "../display/HeaderController";
 import { useTypeSafeTranslation } from "../../hooks/useTypeSafeTranslation";
+import { apiBaseUrl, __prod__ } from "../../lib/constants";
+import { useRouter } from "next/router";
+import { useTokenStore } from "../auth/useTokenStore";
+import { isServer } from "../../lib/isServer";
 
 interface LoginButtonProps {
+  dev?: boolean;
   children: [React.ReactNode, React.ReactNode];
-  oauthUrl: string;
+  oauthUrl?: string;
+  onClick?: () => void;
 }
 
-const LoginButton: React.FC<LoginButtonProps> = ({ oauthUrl, children }) => {
+const LoginButton: React.FC<LoginButtonProps> = ({
+  oauthUrl,
+  children,
+  dev,
+  onClick,
+}) => {
+  const clickHandler = useCallback(() => {
+    window.location.href = oauthUrl as string;
+  }, [oauthUrl]);
+
   return (
     <button
-      className="flex items-center gap-3 bg-primary-700 hover:bg-primary-600 rounded justify-center text-primary-200 py-2 mt-2"
-      onClick={() => {
-        window.location.href = `${oauthUrl}`;
-      }}
+      className={`flex items-center gap-3 ${
+        dev
+          ? "bg-secondary-300 text-primary-900"
+          : "bg-primary-700 hover:bg-primary-600 text-primary-200"
+      } rounded justify-center py-2 mt-2`}
+      onClick={oauthUrl ? clickHandler : onClick}
     >
       <span>{children[0]}</span>
       {children[1]}
@@ -24,6 +41,18 @@ const LoginButton: React.FC<LoginButtonProps> = ({ oauthUrl, children }) => {
 
 export const LoginPage: React.FC = () => {
   const { t } = useTypeSafeTranslation();
+  // const hasTokens = useTokenStore((s) => !!(s.accessToken && s.refreshToken));
+  const { push } = useRouter();
+
+  // useEffect(() => {
+  //   if (hasTokens) {
+  //     push("/dash");
+  //   }
+  // }, [hasTokens, push]);
+
+  const queryParams = !isServer
+    ? "?redirect_after_base=" + window.location.origin
+    : "";
 
   return (
     <div
@@ -58,7 +87,9 @@ export const LoginPage: React.FC = () => {
             </div>
           </div>
           <div className="flex flex-col gap-4 mt-4">
-            <LoginButton oauthUrl="/dash">
+            <LoginButton
+              oauthUrl={`${apiBaseUrl}/auth/google/web${queryParams}`}
+            >
               <Google />
               Login with Google
             </LoginButton>
@@ -66,10 +97,37 @@ export const LoginPage: React.FC = () => {
               <Discord />
               Login with Discord
             </LoginButton>
-            <LoginButton oauthUrl="/dash">
+            <LoginButton
+              oauthUrl={`${apiBaseUrl}/auth/twitter/web${queryParams}`}
+            >
               <Twitter />
               Login with Twitter
             </LoginButton>
+            {!__prod__ ? (
+              <LoginButton
+                dev
+                onClick={async () => {
+                  // eslint-disable-next-line no-alert
+                  const name = window.prompt("username");
+                  if (!name) {
+                    return;
+                  }
+                  const r = await fetch(
+                    `${apiBaseUrl}/dev/test-info?username=` + name
+                  );
+                  const d = await r.json();
+                  useTokenStore.getState().setTokens({
+                    accessToken: d.accessToken,
+                    refreshToken: d.refreshToken,
+                  });
+                  push("/dash");
+                }}
+                data-testid="create-test-user"
+              >
+                <Bug width={20} height={20} />
+                Create a test user
+              </LoginButton>
+            ) : null}
           </div>
         </div>
       </div>
