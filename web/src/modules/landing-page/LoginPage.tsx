@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from "react";
+import React, { useCallback } from "react";
 import { Twitter, Google, Discord, Bug } from "../../icons";
 import { HeaderController } from "../display/HeaderController";
 import { useTypeSafeTranslation } from "../../hooks/useTypeSafeTranslation";
@@ -97,7 +97,9 @@ export const LoginPage: React.FC = () => {
               <Discord />
               Login with Discord
             </LoginButton>
-            <LoginButton oauthUrl="/dash">
+            <LoginButton
+              oauthUrl={`${apiBaseUrl}/auth/twitter/web${queryParams}`}
+            >
               <Twitter />
               Login with Twitter
             </LoginButton>
