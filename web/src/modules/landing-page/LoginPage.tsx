@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useEffect } from "react";
 import { Twitter, Google, Discord, Bug } from "../../icons";
 import { HeaderController } from "../display/HeaderController";
 import { useTypeSafeTranslation } from "../../hooks/useTypeSafeTranslation";
@@ -41,14 +41,14 @@ const LoginButton: React.FC<LoginButtonProps> = ({
 
 export const LoginPage: React.FC = () => {
   const { t } = useTypeSafeTranslation();
-  // const hasTokens = useTokenStore((s) => !!(s.accessToken && s.refreshToken));
+  const hasTokens = useTokenStore((s) => !!(s.accessToken && s.refreshToken));
   const { push } = useRouter();
 
-  // useEffect(() => {
-  //   if (hasTokens) {
-  //     push("/dash");
-  //   }
-  // }, [hasTokens, push]);
+  useEffect(() => {
+    if (hasTokens) {
+      push("/dash");
+    }
+  }, [hasTokens, push]);
 
   const queryParams = !isServer
     ? "?redirect_after_base=" + window.location.origin
