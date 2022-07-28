@@ -49,6 +49,7 @@
     "react-responsive": "8.2.0",
     "react-spring": "^9.4.4",
     "react-virtual": "^2.10.4",
+    "reconnecting-websocket": "^4.4.0",
     "styled-components": "^5.3.5",
     "superstruct": "^0.15.4",
     "tslib": "^2.3.1",

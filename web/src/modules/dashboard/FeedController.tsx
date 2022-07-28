@@ -9,7 +9,7 @@ import { MiddlePanel } from "../layouts/GridPanels";
 import { Povs } from "../../ui/Povs";
 import { SchoolIcon } from "../../icons";
 import { Modal } from "../../ui/Modal";
-import { Input } from "../../ui/Input";
+import { CreatePovModal } from "./CreatePovModal";
 
 const Page: React.FC = () => {
   return (
@@ -74,7 +74,7 @@ export const FeedController: React.FC = () => {
       </div>
       {povModal && (
         <Modal isOpen={povModal} onRequestClose={() => setPovModal(!povModal)}>
-          <Input textarea={true} className="bg-primary-600" />
+          <CreatePovModal />
         </Modal>
       )}
     </MiddlePanel>
