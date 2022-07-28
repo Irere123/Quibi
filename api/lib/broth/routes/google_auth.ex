@@ -77,7 +77,6 @@ defmodule Broth.Routes.GoogleAuth do
   end
 
   def handle_callback(%Plug.Conn{private: %{google_user: user}} = conn) do
-
     try do
       {_, db_user} = Users.google_find_or_create(user)
 

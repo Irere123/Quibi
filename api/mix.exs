@@ -50,7 +50,8 @@ defmodule Okra.MixProject do
       {:prometheus_plugs, "~> 1.1"},
       {:timex, "~> 3.7"},
       # style ENFORCEMENT
-      {:credo, "~> 1.6"}
+      {:credo, "~> 1.6"},
+      {:dotenv, "~> 3.1"}
     ]
   end
 

@@ -19,7 +19,7 @@ defmodule Broth.Routes.TwitterAuth do
   plug(:dispatch)
 
   def put_secret_key_base(conn, _) do
-    put_in(conn.secret_key_base, Application.get_env(:kousa, :secret_key_base))
+    put_in(conn.secret_key_base, Application.get_env(:okra, :secret_key_base))
   end
 
   get "/web" do
@@ -56,8 +56,8 @@ defmodule Broth.Routes.TwitterAuth do
            {:ok, access_token} <- ExTwitter.access_token(oauth_verifier, oauth_token),
            _ <-
              ExTwitter.configure(
-               consumer_key: System.get_env("TWITTER_API_KEY"),
-               consumer_secret: System.get_env("TWITTER_SECRET_KEY"),
+               consumer_key: "zAzhaCUlZSmzOxLNirD63g4D0",
+               consumer_secret: "6UTIrg80iQbVHXP7JUbVq84sVqye6TShn70ad11jQuVk2wTpZP",
                access_token: access_token.oauth_token,
                access_token_secret: access_token.oauth_token_secret
              ),
@@ -78,41 +78,21 @@ defmodule Broth.Routes.TwitterAuth do
                email: email,
                avatarUrl: avatarUrl
              }) do
-        if not is_nil(db_user.reasonForBan) do
-          conn
-          |> Redirect.redirect(
-            base_url <>
-              "/?error=" <>
-              URI.encode(
-                "your account got banned, if you think this was a mistake, please send me an email at benawadapps@gmail.com"
-              )
-          )
-        else
-          conn
-          |> Redirect.redirect(
-            base_url <>
-              "/?accessToken=" <>
-              Okra.AccessToken.generate_and_sign!(%{"userId" => db_user.id}) <>
-              "&refreshToken=" <>
-              Okra.RefreshToken.generate_and_sign!(%{
-                "userId" => db_user.id,
-                "tokenVersion" => db_user.tokenVersion
-              })
-          )
-        end
-      else
-        x ->
-          IO.inspect(x)
-
-          conn
-          |> Redirect.redirect(
-            base_url <>
-              "/?error=" <>
-              URI.encode("twitter login callback failed for some reason, tell ben to check logs")
-          )
+        conn
+        |> Redirect.redirect(
+          base_url <>
+            "/?accessToken=" <>
+            Okra.AccessToken.generate_and_sign!(%{"userId" => db_user.id}) <>
+            "&refreshToken=" <>
+            Okra.RefreshToken.generate_and_sign!(%{
+              "userId" => db_user.id,
+              "tokenVersion" => db_user.tokenVersion
+            })
+        )
       end
     rescue
       e ->
+        IO.inspect(e)
         Sentry.capture_exception(e,
           stacktrace: __STACKTRACE__,
           extra: %{twitter_auth: "/callback"}
@@ -130,7 +110,7 @@ defmodule Broth.Routes.TwitterAuth do
   def get_base_url(conn) do
     case conn |> get_session(:redirect_to_next) do
       true ->
-        "https://next.dogehouse.tv"
+        "https://quibi.me"
 
       _ ->
         Application.fetch_env!(:okra, :web_url)
