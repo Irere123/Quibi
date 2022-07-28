@@ -13,4 +13,6 @@ defmodule Beef.Users do
 
   defdelegate get_by_username(username), to: Beef.Access.Users
   defdelegate google_find_or_create(user), to: Beef.Mutations.Users
+  defdelegate twitter_find_or_create(user), to: Beef.Mutations.Users
+
 end

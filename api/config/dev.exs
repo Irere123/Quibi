@@ -35,18 +35,19 @@ config :joken,
   refresh_token_secret: System.fetch_env!("REFRESH_TOKEN_SECRET")
 
 config :ueberauth, Ueberauth.Strategy.Google.OAuth,
-  client_id: "1022380030031-7ttj98r440qo8amanjpssv8r4pdk2heq.apps.googleusercontent.com",
-  client_secret: "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"
+  client_id: "331770950925-kcebjolgcka56l6oali75dknrigr44q9.apps.googleusercontent.com",
+  client_secret: "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"
+  redirect_uri: "http://localhost:4001/auth/google/callback"
 
 config :ueberauth, Ueberauth.Strategy.Twitter.OAuth,
   consumer_key:
-    System.get_env("TWITTER_API_KEY") ||
+    "zAzhaCUlZSmzOxLNirD63g4D0" ||
       raise("""
       environment variable TWITTER_API_KEY is missing.
       Create an oauth application on Twitter to get one
       """),
   consumer_secret:
-    System.get_env("TWITTER_SECRET_KEY") ||
+    "6UTIrg80iQbVHXP7JUbVq84sVqye6TShn70ad11jQuVk2wTpZP" ||
       raise("""
         environment variable TWITTER_SECRET_KEY is missing.
         Create an oauth application on Twitter to get one
@@ -54,19 +55,19 @@ config :ueberauth, Ueberauth.Strategy.Twitter.OAuth,
 
 config :extwitter, :oauth,
   consumer_key:
-    System.get_env("TWITTER_API_KEY") ||
+    "zAzhaCUlZSmzOxLNirD63g4D0" ||
       raise("""
       environment variable TWITTER_API_KEY is missing.
       Create an oauth application on Twitter to get one
       """),
   consumer_secret:
-    System.get_env("TWITTER_SECRET_KEY") ||
+    "6UTIrg80iQbVHXP7JUbVq84sVqye6TShn70ad11jQuVk2wTpZP" ||
       raise("""
       environment variable TWITTER_SECRET_KEY is missing.
       Create an oauth application on Twitter to get one
       """),
   access_token:
-    System.get_env("TWITTER_BEARER_TOKEN") ||
+    "AAAAAAAAAAAAAAAAAAAAAD4tfQEAAAAAh8bUZXRtP4Ln2%2BVQ3RxkdwG9FQQ%3DXeiAYeJLkEBaALASCKRTpobOA3G9Ny9s7xuyXklQy8qIGzlfNY" ||
       raise("""
       environment variable TWITTER_BEARER_TOKEN is missing.
       Create an oauth application on Twitter to get one

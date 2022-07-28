@@ -11,11 +11,10 @@ defmodule Broth.Routes.GoogleAuth do
     state =
       if Application.get_env(:okra, :staging?) do
         %{
-          redirect_base_url:
-            fetch_query_params(conn).query_params["redirect_after_base"]
-            |> Jason.encode!()
-            |> Base.encode64()
+          redirect_base_url: fetch_query_params(conn).query_params["redirect_after_base"]
         }
+        |> Poison.encode!()
+        |> Base.encode64()
       else
         "web"
       end
@@ -24,7 +23,7 @@ defmodule Broth.Routes.GoogleAuth do
     |> Plug.Conn.put_private(:ueberauth_request_options, %{
       callback_url: Application.get_env(:okra, :api_url) <> "/auth/google/callback",
       options: [
-        default_scope: "profile email plus.me"
+        default_scope: "profile email"
       ]
     })
     |> Ueberauth.Strategy.Google.handle_request!()
@@ -50,7 +49,7 @@ defmodule Broth.Routes.GoogleAuth do
       redirect_base_url
     else
       _ ->
-        Application.fetch_env!(:kousa, :web_url)
+        Application.fetch_env!(:okra, :web_url)
     end
   end
 

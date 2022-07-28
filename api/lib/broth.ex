@@ -5,6 +5,8 @@ defmodule Broth do
   alias Broth.Routes.DevOnly
   alias Broth.Routes.User
   alias Broth.Routes.GoogleAuth
+  alias Broth.Routes.TwitterAuth
+
 
   use Plug.Router
   use Sentry.PlugCapture
@@ -17,6 +19,7 @@ defmodule Broth do
     send_resp(conn, 200, "")
   end
 
+  forward("/auth/twitter", to: TwitterAuth)
   forward("/auth/google", to: GoogleAuth)
   forward("/dev", to: DevOnly)
   forward("/user", to: User)

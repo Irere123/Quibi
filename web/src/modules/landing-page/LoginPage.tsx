@@ -1,10 +1,11 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useEffect } from "react";
 import { Twitter, Google, Discord, Bug } from "../../icons";
 import { HeaderController } from "../display/HeaderController";
 import { useTypeSafeTranslation } from "../../hooks/useTypeSafeTranslation";
 import { apiBaseUrl, __prod__ } from "../../lib/constants";
 import { useRouter } from "next/router";
 import { useTokenStore } from "../auth/useTokenStore";
+import { isServer } from "../../lib/isServer";
 
 interface LoginButtonProps {
   dev?: boolean;
@@ -40,7 +41,18 @@ const LoginButton: React.FC<LoginButtonProps> = ({
 
 export const LoginPage: React.FC = () => {
   const { t } = useTypeSafeTranslation();
+  // const hasTokens = useTokenStore((s) => !!(s.accessToken && s.refreshToken));
   const { push } = useRouter();
+
+  // useEffect(() => {
+  //   if (hasTokens) {
+  //     push("/dash");
+  //   }
+  // }, [hasTokens, push]);
+
+  const queryParams = !isServer
+    ? "?redirect_after_base=" + window.location.origin
+    : "";
 
   return (
     <div
@@ -75,7 +87,9 @@ export const LoginPage: React.FC = () => {
             </div>
           </div>
           <div className="flex flex-col gap-4 mt-4">
-            <LoginButton oauthUrl="/dash">
+            <LoginButton
+              oauthUrl={`${apiBaseUrl}/auth/google/web${queryParams}`}
+            >
               <Google />
               Login with Google
             </LoginButton>
