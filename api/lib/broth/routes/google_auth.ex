@@ -9,15 +9,11 @@ defmodule Broth.Routes.GoogleAuth do
 
   get "/web" do
     state =
-      if Application.get_env(:okra, :staging?) do
-        %{
-          redirect_base_url: fetch_query_params(conn).query_params["redirect_after_base"]
-        }
-        |> Poison.encode!()
-        |> Base.encode64()
-      else
-        "web"
-      end
+      %{
+        redirect_base_url: fetch_query_params(conn).query_params["redirect_after_base"]
+      }
+      |> Poison.encode!()
+      |> Base.encode64()
 
     %{conn | params: Map.put(conn.params, "state", state)}
     |> Plug.Conn.put_private(:ueberauth_request_options, %{
@@ -40,8 +36,9 @@ defmodule Broth.Routes.GoogleAuth do
     |> handle_callback()
   end
 
+  ######## This thing needs a refactor man????
   def get_base_url(conn) do
-    with true <- Application.get_env(:okra, :staging?),
+    with false <- Application.get_env(:okra, :staging?),
          state <- Map.get(conn.query_params, "state", ""),
          {:ok, json} <- Base.decode64(state),
          {:ok, %{"redirect_base_url" => redirect_base_url}} when is_binary(redirect_base_url) <-
@@ -79,10 +76,8 @@ defmodule Broth.Routes.GoogleAuth do
     )
   end
 
-  def handle_callback(
-        %Plug.Conn{private: %{google_user: user}} =
-          conn
-      ) do
+  def handle_callback(%Plug.Conn{private: %{google_user: user}} = conn) do
+
     try do
       {_, db_user} = Users.google_find_or_create(user)
 

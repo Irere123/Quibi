@@ -37,7 +37,6 @@ config :joken,
 config :ueberauth, Ueberauth.Strategy.Google.OAuth,
   client_id: "331770950925-kcebjolgcka56l6oali75dknrigr44q9.apps.googleusercontent.com",
   client_secret: "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"
-  redirect_uri: "http://localhost:4001/auth/google/callback"
 
 config :ueberauth, Ueberauth.Strategy.Twitter.OAuth,
   consumer_key:
