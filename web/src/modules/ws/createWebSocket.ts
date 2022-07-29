@@ -97,7 +97,7 @@ export const createWebSocket = (force?: boolean) => {
       { staleTime: 0 }
     );
 
-    toast("connected", { type: "success" });
+    console.log("connected", { type: "success" });
     const id = setInterval(() => {
       if (ws && ws.readyState !== ws.CLOSED) {
         ws.send("ping");
@@ -108,7 +108,7 @@ export const createWebSocket = (force?: boolean) => {
   });
 
   ws.addEventListener("message", (e) => {
-    console.log(e);
+    console.log(e.data);
     const json = JSON.parse(e.data as string);
 
     if (e.data === '"pong"') {
