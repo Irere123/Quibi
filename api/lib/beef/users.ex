@@ -14,6 +14,7 @@ defmodule Beef.Users do
   # ACCESS Functions
   defdelegate get_by_username(username), to: Beef.Access.Users
   defdelegate get_by_id(user_id), to: Beef.Access.Users
+  defdelegate get(user_id), to: Beef.Access.Users
 
   # MUTATIONS
   defdelegate delete(user_id), to: Beef.Mutations.Users
