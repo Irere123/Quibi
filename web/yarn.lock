@@ -2254,6 +2254,7 @@ __metadata:
     "@types/react-dom": 17.0.14
     "@types/react-i18next": ^8.1.0
     "@types/react-modal": ^3.13.1
+    "@types/react-toastify": ^4.1.0
     "@types/styled-components": ^5.1.24
     "@types/superstruct": ^0.8.2
     "@types/twemoji": ^13.1.2
@@ -4189,6 +4190,15 @@ __metadata:
   dependencies:
     "@types/react": "*"
   checksum: b0ad403e0051a2882e9086c6006cc342901b1c90caf760893b31717a5cbc04f86cc1ea7b5ce12a2c8350c9c09e9b344de3783404e70b7c7ea6a037d0ffd70e99
+  languageName: node
+  linkType: hard
+
+"@types/react-toastify@npm:^4.1.0":
+  version: 4.1.0
+  resolution: "@types/react-toastify@npm:4.1.0"
+  dependencies:
+    react-toastify: "*"
+  checksum: ef8993d4c6019b97f725cabb56b15106f306ba3744acf0930148246608ee992b68459d6af46df16046c2ccf70e7d77de303339760cd0f27a7644d6d1d1d299ac
   languageName: node
   linkType: hard
 
@@ -14027,6 +14037,18 @@ __metadata:
     "@react-spring/web": ~9.4.4
     "@react-spring/zdog": ~9.4.4
   checksum: fb2b36580d61f3e70767635ffcdb5b3751a7f12c3c3a78171ad997076dfa032f2cf77cffc9befd13b8194934e083309906beae971a013d848cc46a702732a283
+  languageName: node
+  linkType: hard
+
+"react-toastify@npm:*":
+  version: 9.0.7
+  resolution: "react-toastify@npm:9.0.7"
+  dependencies:
+    clsx: ^1.1.1
+  peerDependencies:
+    react: ">=16"
+    react-dom: ">=16"
+  checksum: c10753ec242c0f91247633504a6ffc8199a8d4eff5f7e28edd63521236bffda57317438e8e1abe3a25c4296860375fe51d96361480232f1c8d86ed1fcf77ce62
   languageName: node
   linkType: hard
 

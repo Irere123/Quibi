@@ -6,6 +6,7 @@ import { apiBaseUrl, __prod__ } from "../../lib/constants";
 import { useRouter } from "next/router";
 import { useTokenStore } from "../auth/useTokenStore";
 import { isServer } from "../../lib/isServer";
+import { useSaveTokensFromQueryParams } from "../auth/useSaveTokensFromQueryParams";
 
 interface LoginButtonProps {
   dev?: boolean;
@@ -40,6 +41,7 @@ const LoginButton: React.FC<LoginButtonProps> = ({
 };
 
 export const LoginPage: React.FC = () => {
+  useSaveTokensFromQueryParams();
   const { t } = useTypeSafeTranslation();
   const hasTokens = useTokenStore((s) => !!(s.accessToken && s.refreshToken));
   const { push } = useRouter();
