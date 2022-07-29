@@ -35,18 +35,28 @@ config :joken,
   refresh_token_secret: System.fetch_env!("REFRESH_TOKEN_SECRET")
 
 config :ueberauth, Ueberauth.Strategy.Google.OAuth,
-  client_id: "331770950925-kcebjolgcka56l6oali75dknrigr44q9.apps.googleusercontent.com",
-  client_secret: "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"
+  client_id:
+    System.fetch_env!("GOOGLE_CLIENT_ID") ||
+      raise("""
+          environment variable GOOGLE_CLIENT_ID is missing.
+          Create an oauth application on Google Cloud Platform to get one
+      """),
+  client_secret:
+    System.fetch_env!("GOOGLE_CLIENT_SECRET") ||
+      raise("""
+        environment variable GOOGLE_CLIENT_SECRET is missing.
+        Create an oauth application on Google Cloud Platform to get one
+      """)
 
 config :ueberauth, Ueberauth.Strategy.Twitter.OAuth,
   consumer_key:
-    "zAzhaCUlZSmzOxLNirD63g4D0" ||
+    System.fetch_env!("TWITTER_API_KEY") ||
       raise("""
       environment variable TWITTER_API_KEY is missing.
       Create an oauth application on Twitter to get one
       """),
   consumer_secret:
-    "6UTIrg80iQbVHXP7JUbVq84sVqye6TShn70ad11jQuVk2wTpZP" ||
+    System.fetch_env!("TWITTER_SECRET_KEY") ||
       raise("""
         environment variable TWITTER_SECRET_KEY is missing.
         Create an oauth application on Twitter to get one
@@ -54,19 +64,19 @@ config :ueberauth, Ueberauth.Strategy.Twitter.OAuth,
 
 config :extwitter, :oauth,
   consumer_key:
-    "zAzhaCUlZSmzOxLNirD63g4D0" ||
+    System.fetch_env!("TWITTER_API_KEY") ||
       raise("""
       environment variable TWITTER_API_KEY is missing.
       Create an oauth application on Twitter to get one
       """),
   consumer_secret:
-    "6UTIrg80iQbVHXP7JUbVq84sVqye6TShn70ad11jQuVk2wTpZP" ||
+    System.fetch_env!("TWITTER_SECRET_KEY") ||
       raise("""
       environment variable TWITTER_SECRET_KEY is missing.
       Create an oauth application on Twitter to get one
       """),
   access_token:
-    "AAAAAAAAAAAAAAAAAAAAAD4tfQEAAAAAh8bUZXRtP4Ln2%2BVQ3RxkdwG9FQQ%3DXeiAYeJLkEBaALASCKRTpobOA3G9Ny9s7xuyXklQy8qIGzlfNY" ||
+    System.fetch_env!("TWITTER_BEARER_TOKEN") ||
       raise("""
       environment variable TWITTER_BEARER_TOKEN is missing.
       Create an oauth application on Twitter to get one

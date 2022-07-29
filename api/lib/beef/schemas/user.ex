@@ -45,7 +45,7 @@ defmodule Beef.Schemas.User do
     # TODO: amend this to accept *either* githubId or twitterId and also
     # pipe edit_changeset into this puppy.
     user
-    |> cast(attrs, ~w(username githubId avatarUrl bannerUrl)a)
-    |> validate_required([:username, :githubId, :avatarUrl, :bannerUrl])
+    |> cast(attrs, ~w("username twitterId avatarUrl bannerUrl")a)
+    |> validate_required([:username, :avatarUrl, :bannerUrl])
   end
 end

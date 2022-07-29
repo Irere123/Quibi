@@ -11,7 +11,7 @@ defmodule Broth.Routes.TwitterAuth do
 
   plug(Plug.Session,
     store: :cookie,
-    key: "_quibi_session",
+    key: "_dogehouse_session",
     signing_salt: "YaQoOWg5"
   )
 
@@ -50,60 +50,40 @@ defmodule Broth.Routes.TwitterAuth do
 
     base_url = get_base_url(conn_with_qp)
 
-    try do
-      with %{"oauth_token" => oauth_token, "oauth_verifier" => oauth_verifier} <-
-             conn_with_qp.query_params,
-           {:ok, access_token} <- ExTwitter.access_token(oauth_verifier, oauth_token),
-           _ <-
-             ExTwitter.configure(
-               consumer_key: "zAzhaCUlZSmzOxLNirD63g4D0",
-               consumer_secret: "6UTIrg80iQbVHXP7JUbVq84sVqye6TShn70ad11jQuVk2wTpZP",
-               access_token: access_token.oauth_token,
-               access_token_secret: access_token.oauth_token_secret
-             ),
-           %ExTwitter.Model.User{
-             description: bio,
-             name: displayName,
-             id_str: twitterId,
-             raw_data: %{email: email},
-             profile_image_url_https: avatarUrl,
-             profile_banner_url: bannerUrl
-           } <- ExTwitter.verify_credentials(include_email: true),
-           {_, db_user} <-
-             Users.twitter_find_or_create(%{
-               bio: bio,
-               displayName: displayName,
-               twitterId: twitterId,
-               bannerUrl: bannerUrl,
-               email: email,
-               avatarUrl: avatarUrl
-             }) do
-        conn
-        |> Redirect.redirect(
-          base_url <>
-            "/?accessToken=" <>
-            Okra.AccessToken.generate_and_sign!(%{"userId" => db_user.id}) <>
-            "&refreshToken=" <>
-            Okra.RefreshToken.generate_and_sign!(%{
-              "userId" => db_user.id,
-              "tokenVersion" => db_user.tokenVersion
-            })
-        )
-      end
-    rescue
-      e ->
-        IO.inspect(e)
-        Sentry.capture_exception(e,
-          stacktrace: __STACKTRACE__,
-          extra: %{twitter_auth: "/callback"}
-        )
+    with %{"oauth_token" => oauth_token, "oauth_verifier" => oauth_verifier} <-
+           conn_with_qp.query_params,
+         {:ok, access_token} <- ExTwitter.access_token(oauth_verifier, oauth_token),
+         _ <-
+           ExTwitter.configure(
+             consumer_key: System.get_env("TWITTER_API_KEY"),
+             consumer_secret: System.get_env("TWITTER_SECRET_KEY"),
+             access_token: access_token.oauth_token,
+             access_token_secret: access_token.oauth_token_secret
+           ) do
+      user = ExTwitter.verify_credentials(include_email: true)
+      IO.inspect(user)
 
-        conn_with_qp
-        |> Broth.Plugs.Redirect.redirect(
-          base_url <>
-            "/?error=" <>
-            URI.encode("auth failed, enable cookies and try again or give GitHub a try")
-        )
+      db_user =
+        Users.twitter_find_or_create(%{
+          bio: user.description,
+          displayName: user.name,
+          twitterId: user.id_str,
+          bannerUrl: user.profile_banner_url,
+          email: user.raw_data.email,
+          avatarUrl: user.profile_image_url_https
+        })
+
+      conn
+      |> Redirect.redirect(
+        base_url <>
+          "/?accessToken=" <>
+          Okra.AccessToken.generate_and_sign!(%{"userId" => db_user.id}) <>
+          "&refreshToken=" <>
+          Okra.RefreshToken.generate_and_sign!(%{
+            "userId" => db_user.id,
+            "tokenVersion" => db_user.tokenVersion
+          })
+      )
     end
   end
 

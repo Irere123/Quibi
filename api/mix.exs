@@ -51,7 +51,7 @@ defmodule Okra.MixProject do
       {:timex, "~> 3.7"},
       # style ENFORCEMENT
       {:credo, "~> 1.6"},
-      {:dotenv, "~> 3.1"}
+      {:dotenvy, "~> 0.3.0"}
     ]
   end
 

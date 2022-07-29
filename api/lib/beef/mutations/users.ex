@@ -62,6 +62,7 @@ defmodule Beef.Mutations.Users do
           where: u.id == ^db_user.id,
           update: [
             set: [
+              displayName: ^user.displayName,
               twitterId: ^user.twitterId
             ]
           ]
