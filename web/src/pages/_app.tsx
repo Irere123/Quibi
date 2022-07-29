@@ -30,7 +30,7 @@ function App({ Component, pageProps }: AppProps) {
   if (
     isServer &&
     !Component.getInitialProps &&
-    (Component as PageComponent<unknown>)
+    (Component as PageComponent<unknown>).ws
   ) {
     return null;
   }
