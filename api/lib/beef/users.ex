@@ -11,8 +11,16 @@ defmodule Beef.Users do
   NB (5 Mar 2021): these functions are probably going to get streamlined =D
   """
 
+  # ACCESS Functions
   defdelegate get_by_username(username), to: Beef.Access.Users
+  defdelegate get_by_id(user_id), to: Beef.Access.Users
+
+  # MUTATIONS
+  defdelegate delete(user_id), to: Beef.Mutations.Users
+  defdelegate bulk_insert(users), to: Beef.Mutations.Users
+  defdelegate set_offline(user_id), to: Beef.Mutations.Users
+  defdelegate set_online(user_id), to: Beef.Mutations.Users
+
   defdelegate google_find_or_create(user), to: Beef.Mutations.Users
   defdelegate twitter_find_or_create(user), to: Beef.Mutations.Users
-  defdelegate get_by_id(user_id), to: Beef.Access.Users
 end
