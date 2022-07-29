@@ -1,5 +1,6 @@
 import React from "react";
 import { useTypeSafeTranslation } from "../../hooks/useTypeSafeTranslation";
+import { WaitForWsAndAuth } from "../auth/WaitForWsAndAuth";
 import { HeaderController } from "../display/HeaderController";
 import { MainLayout } from "../layouts/MainLayout";
 import { LeftPannel } from "../layouts/Panels";
@@ -10,9 +11,14 @@ export const WorksPage: React.FC = () => {
   const { t } = useTypeSafeTranslation();
 
   return (
-    <MainLayout leftPanel={<LeftPannel />} rightPanel={<RightPanel />}>
-      <HeaderController title={t("components.panels.right.works")} embed={{}} />
-      <WorksController />
-    </MainLayout>
+    <WaitForWsAndAuth>
+      <MainLayout leftPanel={<LeftPannel />} rightPanel={<RightPanel />}>
+        <HeaderController
+          title={t("components.panels.right.works")}
+          embed={{}}
+        />
+        <WorksController />
+      </MainLayout>
+    </WaitForWsAndAuth>
   );
 };

@@ -1,6 +1,8 @@
 import { useRouter } from "next/router";
 import React from "react";
 import { LogOutIcon, PlusIcon } from "../icons";
+import { useTokenStore } from "../modules/auth/useTokenStore";
+import { closeWebSocket } from "../modules/ws/createWebSocket";
 import { BoxedIcon } from "./BoxedIcon";
 import { modalConfirm } from "./ConfirmModal";
 
@@ -32,7 +34,13 @@ export const AccountPageHeader: React.FC<AccountPageHeaderProps> = ({
           circle
           onClick={() => {
             modalConfirm("Are you sure you want to logout", () => {
-              console.log("logged out");
+              closeWebSocket();
+              useTokenStore.getState().setTokens({
+                accessToken: "",
+                refreshToken: "",
+              });
+
+              push("/logout");
             });
           }}
         >

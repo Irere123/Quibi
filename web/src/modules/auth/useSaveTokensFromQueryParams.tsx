@@ -1,5 +1,6 @@
 import { useRouter } from "next/router";
 import { useEffect } from "react";
+import { loginNextPathKey } from "../../lib/constants";
 import { useTokenStore } from "./useTokenStore";
 
 export const useSaveTokensFromQueryParams = () => {
@@ -18,6 +19,14 @@ export const useSaveTokensFromQueryParams = () => {
       });
 
       let nextPath = "/dash";
+
+      try {
+        const possibleNextPath = localStorage.getItem(loginNextPathKey);
+        if (possibleNextPath && possibleNextPath.startsWith("/")) {
+          nextPath = possibleNextPath;
+          localStorage.setItem(loginNextPathKey, "");
+        }
+      } catch {}
       push(nextPath);
     }
   }, [params, push]);
