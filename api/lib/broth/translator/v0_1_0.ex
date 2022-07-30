@@ -25,13 +25,11 @@ defmodule Broth.Translator.V0_1_0 do
     put_in(message, ["op"], @operator_translations[operator])
   end
 
-
   def translate_in_body(message, "get_user_profile") do
     put_in(message, ["d", "userIdOrUsername"], get_in(message, ["d", "userId"]))
   end
 
   def translate_in_body(message, _op), do: message
-
 
   # these casts need to be instrumented with fetchId in order to be treated
   # as a cast.
