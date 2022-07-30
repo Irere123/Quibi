@@ -49,4 +49,16 @@ defmodule Beef.Schemas.User do
     |> cast(attrs, ~w("username twitterId avatarUrl bannerUrl")a)
     |> validate_required([:username, :avatarUrl, :bannerUrl])
   end
+
+  defimpl Jason.Encoder do
+    @fields ~w(
+      id username email displayName avatarUrl bannerUrl bio online
+    )a
+
+    def encode(user, opts) do
+      user
+      |> Map.take(@fields)
+      |> Jason.Encoder.encode(opts)
+    end
+  end
 end

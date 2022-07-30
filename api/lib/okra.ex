@@ -6,6 +6,7 @@ defmodule Okra do
 
     Okra.Metric.PrometheusExporter.setup()
     Okra.Metric.PipelineInstrumenter.setup()
+    Okra.Metric.UserSessions.setup()
 
     children = [
       # top-level supervisor for UserSession group

@@ -11,7 +11,7 @@ defmodule Broth.Routes.TwitterAuth do
 
   plug(Plug.Session,
     store: :cookie,
-    key: "_dogehouse_session",
+    key: "_quibi_session",
     signing_salt: "YaQoOWg5"
   )
 
@@ -59,20 +59,24 @@ defmodule Broth.Routes.TwitterAuth do
              consumer_secret: System.get_env("TWITTER_SECRET_KEY"),
              access_token: access_token.oauth_token,
              access_token_secret: access_token.oauth_token_secret
-           ) do
-      user = ExTwitter.verify_credentials(include_email: true)
-      IO.inspect(user)
-
-      db_user =
-        Users.twitter_find_or_create(%{
-          bio: user.description,
-          displayName: user.name,
-          twitterId: user.id_str,
-          bannerUrl: user.profile_banner_url,
-          email: user.raw_data.email,
-          avatarUrl: user.profile_image_url_https
-        })
-
+           ),
+         %ExTwitter.Model.User{
+           description: bio,
+           name: displayName,
+           id_str: twitterId,
+           raw_data: %{email: email},
+           profile_image_url_https: avatarUrl,
+           profile_banner_url: bannerUrl
+         } <- ExTwitter.verify_credentials(include_email: true),
+         {_, db_user} <-
+           Users.twitter_find_or_create(%{
+             bio: bio,
+             displayName: displayName,
+             twitterId: twitterId,
+             bannerUrl: bannerUrl,
+             email: email,
+             avatarUrl: avatarUrl
+           }) do
       conn
       |> Redirect.redirect(
         base_url <>
@@ -90,7 +94,7 @@ defmodule Broth.Routes.TwitterAuth do
   def get_base_url(conn) do
     case conn |> get_session(:redirect_to_next) do
       true ->
-        "https://quibi.me"
+        "https://next.dogehouse.tv"
 
       _ ->
         Application.fetch_env!(:okra, :web_url)

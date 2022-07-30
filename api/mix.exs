@@ -25,13 +25,13 @@ defmodule Okra.MixProject do
 
   defp deps do
     [
-      {:plug_cowboy, "~> 2.5.2"},
       {:poison, "~> 5.0"},
+      {:plug_cowboy, "~> 2.5.2"},
       {:phoenix_pubsub, "~> 2.1.1"},
       {:ecto_sql, "~> 3.8.3"},
       {:ecto_enum, "~> 1.4"},
       {:jason, "~> 1.3"},
-      {:joken, "~> 2.5"},
+      {:joken, "~> 2.0"},
       {:elixir_uuid, "~> 1.2.1"},
       {:net_address, "~> 0.3"},
       # TODO: switch off of httpoison to, e.g. Mojito or Finch
@@ -51,8 +51,7 @@ defmodule Okra.MixProject do
       {:prometheus_plugs, "~> 1.1"},
       {:timex, "~> 3.7"},
       # style ENFORCEMENT
-      {:credo, "~> 1.6"},
-      {:dotenvy, "~> 0.3.0"}
+      {:credo, "~> 1.6"}
     ]
   end
 
