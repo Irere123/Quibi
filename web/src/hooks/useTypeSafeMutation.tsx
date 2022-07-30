@@ -1,23 +1,31 @@
-import { UseMutationOptions, useMutation } from "react-query";
-import { apiBaseUrl } from "../lib/constants";
+import { wrap } from "../modules/ws/wrapper";
+import { useContext } from "react";
+import { useMutation, UseMutationOptions } from "react-query";
+import { WebSocketContext } from "../modules/ws/WebSocketProvider";
+import { Await } from "../types/util-types";
 
-type Keys = string;
+type Keys = keyof ReturnType<typeof wrap>["mutation"];
 
 export const useTypeSafeMutation = <K extends Keys>(
   key: K,
-  opts?: UseMutationOptions
+  opts?: UseMutationOptions<
+    Await<ReturnType<ReturnType<typeof wrap>["mutation"][K]>>,
+    any,
+    Parameters<ReturnType<typeof wrap>["mutation"][K]>,
+    any
+  >
 ) => {
-  return useMutation<any>(
-    key,
-    async () => {
-      const r = await fetch(`${apiBaseUrl}/${key}`, { method: "POST" });
+  const { conn } = useContext(WebSocketContext);
 
-      if (r.status !== 200) {
-        throw new Error(await r.text());
-      }
-
-      return await r.json();
-    },
+  return useMutation<
+    Await<ReturnType<ReturnType<typeof wrap>["mutation"][K]>>,
+    any,
+    Parameters<ReturnType<typeof wrap>["mutation"][K]>
+  >(
+    (params) =>
+      (wrap(conn!).mutation[typeof key === "string" ? key : key[0]] as any)(
+        ...params
+      ),
     opts
   );
 };

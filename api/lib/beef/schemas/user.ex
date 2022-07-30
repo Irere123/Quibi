@@ -20,12 +20,13 @@ defmodule Beef.Schemas.User do
   end
 
   @derive {Jason.Encoder,
-           only: [:id, :username, :displayName, :avatarUrl, :bannerUrl, :bio, :online]}
+           only: [:id, :username, :email, :displayName, :avatarUrl, :bannerUrl, :bio, :online]}
   @primary_key {:id, :binary_id, []}
   schema "users" do
     field(:twitterId, :string)
     field(:googleId, :string)
-    field(:facebookId, :string)
+    field(:discordId, :string)
+    field(:discordAccessToken, :string)
     field(:username, :string)
     field(:displayName, :string)
     field(:bio, :string, default: "")
@@ -45,7 +46,19 @@ defmodule Beef.Schemas.User do
     # TODO: amend this to accept *either* githubId or twitterId and also
     # pipe edit_changeset into this puppy.
     user
-    |> cast(attrs, ~w(username githubId avatarUrl bannerUrl)a)
-    |> validate_required([:username, :githubId, :avatarUrl, :bannerUrl])
+    |> cast(attrs, ~w("username twitterId avatarUrl bannerUrl")a)
+    |> validate_required([:username, :avatarUrl, :bannerUrl])
+  end
+
+  defimpl Jason.Encoder do
+    @fields ~w(
+      id username email displayName avatarUrl bannerUrl bio online
+    )a
+
+    def encode(user, opts) do
+      user
+      |> Map.take(@fields)
+      |> Jason.Encoder.encode(opts)
+    end
   end
 end

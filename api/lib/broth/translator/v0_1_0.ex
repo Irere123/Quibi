@@ -1,10 +1,12 @@
 defmodule Broth.Translator.V0_1_0 do
-  import Okra.Utils.Version, only: [sigil_v: 2]
+  import Okra.Utils.Version
 
   ############################################################################
   ## INBOUND MESSAGES
+
   @operator_translations %{
-    "auth" => "auth:request"
+    "auth" => "auth:request",
+    "get_user_profile" => "user:get_info"
   }
 
   @operators Map.keys(@operator_translations)
@@ -21,6 +23,10 @@ defmodule Broth.Translator.V0_1_0 do
 
   def translate_operation(message = %{"op" => operator}) do
     put_in(message, ["op"], @operator_translations[operator])
+  end
+
+  def translate_in_body(message, "get_user_profile") do
+    put_in(message, ["d", "userIdOrUsername"], get_in(message, ["d", "userId"]))
   end
 
   def translate_in_body(message, _op), do: message

@@ -29,5 +29,6 @@
     "prepare": "husky install",
     "commit": "cz",
     "commit:signed": "cz -S"
-  }
+  },
+  "packageManager": "yarn@3.2.2"
 }

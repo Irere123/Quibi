@@ -1,10 +1,13 @@
 import React from "react";
+import { PageComponent } from "../../types/PageComponent";
 import { HeaderController } from "../display/HeaderController";
 import { AccountLayout } from "../layouts/AccountLayout";
 import { AccountController } from "./AccountController";
 import { LeftPanel } from "./LeftPanel";
 
-export const AccountPage: React.FC = () => {
+interface AccountPageProps {}
+
+export const AccountPage: PageComponent<AccountPageProps> = () => {
   return (
     <AccountLayout leftPanel={<LeftPanel />}>
       <HeaderController title="Account" />
@@ -12,3 +15,5 @@ export const AccountPage: React.FC = () => {
     </AccountLayout>
   );
 };
+
+AccountPage.ws = true;

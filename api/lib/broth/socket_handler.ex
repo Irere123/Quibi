@@ -1,6 +1,5 @@
 defmodule Broth.SocketHandler do
   require Logger
-  # import Okra.Utils.Version
 
   defstruct user: nil,
             encoding: nil,
@@ -59,7 +58,7 @@ defmodule Broth.SocketHandler do
     # second command forces a shutdown in case the client is a jerk and
     # tries to DOS us by holding open connections.
     # frontend expects 4003
-    ws_push([{:close, 4003, "killed by server"}, shutdown: :normal], state)
+    ws_push([{:close, 4003, "killed_by_server"}, shutdown: :normal], state)
   end
 
   # auth timeout
@@ -76,7 +75,7 @@ defmodule Broth.SocketHandler do
 
   alias Onion.PubSub
 
-  defp unsub_impl(topic, state) do
+  def unsub_impl(topic, state) do
     PubSub.unsubscribe(topic)
     ws_push(nil, state)
   end
@@ -84,7 +83,7 @@ defmodule Broth.SocketHandler do
   # transitional remote_send message
   def remote_send(socket, message), do: send(socket, {:remote_send, message})
 
-  defp remote_send_impl(message, state) do
+  def remote_send_impl(message, state) do
     ws_push(prepare_socket_msg(message, state), state)
   end
 
@@ -100,11 +99,8 @@ defmodule Broth.SocketHandler do
 
   def websocket_handle({:text, command_json}, state) do
     with {:ok, message_map!} <- Jason.decode(command_json),
-         # temporary trap mediasoup direct commands
-         %{"op" => <<not_at>> <> _} when not_at != ?@ <- message_map!,
-         # translation from legacy maps to new maps
          message_map! = Broth.Translator.translate_inbound(message_map!),
-         {:ok, message = %{errors: nil}} <- validate(message_map!),
+         {:ok, message = %{errors: nil}} <- validate(message_map!, state),
          :ok <- auth_check(message, state) do
       # make the state adopt the version of the inbound message.
       new_state =
@@ -115,13 +111,32 @@ defmodule Broth.SocketHandler do
         end
 
       dispatch(message, new_state)
+    else
+      {:error, :auth} ->
+        ws_push({:close, 4004, "not_authenticated"}, state)
+
+      {:error, %Jason.DecodeError{}} ->
+        ws_push({:close, 4001, "invalid input"}, state)
+
+      # error validating the inner changeset.
+      {:ok, error} ->
+        error
+        |> Map.put(:operator, error.inbound_operator)
+        |> prepare_socket_msg(state)
+        |> ws_push(state)
+
+      {:error, changeset = %Ecto.Changeset{}} ->
+        %{errors: Okra.Utils.Errors.changeset_errors(changeset)}
+        |> prepare_socket_msg(state)
+        |> ws_push(state)
     end
   end
 
   import Ecto.Changeset
 
-  def validate(message) do
+  def validate(message, state) do
     message
+    |> Broth.Message.changeset(state)
     |> apply_action(:validate)
   end
 
@@ -188,7 +203,7 @@ defmodule Broth.SocketHandler do
     %{message: inspect(other)}
   end
 
-  def prepare_socket_msg(data, state) do
+  defp prepare_socket_msg(data, state) do
     data
     |> encode_data(state)
     |> prepare_data(state)

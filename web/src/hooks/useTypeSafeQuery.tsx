@@ -1,26 +1,28 @@
+import { wrap } from "../modules/ws/wrapper";
 import { useQuery, UseQueryOptions } from "react-query";
-import { apiBaseUrl } from "../lib/constants";
 import { isServer } from "../lib/isServer";
+import { Await } from "../types/util-types";
+import { useWrappedConn } from "./useConn";
 
-type Keys = string;
+type Keys = keyof ReturnType<typeof wrap>["query"];
+
+type PaginatedKey<K extends Keys> = [K, ...(string | number | boolean)[]];
 
 export const useTypeSafeQuery = <K extends Keys>(
-  key: K,
-  opts?: UseQueryOptions
+  key: K | PaginatedKey<K>,
+  opts?: UseQueryOptions,
+  params?: Parameters<ReturnType<typeof wrap>["query"][K]>
 ) => {
-  return useQuery<any>(
+  const conn = useWrappedConn();
+
+  return useQuery<Await<ReturnType<ReturnType<typeof wrap>["query"][K]>>>(
     key,
-    async () => {
-      const r = await fetch(`${apiBaseUrl}/${key}`);
-
-      if (r.status !== 200) {
-        throw new Error(await r.text());
-      }
-
-      return await r.json();
+    () => {
+      const fn = conn.query[typeof key === "string" ? key : key[0]] as any;
+      return fn(...(params || []));
     },
     {
-      enabled: !isServer,
+      enabled: !!conn && !isServer,
       ...opts,
     } as any
   );

@@ -3,10 +3,10 @@ defmodule Broth do
 
   alias Broth.Routes.Stats
   alias Broth.Routes.DevOnly
-  alias Broth.Routes.User
+  alias Broth.Routes.Users
   alias Broth.Routes.GoogleAuth
   alias Broth.Routes.TwitterAuth
-  alias Broth.Routes.Me
+  alias Broth.Routes.DiscordAuth
 
   use Plug.Router
   use Sentry.PlugCapture
@@ -20,10 +20,10 @@ defmodule Broth do
   end
 
   forward("/auth/twitter", to: TwitterAuth)
+  forward("/auth/discord", to: DiscordAuth)
   forward("/auth/google", to: GoogleAuth)
   forward("/dev", to: DevOnly)
-  forward("/user", to: User)
-  forward("/me", to: Me)
+  forward("/users", to: Users)
   forward("/stats", to: Stats)
 
   get _ do

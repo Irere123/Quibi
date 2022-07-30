@@ -2,10 +2,11 @@ import React, { useCallback, useEffect } from "react";
 import { Twitter, Google, Discord, Bug } from "../../icons";
 import { HeaderController } from "../display/HeaderController";
 import { useTypeSafeTranslation } from "../../hooks/useTypeSafeTranslation";
-import { apiBaseUrl, __prod__ } from "../../lib/constants";
+import { apiBaseUrl, loginNextPathKey, __prod__ } from "../../lib/constants";
 import { useRouter } from "next/router";
 import { useTokenStore } from "../auth/useTokenStore";
 import { isServer } from "../../lib/isServer";
+import { useSaveTokensFromQueryParams } from "../auth/useSaveTokensFromQueryParams";
 
 interface LoginButtonProps {
   dev?: boolean;
@@ -20,9 +21,16 @@ const LoginButton: React.FC<LoginButtonProps> = ({
   dev,
   onClick,
 }) => {
+  const { query } = useRouter();
   const clickHandler = useCallback(() => {
+    if (typeof query.next === "string" && query.next) {
+      try {
+        localStorage.setItem(loginNextPathKey, query.next);
+      } catch {}
+    }
+
     window.location.href = oauthUrl as string;
-  }, [oauthUrl]);
+  }, [oauthUrl, query]);
 
   return (
     <button
@@ -40,6 +48,7 @@ const LoginButton: React.FC<LoginButtonProps> = ({
 };
 
 export const LoginPage: React.FC = () => {
+  useSaveTokensFromQueryParams();
   const { t } = useTypeSafeTranslation();
   const hasTokens = useTokenStore((s) => !!(s.accessToken && s.refreshToken));
   const { push } = useRouter();
@@ -93,7 +102,9 @@ export const LoginPage: React.FC = () => {
               <Google />
               Login with Google
             </LoginButton>
-            <LoginButton oauthUrl="/dash">
+            <LoginButton
+              oauthUrl={`${apiBaseUrl}/auth/discord/web${queryParams}`}
+            >
               <Discord />
               Login with Discord
             </LoginButton>
@@ -122,7 +133,6 @@ export const LoginPage: React.FC = () => {
                   });
                   push("/dash");
                 }}
-                data-testid="create-test-user"
               >
                 <Bug width={20} height={20} />
                 Create a test user

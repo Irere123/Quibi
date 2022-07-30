@@ -1,5 +1,4 @@
 import React from "react";
-import type { AppProps } from "next/app";
 import ReactModal from "react-modal";
 import Router from "next/router";
 import NProgress from "nprogress";
@@ -13,6 +12,7 @@ import "nprogress/nprogress.css";
 import { KeybindListener } from "../modules/keyboard-shotcuts/KeybindListener";
 import { ConfirmModal } from "../ui/ConfirmModal";
 import { ErrorToastController } from "../modules/errors/ErrorToastController";
+import { WebSocketProvider } from "../modules/ws/WebSocketProvider";
 
 if (!isServer) {
   init_i18n();
@@ -26,7 +26,7 @@ Router.events.on("routeChangeError", () => NProgress.done());
 
 ReactModal.setAppElement("#__next");
 
-function App({ Component, pageProps }: AppProps) {
+function App({ Component, pageProps }: any) {
   if (
     isServer &&
     !Component.getInitialProps &&
@@ -36,12 +36,16 @@ function App({ Component, pageProps }: AppProps) {
   }
 
   return (
-    <QueryClientProvider client={queryClient}>
-      <KeybindListener />
-      <ErrorToastController />
-      <Component {...pageProps} />
-      <ConfirmModal />
-    </QueryClientProvider>
+    <WebSocketProvider
+      shouldConnect={!!(Component as PageComponent<unknown>).ws}
+    >
+      <QueryClientProvider client={queryClient}>
+        <KeybindListener />
+        <ErrorToastController />
+        <Component {...pageProps} />
+        <ConfirmModal />
+      </QueryClientProvider>
+    </WebSocketProvider>
   );
 }
 
