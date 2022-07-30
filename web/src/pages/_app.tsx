@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import ReactModal from "react-modal";
 import Router from "next/router";
 import NProgress from "nprogress";
@@ -12,10 +12,7 @@ import "nprogress/nprogress.css";
 import { KeybindListener } from "../modules/keyboard-shotcuts/KeybindListener";
 import { ConfirmModal } from "../ui/ConfirmModal";
 import { ErrorToastController } from "../modules/errors/ErrorToastController";
-import { useSocketStatus } from "../stores/useSocketStatus";
-import { useTokenStore } from "../modules/auth/useTokenStore";
-import { createWebSocket } from "../modules/ws/createWebSocket";
-import { WsKilledMessage } from "../ui/WsKilledMessage";
+import { WebSocketProvider } from "../modules/ws/WebSocketProvider";
 
 if (!isServer) {
   init_i18n();
@@ -30,16 +27,6 @@ Router.events.on("routeChangeError", () => NProgress.done());
 ReactModal.setAppElement("#__next");
 
 function App({ Component, pageProps }: any) {
-  const hasTokens = useTokenStore((s) => !!s.accessToken && !!s.refreshToken);
-  const wsKilledByServer = useSocketStatus(
-    (s) => s.status === "closed-by-server"
-  );
-
-  useState(() => (hasTokens ? createWebSocket() : null));
-  if (!isServer && hasTokens) {
-    createWebSocket();
-  }
-
   if (
     isServer &&
     !Component.getInitialProps &&
@@ -48,17 +35,17 @@ function App({ Component, pageProps }: any) {
     return null;
   }
 
-  if (wsKilledByServer) {
-    return <WsKilledMessage />;
-  }
-
   return (
-    <QueryClientProvider client={queryClient}>
-      <KeybindListener />
-      <ErrorToastController />
-      <Component {...pageProps} />
-      <ConfirmModal />
-    </QueryClientProvider>
+    <WebSocketProvider
+      shouldConnect={!!(Component as PageComponent<unknown>).ws}
+    >
+      <QueryClientProvider client={queryClient}>
+        <KeybindListener />
+        <ErrorToastController />
+        <Component {...pageProps} />
+        <ConfirmModal />
+      </QueryClientProvider>
+    </WebSocketProvider>
   );
 }
 

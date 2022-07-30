@@ -3,14 +3,15 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { AccountIcon, DownloadIcon, HomeIcon, SettingsIcon } from "../../icons";
 import { SingleUser } from "../UserAvatar";
-import src from "../../img/avatar.jpg";
 import { Button } from "../Button";
 import { BoxedIcon } from "../BoxedIcon";
+import { useConn } from "../../hooks/useConn";
 export interface RightHeaderProps {
   actionButton?: React.ReactNode;
 }
 
 const RightHeader: React.FC<RightHeaderProps> = ({ actionButton }) => {
+  const conn = useConn();
   const { pathname, push } = useRouter();
   let showHome = false;
 
@@ -55,7 +56,7 @@ const RightHeader: React.FC<RightHeaderProps> = ({ actionButton }) => {
         <SingleUser
           className={"focus:outline-no-chrome cursor-pointer"}
           size="sm"
-          src={src.src}
+          src={conn.user.avatarUrl}
         />
       </div>
     </div>

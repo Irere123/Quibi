@@ -101,15 +101,7 @@ defmodule Broth.SocketHandler do
     with {:ok, message_map!} <- Jason.decode(command_json),
          {:ok, message = %{errors: nil}} <- validate(message_map!, state),
          :ok <- auth_check(message, state) do
-      # make the state adopt the version of the inbound message.
-      new_state =
-        if message.operator == Broth.Message.Auth.Request do
-          adopt_version(state, message)
-        else
-          state
-        end
-
-      dispatch(message, new_state)
+      dispatch(message, state)
     else
       {:error, :auth} ->
         ws_push({:close, 4004, "not_authenticated"}, state)

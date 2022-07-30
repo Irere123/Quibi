@@ -1,215 +1,265 @@
 import ReconnectingWebSocket from "reconnecting-websocket";
-import { useTokenStore } from "../auth/useTokenStore";
-import { apiBaseUrl, __prod__ } from "../../lib/constants";
-import { useSocketStatus } from "../../stores/useSocketStatus";
-import { useWsHandlerStore } from "../../stores/useWsHandlerStore";
 import { v4 as uuidv4 } from "uuid";
-import { WsParam } from "../../types/wsParam";
-import { queryClient } from "../../lib/queryClient";
-import { toast } from "react-toastify";
-import { showErrorToast } from "../../lib/showErrorToast";
-import { isServer } from "../../lib/isServer";
+import { apiBaseUrl, __prod__ } from "../../lib/constants";
 
-let ws: ReconnectingWebSocket | null;
-let authGood = false;
-let lastMsg = "";
+const heartbeatInterval = 8000;
+const wsProtocol = __prod__ ? "wss" : "ws";
+const apiUrl = apiBaseUrl.replace("http", wsProtocol) + "/socket";
+const connectionTimeout = 15000;
 
-export const auth_query = "auth";
+export type UUID = string;
+export type Token = string;
+export type FetchID = UUID;
+export type Ref = UUID;
+export type Opcode = string;
+export type Logger = (
+  direction: "in" | "out",
+  opcode: Opcode,
+  data?: unknown,
+  fetchId?: FetchID,
+  raw?: string
+) => void;
+export type ListenerHandler<Data = unknown> = (
+  data: Data,
+  fetchId?: FetchID
+) => void;
 
-if (!isServer) {
-  window.addEventListener("online", () => {
-    if (ws && ws.readyState === ws.CLOSED) {
-      toast("reconnecting...", { type: "info" });
-      console.log("online triggered, calling ws.reconnect()");
-      ws.reconnect();
-    }
-  });
-}
-
-export const closeWebSocket = () => {
-  ws?.close();
+export type Listener<Data = unknown> = {
+  opcode: Opcode;
+  handler: ListenerHandler<Data>;
 };
 
-export const createWebSocket = (force?: boolean) => {
-  console.log("createWebSocket");
+/**
+ * A reference to the websocket connection, can be created using `connect()`
+ */
+export type Connection = {
+  close: () => void;
+  once: <Data = unknown>(
+    opcode: Opcode,
+    handler: ListenerHandler<Data>
+  ) => void;
+  addListener: <Data = unknown>(
+    opcode: Opcode,
+    handler: ListenerHandler<Data>
+  ) => () => void;
+  user: any;
+  initialCurrentRoomId?: string;
+  send: (opcode: Opcode, data: unknown, fetchId?: FetchID) => void;
+  sendCast: (opcode: Opcode, data: unknown, ref?: Ref) => void;
+  fetch: (
+    opcode: Opcode,
+    data: unknown,
+    doneOpcode?: Opcode
+  ) => Promise<unknown>;
+  sendCall: (
+    opcode: Opcode,
+    data: unknown,
+    doneOpcode?: Opcode
+  ) => Promise<unknown>;
+};
 
-  if (!force && ws) {
-    console.log("ws already connected");
-    return;
-  } else {
-    console.log("new ws instance incoming");
+export const connect = (
+  token: Token,
+  refreshToken: Token,
+  {
+    logger = () => {},
+    onConnectionTaken = () => {},
+    onClearTokens = () => {},
+    url = apiUrl,
+    fetchTimeout,
+    getAuthOptions,
+    waitToReconnect,
+  }: {
+    logger?: Logger;
+    onConnectionTaken?: () => void;
+    onClearTokens?: () => void;
+    url?: string;
+    fetchTimeout?: number;
+    waitToReconnect?: boolean;
+    getAuthOptions?: () => Partial<{
+      reconnectToVoice: boolean;
+      currentRoomId: string | null;
+      muted: boolean;
+      deafened: boolean;
+      token: Token;
+      refreshToken: Token;
+    }>;
   }
+): Promise<Connection> =>
+  new Promise((resolve, reject) => {
+    const socket = new ReconnectingWebSocket(url!, [], {
+      connectionTimeout,
+      WebSocket,
+    });
 
-  const { accessToken, refreshToken } = useTokenStore.getState();
+    const api2Send = (opcode: Opcode, data: unknown, ref?: Ref) => {
+      // tmp fix
+      // this is to avoid ws events queuing up while socket is closed
+      // then it reconnects and fires before auth goes off
+      // and you get logged out
+      if (socket.readyState !== socket.OPEN) return;
 
-  if (!accessToken || !refreshToken) {
-    return;
-  }
+      const raw = `{"v":"0.1.0", "op":"${opcode}","p":${JSON.stringify(data)}${
+        ref ? `,"ref":"${ref}"` : ""
+      }}`;
 
-  useSocketStatus.getState().setStatus("connecting");
+      socket.send(raw);
+      logger("out", opcode, data, ref, raw);
+    };
 
-  const wsProtocol = __prod__ ? "wss" : "ws";
+    const listeners: Listener[] = [];
 
-  ws = new ReconnectingWebSocket(
-    apiBaseUrl.replace("http", wsProtocol) + "/socket",
-    undefined,
-    { connectionTimeout: 15000 }
-  );
+    socket.addEventListener("close", (error) => {
+      if (error.code === 4001) {
+        socket.close();
+        onClearTokens();
+      } else if (error.code === 4003) {
+        socket.close();
+        onConnectionTaken();
+      } else if (error.code === 4004) {
+        socket.close();
+        onClearTokens();
+      }
 
-  ws.addEventListener("close", ({ code, reason }) => {
-    const { setStatus } = useSocketStatus.getState();
-    authGood = false;
+      if (!waitToReconnect) reject(error);
+    });
 
-    if (code === 4001) {
-      console.log("clearing token");
-      useWsHandlerStore.getState().authHandler?.(null);
-      useTokenStore.getState().setTokens({ accessToken: "", refreshToken: "" });
-      ws?.close();
-      ws = null;
-      setStatus("closed");
-    } else if (code === 4003) {
-      ws?.close();
-      ws = null;
-      setStatus("closed-by-server");
-    } else if (code === 4004) {
-      ws?.close;
-      ws = null;
-    } else {
-      // @todo do more of a status bar thing
-      setStatus("closed");
-    }
-    console.log("ws closed", code, reason);
-  });
+    socket.addEventListener("message", (e) => {
+      if (e.data === `"pong"` || e.data === `pong`) {
+        logger("in", "pong");
 
-  ws.addEventListener("open", () => {
-    useSocketStatus.getState().setStatus("open");
+        return;
+      }
 
-    queryClient.prefetchQuery(
-      auth_query,
-      () =>
-        wsAuthFetch({
-          op: auth_query,
-          d: {
-            accessToken,
-            refreshToken,
+      const message = JSON.parse(e.data);
+
+      logger("in", message.op, message.p, message.fetchId, e.data);
+
+      if (message.op === "auth:request:reply") {
+        const connection: Connection = {
+          close: () => socket.close(),
+          once: (opcode, handler) => {
+            const listener = { opcode, handler } as Listener<unknown>;
+
+            listener.handler = (...params) => {
+              handler(...(params as Parameters<typeof handler>));
+              listeners.splice(listeners.indexOf(listener), 1);
+            };
+
+            listeners.push(listener);
           },
-        }),
-      { staleTime: 0 }
-    );
+          addListener: (opcode, handler) => {
+            const listener = { opcode, handler } as Listener<unknown>;
 
-    console.log("connected", { type: "success" });
-    const id = setInterval(() => {
-      if (ws && ws.readyState !== ws.CLOSED) {
-        ws.send("ping");
+            listeners.push(listener);
+
+            return () => listeners.splice(listeners.indexOf(listener), 1);
+          },
+          user: message.p,
+          send: api2Send,
+          sendCast: api2Send,
+          sendCall: (
+            opcode: Opcode,
+            parameters: unknown,
+            doneOpcode?: Opcode
+          ) =>
+            new Promise((resolveCall, rejectFetch) => {
+              // tmp fix
+              // this is to avoid ws events queuing up while socket is closed
+              // then it reconnects and fires before auth goes off
+              // and you get logged out
+              if (socket.readyState !== socket.OPEN) {
+                rejectFetch(new Error("websocket not connected"));
+
+                return;
+              }
+              const ref: FetchID | false = !doneOpcode && uuidv4();
+              let timeoutId: NodeJS.Timeout | null = null;
+              const unsubscribe = connection.addListener(
+                doneOpcode ?? opcode + ":reply",
+                (data, arrivedId) => {
+                  if (!doneOpcode && arrivedId !== ref) return;
+
+                  if (timeoutId) clearTimeout(timeoutId);
+
+                  unsubscribe();
+                  resolveCall(data);
+                }
+              );
+
+              if (fetchTimeout) {
+                timeoutId = setTimeout(() => {
+                  unsubscribe();
+                  rejectFetch(new Error("timed out"));
+                }, fetchTimeout);
+              }
+
+              api2Send(opcode, parameters, ref || undefined);
+            }),
+          fetch: (opcode: Opcode, parameters: unknown, doneOpcode?: Opcode) =>
+            new Promise((resolveFetch, rejectFetch) => {
+              // tmp fix
+              // this is to avoid ws events queuing up while socket is closed
+              // then it reconnects and fires before auth goes off
+              // and you get logged out
+              if (socket.readyState !== socket.OPEN) {
+                rejectFetch(new Error("websocket not connected"));
+
+                return;
+              }
+              const fetchId: FetchID | false = !doneOpcode && uuidv4();
+              let timeoutId: NodeJS.Timeout | null = null;
+              const unsubscribe = connection.addListener(
+                doneOpcode ?? "fetch_done",
+                (data, arrivedId) => {
+                  if (!doneOpcode && arrivedId !== fetchId) return;
+
+                  if (timeoutId) clearTimeout(timeoutId);
+
+                  unsubscribe();
+                  resolveFetch(data);
+                }
+              );
+
+              if (fetchTimeout) {
+                timeoutId = setTimeout(() => {
+                  unsubscribe();
+                  rejectFetch(new Error("timed out"));
+                }, fetchTimeout);
+              }
+
+              api2Send(opcode, parameters, fetchId || undefined);
+            }),
+        };
+
+        resolve(connection);
       } else {
-        clearInterval(id);
+        listeners
+          .filter(({ opcode }) => opcode === message.op)
+          .forEach((it) =>
+            it.handler(message.d || message.p, message.fetchId || message.ref)
+          );
       }
-    }, 8000);
-  });
+    });
 
-  ws.addEventListener("message", (e) => {
-    console.log(e.data);
-    const json = JSON.parse(e.data as string);
-
-    if (e.data === '"pong"') {
-      return;
-    }
-
-    switch (json.op) {
-      case "new-tokens": {
-        useTokenStore.getState().setTokens({
-          accessToken: json.d.accessToken,
-          refreshToken: json.d.refreshToken,
-        });
-        break;
-      }
-      case "error": {
-        showErrorToast(json.d);
-        break;
-      }
-      default: {
-        const { handlerMap, fetchResolveMap, authHandler } =
-          useWsHandlerStore.getState();
-        if (json.op === "auth-good") {
-          if (lastMsg) {
-            ws?.send(lastMsg);
-            lastMsg = "";
-          }
-          authGood = true;
-          useSocketStatus.getState().setStatus("auth-good");
-          if (authHandler) {
-            authHandler(json.d);
-          } else {
-            console.error("something went wrong, authHandler is null");
-          }
+    socket.addEventListener("open", () => {
+      const id = setInterval(() => {
+        if (socket.readyState === socket.CLOSED) {
+          clearInterval(id);
+        } else {
+          socket.send("ping");
+          logger("out", "ping");
         }
-        console.log("ws: ", json.op);
-        if (json.op in handlerMap) {
-          handlerMap[json.op](json.d);
-        } else if (
-          json.op === "fetch_done" &&
-          json.fetchId &&
-          json.fetchId in fetchResolveMap
-        ) {
-          fetchResolveMap[json.fetchId](json.d);
-        }
-        break;
-      }
-    }
-  });
-};
+      }, heartbeatInterval);
 
-export const wsend = (d: { op: string; d: any }) => {
-  if (!authGood || !ws || ws.readyState !== ws.OPEN) {
-    console.log("ws not ready");
-    lastMsg = JSON.stringify(d);
-  } else {
-    ws?.send(JSON.stringify(d));
-  }
-};
-
-export const wsAuthFetch = <T>(d: WsParam) => {
-  return new Promise<T>((res, rej) => {
-    if (!ws || ws.readyState !== ws.OPEN) {
-      rej(new Error("can't connect to server"));
-    } else {
-      setTimeout(() => {
-        rej(new Error("request timed out"));
-      }, 10000); // 10 secs
-      useWsHandlerStore.getState().addAuthHandler((d) => {
-        if (d) {
-          res(d);
-        }
-      });
-      ws?.send(JSON.stringify(d));
-    }
-  });
-};
-
-export const wsFetch = <T>(d: WsParam) => {
-  return new Promise<T>((res, rej) => {
-    if (!authGood || !ws || ws.readyState !== ws.OPEN) {
-      rej(new Error("can't connect to server"));
-    } else {
-      const fetchId = uuidv4();
-      setTimeout(() => {
-        useWsHandlerStore.getState().clearFetchListener(fetchId);
-        rej(new Error("request timed out"));
-      }, 10000); // 10 secs
-      useWsHandlerStore.getState().addFetchListener(fetchId, (d) => {
-        res(d);
-      });
-      ws?.send(JSON.stringify({ ...d, fetchId }));
-    }
-  });
-};
-
-export const wsMutation = (d: WsParam) => wsFetch(d);
-export const wsMutationThrowError = (d: WsParam) =>
-  wsFetch(d).then((x: any) => {
-    if (x.error) {
-      throw new Error(x.error);
-    }
-
-    return x;
+      api2Send(
+        "auth:request",
+        {
+          accessToken: token,
+          refreshToken,
+          ...getAuthOptions?.(),
+        },
+        uuidv4()
+      );
+    });
   });

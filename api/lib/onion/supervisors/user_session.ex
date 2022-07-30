@@ -12,6 +12,6 @@ defmodule Onion.Supervisors.UserSession do
       {DynamicSupervisor, name: Onion.UserSessionDynamicSupervisor, strategy: :one_for_one}
     ]
 
-    Superviser.init(children, strategy: :one_for_one)
+    Supervisor.init(children, strategy: :one_for_one)
   end
 end

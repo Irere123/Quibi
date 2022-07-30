@@ -1,5 +1,6 @@
 import React from "react";
 import { useTypeSafeTranslation } from "../../hooks/useTypeSafeTranslation";
+import { PageComponent } from "../../types/PageComponent";
 import { WaitForWsAndAuth } from "../auth/WaitForWsAndAuth";
 import { HeaderController } from "../display/HeaderController";
 import { MainLayout } from "../layouts/MainLayout";
@@ -7,7 +8,9 @@ import { LeftPannel } from "../layouts/Panels";
 import { RightPanel } from "./RightPanel";
 import { WorksController } from "./WorksController";
 
-export const WorksPage: React.FC = () => {
+interface WorksPageProps {}
+
+export const WorksPage: PageComponent<WorksPageProps> = () => {
   const { t } = useTypeSafeTranslation();
 
   return (
@@ -22,3 +25,5 @@ export const WorksPage: React.FC = () => {
     </WaitForWsAndAuth>
   );
 };
+
+WorksPage.ws = true;

@@ -1,5 +1,7 @@
 defmodule Onion.UserSession do
   use GenServer, restart: :temporary
+  alias Beef.Users
+  require Logger
 
   # TODO: change this
   defmodule State do
@@ -82,6 +84,12 @@ defmodule Onion.UserSession do
     {:noreply, Map.merge(state, info)}
   end
 
+  def get_info_for_msg(user_id), do: call(user_id, :get_info_for_msg)
+
+  defp get_info_for_msg_impl(_reply, state) do
+    {:reply, {state.avatar_url, state.display_name, state.username}, state}
+  end
+
   def get(user_id, key), do: call(user_id, {:get, key})
 
   defp get_impl(key, _reply, state) do
@@ -98,24 +106,11 @@ defmodule Onion.UserSession do
       # running.
       Process.exit(state.pid, :normal)
     else
-      Beef.Users.set_online(state.user_id)
+      Users.set_online(state.user_id)
     end
 
     Process.monitor(pid)
     {:reply, :ok, %{state | pid: pid}}
-  end
-
-  @all [{{:_, :"$1", :_}, [], [:"$1"]}]
-  def force_reconnects() do
-    Onion.UserSessionRegistry
-    |> Registry.select(@all)
-    |> Enum.each(&reconnect(&1))
-  end
-
-  def reconnect(user_pid), do: GenServer.cast(user_pid, {:reconnect})
-
-  defp reconnect_impl(state) do
-    {:noreply, state}
   end
 
   ##############################################################################
@@ -138,11 +133,10 @@ defmodule Onion.UserSession do
   def handle_cast({:send_ws, platform, msg}, state),
     do: send_ws_impl(platform, msg, state)
 
-  def handle_cast({:reconnect}, state),
-    do: reconnect_impl(state)
-
   def handle_cast({:new_tokens, tokens}, state), do: new_tokens_impl(tokens, state)
   def handle_cast({:set_state, info}, state), do: set_state_impl(info, state)
+
+  def handle_call(:get_info_for_msg, reply, state), do: get_info_for_msg_impl(reply, state)
   def handle_call({:get, key}, reply, state), do: get_impl(key, reply, state)
   def handle_call({:set_active_ws, pid}, reply, state), do: set_active_ws(pid, reply, state)
 

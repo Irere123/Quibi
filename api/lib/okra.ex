@@ -8,6 +8,8 @@ defmodule Okra do
     Okra.Metric.PipelineInstrumenter.setup()
 
     children = [
+      # top-level supervisor for UserSession group
+      Onion.Supervisors.UserSession,
       Onion.StatsCache,
       {Beef.Repo, []},
       {Phoenix.PubSub, name: Onion.PubSub},

@@ -23,6 +23,7 @@ defmodule Broth.Message.Auth.Request do
       id
       username
       displayName
+      email
       avatarUrl
       bannerUrl
       bio
@@ -34,6 +35,7 @@ defmodule Broth.Message.Auth.Request do
     schema "users" do
       field(:username, :string)
       field(:displayName, :string)
+      field(:email, :string)
       field(:avatarUrl, :string)
       field(:bannerUrl, :string)
       field(:bio, :string, default: "")
@@ -46,6 +48,7 @@ defmodule Broth.Message.Auth.Request do
   def execute(changeset, state) do
     with {:ok, request} <- apply_action(changeset, :validate),
          {:ok, user} <- Okra.Auth.authenticate(request) do
+          IO.inspect(state)
       {:reply, user, %{state | user: user}}
     else
       # don't tolerate malformed requests with any response besides closing

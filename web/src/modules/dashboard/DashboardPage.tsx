@@ -1,12 +1,15 @@
 import React from "react";
 import { useTypeSafeTranslation } from "../../hooks/useTypeSafeTranslation";
+import { PageComponent } from "../../types/PageComponent";
 import { WaitForWsAndAuth } from "../auth/WaitForWsAndAuth";
 
 import { HeaderController } from "../display/HeaderController";
 import { DesktopLayout } from "../layouts/DesktopLayout";
 import { FeedController } from "./FeedController";
 
-export const DashboardPage: React.FC = () => {
+interface BoardPageProps {}
+
+export const DashboardPage: PageComponent<BoardPageProps> = () => {
   const { t } = useTypeSafeTranslation();
 
   return (
@@ -18,3 +21,5 @@ export const DashboardPage: React.FC = () => {
     </WaitForWsAndAuth>
   );
 };
+
+DashboardPage.ws = true;
