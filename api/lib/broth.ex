@@ -3,7 +3,7 @@ defmodule Broth do
 
   alias Broth.Routes.Stats
   alias Broth.Routes.DevOnly
-  alias Broth.Routes.User
+  alias Broth.Routes.Users
   alias Broth.Routes.GoogleAuth
   alias Broth.Routes.TwitterAuth
   alias Broth.Routes.DiscordAuth
@@ -23,7 +23,7 @@ defmodule Broth do
   forward("/auth/discord", to: DiscordAuth)
   forward("/auth/google", to: GoogleAuth)
   forward("/dev", to: DevOnly)
-  forward("/user", to: User)
+  forward("/users", to: Users)
   forward("/stats", to: Stats)
 
   get _ do
