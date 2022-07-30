@@ -99,9 +99,18 @@ defmodule Broth.SocketHandler do
 
   def websocket_handle({:text, command_json}, state) do
     with {:ok, message_map!} <- Jason.decode(command_json),
+         message_map! = Broth.Translator.translate_inbound(message_map!),
          {:ok, message = %{errors: nil}} <- validate(message_map!, state),
          :ok <- auth_check(message, state) do
-      dispatch(message, state)
+      # make the state adopt the version of the inbound message.
+      new_state =
+        if message.operator == Broth.Message.Auth.Request do
+          adopt_version(state, message)
+        else
+          state
+        end
+
+      dispatch(message, new_state)
     else
       {:error, :auth} ->
         ws_push({:close, 4004, "not_authenticated"}, state)
