@@ -4,6 +4,7 @@ import { Button } from "./Button";
 import { SingleUser } from "./UserAvatar/SingleUser";
 import { CalendarMonth, CompassIcon, Friends } from "../icons";
 import { EditProfileModal } from "../modules/user/EditProfileModal";
+import { FormattedDate } from "./FormattedDate";
 
 export interface ProfileHeaderProps {
   displayName: string;
@@ -84,7 +85,8 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
       <div className="p-4 text-primary-200">
         {user.bio ? <p className="text-sm">{user.bio}</p> : null}
         <p className="flex items-center gap-2 mt-3">
-          <CalendarMonth width={20} height={20} /> Joined July 2021
+          <CalendarMonth width={20} height={20} />
+          Joined <FormattedDate date={new Date(user.inserted_at)} />
         </p>
       </div>
     </div>

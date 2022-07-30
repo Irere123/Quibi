@@ -25,7 +25,8 @@ defmodule Broth.Message.User.GetInfo do
       bannerUrl
       bio
       online
-      lastOnline
+      last_online
+      inserted_at
     )a}
 
     @primary_key {:id, :binary_id, []}
@@ -37,7 +38,8 @@ defmodule Broth.Message.User.GetInfo do
       field(:bannerUrl, :string)
       field(:bio, :string, default: "")
       field(:online, :boolean)
-      field(:lastOnline, :utc_datetime_usec)
+      field(:last_online, :utc_datetime_usec)
+      field(:inserted_at, :utc_datetime_usec)
       field(:error, :string, virtual: true)
     end
   end
