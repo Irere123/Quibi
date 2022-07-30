@@ -52,11 +52,12 @@ const RightHeader: React.FC<RightHeaderProps> = ({ actionButton }) => {
 
       {actionButton}
 
-      <div onClick={() => push(`/u/irere`)}>
+      <div onClick={() => push(`/u/${conn.user.username}`)}>
         <SingleUser
           className={"focus:outline-no-chrome cursor-pointer"}
           size="sm"
           src={conn.user.avatarUrl}
+          username={conn.user.username}
         />
       </div>
     </div>

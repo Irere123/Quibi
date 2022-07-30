@@ -32,7 +32,7 @@ export const WebSocketProvider: React.FC<WebSocketProviderProps> = ({
   useEffect(() => {
     if (!conn && shouldConnect && hasTokens && !isConnecting.current) {
       isConnecting.current = true;
-      console.log(conn);
+
       connect("", "", {
         waitToReconnect: true,
         url: apiBaseUrl.replace("http", "ws") + "/socket",

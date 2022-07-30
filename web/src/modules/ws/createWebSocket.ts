@@ -43,7 +43,6 @@ export type Connection = {
     handler: ListenerHandler<Data>
   ) => () => void;
   user: any;
-  initialCurrentRoomId?: string;
   send: (opcode: Opcode, data: unknown, fetchId?: FetchID) => void;
   sendCast: (opcode: Opcode, data: unknown, ref?: Ref) => void;
   fetch: (
@@ -87,11 +86,10 @@ export const connect = (
   }
 ): Promise<Connection> =>
   new Promise((resolve, reject) => {
-    const socket = new ReconnectingWebSocket(url!, [], {
+    const socket = new ReconnectingWebSocket(url, [], {
       connectionTimeout,
       WebSocket,
     });
-
     const api2Send = (opcode: Opcode, data: unknown, ref?: Ref) => {
       // tmp fix
       // this is to avoid ws events queuing up while socket is closed
@@ -99,17 +97,37 @@ export const connect = (
       // and you get logged out
       if (socket.readyState !== socket.OPEN) return;
 
-      const raw = `{"v":"0.1.0", "op":"${opcode}","p":${JSON.stringify(data)}${
+      const raw = `{"v":"0.2.0", "op":"${opcode}","p":${JSON.stringify(data)}${
         ref ? `,"ref":"${ref}"` : ""
       }}`;
 
       socket.send(raw);
       logger("out", opcode, data, ref, raw);
     };
+    const apiSend = (opcode: Opcode, data: unknown, fetchId?: FetchID) => {
+      // tmp fix
+      // this is to avoid ws events queuing up while socket is closed
+      // then it reconnects and fires before auth goes off
+      // and you get logged out
+      if (socket.readyState !== socket.OPEN) {
+        return;
+      }
+      const raw = `{"op":"${opcode}","d":${JSON.stringify(data)}${
+        fetchId ? `,"fetchId":"${fetchId}"` : ""
+      }}`;
+
+      socket.send(raw);
+      logger("out", opcode, data, fetchId, raw);
+    };
 
     const listeners: Listener[] = [];
 
+    // close & message listener needs to be outside of open
+    // this prevents multiple listeners from being created on reconnect
     socket.addEventListener("close", (error) => {
+      // I want this here
+      // eslint-disable-next-line no-console
+      console.log(error);
       if (error.code === 4001) {
         socket.close();
         onClearTokens();
@@ -133,9 +151,9 @@ export const connect = (
 
       const message = JSON.parse(e.data);
 
-      logger("in", message.op, message.p, message.fetchId, e.data);
+      logger("in", message.op, message.d, message.fetchId, e.data);
 
-      if (message.op === "auth:request:reply") {
+      if (message.op === "auth-good") {
         const connection: Connection = {
           close: () => socket.close(),
           once: (opcode, handler) => {
@@ -155,8 +173,8 @@ export const connect = (
 
             return () => listeners.splice(listeners.indexOf(listener), 1);
           },
-          user: message.p,
-          send: api2Send,
+          user: message.d.user,
+          send: apiSend,
           sendCast: api2Send,
           sendCall: (
             opcode: Opcode,
@@ -228,7 +246,7 @@ export const connect = (
                 }, fetchTimeout);
               }
 
-              api2Send(opcode, parameters, fetchId || undefined);
+              apiSend(opcode, parameters, fetchId || undefined);
             }),
         };
 
@@ -252,14 +270,10 @@ export const connect = (
         }
       }, heartbeatInterval);
 
-      api2Send(
-        "auth:request",
-        {
-          accessToken: token,
-          refreshToken,
-          ...getAuthOptions?.(),
-        },
-        uuidv4()
-      );
+      apiSend("auth", {
+        accessToken: token,
+        refreshToken,
+        ...getAuthOptions?.(),
+      });
     });
   });

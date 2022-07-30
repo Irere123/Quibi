@@ -35,3 +35,5 @@ export { default as Rocket } from "./Rocket";
 export { default as Calendar } from "./Calendar";
 export { default as New } from "./New";
 export { default as Bug } from "./Bug";
+export { default as CalendarMonth } from "./CalendarMonth";
+export { default as LinkIcon } from "./LinkIcon";

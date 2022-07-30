@@ -30,11 +30,18 @@ export const wrap = (connection: Connection) => ({
    * Allows you to call functions that return information about the ws state
    */
   query: {
-    getRoomUsers: (): Promise<any> =>
-      connection.fetch(
-        "get_current_room_users",
-        {},
-        "get_current_room_users_done"
-      ),
+    getUserProfile: (
+      idOrUsername: string
+    ): Promise<any | null | { error: string }> =>
+      connection.fetch("get_user_profile", { userId: idOrUsername }),
+  },
+  /**
+   * Allows you to call functions that mutate the ws state
+   */
+  mutation: {
+    userUpdate: (data: Partial<unknown>): Promise<unknown> =>
+      connection.sendCall("user:update", data),
+    editProfile: (data: Partial<unknown>): Promise<unknown> =>
+      connection.sendCall("user:update", data),
   },
 });

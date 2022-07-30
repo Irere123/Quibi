@@ -10,9 +10,6 @@ interface UserProfileProps {
     displayName: string;
     avatarUrl: string;
     bannerUrl: string;
-    followsYou?: boolean;
-    youAreFollowing?: boolean;
-    iBlockedThem?: boolean;
   };
   isCurrentUser?: boolean;
 }
