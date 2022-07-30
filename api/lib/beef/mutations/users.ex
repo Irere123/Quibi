@@ -18,7 +18,6 @@ defmodule Beef.Mutations.Users do
   end
 
   def set_online(user_id) do
-    IO.puts(user_id)
     Query.start()
     |> Query.filter_by_id(user_id)
     |> Query.update_set_online_true()
