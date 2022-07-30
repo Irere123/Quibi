@@ -46,6 +46,7 @@ defmodule Okra.MixProject do
       {:ueberauth_twitter, "~> 0.4.1"},
       {:ueberauth_google, "~> 0.10.1"},
       {:ueberauth_facebook, "~> 0.10.0"},
+      {:ueberauth_discord, "~> 0.6"},
       {:prometheus_ex, "~> 3.0"},
       {:prometheus_plugs, "~> 1.1"},
       {:timex, "~> 3.7"},

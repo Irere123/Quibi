@@ -25,7 +25,8 @@ defmodule Beef.Schemas.User do
   schema "users" do
     field(:twitterId, :string)
     field(:googleId, :string)
-    field(:facebookId, :string)
+    field(:discordId, :string)
+    field(:discordAccessToken, :string)
     field(:username, :string)
     field(:displayName, :string)
     field(:bio, :string, default: "")

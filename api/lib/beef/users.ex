@@ -22,6 +22,8 @@ defmodule Beef.Users do
   defdelegate set_offline(user_id), to: Beef.Mutations.Users
   defdelegate set_online(user_id), to: Beef.Mutations.Users
 
+  # Authentications stuff
   defdelegate google_find_or_create(user), to: Beef.Mutations.Users
   defdelegate twitter_find_or_create(user), to: Beef.Mutations.Users
+  defdelegate discord_find_or_create(user, discord_access_token), to: Beef.Mutations.Users
 end

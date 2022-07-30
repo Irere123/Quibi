@@ -102,7 +102,9 @@ export const LoginPage: React.FC = () => {
               <Google />
               Login with Google
             </LoginButton>
-            <LoginButton oauthUrl="/dash">
+            <LoginButton
+              oauthUrl={`${apiBaseUrl}/auth/discord/web${queryParams}`}
+            >
               <Discord />
               Login with Discord
             </LoginButton>

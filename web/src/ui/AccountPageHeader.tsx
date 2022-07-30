@@ -1,8 +1,8 @@
 import { useRouter } from "next/router";
 import React from "react";
+import { useConn } from "../hooks/useConn";
 import { LogOutIcon, PlusIcon } from "../icons";
 import { useTokenStore } from "../modules/auth/useTokenStore";
-import { closeWebSocket } from "../modules/ws/createWebSocket";
 import { BoxedIcon } from "./BoxedIcon";
 import { modalConfirm } from "./ConfirmModal";
 
@@ -16,6 +16,7 @@ export const AccountPageHeader: React.FC<AccountPageHeaderProps> = ({
   title,
   children,
 }) => {
+  const conn = useConn();
   const { push } = useRouter();
   return (
     <div className="flex w-full items-center">
@@ -34,7 +35,7 @@ export const AccountPageHeader: React.FC<AccountPageHeaderProps> = ({
           circle
           onClick={() => {
             modalConfirm("Are you sure you want to logout", () => {
-              closeWebSocket();
+              conn.close();
               useTokenStore.getState().setTokens({
                 accessToken: "",
                 refreshToken: "",
