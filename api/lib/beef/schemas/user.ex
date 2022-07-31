@@ -20,7 +20,18 @@ defmodule Beef.Schemas.User do
   end
 
   @derive {Jason.Encoder,
-           only: [:id, :username, :email, :displayName, :avatarUrl, :bannerUrl, :bio, :online, :inserted_at, :last_online]}
+           only: [
+             :id,
+             :username,
+             :email,
+             :displayName,
+             :avatarUrl,
+             :bannerUrl,
+             :bio,
+             :online,
+             :inserted_at,
+             :last_online
+           ]}
   @primary_key {:id, :binary_id, []}
   schema "users" do
     field(:twitterId, :string)

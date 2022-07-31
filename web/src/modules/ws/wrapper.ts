@@ -30,6 +30,12 @@ export const wrap = (connection: Connection) => ({
    * Allows you to call functions that return information about the ws state
    */
   query: {
+    search: (
+      query: string
+    ): Promise<{
+      items: Array<any>;
+      users: any[];
+    }> => connection.fetch("search", { query }) as any,
     getUserProfile: (
       idOrUsername: string
     ): Promise<any | null | { error: string }> =>

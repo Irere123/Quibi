@@ -15,7 +15,38 @@ defmodule Beef.Access.Users do
     |> Repo.one()
   end
 
+  def search_username(<<first_letter>> <> rest) when first_letter == ?@ do
+    search_username(rest)
+  end
+
+  def search_username(start_of_username) do
+    search_str = start_of_username <> "%"
+
+    Query.start()
+    |> where([u], ilike(u.username, ^search_str) or ilike(u.displayName, ^search_str))
+    |> limit([], 15)
+    |> Repo.all()
+  end
+
   def get_by_id(user_id) do
     Repo.get(User, user_id)
+  end
+
+  @fetch_limit 16
+  def search(query, offset) do
+    query_with_percent = "%" <> query <> "%"
+
+    items =
+      from(u in User,
+        where:
+          ilike(u.username, ^query_with_percent) or
+            ilike(u.displayName, ^query_with_percent),
+        limit: @fetch_limit,
+        offset: ^offset
+      )
+      |> Repo.all()
+
+    {Enum.slice(items, 0, -1 + @fetch_limit),
+     if(length(items) == @fetch_limit, do: -1 + offset + @fetch_limit, else: nil)}
   end
 end

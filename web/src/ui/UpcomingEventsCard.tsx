@@ -89,7 +89,11 @@ export const UpcomingEventsCard: React.FC<UpcomingEventsCardProps> = ({
       </div>
       <div className="flex flex-col">
         {events.map((event) => (
-          <ScheduledRoomSummaryCard transition key={event.id} {...event} />
+          <ScheduledRoomSummaryCard
+            transition
+            key={event.id + event.title}
+            {...event}
+          />
         ))}
       </div>
 

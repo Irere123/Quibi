@@ -107,7 +107,7 @@ export const SingleUser: React.FC<AvatarProps> = ({
       {isOnline && (
         <span
           className={
-            "rounded-full absolute box-content bg-secondary-300 border-secondary-400"
+            "rounded-full absolute box-content bg-secondary-300 border-primary-800"
           }
           style={sizeStyle}
         ></span>

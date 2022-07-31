@@ -1,10 +1,13 @@
 defmodule Broth.Message.Manifest do
   alias Broth.Message.Auth
   alias Broth.Message.User
+  alias Broth.Message.Search
 
   @actions %{
     "auth:request" => Auth.Request,
-    "user:get_info" => User.GetInfo
+    "user:get_info" => User.GetInfo,
+    "user:update" => User.Update,
+    "search:search" => Search
   }
   # verify that all of the actions are accounted for in the
   # operators list

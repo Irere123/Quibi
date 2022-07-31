@@ -2,6 +2,7 @@ import { Form, Formik } from "formik";
 import React, { useContext } from "react";
 import { object, pattern, size, string } from "superstruct";
 import { InputField } from "../../form-fields/InputField";
+import { useTypeSafeMutation } from "../../hooks/useTypeSafeMutation";
 import { useTypeSafeTranslation } from "../../hooks/useTypeSafeTranslation";
 import { validateStruct } from "../../lib/validateStruct";
 import { Button } from "../../ui/Button";
@@ -33,6 +34,7 @@ export const EditProfileModal: React.FC<EditProfileModalProps> = ({
   onEdit,
 }) => {
   const { conn, setUser } = useContext(WebSocketContext);
+  const { mutateAsync } = useTypeSafeMutation("editProfile");
   const { t } = useTypeSafeTranslation();
 
   if (!conn) {
@@ -62,6 +64,7 @@ export const EditProfileModal: React.FC<EditProfileModalProps> = ({
             });
           }}
           onSubmit={async (data) => {
+            await mutateAsync([data]);
             if (conn) {
               setUser({
                 ...conn?.user,

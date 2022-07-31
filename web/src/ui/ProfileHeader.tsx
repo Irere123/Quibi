@@ -41,7 +41,6 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
             update(["getUserProfile", d.username], (x) =>
               !x ? x : { ...x, ...d }
             );
-
             if (d.username !== username) {
               preloadPush({
                 route: "profile",
@@ -92,7 +91,7 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
                 icon={<CompassIcon />}
                 onClick={() => setShowEditProfileModal(!showEditProfileModal)}
               >
-                edit profile
+                Edit profile
               </Button>
             ) : null}
           </div>

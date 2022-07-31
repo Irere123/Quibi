@@ -15,8 +15,12 @@ defmodule Beef.Users do
   defdelegate get_by_username(username), to: Beef.Access.Users
   defdelegate get_by_id(user_id), to: Beef.Access.Users
   defdelegate get(user_id), to: Beef.Access.Users
+  defdelegate search(query, offset), to: Beef.Access.Users
+  defdelegate search_username(query), to: Beef.Access.Users
 
   # MUTATIONS
+  defdelegate update(changeset), to: Beef.Repo
+
   defdelegate delete(user_id), to: Beef.Mutations.Users
   defdelegate bulk_insert(users), to: Beef.Mutations.Users
   defdelegate set_offline(user_id), to: Beef.Mutations.Users

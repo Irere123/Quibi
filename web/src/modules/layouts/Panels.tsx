@@ -9,6 +9,10 @@ import avatar from "../../img/avatar.jpg";
 import { useRouter } from "next/router";
 import { useTypeSafeTranslation } from "../../hooks/useTypeSafeTranslation";
 import { UpcomingEventsCard } from "../../ui/UpcomingEventsCard";
+import { Button } from "../../ui/Button";
+import { modalConfirm } from "../../shared-components/ConfirmModal";
+import { useTokenStore } from "../auth/useTokenStore";
+import { useConn } from "../../hooks/useConn";
 
 export const LeftPannel: React.FC = () => {
   const { t } = useTypeSafeTranslation();
@@ -108,7 +112,8 @@ export const RightPanel: React.FC = () => {
 };
 
 export const SettingsLeftPanel: React.FC = () => {
-  const { pathname } = useRouter();
+  const conn = useConn();
+  const { pathname, push } = useRouter();
   const { t } = useTypeSafeTranslation();
   const activeCSS = (link: string) => {
     if (pathname === link) {
@@ -169,6 +174,22 @@ export const SettingsLeftPanel: React.FC = () => {
             {t("pages.settings.keybinds.label")}
           </p>
         </Link>
+        <Button
+          className="mt-2"
+          size="medium"
+          onClick={() =>
+            modalConfirm("Are you sure you want to logout", () => {
+              conn.close();
+              useTokenStore
+                .getState()
+                .setTokens({ accessToken: "", refreshToken: "" });
+
+              push("/");
+            })
+          }
+        >
+          Logout
+        </Button>
       </div>
     </div>
   );
