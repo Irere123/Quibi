@@ -2,7 +2,6 @@ import { Form, Formik } from "formik";
 import React, { useContext } from "react";
 import { object, pattern, size, string } from "superstruct";
 import { InputField } from "../../form-fields/InputField";
-import { useTypeSafeMutation } from "../../hooks/useTypeSafeMutation";
 import { useTypeSafeTranslation } from "../../hooks/useTypeSafeTranslation";
 import { validateStruct } from "../../lib/validateStruct";
 import { Button } from "../../ui/Button";
@@ -34,7 +33,6 @@ export const EditProfileModal: React.FC<EditProfileModalProps> = ({
   onEdit,
 }) => {
   const { conn, setUser } = useContext(WebSocketContext);
-  const { mutateAsync } = useTypeSafeMutation("editProfile");
   const { t } = useTypeSafeTranslation();
 
   if (!conn) {
@@ -49,48 +47,66 @@ export const EditProfileModal: React.FC<EditProfileModalProps> = ({
       onRequestClose={onRequestClose}
       title={`Edit profile`}
     >
-      <Formik
-        initialValues={{
-          displayName: user.displayName,
-          username: user.username,
-          bio: user.bio || "",
-        }}
-        validateOnChange={false}
-        validate={(values) => {
-          return validateFn({
-            ...values,
-            displayName: values.displayName.trim(),
-          });
-        }}
-        onSubmit={() => {}}
-      >
-        {({ isSubmitting }) => (
-          <Form className={`flex-col w-full`}>
-            <InputField
-              className="mb-4"
-              errorMsg="Threre is an error with your display name"
-              label="Display name"
-              name="displayName"
-            />
-            <InputField
-              className="mb-4"
-              errorMsg="Threre is an error with your bio"
-              label="About"
-              name="bio"
-              textarea={true}
-              rows={5}
-            />
-            <div className={`flex pt-2 items-center`}>
-              <Button loading={isSubmitting} type="submit" className={`mr-3`}>
-                {t("common.save")}
-              </Button>
-              <ButtonLink type="button" onClick={onRequestClose}>
-                {t("common.cancel")}
-              </ButtonLink>
-            </div>
-          </Form>
-        )}
-      </Formik>
+      {isOpen ? (
+        <Formik
+          initialValues={{
+            displayName: user.displayName,
+            username: user.username,
+            bio: user.bio || "",
+          }}
+          validateOnChange={false}
+          validate={(values) => {
+            return validateFn({
+              ...values,
+              displayName: values.displayName.trim(),
+            });
+          }}
+          onSubmit={async (data) => {
+            if (conn) {
+              setUser({
+                ...conn?.user,
+                ...data,
+                bio: data.bio.trim(),
+                displayName: data.displayName.trim(),
+              });
+            }
+            onEdit?.(data);
+            onRequestClose();
+          }}
+        >
+          {({ isSubmitting }) => (
+            <Form className={`flex-col w-full`}>
+              <InputField
+                className="mb-4"
+                errorMsg="There is an error with your display name"
+                label="Display name"
+                name="displayName"
+              />
+              <InputField
+                className="mb-4"
+                errorMsg="There is an error with your bio"
+                label="About"
+                name="bio"
+                textarea={true}
+                rows={5}
+              />
+              <div className={`flex pt-2 items-center`}>
+                <Button
+                  loading={isSubmitting}
+                  type="submit"
+                  className={`mr-3`}
+                  size="medium"
+                >
+                  {t("common.save")}
+                </Button>
+                <ButtonLink type="button" onClick={onRequestClose}>
+                  {t("common.cancel")}
+                </ButtonLink>
+              </div>
+            </Form>
+          )}
+        </Formik>
+      ) : null}
     </Modal>
   );
 };

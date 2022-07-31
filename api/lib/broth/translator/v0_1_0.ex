@@ -6,7 +6,8 @@ defmodule Broth.Translator.V0_1_0 do
 
   @operator_translations %{
     "auth" => "auth:request",
-    "get_user_profile" => "user:get_info"
+    "get_user_profile" => "user:get_info",
+    "edit_profile" => "user:update"
   }
 
   @operators Map.keys(@operator_translations)
@@ -23,6 +24,11 @@ defmodule Broth.Translator.V0_1_0 do
 
   def translate_operation(message = %{"op" => operator}) do
     put_in(message, ["op"], @operator_translations[operator])
+  end
+
+
+  def translate_in_body(message, "edit_profile") do
+    put_in(message, ["d"], get_in(message, ["d", "data"]))
   end
 
   def translate_in_body(message, "get_user_profile") do

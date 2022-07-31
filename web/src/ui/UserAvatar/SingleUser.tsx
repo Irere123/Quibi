@@ -63,7 +63,7 @@ export interface AvatarProps {
   outline?: boolean;
   username?: string;
   hover?: boolean;
-  active?: boolean;
+  shadow?: boolean;
   isBot?: boolean;
 }
 
@@ -74,7 +74,7 @@ export const SingleUser: React.FC<AvatarProps> = ({
   isOnline = false,
   username,
   outline,
-  active,
+  shadow,
 }) => {
   const [isError, setError] = useState(false);
   const sizeStyle = onlineIndicatorStyleMap[size];
@@ -89,7 +89,7 @@ export const SingleUser: React.FC<AvatarProps> = ({
       <img
         alt={username ? `${username}-s-avatar` : "your-avatar"}
         style={{
-          boxShadow: active ? "0 0 0 4px var(--color-accent)" : "",
+          boxShadow: shadow ? "0 0 0 4px var(--color-accent)" : "",
         }}
         className={`rounded-full w-full h-full object-cover ${
           outline && "border-4 border-secondary-300 hover:scale-105"
@@ -99,7 +99,7 @@ export const SingleUser: React.FC<AvatarProps> = ({
           isError
             ? `https://ui-avatars.com/api/${
                 username ? `&name=${username}` : "&name"
-              }&rounded=true&background=B23439&bold=true&color=FFFFFF`
+              }&rounded=true&background=86efac&bold=true&color=00000`
             : src
         }
       />
@@ -110,24 +110,8 @@ export const SingleUser: React.FC<AvatarProps> = ({
             "rounded-full absolute box-content bg-secondary-300 border-secondary-400"
           }
           style={sizeStyle}
-          data-testid="online-indictor"
         ></span>
       )}
-      {/* {isBot && (
-        <span
-          className={
-            "rounded-full absolute box-content bg-primary-800 border-primary-800 text-secondary items-center justify-center"
-          }
-          style={{ ...sizeStyle, padding: 2, top: -2 }}
-          data-testid="online-indictor"
-        >
-          <BotIcon
-            data-testid={`bot:${username}`}
-            width={sizeStyle.width}
-            height={sizeStyle.width}
-          />
-        </span>
-      )} */}
     </div>
   );
 };

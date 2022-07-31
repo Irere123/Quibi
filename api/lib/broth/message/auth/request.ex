@@ -6,13 +6,12 @@ defmodule Broth.Message.Auth.Request do
   embedded_schema do
     field(:accessToken, :string)
     field(:refreshToken, :string)
-    field(:platform, :string)
   end
 
   @impl true
   def changeset(initializer \\ %__MODULE__{}, data) do
     initializer
-    |> cast(data, [:accessToken, :refreshToken, :platform])
+    |> cast(data, [:accessToken, :refreshToken])
     |> validate_required([:accessToken])
   end
 
@@ -28,7 +27,8 @@ defmodule Broth.Message.Auth.Request do
       bannerUrl
       bio
       online
-      lastOnline
+      last_online
+      inserted_at
     )a}
 
     @primary_key {:id, :binary_id, []}
@@ -40,7 +40,8 @@ defmodule Broth.Message.Auth.Request do
       field(:bannerUrl, :string)
       field(:bio, :string, default: "")
       field(:online, :boolean)
-      field(:lastOnline, :utc_datetime_usec)
+      field(:last_online, :utc_datetime_usec)
+      field(:inserted_at, :utc_datetime_usec)
     end
   end
 

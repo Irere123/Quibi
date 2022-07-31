@@ -1,7 +1,7 @@
 import React from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { AccountIcon, DownloadIcon, HomeIcon, SettingsIcon } from "../../icons";
+import { AppsIcon, DownloadIcon, HomeIcon, SettingsIcon } from "../../icons";
 import { SingleUser } from "../UserAvatar";
 import { Button } from "../Button";
 import { BoxedIcon } from "../BoxedIcon";
@@ -22,14 +22,10 @@ const RightHeader: React.FC<RightHeaderProps> = ({ actionButton }) => {
   }
 
   return (
-    <div className="flex space-x-4 items-center justify-end focus:outline-no-chrome w-full">
-      <Link href={"/u/account"}>
-        <a>
-          <BoxedIcon circle shadow>
-            <AccountIcon />
-          </BoxedIcon>
-        </a>
-      </Link>
+    <div className="flex  space-x-4 items-center justify-end focus:outline-no-chrome w-full">
+      <BoxedIcon circle>
+        <AppsIcon />
+      </BoxedIcon>
       {showHome ? (
         <Link href={"/dash"}>
           <a>

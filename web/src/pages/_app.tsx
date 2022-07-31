@@ -10,7 +10,7 @@ import { queryClient } from "../lib/queryClient";
 import "../styles/globals.css";
 import "nprogress/nprogress.css";
 import { KeybindListener } from "../modules/keyboard-shotcuts/KeybindListener";
-import { ConfirmModal } from "../ui/ConfirmModal";
+import { ConfirmModal } from "../shared-components/ConfirmModal";
 import { ErrorToastController } from "../modules/errors/ErrorToastController";
 import { WebSocketProvider } from "../modules/ws/WebSocketProvider";
 

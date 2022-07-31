@@ -6,7 +6,8 @@ alias Broth.Message.User
 defenum(
   Broth.Message.Types.Operator,
   [
-    {User.GetInfo, 6},
+     # user commands and casts: 0..90
+    {User.GetInfo, 5},
     # auth and maintenance commands 182..240
     {Auth.Request, 183}
   ]

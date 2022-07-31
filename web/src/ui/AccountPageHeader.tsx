@@ -4,7 +4,7 @@ import { useConn } from "../hooks/useConn";
 import { LogOutIcon, PlusIcon } from "../icons";
 import { useTokenStore } from "../modules/auth/useTokenStore";
 import { BoxedIcon } from "./BoxedIcon";
-import { modalConfirm } from "./ConfirmModal";
+import { modalConfirm } from "../shared-components/ConfirmModal";
 
 interface AccountPageHeaderProps {
   title: string;

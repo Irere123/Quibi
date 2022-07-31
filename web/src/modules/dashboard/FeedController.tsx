@@ -1,15 +1,12 @@
-import React, { useState } from "react";
+import React from "react";
 import img from "../../img/avatar2.jpg";
 import { useScreenType } from "../../hooks/useScreenType";
-import { useTypeSafeTranslation } from "../../hooks/useTypeSafeTranslation";
 
 import { FeedCard } from "../../ui/FeedCard";
 import { FeedHeader } from "../../ui/FeedHeader";
 import { MiddlePanel } from "../layouts/GridPanels";
-import { Povs } from "../../ui/Povs";
+import { MyPeopleOnline } from "./MyPeopleOnline";
 import { SchoolIcon } from "../../icons";
-import { Modal } from "../../ui/Modal";
-import { CreatePovModal } from "./CreatePovModal";
 
 const Page: React.FC = () => {
   return (
@@ -37,8 +34,6 @@ const Page: React.FC = () => {
 };
 
 export const FeedController: React.FC = () => {
-  const { t } = useTypeSafeTranslation();
-  const [povModal, setPovModal] = useState(false);
   const screenType = useScreenType();
 
   let mb = "mb-7";
@@ -47,36 +42,12 @@ export const FeedController: React.FC = () => {
   }
 
   return (
-    <MiddlePanel
-      stickyChildren={
-        <FeedHeader
-          title={t("pages.home.your_feed")}
-          content={
-            <div className="flex gap-3">
-              <Povs
-                onClick={() => setPovModal(!povModal)}
-                povArray={[
-                  { avatar: img.src, id: 2, username: "Kevin" },
-                  { avatar: img.src, id: 2, username: "Durant" },
-                  { avatar: img.src, id: 2, username: "James" },
-                  { avatar: img.src, id: 2, username: "Lebron" },
-                ]}
-              />
-            </div>
-          }
-        />
-      }
-    >
+    <MiddlePanel stickyChildren={<FeedHeader content={<MyPeopleOnline />} />}>
       <div className={`flex flex-1 flex-col ${mb}`}>
         <div className="flex flex-col space-y-4">
           <Page />
         </div>
       </div>
-      {povModal && (
-        <Modal isOpen={povModal} onRequestClose={() => setPovModal(!povModal)}>
-          <CreatePovModal />
-        </Modal>
-      )}
     </MiddlePanel>
   );
 };

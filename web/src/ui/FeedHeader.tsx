@@ -1,7 +1,7 @@
 import React from "react";
 
 export interface FeedHeaderProps {
-  title: string;
+  title?: string;
   content?: React.ReactNode;
 }
 
