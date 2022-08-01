@@ -3,6 +3,7 @@ import React, {
   DetailedHTMLProps,
   ReactNode,
 } from "react";
+import { Spinner } from "./Spinner";
 
 const sizeClassnames = {
   big: "py-2 px-6 text-sm rounded-lg",
@@ -61,7 +62,11 @@ export const Button: React.FC<ButtonProps> = ({
         {icon ? <span className={`mr-2 items-center`}>{icon}</span> : null}
         {children}
       </span>
-      {loading ? <span className={`absolute`}>loading...</span> : null}
+      {loading ? (
+        <span className={`absolute`}>
+          <Spinner />
+        </span>
+      ) : null}
     </button>
   );
 };
