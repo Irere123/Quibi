@@ -40,12 +40,7 @@ export const LeftPanel: React.FC = () => {
           return (
             <Link href={`/chat/dm/${r.id}/`} key={idx}>
               <a>
-                <SingleUser
-                  src={r.avatarUrl}
-                  size="sm"
-                  outline
-                  isOnline={true}
-                />
+                <SingleUser src={r.avatarUrl} size="sm" isOnline={true} />
               </a>
             </Link>
           );
@@ -53,7 +48,7 @@ export const LeftPanel: React.FC = () => {
           return (
             <Link href={`/chat/f/${r.id}/${r.rid}`} key={idx}>
               <a>
-                <SingleUser src={r.avatarUrl} size="sm" outline />
+                <SingleUser src={r.avatarUrl} size="sm" />
               </a>
             </Link>
           );
@@ -62,7 +57,7 @@ export const LeftPanel: React.FC = () => {
         return (
           <Link href={`/chat/r/${r.id}/${r.rid}`} key={idx}>
             <a>
-              <SingleUser src={r.avatarUrl} size="sm" outline />
+              <SingleUser src={r.avatarUrl} size="sm" />
             </a>
           </Link>
         );
