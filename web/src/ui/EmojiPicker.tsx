@@ -65,10 +65,10 @@ export const EmojiPicker: React.FC<EmojiPickerProps> = ({
 
   return (
     <div
-      className={`flex bg-primary-600 rounded-8  flex-row flex-grow p-1 max-h-32 pt-2 px-2 absolute bottom-full w-full`}
+      className={`flex bg-primary-600 rounded  flex-row flex-grow p-1 max-h-48 pt-2 px-2 absolute bottom-full w-2/5`}
     >
       <div
-        className={` grid grid-cols-7 w-full pr-3 gap-2 max-h-16 overflow-y-scroll scrollbar-thin scrollbar-thumb-rounded-xl scrollbar-thumb-primary-900`}
+        className={` grid grid-cols-7 w-full pr-3 gap-2  overflow-y-scroll scrollbar-thin scrollbar-thumb-rounded-xl scrollbar-thumb-primary-900`}
       >
         {(queryMatches.length ? queryMatches : emojiSet).map((emoji) => (
           <img

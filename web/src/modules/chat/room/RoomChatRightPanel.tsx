@@ -20,7 +20,7 @@ export const RoomChatRightPanel: React.FC = () => {
         </div>
       </div>
       <div className="flex flex-col items-center justify-center gap-4">
-        <SingleUser active src={avatar.src} username="hello" isOnline />
+        <SingleUser outline src={avatar.src} username="hello" isOnline={true} />
         <div className="flex gap-3">
           <BoxedIcon>
             <AccountTree />

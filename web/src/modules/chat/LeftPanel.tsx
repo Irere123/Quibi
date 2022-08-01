@@ -7,7 +7,6 @@ import { PlusIcon } from "../../icons";
 
 import { SingleUser } from "../../ui/UserAvatar";
 import { useState } from "react";
-import { Modal } from "../../ui/Modal";
 import { CreateRoomModal } from "./room/CreateRoomModal";
 
 const rooms = [
@@ -74,14 +73,10 @@ export const LeftPanel: React.FC = () => {
         </BoxedIcon>
       </div>
       {createRoomModal && (
-        <Modal
+        <CreateRoomModal
           isOpen={createRoomModal}
           onRequestClose={() => setCreateRoomModal(!createRoomModal)}
-          title="Create a room"
-          subtitle="Your room is where you and your community hangout.Make yours and start talking"
-        >
-          <CreateRoomModal />
-        </Modal>
+        />
       )}
     </div>
   );
