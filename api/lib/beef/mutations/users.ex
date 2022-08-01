@@ -102,7 +102,7 @@ defmodule Beef.Mutations.Users do
       {:create,
        Repo.insert!(
          %User{
-           username: Okra.Utils.Random.big_ascii_id(),
+           username: user.username,
            email: if(user.email == "", do: nil, else: user.email),
            twitterId: user.twitterId,
            avatarUrl: user.avatarUrl,
@@ -149,12 +149,12 @@ defmodule Beef.Mutations.Users do
       {:create,
        Repo.insert!(
          %User{
-           username: Okra.Utils.Random.big_ascii_id(),
+           username: user["username"],
            discordId: discordId,
            email: if(user["email"] == "", do: nil, else: user["email"]),
            discordAccessToken: discord_access_token,
            avatarUrl: Okra.Discord.get_avatar_url(user),
-           displayName: user["username"],
+           displayName: Okra.Utils.Random.big_ascii_id(),
            hasLoggedIn: true
          },
          returning: true
