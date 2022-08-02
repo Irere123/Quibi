@@ -22,9 +22,9 @@ export const LeftPannel: React.FC = () => {
   let room = rooms[0];
 
   if (room.isForum) {
-    chatLink = `/chat/f/${room.id}/${room.id}`;
+    chatLink = `/room/f/${room.id}/${room.id}`;
   } else {
-    chatLink = `/chat/r/${room.id}/${room.id}`;
+    chatLink = `/room/${room.id}/${room.id}`;
   }
 
   return (
