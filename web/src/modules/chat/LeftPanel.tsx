@@ -1,63 +1,37 @@
 import Link from "next/link";
-import avatar from "../../img/avatar.jpg";
-import avatar2 from "../../img/avatar2.jpg";
-import avatar3 from "../../img/avatar3.jpg";
 import { BoxedIcon } from "../../ui/BoxedIcon";
 import { PlusIcon } from "../../icons";
 
-import { SingleUser } from "../../ui/UserAvatar";
+import { SingleUser } from "../../ui/Avatars";
 import { useState } from "react";
 import { CreateRoomModal } from "./room/CreateRoomModal";
-
-const rooms = [
-  {
-    id: 1,
-    rid: 23,
-    avatarUrl: avatar.src,
-    name: "Kenny",
-    dm: true,
-  },
-  {
-    id: 2,
-    rid: 32,
-    avatarUrl: avatar2.src,
-    forum: true,
-  },
-  {
-    id: 3,
-    rid: 234,
-    avatarUrl: avatar3.src,
-  },
-];
+import { useConn } from "../../hooks/useConn";
 
 export const LeftPanel: React.FC = () => {
+  const { rooms } = useConn();
   const [createRoomModal, setCreateRoomModal] = useState<boolean>(false);
 
   return (
-    <div className="flex flex-col items-center gap-5 cursor-pointer ">
-      {rooms.map((r, idx: number) => {
-        if (r.dm) {
+    <div className="flex flex-col items-center gap-5 cursor-pointer overflow-y-auto mb-3">
+      {rooms.map((room: any, idx: number) => {
+        if (room.isForum) {
           return (
-            <Link href={`/chat/dm/${r.id}/`} key={idx}>
+            <Link href={`/room/f/${room.id}/${room.id}`} key={room.id}>
               <a>
-                <SingleUser src={r.avatarUrl} size="sm" isOnline={true} />
-              </a>
-            </Link>
-          );
-        } else if (r.forum) {
-          return (
-            <Link href={`/chat/f/${r.id}/${r.rid}`} key={idx}>
-              <a>
-                <SingleUser src={r.avatarUrl} size="sm" />
+                <SingleUser
+                  src={room.avatarUrl}
+                  username={room.name}
+                  size="sm"
+                />
               </a>
             </Link>
           );
         }
 
         return (
-          <Link href={`/chat/r/${r.id}/${r.rid}`} key={idx}>
+          <Link href={`/room/${room.id}/${room.id}`} key={room.id}>
             <a>
-              <SingleUser src={r.avatarUrl} size="sm" />
+              <SingleUser src={room.avatarUrl} size="sm" />
             </a>
           </Link>
         );

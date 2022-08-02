@@ -1,6 +1,6 @@
 import React from "react";
 import { useModalStore } from "../../../stores/useModalStore";
-import { MultipleUsers } from "../../../ui/UserAvatar";
+import { MultipleUsers } from "../../../ui/Avatars";
 import avatar from "../../../img/avatar.jpg";
 import avatar2 from "../../../img/avatar2.jpg";
 import avatar3 from "../../../img/avatar3.jpg";

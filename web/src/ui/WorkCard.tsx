@@ -1,6 +1,6 @@
 import React from "react";
 import { Tag } from "./Tag";
-import { SingleUser } from "./UserAvatar";
+import { SingleUser } from "./Avatars";
 
 export interface WorkCardProps {
   sender: {

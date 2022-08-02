@@ -1,6 +1,6 @@
 import React, { useMemo } from "react";
 import { generateColorFromString } from "../lib/generateColor";
-import { SingleUser } from "./UserAvatar";
+import { SingleUser } from "./Avatars";
 import { FormattedDate } from "./FormattedDate";
 
 export interface MessageElementProps {

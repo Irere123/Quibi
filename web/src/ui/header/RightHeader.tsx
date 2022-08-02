@@ -2,7 +2,7 @@ import React from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { AppsIcon, DownloadIcon, HomeIcon, SettingsIcon } from "../../icons";
-import { SingleUser } from "../UserAvatar";
+import { SingleUser } from "../Avatars";
 import { Button } from "../Button";
 import { BoxedIcon } from "../BoxedIcon";
 import { useConn } from "../../hooks/useConn";

@@ -1,6 +1,6 @@
 import React from "react";
 import { kFormatter } from "../lib/kFormatter";
-import { SingleUser } from "./UserAvatar";
+import { SingleUser } from "./Avatars";
 import { UserBadge } from "./UserBadge";
 
 export type badge = {

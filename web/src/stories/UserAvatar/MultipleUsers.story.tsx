@@ -1,7 +1,7 @@
 import React from "react";
 import { Story } from "@storybook/react";
 
-import { MultipleUsers, AvatarProps } from "../../ui/UserAvatar/MultipleUsers";
+import { MultipleUsers, AvatarProps } from "../../ui/Avatars/MultipleUsers";
 
 import src from "../../img/avatar.jpg";
 

@@ -2,7 +2,7 @@ import Link from "next/link";
 import React from "react";
 import { PersonAdd } from "../icons";
 import { Button } from "./Button";
-import { SingleUser } from "./UserAvatar";
+import { SingleUser } from "./Avatars";
 
 interface FollowSuggCardProps {
   users: {

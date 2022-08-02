@@ -1,5 +1,5 @@
 import React from "react";
-import { SingleUser } from "../../UserAvatar";
+import { SingleUser } from "../../Avatars";
 
 export interface UserSearchResultProps {
   user: {

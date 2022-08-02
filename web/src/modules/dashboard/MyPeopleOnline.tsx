@@ -1,7 +1,7 @@
 import React from "react";
 import avatar from "../../img/avatar2.jpg";
 import { PlusIcon } from "../../icons";
-import { SingleUser } from "../../ui/UserAvatar";
+import { SingleUser } from "../../ui/Avatars";
 
 export interface MyPeopleOnlineProps {}
 

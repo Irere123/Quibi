@@ -1,7 +1,7 @@
 import React, { ReactChild, useState } from "react";
 import { ProfileHeaderWrapper } from "./ProfileHeaderWrapper";
 import { Button } from "./Button";
-import { SingleUser } from "./UserAvatar/SingleUser";
+import { SingleUser } from "./Avatars/SingleUser";
 import { CalendarMonth, CompassIcon, Friends } from "../icons";
 import { EditProfileModal } from "../modules/user/EditProfileModal";
 import { FormattedDate } from "./FormattedDate";

@@ -5,7 +5,7 @@ import { kFormatter } from "../../../lib/kFormatter";
 import { truncate } from "../../../lib/truncate";
 import { BoxedIcon } from "../../../ui/BoxedIcon";
 import { Tag } from "../../../ui/Tag";
-import { SingleUser } from "../../../ui/UserAvatar";
+import { SingleUser } from "../../../ui/Avatars";
 
 export const RoomChatRightPanel: React.FC = () => {
   return (

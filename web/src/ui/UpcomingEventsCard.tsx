@@ -4,7 +4,7 @@ import React from "react";
 import { PlusIcon } from "../icons";
 import { BoxedIcon } from "./BoxedIcon";
 import { CardHeading } from "./CardHeading";
-import { MultipleUsers } from "./UserAvatar";
+import { MultipleUsers } from "./Avatars";
 
 interface FormattedEventDateProps {
   scheduledFor: Date;

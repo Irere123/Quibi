@@ -18,7 +18,7 @@ export const CreateRoomModal: React.FC<CreateRoomModalProps> = ({
 }) => {
   const conn = useWrappedConn();
   const { push } = useRouter();
-  const [type, setType] = useState<"text" | "forum">("text");
+  const [type, setType] = useState("text");
 
   return (
     <Modal
@@ -31,7 +31,6 @@ export const CreateRoomModal: React.FC<CreateRoomModalProps> = ({
           initialValues={{
             name: "",
             privacy: "private",
-            type: type,
           }}
           validateOnChange={false}
           validate={({ name }) => {
@@ -57,7 +56,7 @@ export const CreateRoomModal: React.FC<CreateRoomModalProps> = ({
             onRequestClose();
           }}
         >
-          {({ isSubmitting, setFieldValue }) => (
+          {({ isSubmitting }) => (
             <Form>
               <div className="flex flex-col mb-5">
                 <div className="flex flex-col gap-2">
@@ -65,10 +64,7 @@ export const CreateRoomModal: React.FC<CreateRoomModalProps> = ({
                     room type
                   </p>
                   <div
-                    onClick={() => {
-                      setType("text");
-                      setFieldValue("type", type);
-                    }}
+                    onClick={() => setType("text")}
                     className={`flex gap-3 text-primary-100 items-center cursor-pointer px-3 py-1 ${
                       type === "text" ? "bg-primary-600" : "bg-primary-700"
                     } rounded`}
@@ -90,10 +86,7 @@ export const CreateRoomModal: React.FC<CreateRoomModalProps> = ({
                     </span>
                   </div>
                   <div
-                    onClick={() => {
-                      setType("forum");
-                      setFieldValue("type", type);
-                    }}
+                    onClick={() => setType("forum")}
                     className={`flex gap-3 text-primary-100 items-center cursor-pointer px-3 py-1 ${
                       type === "forum" ? "bg-primary-700" : "bg-primary-600"
                     } rounded`}

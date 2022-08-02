@@ -3,7 +3,7 @@ import React from "react";
 import { useConn } from "../hooks/useConn";
 import { PlusIcon } from "../icons";
 import { BoxedIcon } from "./BoxedIcon";
-import { SingleUser } from "./UserAvatar";
+import { SingleUser } from "./Avatars";
 
 interface AccountPageHeaderProps {
   title: string;
