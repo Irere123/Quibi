@@ -38,8 +38,8 @@ export const LeftPannel: React.FC = () => {
           </a>
         </Link>
       </Tooltip>
-      <Tooltip text={"Academic"}>
-        <Link href={"/u/account"}>
+      <Tooltip text={t("components.panels.right.acedemic")}>
+        <Link href={"/u/academic"}>
           <a>
             <BoxedIcon circle shadow>
               <SchoolIcon />
@@ -56,8 +56,8 @@ export const LeftPannel: React.FC = () => {
           </a>
         </Link>
       </Tooltip>
-      <Tooltip text={"Explore"}>
-        <Link href={"/works"}>
+      <Tooltip text={t("components.panels.right.explore")}>
+        <Link href={"/explore"}>
           <a>
             <BoxedIcon circle shadow>
               <CompassIcon />

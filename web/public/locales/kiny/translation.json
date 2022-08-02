@@ -61,9 +61,8 @@
       "right": {
         "home": "Itangiriro",
         "chat": "Kuganira",
-        "works": "Umukoro",
-        "account": "Konte",
-        "discovery": "Shakisha"
+        "explore": "Explore",
+        "acedemic": "Acedemic"
       }
     }
   }

@@ -10,14 +10,14 @@ import { WorksController } from "./WorksController";
 
 interface WorksPageProps {}
 
-export const WorksPage: PageComponent<WorksPageProps> = () => {
+export const ExplorePage: PageComponent<WorksPageProps> = () => {
   const { t } = useTypeSafeTranslation();
 
   return (
     <WaitForWsAndAuth>
       <MainLayout leftPanel={<LeftPannel />} rightPanel={<RightPanel />}>
         <HeaderController
-          title={t("components.panels.right.works")}
+          title={t("components.panels.right.explore")}
           embed={{}}
         />
         <WorksController />
@@ -26,4 +26,4 @@ export const WorksPage: PageComponent<WorksPageProps> = () => {
   );
 };
 
-WorksPage.ws = true;
+ExplorePage.ws = true;

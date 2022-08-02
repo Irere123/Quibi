@@ -2,7 +2,7 @@
   "_comment": "if you change this file, do: yarn i18 NB:You must keep all files in sync(the same)",
   "header": {
     "_comment": "Main title Internationalization Strings",
-    "title": "Quibi",
+    "title": "Quibi - Open world",
     "dashboard": "Dashboard"
   },
   "common": {
@@ -76,9 +76,8 @@
       "right": {
         "home": "Home",
         "chat": "Chat",
-        "works": "Works",
-        "account": "Account",
-        "discovery": "Discovery"
+        "explore": "Explore",
+        "acedemic": "Academic"
       }
     }
   }

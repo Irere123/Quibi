@@ -61,9 +61,8 @@
       "right": {
         "home": "Accueil",
         "chat": "Chat",
-        "works": "Oeuvres",
-        "account": "Compte",
-        "discovery": "Explorer"
+        "explore": "Explorer",
+        "acedemic": "Acedemic"
       }
     }
   }
