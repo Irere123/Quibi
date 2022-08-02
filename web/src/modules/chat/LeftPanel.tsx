@@ -2,10 +2,10 @@ import Link from "next/link";
 import { BoxedIcon } from "../../ui/BoxedIcon";
 import { PlusIcon } from "../../icons";
 
-import { SingleUser } from "../../ui/Avatars";
 import { useState } from "react";
 import { CreateRoomModal } from "./room/CreateRoomModal";
 import { useConn } from "../../hooks/useConn";
+import { RoomAvatar } from "../../ui/Avatars";
 
 export const LeftPanel: React.FC = () => {
   const { rooms } = useConn();
@@ -18,11 +18,7 @@ export const LeftPanel: React.FC = () => {
           return (
             <Link href={`/room/f/${room.id}/${room.id}`} key={room.id}>
               <a>
-                <SingleUser
-                  src={room.avatarUrl}
-                  username={room.name}
-                  size="sm"
-                />
+                <RoomAvatar name={room.name} size="md" />
               </a>
             </Link>
           );
@@ -31,7 +27,7 @@ export const LeftPanel: React.FC = () => {
         return (
           <Link href={`/room/${room.id}/${room.id}`} key={room.id}>
             <a>
-              <SingleUser src={room.avatarUrl} size="sm" />
+              <RoomAvatar name={room.name} size="md" isOnline />
             </a>
           </Link>
         );
