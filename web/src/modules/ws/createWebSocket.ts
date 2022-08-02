@@ -43,6 +43,7 @@ export type Connection = {
     handler: ListenerHandler<Data>
   ) => () => void;
   user: any;
+  rooms: any;
   send: (opcode: Opcode, data: unknown, fetchId?: FetchID) => void;
   sendCast: (opcode: Opcode, data: unknown, ref?: Ref) => void;
   fetch: (
@@ -174,6 +175,7 @@ export const connect = (
             return () => listeners.splice(listeners.indexOf(listener), 1);
           },
           user: message.d.user,
+          rooms: message.d.rooms,
           send: apiSend,
           sendCast: api2Send,
           sendCall: (

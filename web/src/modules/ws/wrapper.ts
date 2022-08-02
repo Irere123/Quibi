@@ -49,5 +49,10 @@ export const wrap = (connection: Connection) => ({
       connection.sendCall("user:update", data),
     editProfile: (data: Partial<unknown>): Promise<unknown> =>
       connection.sendCall("user:update", data),
+    createRoom: (data: {
+      name: string;
+      privacy: string;
+      type: string;
+    }): Promise<any> => connection.fetch("create_room", data) as any,
   },
 });

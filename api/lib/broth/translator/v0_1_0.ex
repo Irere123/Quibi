@@ -8,7 +8,8 @@ defmodule Broth.Translator.V0_1_0 do
     "auth" => "auth:request",
     "get_user_profile" => "user:get_info",
     "edit_profile" => "user:update",
-    "search" => "search:search"
+    "search" => "search:search",
+    "create_room" => "room:create"
   }
 
   @operators Map.keys(@operator_translations)
@@ -25,6 +26,11 @@ defmodule Broth.Translator.V0_1_0 do
 
   def translate_operation(message = %{"op" => operator}) do
     put_in(message, ["op"], @operator_translations[operator])
+  end
+
+  def translate_in_body(message, "create_room") do
+    is_forum = get_in(message, ["d", "type"]) == "forum"
+    put_in(message, ["d", "isForum"], is_forum)
   end
 
   def translate_in_body(message, "edit_profile") do
@@ -66,7 +72,11 @@ defmodule Broth.Translator.V0_1_0 do
   defp add_out_err(message, _), do: message
 
   def translate_out_body(message, "auth:request") do
-    %{message | op: "auth-good", d: %{user: message.d}}
+    %{message | op: "auth-good", d: message.d}
+  end
+
+  def translate_out_body(message, "room:create") do
+    %{message | d: %{room: message.d}}
   end
 
   #################################################################
