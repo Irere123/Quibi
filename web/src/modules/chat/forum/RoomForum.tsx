@@ -1,7 +1,7 @@
 import React from "react";
-import { ChatInput } from "../../ChatInput";
+import { ChatInput } from "../ChatInput";
 import { RoomForumContent } from "./RoomForumContent";
-import { RoomForumHeader } from "../../../../ui/RoomForumHeader";
+import { RoomForumHeader } from "../../../ui/RoomForumHeader";
 
 export const RoomForum: React.FC = () => {
   return (

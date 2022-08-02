@@ -1,6 +1,6 @@
 import React from "react";
-import { PlusIcon } from "../../../../icons";
-import { BoxedIcon } from "../../../../ui/BoxedIcon";
+import { PlusIcon } from "../../../icons";
+import { BoxedIcon } from "../../../ui/BoxedIcon";
 
 export interface Props {}
 
