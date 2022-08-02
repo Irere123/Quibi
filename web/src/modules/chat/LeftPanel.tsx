@@ -12,13 +12,13 @@ export const LeftPanel: React.FC = () => {
   const [createRoomModal, setCreateRoomModal] = useState<boolean>(false);
 
   return (
-    <div className="flex flex-col items-center gap-5 cursor-pointer overflow-y-auto mb-3">
-      {rooms.map((room: any, idx: number) => {
+    <div className="flex flex-col items-center gap-5 cursor-pointer overflow-y-auto">
+      {rooms.map((room: any) => {
         if (room.isForum) {
           return (
             <Link href={`/room/f/${room.id}/${room.id}`} key={room.id}>
               <a>
-                <RoomAvatar name={room.name} size="md" />
+                <RoomAvatar name={room.name} size="sm" />
               </a>
             </Link>
           );
@@ -27,7 +27,7 @@ export const LeftPanel: React.FC = () => {
         return (
           <Link href={`/room/${room.id}/${room.id}`} key={room.id}>
             <a>
-              <RoomAvatar name={room.name} size="md" isOnline />
+              <RoomAvatar name={room.name} size="sm" isOnline />
             </a>
           </Link>
         );

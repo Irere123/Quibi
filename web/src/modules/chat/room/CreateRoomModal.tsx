@@ -49,9 +49,9 @@ export const CreateRoomModal: React.FC<CreateRoomModalProps> = ({
             const { room } = await conn.mutation.createRoom(d);
 
             if (room.isForum) {
-              push(`/chat/f/${room.id}/${room.id}`);
+              push(`/room/f/${room.id}/${room.id}`);
             }
-            push(`/chat/r/${room.id}/${room.id}`);
+            push(`/room/${room.id}/${room.id}`);
 
             onRequestClose();
           }}
