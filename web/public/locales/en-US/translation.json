@@ -49,7 +49,7 @@
   "modules": { "chat": { "sendMessage": "Send Message" } },
   "components": {
     "search": {
-      "placeholder": "Search for works, users and more",
+      "placeholder": "Search for schools, people or quizes",
       "placeholderShort": "Search"
     },
     "panels": {

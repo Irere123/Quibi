@@ -15,17 +15,7 @@ import { useTokenStore } from "../auth/useTokenStore";
 import { useConn } from "../../hooks/useConn";
 
 export const LeftPannel: React.FC = () => {
-  const { rooms } = useConn();
   const { t } = useTypeSafeTranslation();
-
-  let chatLink;
-  let room = rooms[0];
-
-  if (room.isForum) {
-    chatLink = `/room/f/${room.id}/${room.id}`;
-  } else {
-    chatLink = `/room/${room.id}/${room.id}`;
-  }
 
   return (
     <div className="flex flex-col items-center gap-5">
@@ -48,7 +38,7 @@ export const LeftPannel: React.FC = () => {
         </Link>
       </Tooltip>
       <Tooltip text={t("components.panels.right.chat")}>
-        <Link href={chatLink}>
+        <Link href={"/chat"}>
           <a>
             <BoxedIcon circle shadow>
               <AtIcon />

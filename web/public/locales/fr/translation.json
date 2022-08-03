@@ -52,7 +52,7 @@
   "modules": { "chat": { "sendMessage": "Envoyer le message" } },
   "components": {
     "search": {
-      "placeholder": "Chercher des messages, personnes et plus",
+      "placeholder": "Chercher des ecoles, personnes ou questions",
       "placeholderShort": "Chercher"
     },
     "panels": {

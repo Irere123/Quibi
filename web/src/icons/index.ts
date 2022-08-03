@@ -39,3 +39,4 @@ export { default as CalendarMonth } from "./CalendarMonth";
 export { default as LinkIcon } from "./LinkIcon";
 export { default as RadarIcon } from "./RadarIcon";
 export { default as AppsIcon } from "./AppsIcon";
+export { default as ChatBubble } from "./ChatBubble";

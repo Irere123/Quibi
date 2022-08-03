@@ -14,10 +14,30 @@ export const MyPeopleOnline: React.FC<MyPeopleOnlineProps> = ({}) => {
         <PlusIcon />
       </div>
       <div className="flex gap-3">
-        <SingleUser size="md" src={avatar.src} username="Emmy" outline={true} />
-        <SingleUser size="md" src={avatar.src} username="Emmy" outline={true} />
-        <SingleUser size="md" src={avatar.src} username="Emmy" outline={true} />
-        <SingleUser size="md" src={avatar.src} username="Emmy" outline={true} />
+        <SingleUser
+          size="md"
+          src={avatar.src}
+          username="Emmy"
+          isOnline={true}
+        />
+        <SingleUser
+          size="md"
+          src={avatar.src}
+          username="Emmy"
+          isOnline={true}
+        />
+        <SingleUser
+          size="md"
+          src={avatar.src}
+          username="Emmy"
+          isOnline={true}
+        />
+        <SingleUser
+          size="md"
+          src={avatar.src}
+          username="Emmy"
+          isOnline={true}
+        />
       </div>
     </div>
   );
