@@ -1,15 +1,15 @@
-import React from "react";
-import { PlusIcon } from "../../icons";
-import { useModalStore } from "../../stores/useModalStore";
+import { useRouter } from "next/router";
+import React, { useState } from "react";
+import { CalendarMonth, PlusIcon } from "../../icons";
 import { BoxedIcon } from "../../ui/BoxedIcon";
-import { Modal } from "../../ui/Modal";
 import { PageHeader } from "../../ui/PageHeader";
 import { MiddlePanel } from "../layouts/GridPanels";
-import { CreateQuizModal } from "./CreateQuizModal";
+import { CreateQuizModal } from "../quiz/CreateQuizModal";
 import { Quizes } from "./Quizes";
 
 export const WorksController: React.FC = () => {
-  const { addQuizModal, setAddQuizModal } = useModalStore();
+  const { push } = useRouter();
+  const [open, setOpen] = useState(false);
 
   return (
     <MiddlePanel
@@ -17,11 +17,14 @@ export const WorksController: React.FC = () => {
         <PageHeader
           title="For you"
           content={
-            <>
-              <BoxedIcon onClick={() => setAddQuizModal(!addQuizModal)}>
+            <div className="flex gap-3">
+              <BoxedIcon className="text-accent" onClick={() => setOpen(!open)}>
                 <PlusIcon />
               </BoxedIcon>
-            </>
+              <BoxedIcon onClick={() => push("/scheduled-quizes")}>
+                <CalendarMonth />
+              </BoxedIcon>
+            </div>
           }
         />
       }
@@ -31,15 +34,8 @@ export const WorksController: React.FC = () => {
           <Quizes />
         </div>
       </div>
-      {addQuizModal && (
-        <Modal
-          isOpen={addQuizModal}
-          onRequestClose={() => setAddQuizModal(!addQuizModal)}
-          title="Create new"
-          subtitle="When you create a quiz you can invite other people to join it.."
-        >
-          <CreateQuizModal />
-        </Modal>
+      {open && (
+        <CreateQuizModal isOpen={open} onRequestClose={() => setOpen(!open)} />
       )}
     </MiddlePanel>
   );

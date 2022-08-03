@@ -23,7 +23,7 @@ export const Quizes: React.FC = () => {
         avatars={[avatar.src, avatar2.src]}
         live={true}
         subtitle={"Garry Simon, Peter Thiel"}
-        people={20}
+        people={26}
         onClick={() => push(`/quiz/${v4()}`)}
       />
       <Card
@@ -32,7 +32,8 @@ export const Quizes: React.FC = () => {
           "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Nisi, velit"
         }
         avatars={[avatar.src, avatar2.src]}
-        date={Date.now()}
+        live={true}
+        people={10}
         speakers={["Garry Simon, Peter Thiel"]}
         onClick={() => push(`/quiz/${v4()}`)}
       />
