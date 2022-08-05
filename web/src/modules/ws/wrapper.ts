@@ -68,6 +68,10 @@ export const wrap = (connection: Connection) => ({
   mutation: {
     userUpdate: (data: Partial<unknown>): Promise<unknown> =>
       connection.sendCall("user:update", data),
+    userBlock: (userId: string): Promise<unknown> =>
+      connection.sendCall("user:block", { userId }),
+    userUnblock: (userId: string): Promise<unknown> =>
+      connection.sendCall("user:unblock", { userId }),
     editProfile: (data: Partial<unknown>): Promise<unknown> =>
       connection.sendCall("user:update", data),
     createRoom: (data: {

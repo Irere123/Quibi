@@ -29,6 +29,10 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
 }) => {
   const { mutateAsync, isLoading: followLoading } =
     useTypeSafeMutation("follow");
+  const { mutateAsync: block, isLoading: blockLoading } =
+    useTypeSafeMutation("userBlock");
+  const { mutateAsync: unblock, isLoading: unblockLoading } =
+    useTypeSafeMutation("userUnblock");
   const [showEditProfileModal, setShowEditProfileModal] = useState(false);
   const preloadPush = usePreloadPush();
   const update = useTypeSafeUpdateQuery();
@@ -82,6 +86,38 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
 
         <div className="w-3/6 ">
           <div className="flex flex-row justify-end content-end gap-2">
+            {!isCurrentUser && (
+              <Button
+                loading={blockLoading || unblockLoading}
+                size="small"
+                color={user.iBlockedThem ? "secondary" : "primary"}
+                onClick={async () => {
+                  if (user.iBlockedThem) {
+                    await unblock([user.id]);
+                    updater(["getUserProfile", username], (u) =>
+                      !u
+                        ? u
+                        : {
+                            ...u,
+                            iBlockedThem: false,
+                          }
+                    );
+                  } else {
+                    await block([user.id]);
+                    updater(["getUserProfile", username], (u) =>
+                      !u
+                        ? u
+                        : {
+                            ...u,
+                            iBlockedThem: true,
+                          }
+                    );
+                  }
+                }}
+              >
+                {user.iBlockedThem ? <>Unblock</> : <>Block</>}
+              </Button>
+            )}
             {!isCurrentUser && (
               <Button
                 loading={followLoading}

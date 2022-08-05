@@ -6,7 +6,7 @@ defmodule Beef.Schemas.UserBlock do
 
   @derive {Jason.Encoder, only: [:userId, :userIdBlocked]}
   @primary_key false
-  schema "user_block" do
+  schema "user_blocks" do
     belongs_to(:user, User, foreign_key: :userId, type: :binary_id)
     belongs_to(:blockedUser, User, foreign_key: :userIdBlocked, type: :binary_id)
 

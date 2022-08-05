@@ -20,12 +20,15 @@ export const UserProfileController: React.FC = () => {
   );
 
   if (isLoading) {
-    return <div>loading...</div>;
+    // @todo: make this better
+    return <InfoText>Loading...</InfoText>;
   }
 
   if (!data || ("error" in data && data.error.includes("could not find"))) {
     // @todo: make this better
     return <InfoText>The user could not be found</InfoText>;
+  } else if ("error" in data && data.error.includes("blocked")) {
+    return <InfoText>You have been blocked by this user.</InfoText>;
   } else if ("error" in data) {
     // @todo: make this better
     return <InfoText>{data.error}</InfoText>;

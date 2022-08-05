@@ -55,6 +55,8 @@ defmodule Beef.Access.Users do
     |> Query.filter_by_id(them_id)
     |> select([u], u)
     |> Query.follow_info(me_id)
+    |> Query.i_blocked_them_info(me_id)
+    |> Query.they_blocked_me_info(me_id)
     |> Query.limit_one()
     |> Repo.one()
   end
@@ -64,6 +66,8 @@ defmodule Beef.Access.Users do
     |> Query.filter_by_username(username)
     |> select([u], u)
     |> Query.follow_info(user_id)
+    |> Query.i_blocked_them_info(user_id)
+    |> Query.they_blocked_me_info(user_id)
     |> Query.limit_one()
     |> Repo.one()
   end
