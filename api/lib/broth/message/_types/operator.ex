@@ -14,6 +14,8 @@ defenum(
     {User.Unfollow, 11},
     {User.GetFollowing, 1},
     {User.GetFollowers, 2},
+    {User.Unblock, 8},
+    {User.Block, 9},
     {User.Follow, 3},
     {User.Online, 4},
     {User.GetRelationship, 7},
