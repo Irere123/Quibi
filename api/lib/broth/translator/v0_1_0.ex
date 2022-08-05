@@ -9,7 +9,13 @@ defmodule Broth.Translator.V0_1_0 do
     "get_user_profile" => "user:get_info",
     "edit_profile" => "user:update",
     "search" => "search:search",
-    "create_room" => "room:create"
+    "create_room" => "room:create",
+    # follow needs to arbitrate if it becomes follow or unfollow.
+    "follow" => nil,
+    # get_follow_list needs to arbitrate if its followers or following.
+    "get_follow_list" => nil,
+    "follow_info" => "user:get_relationship",
+    "get_my_following" => "user:get_following"
   }
 
   @operators Map.keys(@operator_translations)
@@ -39,6 +45,22 @@ defmodule Broth.Translator.V0_1_0 do
 
   def translate_in_body(message, "get_user_profile") do
     put_in(message, ["d", "userIdOrUsername"], get_in(message, ["d", "userId"]))
+  end
+
+  def translate_in_body(message, "follow") do
+    # this one has to also alter the operation.
+    operation = if get_in(message, ["d", "value"]), do: "user:follow", else: "user:unfollow"
+    put_in(message, ["op"], operation)
+  end
+
+  def translate_in_body(message, "get_follow_list") do
+    # this one has to also alter the operation.
+    operation =
+      if get_in(message, ["d", "isFollowing"]),
+        do: "user:get_following",
+        else: "user:get_followers"
+
+    put_in(message, ["op"], operation)
   end
 
   def translate_in_body(message, _op), do: message
@@ -77,6 +99,28 @@ defmodule Broth.Translator.V0_1_0 do
 
   def translate_out_body(message, "room:create") do
     %{message | d: %{room: message.d}}
+  end
+
+  def translate_out_body(message, "user:get_following") do
+    data = %{users: message.d.following, nextCursor: message.d.nextCursor}
+    %{message | d: data}
+  end
+
+  def translate_out_body(message, "user:get_followers") do
+    data = %{users: message.d.followers, nextCursor: message.d.nextCursor}
+    %{message | d: data}
+  end
+
+  def translate_out_body(message, "user:get_relationship") do
+    new_data =
+      case message.d.relationship do
+        nil -> %{followsYou: false, youAreFollowing: false}
+        :follower -> %{followsYou: true, youAreFollowing: false}
+        :following -> %{followsYou: false, youAreFollowing: true}
+        :mutual -> %{followsYou: true, youAreFollowing: true}
+      end
+
+    %{message | d: new_data}
   end
 
   #################################################################

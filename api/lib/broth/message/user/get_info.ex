@@ -25,8 +25,11 @@ defmodule Broth.Message.User.GetInfo do
       bannerUrl
       bio
       online
+      numFollowing
+      numFollowers
       last_online
       inserted_at
+      iBlockedThem
     )a}
 
     @primary_key {:id, :binary_id, []}
@@ -41,6 +44,11 @@ defmodule Broth.Message.User.GetInfo do
       field(:last_online, :utc_datetime_usec)
       field(:inserted_at, :utc_datetime_usec)
       field(:error, :string, virtual: true)
+      field(:numFollowing, :integer)
+      field(:numFollowers, :integer)
+      field(:youAreFollowing, :boolean, virtual: true)
+      field(:followsYou, :boolean, virtual: true)
+      field(:iBlockedThem, :boolean, virtual: true)
     end
   end
 
@@ -61,6 +69,9 @@ defmodule Broth.Message.User.GetInfo do
         case user do
           nil ->
             {:reply, %{error: "could not find user"}, state}
+
+          %{theyBlockedMe: true} ->
+            {:reply, %{error: "blocked"}, state}
 
           _ ->
             {:reply, user, state}

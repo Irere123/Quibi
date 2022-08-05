@@ -9,7 +9,12 @@ defmodule Broth.Message.Manifest do
     "user:get_info" => User.GetInfo,
     "user:update" => User.Update,
     "search:search" => Search,
-    "room:create" => Room.Create
+    "room:create" => Room.Create,
+    "user:follow" => User.Follow,
+    "user:get_following" => User.GetFollowing,
+    "user:get_followers" => User.GetFollowers,
+    "user:get_relationship" => User.GetRelationship,
+    "user:unfollow" => User.Unfollow
   }
   # verify that all of the actions are accounted for in the
   # operators list
