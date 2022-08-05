@@ -8,9 +8,6 @@ import { BoxedIcon } from "../BoxedIcon";
 import { useConn } from "../../hooks/useConn";
 import { DropdownController } from "../DropdownController";
 import { MenuDropDown } from "../MenuDropDown";
-import { SettingsDropdown } from "../SettingsDropdown";
-import { modalConfirm } from "../../shared-components/ConfirmModal";
-import { useTokenStore } from "../../modules/auth/useTokenStore";
 import { ApiPreloadLink } from "../../shared-components/ApiPreloadLink";
 export interface RightHeaderProps {
   actionButton?: React.ReactNode;

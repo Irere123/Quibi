@@ -1,7 +1,6 @@
 import React from "react";
 import Link from "next/link";
 import {
-  AccountIcon,
   AtIcon,
   CompassIcon,
   HomeIcon,
@@ -22,10 +21,17 @@ export const TabletSidebar: React.FC<TabletSidebarProps> = ({}) => {
           </BoxedIcon>
         </a>
       </Link>
-      <Link href={"/discovery"}>
+      <Link href={"/explore"}>
         <a>
           <BoxedIcon circle shadow>
             <CompassIcon />
+          </BoxedIcon>
+        </a>
+      </Link>
+      <Link href={"/u/academic"}>
+        <a>
+          <BoxedIcon circle shadow>
+            <SchoolIcon />
           </BoxedIcon>
         </a>
       </Link>
@@ -37,16 +43,7 @@ export const TabletSidebar: React.FC<TabletSidebarProps> = ({}) => {
           </BoxedIcon>
         </a>
       </Link>
-      <Link href={"/works"}>
-        <a>
-          <BoxedIcon circle shadow>
-            <SchoolIcon />
-          </BoxedIcon>
-        </a>
-      </Link>
-      <BoxedIcon circle shadow>
-        <AccountIcon />
-      </BoxedIcon>
+
       <Link href={"/settings"}>
         <a>
           <BoxedIcon circle shadow>
