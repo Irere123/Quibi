@@ -36,31 +36,6 @@ export const ChatLeftPanel: React.FC<LeftPanelProps> = ({ children }) => {
   );
 };
 
-export const AccountLeftPanel: React.FC<LeftPanelProps> = ({ children }) => {
-  return (
-    <FixedGridPanel>
-      <h3 className="text-secondary-300">Quibi</h3>
-      {children}
-    </FixedGridPanel>
-  );
-};
-
-export const AccountMainPanel: React.FC<{
-  stickyChildren?: React.ReactNode;
-}> = ({ children, stickyChildren }) => {
-  return (
-    <GridPanel>
-      <div
-        className={`flex sticky w-full flex-col z-10 bg-primary-900 pt-5`}
-        style={{ top: "0px" }}
-      >
-        {stickyChildren}
-      </div>
-      {children}
-    </GridPanel>
-  );
-};
-
 export const MiddlePanel: React.FC<
   LeftPanelProps & { stickyChildren?: React.ReactNode }
 > = ({ stickyChildren, children }) => {

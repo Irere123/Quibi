@@ -5,25 +5,21 @@ import { WaitForWsAndAuth } from "../auth/WaitForWsAndAuth";
 import { HeaderController } from "../display/HeaderController";
 import { MainLayout } from "../layouts/MainLayout";
 import { LeftPanel } from "../layouts/Panels";
-import { RightPanel } from "./RightPanel";
-import { WorksController } from "./WorksController";
+import { AcademicController } from "./AcademicController";
 
-interface WorksPageProps {}
+interface AcademicPageProps {}
 
-export const ExplorePage: PageComponent<WorksPageProps> = () => {
+export const AcademicPage: PageComponent<AcademicPageProps> = () => {
   const { t } = useTypeSafeTranslation();
 
   return (
     <WaitForWsAndAuth>
-      <MainLayout leftPanel={<LeftPanel />} rightPanel={<RightPanel />}>
-        <HeaderController
-          title={t("components.panels.right.explore")}
-          embed={{}}
-        />
-        <WorksController />
+      <HeaderController title={t("components.panels.right.acedemic")} />
+      <MainLayout leftPanel={<LeftPanel />}>
+        <AcademicController />
       </MainLayout>
     </WaitForWsAndAuth>
   );
 };
 
-ExplorePage.ws = true;
+AcademicPage.ws = true;

@@ -14,7 +14,7 @@ import { modalConfirm } from "../../shared-components/ConfirmModal";
 import { useTokenStore } from "../auth/useTokenStore";
 import { useConn } from "../../hooks/useConn";
 
-export const LeftPannel: React.FC = () => {
+export const LeftPanel: React.FC = () => {
   const { t } = useTypeSafeTranslation();
 
   return (

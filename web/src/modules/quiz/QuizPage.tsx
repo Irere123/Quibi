@@ -4,7 +4,7 @@ import { isServer } from "../../lib/isServer";
 import { PageComponent } from "../../types/PageComponent";
 import { WaitForWsAndAuth } from "../auth/WaitForWsAndAuth";
 import { MainLayout } from "../layouts/MainLayout";
-import { LeftPannel } from "../layouts/Panels";
+import { LeftPanel } from "../layouts/Panels";
 import { QuizChatController } from "./QuizChatController";
 import { QuizOpenGraphPreview } from "./QuizOpenGraphPreview";
 import { QuizPageController } from "./QuizPageController";
@@ -16,7 +16,7 @@ export const QuizPage: PageComponent<QuizPageProps> = () => {
     <QuizOpenGraphPreview quiz={undefined}>
       <WaitForWsAndAuth>
         <MainLayout
-          leftPanel={<LeftPannel />}
+          leftPanel={<LeftPanel />}
           rightPanel={<QuizChatController />}
         >
           <QuizPageController />

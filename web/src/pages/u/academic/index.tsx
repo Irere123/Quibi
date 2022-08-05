@@ -1,3 +1,3 @@
-import { AccountPage } from "../../../modules/academic/AccountPage";
+import { AcademicPage } from "../../../modules/academic/AcademicPage";
 
-export default AccountPage;
+export default AcademicPage;

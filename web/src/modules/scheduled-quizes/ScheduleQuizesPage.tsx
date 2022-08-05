@@ -3,7 +3,7 @@ import { WaitForWsAndAuth } from "../auth/WaitForWsAndAuth";
 import { HeaderController } from "../display/HeaderController";
 import { RightPanel } from "../explore/RightPanel";
 import { MainLayout } from "../layouts/MainLayout";
-import { LeftPannel } from "../layouts/Panels";
+import { LeftPanel } from "../layouts/Panels";
 import { ScheduledQuizList } from "./ScheduledQuizList";
 
 interface ScheduledQuizesPageProps {}
@@ -14,7 +14,7 @@ export const ScheduledQuizesPage: PageComponent<
   return (
     <WaitForWsAndAuth>
       <HeaderController title="Scheduled" />
-      <MainLayout leftPanel={<LeftPannel />} rightPanel={<RightPanel />}>
+      <MainLayout leftPanel={<LeftPanel />} rightPanel={<RightPanel />}>
         <ScheduledQuizList />
       </MainLayout>
     </WaitForWsAndAuth>
