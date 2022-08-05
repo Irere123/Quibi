@@ -3,6 +3,7 @@ import React, { useEffect, useMemo, useRef, useState } from "react";
 import { connect, Connection } from "./createWebSocket";
 import { apiBaseUrl } from "../../lib/constants";
 import { useTokenStore } from "../auth/useTokenStore";
+import { User } from "./types";
 
 interface WebSocketProviderProps {
   shouldConnect: boolean;
@@ -12,7 +13,7 @@ type V = Connection | null;
 
 export const WebSocketContext = React.createContext<{
   conn: V;
-  setUser: (u: any) => void;
+  setUser: (u: User) => void;
   setConn: (u: Connection | null) => void;
 }>({
   conn: null,

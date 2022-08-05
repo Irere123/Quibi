@@ -6,11 +6,12 @@ import { HeaderController } from "../display/HeaderController";
 import { MiddlePanel } from "../layouts/GridPanels";
 import { MainLayout } from "../layouts/MainLayout";
 import { LeftPanel, RightPanel } from "../layouts/Panels";
+import { User } from "../ws/types";
 import { UserProfileController } from "./UserProfileController";
 
 interface UserPageProps {
   username: string;
-  user: any | null;
+  user: User | null;
 }
 
 export const UserPage: PageComponent<UserPageProps> = ({ user, username }) => {
