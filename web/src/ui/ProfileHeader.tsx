@@ -7,6 +7,8 @@ import { EditProfileModal } from "../modules/user/EditProfileModal";
 import { FormattedDate } from "./FormattedDate";
 import { usePreloadPush } from "../shared-components/ApiPreloadLink";
 import { useTypeSafeUpdateQuery } from "../hooks/useTypeSafeUpdateQuery";
+import { useTypeSafeMutation } from "../hooks/useTypeSafeMutation";
+import { UserBadge } from "./UserBadge";
 
 export interface ProfileHeaderProps {
   displayName: string;
@@ -25,9 +27,12 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
   isCurrentUser,
   pfp = "https://dogehouse.tv/favicon.ico",
 }) => {
+  const { mutateAsync, isLoading: followLoading } =
+    useTypeSafeMutation("follow");
   const [showEditProfileModal, setShowEditProfileModal] = useState(false);
   const preloadPush = usePreloadPush();
   const update = useTypeSafeUpdateQuery();
+  const updater = useTypeSafeUpdateQuery();
 
   return (
     <div className="bg-primary-800 rounded-lg relative">
@@ -58,11 +63,20 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
         </div>
         <div className="flex flex-col w-3/6 font-sans">
           <h4 className="text-primary-100 font-bold truncate">{displayName}</h4>
-          <div className="flex flex-row items-center">
+          <div className="flex flex-col justify-center">
             <p
               className="text-primary-300 mr-2"
               data-testid="profile-info-username"
             >{`@${username}`}</p>
+            <div className="flex items-center gap-3 text-primary-600">
+              <p>followers {user.numFollowers}</p>
+              <p>following {user.numFollowing}</p>
+            </div>
+            {user.followsYou ? (
+              <UserBadge color="grey" variant="primary-700">
+                follows you
+              </UserBadge>
+            ) : null}
           </div>
         </div>
 
@@ -70,16 +84,22 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
           <div className="flex flex-row justify-end content-end gap-2">
             {!isCurrentUser && (
               <Button
+                loading={followLoading}
+                onClick={async () => {
+                  await mutateAsync([user.id, !user.youAreFollowing]);
+                  updater(["getUserProfile", username], (u) =>
+                    !u
+                      ? u
+                      : {
+                          ...u,
+                          numFollowers:
+                            u.numFollowers + (user.youAreFollowing ? -1 : 1),
+                          youAreFollowing: !user.youAreFollowing,
+                        }
+                  );
+                }}
                 size="small"
-                color={user.iBlockedThem ? "primary-300" : "primary"}
-              >
-                {user.iBlockedThem ? "Unblock" : "Block"}
-              </Button>
-            )}
-            {!isCurrentUser && (
-              <Button
-                size="small"
-                color={user.youAreFollowing ? "primary-300" : "primary"}
+                color={user.youAreFollowing ? "secondary" : "primary"}
                 icon={user.youAreFollowing ? null : <Friends />}
               >
                 {user.youAreFollowing ? <>Unfollow</> : <>Follow</>}

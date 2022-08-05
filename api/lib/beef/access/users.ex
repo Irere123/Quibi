@@ -49,4 +49,23 @@ defmodule Beef.Access.Users do
     {Enum.slice(items, 0, -1 + @fetch_limit),
      if(length(items) == @fetch_limit, do: -1 + offset + @fetch_limit, else: nil)}
   end
+
+  def get_by_id_with_follow_info(me_id, them_id) do
+    Query.start()
+    |> Query.filter_by_id(them_id)
+    |> select([u], u)
+    |> Query.follow_info(me_id)
+    |> Query.limit_one()
+    |> Repo.one()
+  end
+
+  def get_by_username_with_follow_info(user_id, username) do
+    Query.start()
+    |> Query.filter_by_username(username)
+    |> select([u], u)
+    |> Query.follow_info(user_id)
+    |> Query.limit_one()
+    |> Repo.one()
+  end
+
 end

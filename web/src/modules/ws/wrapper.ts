@@ -40,6 +40,25 @@ export const wrap = (connection: Connection) => ({
       idOrUsername: string
     ): Promise<any | null | { error: string }> =>
       connection.fetch("get_user_profile", { userId: idOrUsername }),
+    getMyFollowing: (
+      cursor = 0
+    ): Promise<{
+      users: any[];
+      nextCursor: number | null;
+    }> => connection.fetch("get_my_following", { cursor }) as any,
+    getFollowList: (
+      username: string,
+      isFollowing: boolean,
+      cursor = 0
+    ): Promise<{
+      users: any[];
+      nextCursor: number | null;
+    }> =>
+      connection.fetch("get_follow_list", {
+        username,
+        isFollowing,
+        cursor,
+      }) as any,
   },
   /**
    * Allows you to call functions that mutate the ws state
@@ -54,5 +73,7 @@ export const wrap = (connection: Connection) => ({
       privacy: string;
       type: string;
     }): Promise<any> => connection.fetch("create_room", data) as any,
+    follow: (userId: string, value: boolean): Promise<void> =>
+      connection.fetch("follow", { userId, value }) as any,
   },
 });

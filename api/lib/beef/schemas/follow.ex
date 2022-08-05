@@ -18,11 +18,11 @@ defmodule Beef.Schemas.Follow do
     timestamps()
   end
 
-  @doc false
-  def insert_changeset(follow, attrs) do
-    follow
-    |> cast(attrs, [:userId, :followerId])
-    |> validate_required([[:followerId, :userId]])
-    |> unique_constraint(:already_following, name: "followers_pkey")
-  end
+ @doc false
+ def insert_changeset(follow, attrs) do
+  follow
+  |> cast(attrs, [:userId, :followerId])
+  |> validate_required([:userId, :followerId])
+  |> unique_constraint(:already_following, name: "followers_pkey")
+end
 end
