@@ -2,7 +2,7 @@
 
 describe("mywebsite", () => {
   beforeEach(() => {
-    cy.visit("http://localhost:3000/dash");
+    cy.visit("http://localhost:3000/");
   });
 
   it("has search", () => {
