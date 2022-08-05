@@ -15,6 +15,7 @@ defenum(
     {User.GetFollowing, 1},
     {User.GetFollowers, 2},
     {User.Follow, 3},
+    {User.Online, 4},
     {User.GetRelationship, 7},
     # room commands and casts: 91..181
     {Room.Create, 91},

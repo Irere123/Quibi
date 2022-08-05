@@ -2,7 +2,6 @@ defmodule Okra.Follow do
   alias Beef.Follows
   alias Beef.Users
 
-
   def get_follow_list(user_id, user_id_to_get_list_for, get_following_list, cursor) do
     if get_following_list do
       Follows.get_following(user_id, user_id_to_get_list_for, cursor)
@@ -28,11 +27,11 @@ defmodule Okra.Follow do
     end
   end
 
-   # TODO: break this out into assertive "follow" and "unfollow" commands, instead of
+  # TODO: break this out into assertive "follow" and "unfollow" commands, instead of
   # ambiguous "should_follow"
   def follow(user_id, user_you_want_to_follow_id, should_follow) do
     if should_follow do
-      if user_id != user_you_want_to_follow_id  do
+      if user_id != user_you_want_to_follow_id do
         Follows.insert(%{userId: user_you_want_to_follow_id, followerId: user_id})
       end
     else
@@ -42,5 +41,4 @@ defmodule Okra.Follow do
       )
     end
   end
-
 end

@@ -40,6 +40,8 @@ export const wrap = (connection: Connection) => ({
       idOrUsername: string
     ): Promise<any | null | { error: string }> =>
       connection.fetch("get_user_profile", { userId: idOrUsername }),
+    getUsersOnline: (userId: string): Promise<any | null | { error: string }> =>
+      connection.fetch("get_online", { userId }),
     getMyFollowing: (
       cursor = 0
     ): Promise<{

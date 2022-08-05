@@ -14,7 +14,8 @@ defmodule Broth.Message.Manifest do
     "user:get_following" => User.GetFollowing,
     "user:get_followers" => User.GetFollowers,
     "user:get_relationship" => User.GetRelationship,
-    "user:unfollow" => User.Unfollow
+    "user:unfollow" => User.Unfollow,
+    "user:get_online" => User.Online
   }
   # verify that all of the actions are accounted for in the
   # operators list

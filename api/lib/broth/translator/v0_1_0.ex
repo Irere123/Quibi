@@ -9,6 +9,7 @@ defmodule Broth.Translator.V0_1_0 do
     "get_user_profile" => "user:get_info",
     "edit_profile" => "user:update",
     "search" => "search:search",
+    "get_online" => "user:get_online",
     "create_room" => "room:create",
     # follow needs to arbitrate if it becomes follow or unfollow.
     "follow" => nil,
@@ -108,6 +109,11 @@ defmodule Broth.Translator.V0_1_0 do
 
   def translate_out_body(message, "user:get_followers") do
     data = %{users: message.d.followers, nextCursor: message.d.nextCursor}
+    %{message | d: data}
+  end
+
+  def translate_out_body(message, "user:get_online") do
+    data = %{users: message.d.followers}
     %{message | d: data}
   end
 

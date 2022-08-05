@@ -6,13 +6,25 @@ defmodule Beef.Follows do
   alias Beef.Schemas.Follow
   alias Beef.Schemas.User
 
-
   def get_followers_online(user_id) do
     from(
       f in Follow,
       inner_join: u in User,
       on: f.followerId == u.id,
       where: f.userId == ^user_id and u.online == true,
+      order_by: [desc: u.last_online]
+    )
+    |> Beef.Repo.all()
+  end
+
+  def get_users_online(user_id) do
+    from(
+      u in User,
+      inner_join: f in Follow,
+      on: f.userId == u.id,
+      left_join: f2 in Follow,
+      on: f2.userId == ^user_id,
+      where: f.followerId == ^user_id and u.online == true  ,
       order_by: [desc: u.last_online]
     )
     |> Beef.Repo.all()
