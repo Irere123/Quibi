@@ -50,7 +50,7 @@ defmodule Broth.Message.Auth.Request do
     with {:ok, request} <- apply_action(changeset, :validate),
          {:ok, user} <- Okra.Auth.authenticate(request) do
       rooms = Beef.Rooms.get_user_rooms(user.id)
-      {:reply, %{ user: user, rooms: rooms}, %{state | user: user}}
+      {:reply, %{user: user, rooms: rooms}, %{state | user: user}}
     else
       # don't tolerate malformed requests with any response besides closing
       # out websocket.

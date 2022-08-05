@@ -19,19 +19,6 @@ defmodule Beef.Schemas.User do
     end
   end
 
-  @derive {Jason.Encoder,
-           only: [
-             :id,
-             :username,
-             :email,
-             :displayName,
-             :avatarUrl,
-             :bannerUrl,
-             :bio,
-             :online,
-             :inserted_at,
-             :last_online
-           ]}
   @primary_key {:id, :binary_id, []}
   schema "users" do
     field(:twitterId, :string)
@@ -48,6 +35,22 @@ defmodule Beef.Schemas.User do
     field(:online, :boolean)
     field(:hasLoggedIn, :boolean)
     field(:last_online, :utc_datetime_usec)
+    field(:numFollowing, :integer)
+    field(:numFollowers, :integer)
+    field(:youAreFollowing, :boolean, virtual: true)
+    field(:followsYou, :boolean, virtual: true)
+    field(:theyBlockedMe, :boolean, virtual: true)
+    field(:iBlockedThem, :boolean, virtual: true)
+
+    many_to_many(:blocked_by, __MODULE__,
+      join_through: "user_blocks",
+      join_keys: [userIdBlocked: :id, userId: :id]
+    )
+
+    many_to_many(:blocking, __MODULE__,
+      join_through: "user_blocks",
+      join_keys: [userId: :id, userIdBlocked: :id]
+    )
 
     timestamps()
   end
@@ -63,7 +66,9 @@ defmodule Beef.Schemas.User do
 
   defimpl Jason.Encoder do
     @fields ~w(
-      id username email displayName avatarUrl bannerUrl bio online last_online inserted_at
+      id username email displayName avatarUrl bannerUrl bio online
+      last_online  inserted_at youAreFollowing followsYou iBlockedThem
+      numFollowing numFollowers
     )a
 
     def encode(user, opts) do
