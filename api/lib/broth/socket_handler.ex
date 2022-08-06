@@ -5,6 +5,7 @@ defmodule Broth.SocketHandler do
             encoding: nil,
             compression: nil,
             version: nil,
+            user_ids_i_am_blocking: [],
             callers: []
 
   @behaviour :cowboy_websocket
@@ -31,6 +32,7 @@ defmodule Broth.SocketHandler do
     state = %__MODULE__{
       encoding: encoding,
       compression: compression,
+      user_ids_i_am_blocking: [],
       callers: get_callers(request)
     }
 

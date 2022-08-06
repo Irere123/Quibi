@@ -1,9 +1,14 @@
 import React, { ReactChild, useState } from "react";
 import { ProfileHeaderWrapper } from "./ProfileHeaderWrapper";
 import { Button } from "./Button";
-import { SingleUser } from "./UserAvatar/SingleUser";
+import { SingleUser } from "./Avatars/SingleUser";
 import { CalendarMonth, CompassIcon, Friends } from "../icons";
 import { EditProfileModal } from "../modules/user/EditProfileModal";
+import { FormattedDate } from "./FormattedDate";
+import { usePreloadPush } from "../shared-components/ApiPreloadLink";
+import { useTypeSafeUpdateQuery } from "../hooks/useTypeSafeUpdateQuery";
+import { useTypeSafeMutation } from "../hooks/useTypeSafeMutation";
+import { UserBadge } from "./UserBadge";
 
 export interface ProfileHeaderProps {
   displayName: string;
@@ -22,7 +27,16 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
   isCurrentUser,
   pfp = "https://dogehouse.tv/favicon.ico",
 }) => {
+  const { mutateAsync, isLoading: followLoading } =
+    useTypeSafeMutation("follow");
+  const { mutateAsync: block, isLoading: blockLoading } =
+    useTypeSafeMutation("userBlock");
+  const { mutateAsync: unblock, isLoading: unblockLoading } =
+    useTypeSafeMutation("userUnblock");
   const [showEditProfileModal, setShowEditProfileModal] = useState(false);
+  const preloadPush = usePreloadPush();
+  const update = useTypeSafeUpdateQuery();
+  const updater = useTypeSafeUpdateQuery();
 
   return (
     <div className="bg-primary-800 rounded-lg relative">
@@ -32,6 +46,17 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
         <EditProfileModal
           isOpen={showEditProfileModal}
           onRequestClose={() => setShowEditProfileModal(!showEditProfileModal)}
+          onEdit={(d) => {
+            update(["getUserProfile", d.username], (x) =>
+              !x ? x : { ...x, ...d }
+            );
+            if (d.username !== username) {
+              preloadPush({
+                route: "profile",
+                data: { username: d.username },
+              });
+            }
+          }}
         />
         <div className="flex mr-4 ">
           <SingleUser
@@ -42,11 +67,20 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
         </div>
         <div className="flex flex-col w-3/6 font-sans">
           <h4 className="text-primary-100 font-bold truncate">{displayName}</h4>
-          <div className="flex flex-row items-center">
+          <div className="flex flex-col justify-center">
             <p
               className="text-primary-300 mr-2"
               data-testid="profile-info-username"
             >{`@${username}`}</p>
+            <div className="flex items-center gap-3 text-primary-600">
+              <p>followers {user.numFollowers}</p>
+              <p>following {user.numFollowing}</p>
+            </div>
+            {user.followsYou ? (
+              <UserBadge color="grey" variant="primary-700">
+                follows you
+              </UserBadge>
+            ) : null}
           </div>
         </div>
 
@@ -54,16 +88,54 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
           <div className="flex flex-row justify-end content-end gap-2">
             {!isCurrentUser && (
               <Button
+                loading={blockLoading || unblockLoading}
                 size="small"
-                color={user.iBlockedThem ? "primary-300" : "primary"}
+                color={user.iBlockedThem ? "secondary" : "primary"}
+                onClick={async () => {
+                  if (user.iBlockedThem) {
+                    await unblock([user.id]);
+                    updater(["getUserProfile", username], (u) =>
+                      !u
+                        ? u
+                        : {
+                            ...u,
+                            iBlockedThem: false,
+                          }
+                    );
+                  } else {
+                    await block([user.id]);
+                    updater(["getUserProfile", username], (u) =>
+                      !u
+                        ? u
+                        : {
+                            ...u,
+                            iBlockedThem: true,
+                          }
+                    );
+                  }
+                }}
               >
-                {user.iBlockedThem ? "Unblock" : "Block"}
+                {user.iBlockedThem ? <>Unblock</> : <>Block</>}
               </Button>
             )}
             {!isCurrentUser && (
               <Button
+                loading={followLoading}
+                onClick={async () => {
+                  await mutateAsync([user.id, !user.youAreFollowing]);
+                  updater(["getUserProfile", username], (u) =>
+                    !u
+                      ? u
+                      : {
+                          ...u,
+                          numFollowers:
+                            u.numFollowers + (user.youAreFollowing ? -1 : 1),
+                          youAreFollowing: !user.youAreFollowing,
+                        }
+                  );
+                }}
                 size="small"
-                color={user.youAreFollowing ? "primary-300" : "primary"}
+                color={user.youAreFollowing ? "secondary" : "primary"}
                 icon={user.youAreFollowing ? null : <Friends />}
               >
                 {user.youAreFollowing ? <>Unfollow</> : <>Follow</>}
@@ -75,7 +147,7 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
                 icon={<CompassIcon />}
                 onClick={() => setShowEditProfileModal(!showEditProfileModal)}
               >
-                edit profile
+                Edit profile
               </Button>
             ) : null}
           </div>
@@ -84,7 +156,8 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
       <div className="p-4 text-primary-200">
         {user.bio ? <p className="text-sm">{user.bio}</p> : null}
         <p className="flex items-center gap-2 mt-3">
-          <CalendarMonth width={20} height={20} /> Joined July 2021
+          <CalendarMonth width={20} height={20} />
+          Joined <FormattedDate date={new Date(user.inserted_at)} />
         </p>
       </div>
     </div>

@@ -37,3 +37,8 @@ export { default as New } from "./New";
 export { default as Bug } from "./Bug";
 export { default as CalendarMonth } from "./CalendarMonth";
 export { default as LinkIcon } from "./LinkIcon";
+export { default as RadarIcon } from "./RadarIcon";
+export { default as AppsIcon } from "./AppsIcon";
+export { default as ChatBubble } from "./ChatBubble";
+export { default as DoNotDisturb } from "./DoNotDisturb";
+export { default as Feather } from "./Feather";

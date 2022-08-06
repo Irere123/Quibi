@@ -1,6 +1,7 @@
 import ReconnectingWebSocket from "reconnecting-websocket";
 import { v4 as uuidv4 } from "uuid";
 import { apiBaseUrl, __prod__ } from "../../lib/constants";
+import { User } from "./types";
 
 const heartbeatInterval = 8000;
 const wsProtocol = __prod__ ? "wss" : "ws";
@@ -42,7 +43,8 @@ export type Connection = {
     opcode: Opcode,
     handler: ListenerHandler<Data>
   ) => () => void;
-  user: any;
+  user: User;
+  rooms: any;
   send: (opcode: Opcode, data: unknown, fetchId?: FetchID) => void;
   sendCast: (opcode: Opcode, data: unknown, ref?: Ref) => void;
   fetch: (
@@ -174,6 +176,7 @@ export const connect = (
             return () => listeners.splice(listeners.indexOf(listener), 1);
           },
           user: message.d.user,
+          rooms: message.d.rooms,
           send: apiSend,
           sendCast: api2Send,
           sendCall: (

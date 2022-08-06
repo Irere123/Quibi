@@ -32,6 +32,36 @@ defmodule Beef.Mutations.Users do
     |> Repo.update_all([])
   end
 
+  def set_user_left_current_quiz(user_id) do
+    Onion.UserSession.set_current_quiz_id(user_id, nil)
+
+    Query.start()
+    |> Query.filter_by_id(user_id)
+    |> Query.update_set_current_quiz_nil()
+    |> Repo.update_all([])
+  end
+
+  def set_current_quiz(user_id, quiz_id, returning \\ false) do
+    Onion.UserSession.set_current_quiz_id(user_id, quiz_id)
+
+    q =
+      from(u in User,
+        where: u.id == ^user_id,
+        update: [
+          set: [
+            currentQuizId: ^quiz_id
+          ]
+        ]
+      )
+
+    q = if returning, do: select(q, [u], u), else: q
+
+    case Repo.update_all(q, []) do
+      {_, [user]} -> %{user: user}
+      _ -> nil
+    end
+  end
+
   def google_find_or_create(user) do
     googleId = user["sub"]
 
@@ -102,7 +132,7 @@ defmodule Beef.Mutations.Users do
       {:create,
        Repo.insert!(
          %User{
-           username: Okra.Utils.Random.big_ascii_id(),
+           username: user.username,
            email: if(user.email == "", do: nil, else: user.email),
            twitterId: user.twitterId,
            avatarUrl: user.avatarUrl,
@@ -149,12 +179,12 @@ defmodule Beef.Mutations.Users do
       {:create,
        Repo.insert!(
          %User{
-           username: Okra.Utils.Random.big_ascii_id(),
+           username: user["username"],
            discordId: discordId,
            email: if(user["email"] == "", do: nil, else: user["email"]),
            discordAccessToken: discord_access_token,
            avatarUrl: Okra.Discord.get_avatar_url(user),
-           displayName: user["username"],
+           displayName: Okra.Utils.Random.big_ascii_id(),
            hasLoggedIn: true
          },
          returning: true

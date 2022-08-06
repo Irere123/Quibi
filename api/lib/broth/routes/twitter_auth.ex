@@ -61,6 +61,7 @@ defmodule Broth.Routes.TwitterAuth do
              access_token_secret: access_token.oauth_token_secret
            ),
          %ExTwitter.Model.User{
+           screen_name: username,
            description: bio,
            name: displayName,
            id_str: twitterId,
@@ -70,6 +71,7 @@ defmodule Broth.Routes.TwitterAuth do
          } <- ExTwitter.verify_credentials(include_email: true),
          {_, db_user} <-
            Users.twitter_find_or_create(%{
+             username: username,
              bio: bio,
              displayName: displayName,
              twitterId: twitterId,

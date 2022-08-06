@@ -5,12 +5,16 @@ import { CompassIcon, HomeIcon, SchoolIcon } from "../../icons";
 import AtIcon from "../../icons/AtIcon";
 import { BoxedIcon } from "../../ui/BoxedIcon";
 import { Tooltip } from "../../ui/Tooltip";
-import { SingleUser } from "../../ui/UserAvatar";
 import avatar from "../../img/avatar.jpg";
 import { useRouter } from "next/router";
 import { useTypeSafeTranslation } from "../../hooks/useTypeSafeTranslation";
+import { UpcomingEventsCard } from "../../ui/UpcomingEventsCard";
+import { Button } from "../../ui/Button";
+import { modalConfirm } from "../../shared-components/ConfirmModal";
+import { useTokenStore } from "../auth/useTokenStore";
+import { useConn } from "../../hooks/useConn";
 
-export const LeftPannel: React.FC = () => {
+export const LeftPanel: React.FC = () => {
   const { t } = useTypeSafeTranslation();
 
   return (
@@ -24,11 +28,11 @@ export const LeftPannel: React.FC = () => {
           </a>
         </Link>
       </Tooltip>
-      <Tooltip text={t("components.panels.right.discovery")}>
-        <Link href={"/discovery"}>
+      <Tooltip text={t("components.panels.right.acedemic")}>
+        <Link href={"/u/academic"}>
           <a>
             <BoxedIcon circle shadow>
-              <CompassIcon />
+              <SchoolIcon />
             </BoxedIcon>
           </a>
         </Link>
@@ -42,11 +46,11 @@ export const LeftPannel: React.FC = () => {
           </a>
         </Link>
       </Tooltip>
-      <Tooltip text={t("components.panels.right.works")}>
-        <Link href={"/works"}>
+      <Tooltip text={t("components.panels.right.explore")}>
+        <Link href={"/explore"}>
           <a>
             <BoxedIcon circle shadow>
-              <SchoolIcon />
+              <CompassIcon />
             </BoxedIcon>
           </a>
         </Link>
@@ -65,65 +69,51 @@ export const RightPanel: React.FC = () => {
         <Link href={"/ads-1"}>
           <a>
             <div className="bg-secondary-300 p-3 rounded text-primary-900">
-              <p>Riviera High School</p>
-              <p>
-                Privacy policy we only own your username and email so dont worry
+              <p className="font-bold">Riviera High School</p>
+              <p className="font-light">
+                Our school is the best one join it and get unlimited resources
+                and more Join now we have a discount this month
               </p>
             </div>
           </a>
         </Link>
       </div>
-      <div>
-        <p className="text-primary-100">{t("components.panels.cantacts")}</p>
-
-        <div className="flex flex-col gap-3 mt-4 bg-primary-800 border border-accent rounded-lg p-4  max-w-md w-full">
-          <Link href={`/contact/1`}>
-            <a>
-              <div className="cursor-pointer flex gap-2 items-center">
-                <SingleUser size="md" isOnline={true} src={avatar.src} />
-                <div className="flex flex-col">
-                  <p className="truncate text-primary-100">John Doe</p>
-                  <p className="truncate text-primary-300 text-sm">
-                    Hi, i love everyone
-                  </p>
-                </div>
-              </div>
-            </a>
-          </Link>
-          <Link href={`/contact/1`}>
-            <a>
-              <div className="cursor-pointer flex gap-2 items-center">
-                <SingleUser size="md" isOnline={true} src={avatar.src} />
-                <div className="flex flex-col">
-                  <p className="truncate text-primary-100">John Doe</p>
-                  <p className="truncate text-primary-300 text-sm">
-                    Hi, i love everyone
-                  </p>
-                </div>
-              </div>
-            </a>
-          </Link>
-          <Link href={`/contact/1`}>
-            <a>
-              <div className="cursor-pointer flex gap-2 items-center">
-                <SingleUser isOnline={true} size="md" src={avatar.src} />
-                <div className="flex flex-col">
-                  <p className="truncate text-primary-100">John Doe</p>
-                  <p className="truncate text-primary-300 text-sm">
-                    Hi, i love everyone
-                  </p>
-                </div>
-              </div>
-            </a>
-          </Link>
-        </div>
-      </div>
+      <UpcomingEventsCard
+        events={[
+          {
+            onClick: () => {
+              console.log("hello world");
+            },
+            id: "34",
+            scheduledFor: new Date(),
+            planersInfo: {
+              avatars: [avatar.src, avatar.src],
+              planers: ["Irere", "John"],
+            },
+            title: "Chemistry hangout",
+          },
+          {
+            onClick: () => {
+              console.log("hello world");
+            },
+            id: "34",
+            scheduledFor: new Date(),
+            planersInfo: {
+              avatars: [avatar.src, avatar.src],
+              planers: ["Irere", "John"],
+            },
+            title: "Maths Course",
+          },
+        ]}
+        onCreateScheduledEvent={() => console.log("Hello world")}
+      />
     </div>
   );
 };
 
 export const SettingsLeftPanel: React.FC = () => {
-  const { pathname } = useRouter();
+  const conn = useConn();
+  const { pathname, push } = useRouter();
   const { t } = useTypeSafeTranslation();
   const activeCSS = (link: string) => {
     if (pathname === link) {
@@ -184,6 +174,22 @@ export const SettingsLeftPanel: React.FC = () => {
             {t("pages.settings.keybinds.label")}
           </p>
         </Link>
+        <Button
+          className="mt-2"
+          size="medium"
+          onClick={() =>
+            modalConfirm("Are you sure you want to logout", () => {
+              conn.close();
+              useTokenStore
+                .getState()
+                .setTokens({ accessToken: "", refreshToken: "" });
+
+              push("/");
+            })
+          }
+        >
+          Logout
+        </Button>
       </div>
     </div>
   );

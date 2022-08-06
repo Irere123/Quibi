@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
 import { usePopper } from "react-popper";
-import { isServer } from "../lib/isServer";
 
 export const DropdownController: React.FC<{
   portal?: boolean;
@@ -9,7 +8,14 @@ export const DropdownController: React.FC<{
   innerClassName?: string;
   overlay: (c: () => void) => React.ReactNode;
   zIndex?: number;
-}> = ({ children, className, innerClassName, overlay, portal, zIndex }) => {
+}> = ({
+  children,
+  className,
+  innerClassName,
+  overlay,
+  portal = true,
+  zIndex,
+}) => {
   const [visible, setVisibility] = useState(false);
 
   const referenceRef = useRef<HTMLButtonElement>(null);
@@ -41,10 +47,6 @@ export const DropdownController: React.FC<{
     };
   }, []);
 
-  if (!isServer) {
-    portal = true;
-  }
-
   const body = (
     <div
       className={`absolute ${className}`}
@@ -67,10 +69,10 @@ export const DropdownController: React.FC<{
         className="flex focus:outline-no-chrome"
         ref={referenceRef}
         onClick={() => setVisibility(!visible)}
+        data-testid="dropdown-trigger"
       >
         {children}
       </button>
-
       {portal ? createPortal(body, document.querySelector("#main")!) : body}
     </React.Fragment>
   );

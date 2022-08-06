@@ -30,10 +30,41 @@ export const wrap = (connection: Connection) => ({
    * Allows you to call functions that return information about the ws state
    */
   query: {
+    search: (
+      query: string
+    ): Promise<{
+      items: Array<any>;
+      users: any[];
+    }> => connection.fetch("search", { query }) as any,
     getUserProfile: (
       idOrUsername: string
     ): Promise<any | null | { error: string }> =>
       connection.fetch("get_user_profile", { userId: idOrUsername }),
+    getUsersOnline: (userId: string): Promise<any | null | { error: string }> =>
+      connection.fetch("get_online", { userId }),
+    getTopPublicQuizes: (cursor = 0): Promise<any> =>
+      connection.fetch("get_top_public_quizes", { cursor }),
+    getMyFollowing: (
+      cursor = 0
+    ): Promise<{
+      users: any[];
+      nextCursor: number | null;
+    }> => connection.fetch("get_my_following", { cursor }) as any,
+    getFollowList: (
+      username: string,
+      isFollowing: boolean,
+      cursor = 0
+    ): Promise<{
+      users: any[];
+      nextCursor: number | null;
+    }> =>
+      connection.fetch("get_follow_list", {
+        username,
+        isFollowing,
+        cursor,
+      }) as any,
+    joinQuiz: (quizId: string) =>
+      connection.fetch(`join_quiz_and_get_info`, { quizId }),
   },
   /**
    * Allows you to call functions that mutate the ws state
@@ -41,7 +72,23 @@ export const wrap = (connection: Connection) => ({
   mutation: {
     userUpdate: (data: Partial<unknown>): Promise<unknown> =>
       connection.sendCall("user:update", data),
+    userBlock: (userId: string): Promise<unknown> =>
+      connection.sendCall("user:block", { userId }),
+    userUnblock: (userId: string): Promise<unknown> =>
+      connection.sendCall("user:unblock", { userId }),
     editProfile: (data: Partial<unknown>): Promise<unknown> =>
       connection.sendCall("user:update", data),
+    createRoom: (data: {
+      name: string;
+      privacy: string;
+      type: string;
+    }): Promise<any> => connection.fetch("create_room", data) as any,
+    createQuiz: (data: {
+      name: string;
+      privacy: string;
+      description: string;
+    }): Promise<any> => connection.fetch("create_quiz", data) as any,
+    follow: (userId: string, value: boolean): Promise<void> =>
+      connection.fetch("follow", { userId, value }) as any,
   },
 });

@@ -2,7 +2,7 @@
   "_comment": "if you change this file, do: yarn i18 NB:You must keep all files in sync(the same)",
   "header": {
     "_comment": "Main title Internationalization Strings",
-    "title": "Quibi",
+    "title": "Quibi - Open world",
     "dashboard": "Dashboard"
   },
   "common": {
@@ -49,7 +49,7 @@
   "modules": { "chat": { "sendMessage": "Send Message" } },
   "components": {
     "search": {
-      "placeholder": "Search for works, users and more",
+      "placeholder": "Search for schools, people or quizes",
       "placeholderShort": "Search"
     },
     "panels": {
@@ -58,9 +58,9 @@
       "right": {
         "home": "Home",
         "chat": "Chat",
-        "works": "Works",
+        "explore": "Explore",
         "account": "Account",
-        "discovery": "Discovery"
+        "acedemic": "Academic"
       }
     }
   }

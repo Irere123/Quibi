@@ -40,6 +40,5 @@ export type TranslationKeys =
 	| "components.panels.sponsored"
 	| "components.panels.right.home"
 	| "components.panels.right.chat"
-	| "components.panels.right.works"
-	| "components.panels.right.account"
-	| "components.panels.right.discovery";
+	| "components.panels.right.explore"
+	| "components.panels.right.acedemic";

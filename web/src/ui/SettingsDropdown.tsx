@@ -7,15 +7,17 @@ import {
   Discord,
   HandIcon,
 } from "../icons";
+import { ApiPreloadLink } from "../shared-components/ApiPreloadLink";
 
 import { BaseOverlay } from "../ui/BaseOverlay";
 import { SettingsIcon } from "../ui/SettingsIcon";
 import { LanguageSelector } from "./LanguageSelector";
 
 export const SettingsDropdown: React.FC<{
+  user: any;
   onCloseDropdown: () => void;
   onActionButtonClicked: () => void;
-}> = ({ onCloseDropdown, onActionButtonClicked }) => {
+}> = ({ user, onCloseDropdown, onActionButtonClicked }) => {
   const [currentOverlay, setCurrentOverlay] = useState<ReactNode>(null);
 
   const { push } = useRouter();
@@ -31,12 +33,14 @@ export const SettingsDropdown: React.FC<{
         overlay={currentOverlay}
       >
         <div className="flex flex-col">
-          <SettingsIcon
-            onClick={onCloseDropdown}
-            icon={<AccountIcon />}
-            label={"Profile"}
-            transition
-          />
+          <ApiPreloadLink route="profile" data={{ username: user.username }}>
+            <SettingsIcon
+              onClick={onCloseDropdown}
+              icon={<AccountIcon />}
+              label={"Profile"}
+              transition
+            />
+          </ApiPreloadLink>
 
           <SettingsIcon
             icon={<OutlineGlobe />}

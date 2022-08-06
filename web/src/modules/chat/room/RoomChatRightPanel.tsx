@@ -5,7 +5,7 @@ import { kFormatter } from "../../../lib/kFormatter";
 import { truncate } from "../../../lib/truncate";
 import { BoxedIcon } from "../../../ui/BoxedIcon";
 import { Tag } from "../../../ui/Tag";
-import { SingleUser } from "../../../ui/UserAvatar";
+import { SingleUser } from "../../../ui/Avatars";
 
 export const RoomChatRightPanel: React.FC = () => {
   return (
@@ -20,7 +20,7 @@ export const RoomChatRightPanel: React.FC = () => {
         </div>
       </div>
       <div className="flex flex-col items-center justify-center gap-4">
-        <SingleUser active src={avatar.src} username="hello" isOnline />
+        <SingleUser outline src={avatar.src} username="hello" isOnline={true} />
         <div className="flex gap-3">
           <BoxedIcon>
             <AccountTree />

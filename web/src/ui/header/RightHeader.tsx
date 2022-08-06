@@ -1,11 +1,15 @@
 import React from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { AccountIcon, DownloadIcon, HomeIcon, SettingsIcon } from "../../icons";
-import { SingleUser } from "../UserAvatar";
+import { AppsIcon, DownloadIcon, HomeIcon, SettingsIcon } from "../../icons";
+import { SingleUser } from "../Avatars";
 import { Button } from "../Button";
 import { BoxedIcon } from "../BoxedIcon";
 import { useConn } from "../../hooks/useConn";
+import { DropdownController } from "../DropdownController";
+import { MenuDropDown } from "../MenuDropDown";
+import { ApiPreloadLink } from "../../shared-components/ApiPreloadLink";
+import { SettingsDropdown } from "../SettingsDropdown";
 export interface RightHeaderProps {
   actionButton?: React.ReactNode;
 }
@@ -22,18 +26,15 @@ const RightHeader: React.FC<RightHeaderProps> = ({ actionButton }) => {
   }
 
   return (
-    <div className="flex space-x-4 items-center justify-end focus:outline-no-chrome w-full">
-      <Link href={"/u/account"}>
-        <a>
-          <BoxedIcon circle shadow>
-            <AccountIcon />
-          </BoxedIcon>
-        </a>
-      </Link>
+    <div className="flex  space-x-4 items-center justify-end focus:outline-no-chrome w-full">
+      <BoxedIcon circle={true}>
+        <AppsIcon />
+      </BoxedIcon>
+
       {showHome ? (
         <Link href={"/dash"}>
           <a>
-            <BoxedIcon circle shadow>
+            <BoxedIcon circle={true} shadow={true}>
               <HomeIcon />
             </BoxedIcon>
           </a>
@@ -41,7 +42,7 @@ const RightHeader: React.FC<RightHeaderProps> = ({ actionButton }) => {
       ) : (
         <Link href={"/settings"}>
           <a>
-            <BoxedIcon circle>
+            <BoxedIcon circle={true}>
               <SettingsIcon />
             </BoxedIcon>
           </a>
@@ -52,14 +53,14 @@ const RightHeader: React.FC<RightHeaderProps> = ({ actionButton }) => {
 
       {actionButton}
 
-      <div onClick={() => push(`/u/${conn.user.username}`)}>
+      <ApiPreloadLink data={{ username: conn.user.username }} route="profile">
         <SingleUser
           className={"focus:outline-no-chrome cursor-pointer"}
           size="sm"
           src={conn.user.avatarUrl}
           username={conn.user.username}
         />
-      </div>
+      </ApiPreloadLink>
     </div>
   );
 };

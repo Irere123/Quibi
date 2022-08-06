@@ -9,6 +9,7 @@ defmodule Onion.UserSession do
               pid: nil,
               username: nil,
               display_name: nil,
+              current_quiz_id: nil,
               avatar_url: nil,
               banner_url: nil
   end
@@ -82,6 +83,14 @@ defmodule Onion.UserSession do
 
   defp set_state_impl(info, state) do
     {:noreply, Map.merge(state, info)}
+  end
+
+  def set_current_quiz_id(user_id, current_quiz_id) do
+    set_state(user_id, %{current_quiz_id: current_quiz_id})
+  end
+
+  def get_current_quiz_id(user_id) do
+    get(user_id, :current_quiz_id)
   end
 
   def get_info_for_msg(user_id), do: call(user_id, :get_info_for_msg)

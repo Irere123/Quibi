@@ -5,7 +5,7 @@ import { CardHeading } from "./CardHeading";
 
 import { FormattedDate } from "./FormattedDate";
 import { Tag } from "./Tag";
-import { MultipleUsers, SingleUser } from "./UserAvatar";
+import { MultipleUsers, SingleUser } from "./Avatars";
 
 export interface CardProps {
   icon?: ReactElement;

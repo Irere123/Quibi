@@ -1,10 +1,9 @@
 import { useRouter } from "next/router";
 import React from "react";
 import { useConn } from "../hooks/useConn";
-import { LogOutIcon, PlusIcon } from "../icons";
-import { useTokenStore } from "../modules/auth/useTokenStore";
+import { PlusIcon } from "../icons";
 import { BoxedIcon } from "./BoxedIcon";
-import { modalConfirm } from "./ConfirmModal";
+import { SingleUser } from "./Avatars";
 
 interface AccountPageHeaderProps {
   title: string;
@@ -31,22 +30,7 @@ export const AccountPageHeader: React.FC<AccountPageHeaderProps> = ({
         <BoxedIcon circle onClick={() => push("/dash")}>
           <PlusIcon className="transform rotate-45" />
         </BoxedIcon>
-        <BoxedIcon
-          circle
-          onClick={() => {
-            modalConfirm("Are you sure you want to logout", () => {
-              conn.close();
-              useTokenStore.getState().setTokens({
-                accessToken: "",
-                refreshToken: "",
-              });
-
-              push("/logout");
-            });
-          }}
-        >
-          <LogOutIcon />
-        </BoxedIcon>
+        <SingleUser src={conn.user.avatarUrl} size="md" />
       </div>
     </div>
   );

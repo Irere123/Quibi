@@ -1,7 +1,7 @@
 import React, { ReactElement, useMemo } from "react";
 import { FeedCardHeading } from "./FeedCardHeading";
 import { FormattedDate } from "./FormattedDate";
-import { MultipleUsers } from "./UserAvatar";
+import { MultipleUsers } from "./Avatars";
 
 export interface FeedCardProps {
   headIcon?: ReactElement;

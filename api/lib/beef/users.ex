@@ -13,10 +13,20 @@ defmodule Beef.Users do
 
   # ACCESS Functions
   defdelegate get_by_username(username), to: Beef.Access.Users
+  defdelegate get_by_username_with_follow_info(user_id, username), to: Beef.Access.Users
   defdelegate get_by_id(user_id), to: Beef.Access.Users
+  defdelegate get_by_id_with_follow_info(me_id, them_id), to: Beef.Access.Users
   defdelegate get(user_id), to: Beef.Access.Users
+  defdelegate search(query, offset), to: Beef.Access.Users
+  defdelegate search_username(query), to: Beef.Access.Users
+  defdelegate get_current_quiz_id(user_id), to: Beef.Access.Users
 
   # MUTATIONS
+  defdelegate update(changeset), to: Beef.Repo
+  defdelegate set_current_quiz(user_id, quiz_id), to: Beef.Mutations.Users
+  defdelegate set_user_left_current_quiz(user_id), to: Beef.Mutations.Users
+  defdelegate set_current_quiz(user_id, quiz_id, returning), to: Beef.Mutations.Users
+
   defdelegate delete(user_id), to: Beef.Mutations.Users
   defdelegate bulk_insert(users), to: Beef.Mutations.Users
   defdelegate set_offline(user_id), to: Beef.Mutations.Users

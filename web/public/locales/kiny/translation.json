@@ -52,7 +52,7 @@
   "modules": { "chat": { "sendMessage": "Ohereza ubutumwa" } },
   "components": {
     "search": {
-      "placeholder": "Shakisha ubutumwa, abantu n'ibindi",
+      "placeholder": "Shakisha ibigo, abantu cyangwa ibabazo",
       "placeholderShort": "Shakisha"
     },
     "panels": {
@@ -61,9 +61,8 @@
       "right": {
         "home": "Itangiriro",
         "chat": "Kuganira",
-        "works": "Umukoro",
-        "account": "Konte",
-        "discovery": "Shakisha"
+        "explore": "Explore",
+        "acedemic": "Acedemic"
       }
     }
   }

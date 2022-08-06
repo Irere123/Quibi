@@ -11,6 +11,7 @@ defmodule Okra do
     children = [
       # top-level supervisor for UserSession group
       Onion.Supervisors.UserSession,
+      Onion.Supervisors.QuizSession,
       Onion.StatsCache,
       {Beef.Repo, []},
       {Phoenix.PubSub, name: Onion.PubSub},

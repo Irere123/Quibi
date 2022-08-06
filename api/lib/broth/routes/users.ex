@@ -4,6 +4,7 @@ defmodule Broth.Routes.Users do
   alias Beef.Repo
   alias Beef.Users
   alias Beef.Schemas.User
+  alias Beef.Schemas.Room
 
   use Plug.Router
 
@@ -11,12 +12,24 @@ defmodule Broth.Routes.Users do
   plug(:match)
   plug(:dispatch)
 
+  # @TODO: remove this in prod
   get "/" do
     users = Repo.all(User)
 
     conn
     |> put_resp_content_type("application/json")
     |> send_resp(200, Jason.encode!(%{users: users}))
+  end
+
+  # @TODO: remove this in prod
+  get "/rooms" do
+    rooms =
+      Room
+      |> Repo.all()
+
+    conn
+    |> put_resp_content_type("application/json")
+    |> send_resp(200, Jason.encode!(%{rooms: rooms}))
   end
 
   get "/:username" do

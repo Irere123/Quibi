@@ -2,7 +2,7 @@
 import React from "react";
 import { Story } from "@storybook/react";
 
-import { SingleUser, AvatarProps } from "../../ui/UserAvatar/SingleUser";
+import { SingleUser, AvatarProps } from "../../ui/Avatars/SingleUser";
 
 import src from "../../img/avatar.jpg";
 
