@@ -42,6 +42,8 @@ export const wrap = (connection: Connection) => ({
       connection.fetch("get_user_profile", { userId: idOrUsername }),
     getUsersOnline: (userId: string): Promise<any | null | { error: string }> =>
       connection.fetch("get_online", { userId }),
+    getTopPublicQuizes: (cursor = 0): Promise<any> =>
+      connection.fetch("get_top_public_quizes", { cursor }),
     getMyFollowing: (
       cursor = 0
     ): Promise<{
@@ -79,6 +81,11 @@ export const wrap = (connection: Connection) => ({
       privacy: string;
       type: string;
     }): Promise<any> => connection.fetch("create_room", data) as any,
+    createQuiz: (data: {
+      name: string;
+      privacy: string;
+      description: string;
+    }): Promise<any> => connection.fetch("create_quiz", data) as any,
     follow: (userId: string, value: boolean): Promise<void> =>
       connection.fetch("follow", { userId, value }) as any,
   },

@@ -9,6 +9,7 @@ import { useConn } from "../../hooks/useConn";
 import { DropdownController } from "../DropdownController";
 import { MenuDropDown } from "../MenuDropDown";
 import { ApiPreloadLink } from "../../shared-components/ApiPreloadLink";
+import { SettingsDropdown } from "../SettingsDropdown";
 export interface RightHeaderProps {
   actionButton?: React.ReactNode;
 }
@@ -26,16 +27,9 @@ const RightHeader: React.FC<RightHeaderProps> = ({ actionButton }) => {
 
   return (
     <div className="flex  space-x-4 items-center justify-end focus:outline-no-chrome w-full">
-      <DropdownController
-        zIndex={20}
-        className="top-9 right-7 md:right-0 fixed"
-        innerClassName="fixed  transform -translate-x-full"
-        overlay={() => <MenuDropDown />}
-      >
-        <BoxedIcon circle={true}>
-          <AppsIcon />
-        </BoxedIcon>
-      </DropdownController>
+      <BoxedIcon circle={true}>
+        <AppsIcon />
+      </BoxedIcon>
 
       {showHome ? (
         <Link href={"/dash"}>

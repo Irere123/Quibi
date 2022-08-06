@@ -17,7 +17,7 @@ defmodule Beef.Queries.UserBlocks do
 
   def filter_by_username_and_blockedId(query, username, user_id_blocked) do
     query
-   |> join(:inner, [ub], u in User, on: u.id == ub.userId)
-   |> where([ub, u], ub.userIdBlocked == ^user_id_blocked and u.username == ^username)
+    |> join(:inner, [ub], u in User, on: u.id == ub.userId)
+    |> where([ub, u], ub.userIdBlocked == ^user_id_blocked and u.username == ^username)
   end
 end

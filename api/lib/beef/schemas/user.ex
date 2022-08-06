@@ -16,6 +16,7 @@ defmodule Beef.Schemas.User do
       field(:displayName, :string)
       field(:username, :string)
       field(:avatarUrl, :string)
+      field(:numFollowers, :integer)
     end
   end
 
@@ -41,6 +42,8 @@ defmodule Beef.Schemas.User do
     field(:followsYou, :boolean, virtual: true)
     field(:theyBlockedMe, :boolean, virtual: true)
     field(:iBlockedThem, :boolean, virtual: true)
+
+    belongs_to(:currentQuiz, Beef.Schemas.Quiz, foreign_key: :currentQuizId, type: :binary_id)
 
     many_to_many(:blocked_by, __MODULE__,
       join_through: "user_blocks",
@@ -68,12 +71,19 @@ defmodule Beef.Schemas.User do
     @fields ~w(
       id username email displayName avatarUrl bannerUrl bio online
       last_online  inserted_at youAreFollowing followsYou iBlockedThem
-      numFollowing numFollowers
+      numFollowing numFollowers currentQuizId currentQuiz
     )a
+
+    defp transform_current_quiz(fields = %{currentQuiz: %Ecto.Association.NotLoaded{}}) do
+      Map.delete(fields, :currentQuiz)
+    end
+
+    defp transform_current_quiz(fields), do: fields
 
     def encode(user, opts) do
       user
       |> Map.take(@fields)
+      |> transform_current_quiz
       |> Jason.Encoder.encode(opts)
     end
   end

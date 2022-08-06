@@ -90,4 +90,12 @@ defmodule Beef.Queries.Users do
       youAreFollowing: not is_nil(f_i_follow_them.userId)
     })
   end
+
+  def update_set_current_quiz_nil(query) do
+    update(query,
+      set: [
+        currentQuizId: nil
+      ]
+    )
+  end
 end

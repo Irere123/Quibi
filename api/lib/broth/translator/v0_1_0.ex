@@ -11,12 +11,14 @@ defmodule Broth.Translator.V0_1_0 do
     "search" => "search:search",
     "get_online" => "user:get_online",
     "create_room" => "room:create",
+    "create_quiz" => "quiz:create",
     # follow needs to arbitrate if it becomes follow or unfollow.
     "follow" => nil,
     # get_follow_list needs to arbitrate if its followers or following.
     "get_follow_list" => nil,
     "follow_info" => "user:get_relationship",
-    "get_my_following" => "user:get_following"
+    "get_my_following" => "user:get_following",
+    "get_top_public_quizes" => "quiz:get_top"
   }
 
   @operators Map.keys(@operator_translations)
@@ -38,6 +40,11 @@ defmodule Broth.Translator.V0_1_0 do
   def translate_in_body(message, "create_room") do
     is_forum = get_in(message, ["d", "type"]) == "forum"
     put_in(message, ["d", "isForum"], is_forum)
+  end
+
+  def translate_in_body(message, "create_quiz") do
+    is_private = get_in(message, ["d", "privacy"]) == "private"
+    put_in(message, ["d", "isPrivate"], is_private)
   end
 
   def translate_in_body(message, "edit_profile") do
@@ -100,6 +107,10 @@ defmodule Broth.Translator.V0_1_0 do
 
   def translate_out_body(message, "room:create") do
     %{message | d: %{room: message.d}}
+  end
+
+  def translate_out_body(message, "quiz:create") do
+    %{message | d: %{quiz: message.d}}
   end
 
   def translate_out_body(message, "user:get_following") do

@@ -3,6 +3,7 @@ import EctoEnum
 alias Broth.Message.Auth
 alias Broth.Message.User
 alias Broth.Message.Search
+alias Broth.Message.Quiz
 alias Broth.Message.Room
 
 defenum(
@@ -21,8 +22,12 @@ defenum(
     {User.GetRelationship, 7},
     # room commands and casts: 91..181
     {Room.Create, 91},
-    # auth and maintenance commands 182..240
+    # auth and maintenance commands 182..210
     {Auth.Request, 183},
-    {Search, 184}
+    {Search, 184},
+
+    # quiz commands and casts: 210..250
+    {Quiz.Create, 210},
+    {Quiz.GetTop, 211}
   ]
 )

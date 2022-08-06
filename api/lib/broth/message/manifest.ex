@@ -3,6 +3,7 @@ defmodule Broth.Message.Manifest do
   alias Broth.Message.User
   alias Broth.Message.Search
   alias Broth.Message.Room
+  alias Broth.Message.Quiz
 
   @actions %{
     "auth:request" => Auth.Request,
@@ -17,7 +18,9 @@ defmodule Broth.Message.Manifest do
     "user:block" => User.Block,
     "user:unblock" => User.Unblock,
     "user:get_info" => User.GetInfo,
-    "user:update" => User.Update
+    "user:update" => User.Update,
+    "quiz:create" => Quiz.Create,
+    "quiz:get_top" => Quiz.GetTop
   }
   # verify that all of the actions are accounted for in the
   # operators list

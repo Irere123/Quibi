@@ -24,7 +24,7 @@ defmodule Beef.Follows do
       on: f.userId == u.id,
       left_join: f2 in Follow,
       on: f2.userId == ^user_id,
-      where: f.followerId == ^user_id and u.online == true  ,
+      where: f.followerId == ^user_id and u.online == true,
       order_by: [desc: u.last_online]
     )
     |> Beef.Repo.all()
