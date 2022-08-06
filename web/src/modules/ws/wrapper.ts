@@ -63,6 +63,8 @@ export const wrap = (connection: Connection) => ({
         isFollowing,
         cursor,
       }) as any,
+    joinQuiz: (quizId: string) =>
+      connection.fetch(`join_quiz_and_get_info`, { quizId }),
   },
   /**
    * Allows you to call functions that mutate the ws state

@@ -8,6 +8,9 @@ import { isServer } from "../../lib/isServer";
 import { useTypeSafeQuery } from "../../hooks/useTypeSafeQuery";
 import { InfoText } from "../../ui/InfoText";
 import { Button } from "../../ui/Button";
+import { useTypeSafePrefetch } from "../../hooks/useTypeSafePrefetch";
+import { useQuizChatStore } from "../quiz/chat/useQuizChatStore";
+import { useCurrentQuizIdStore } from "../../stores/useCurrentQuizStore";
 
 export const Quizes: React.FC<{
   cursor: number;
@@ -15,7 +18,9 @@ export const Quizes: React.FC<{
   isOnlyPage: boolean;
   onLoadMore: (o: number) => void;
 }> = ({ cursor, isLastPage, isOnlyPage, onLoadMore }) => {
+  const { currentQuizId } = useCurrentQuizIdStore();
   const { push } = useRouter();
+  const prefetch = useTypeSafePrefetch();
   const { isLoading, data } = useTypeSafeQuery(
     ["getTopPublicQuizes", cursor],
     {
@@ -54,12 +59,19 @@ export const Quizes: React.FC<{
             "peoplePreviewList" in quiz
               ? quiz.peoplePreviewList
                   .slice(0, 3)
-                  .map((x: any) => x.displayName)
+                  .map((x: any) => x.username)
                   .join(", ")
               : ""
           }
           people={quiz.numPeopleInside}
-          onClick={() => push(`/quiz/${quiz.id}}`)}
+          onClick={() => {
+            if (quiz.id !== currentQuizId) {
+              useQuizChatStore.getState().reset();
+              prefetch(["joinQuiz", quiz.id], [quiz.id]);
+            }
+
+            push(`/quiz/${quiz.id}}`);
+          }}
         />
       ))}
       {isLastPage && data.nextCursor ? (

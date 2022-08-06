@@ -62,9 +62,9 @@ defmodule Beef.Mutations.Quizes do
     |> Repo.update_all([])
   end
 
-  def delete_quiz_by_id(quiz_id) do
-    %Quiz{id: quiz_id} |> Repo.delete()
-  end
+  # def delete_quiz_by_id(quiz_id) do
+  #   %Quiz{id: quiz_id} |> Repo.delete()
+  # end
 
   def decrement_quiz_people_count(quiz_id, new_people_list) do
     from(q in Quiz,

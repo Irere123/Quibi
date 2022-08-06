@@ -3,6 +3,7 @@ import { useRouter } from "next/router";
 import React from "react";
 import { InputField } from "../../form-fields/InputField";
 import { useWrappedConn } from "../../hooks/useConn";
+import { useTypeSafePrefetch } from "../../hooks/useTypeSafePrefetch";
 import { useTypeSafeTranslation } from "../../hooks/useTypeSafeTranslation";
 import { showErrorToast } from "../../lib/showErrorToast";
 import { useCurrentQuizIdStore } from "../../stores/useCurrentQuizStore";
@@ -23,6 +24,7 @@ export const CreateQuizModal: React.FC<CreateQuizModalProps> = ({
 }) => {
   const { push } = useRouter();
   const { t } = useTypeSafeTranslation();
+  const prefetch = useTypeSafePrefetch();
   const conn = useWrappedConn();
 
   return (
@@ -48,6 +50,8 @@ export const CreateQuizModal: React.FC<CreateQuizModalProps> = ({
               return;
             } else if (resp.quiz) {
               const { quiz } = resp;
+
+              prefetch(["joinQuiz", quiz.id], [quiz.id]);
               useQuizChatStore.getState().clearChat();
               useCurrentQuizIdStore.getState().setCurrentQuizId(quiz.id);
               push(`/quiz/[id]`, `/quiz/${quiz.id}`);

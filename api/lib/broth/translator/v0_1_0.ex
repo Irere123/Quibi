@@ -18,7 +18,8 @@ defmodule Broth.Translator.V0_1_0 do
     "get_follow_list" => nil,
     "follow_info" => "user:get_relationship",
     "get_my_following" => "user:get_following",
-    "get_top_public_quizes" => "quiz:get_top"
+    "get_top_public_quizes" => "quiz:get_top",
+    "join_quiz_and_get_info" => "quiz:join"
   }
 
   @operators Map.keys(@operator_translations)
@@ -50,6 +51,10 @@ defmodule Broth.Translator.V0_1_0 do
   def translate_in_body(message, "edit_profile") do
     put_in(message, ["d"], get_in(message, ["d", "data"]))
   end
+
+  # def translate_in_body(message, "join_quiz_and_get_info") do
+  #   put_in(message, ["d"], get_in(message, ["d", "quizId"]))
+  # end
 
   def translate_in_body(message, "get_user_profile") do
     put_in(message, ["d", "userIdOrUsername"], get_in(message, ["d", "userId"]))
@@ -125,6 +130,11 @@ defmodule Broth.Translator.V0_1_0 do
 
   def translate_out_body(message, "user:get_online") do
     data = %{users: message.d.followers}
+    %{message | d: data}
+  end
+
+  def translate_out_body(message, "quiz:jojn") do
+    data = %{quiz: message.d}
     %{message | d: data}
   end
 

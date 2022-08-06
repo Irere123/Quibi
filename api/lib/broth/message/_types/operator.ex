@@ -28,6 +28,7 @@ defenum(
 
     # quiz commands and casts: 210..250
     {Quiz.Create, 210},
-    {Quiz.GetTop, 211}
+    {Quiz.GetTop, 211},
+    {Quiz.Join, 212}
   ]
 )

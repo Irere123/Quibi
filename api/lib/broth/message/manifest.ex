@@ -20,7 +20,8 @@ defmodule Broth.Message.Manifest do
     "user:get_info" => User.GetInfo,
     "user:update" => User.Update,
     "quiz:create" => Quiz.Create,
-    "quiz:get_top" => Quiz.GetTop
+    "quiz:get_top" => Quiz.GetTop,
+    "quiz:join" => Quiz.Join
   }
   # verify that all of the actions are accounted for in the
   # operators list

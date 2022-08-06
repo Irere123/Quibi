@@ -3,7 +3,6 @@ defmodule Onion.QuizSession do
 
   defmodule State do
     defstruct quiz_id: "", users: []
-
   end
 
   #################################################################################
