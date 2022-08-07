@@ -5,15 +5,7 @@ import { MiddlePanel } from "../layouts/GridPanels";
 export const AcademicController: React.FC = () => {
   return (
     <MiddlePanel
-      stickyChildren={
-        <PageHeader
-          content={
-            <>
-              <div>Hello world</div>
-            </>
-          }
-        />
-      }
+      stickyChildren={<PageHeader content={<div>Hello world</div>} />}
     >
       <h1>Hello world</h1>
     </MiddlePanel>
