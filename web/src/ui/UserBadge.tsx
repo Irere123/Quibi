@@ -15,6 +15,7 @@ interface UserBadgeProps {
   variant?: keyof typeof badgeVariants;
   color?: keyof typeof colorVariants;
   className?: string;
+  children?: React.ReactNode;
 }
 
 export const UserBadge: React.FC<UserBadgeProps> = ({

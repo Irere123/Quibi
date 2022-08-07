@@ -5,6 +5,7 @@ import { HeaderController } from "../display/HeaderController";
 interface QuizOpenGraphPreviewProps {
   // @TODO: make any into a Quiz Type
   quiz: any | null | undefined;
+  children?: React.ReactNode;
 }
 
 export const QuizOpenGraphPreview: React.FC<QuizOpenGraphPreviewProps> = ({

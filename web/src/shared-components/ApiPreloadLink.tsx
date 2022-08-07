@@ -20,6 +20,7 @@ type DifferentProps = {
   [K in keyof Handler]: {
     route: K;
     data: Parameters<Handler[K]>[0];
+    children?: React.ReactNode;
   };
 };
 

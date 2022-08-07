@@ -5,6 +5,7 @@ import { LeftPanel, RightPanel } from "./GridPanels";
 interface MainLayoutProps {
   leftPanel?: React.ReactNode;
   rightPanel?: React.ReactNode;
+  children?: React.ReactNode;
 }
 
 export const ChatLayout: React.FC<MainLayoutProps> = ({

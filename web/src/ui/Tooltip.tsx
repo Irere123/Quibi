@@ -2,6 +2,7 @@ import React, { useRef } from "react";
 
 export interface TooltipProps {
   text: string;
+  children?: React.ReactNode;
 }
 
 export const Tooltip: React.FC<TooltipProps> = ({ children, text }) => {

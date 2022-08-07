@@ -7,6 +7,7 @@ import { User } from "./types";
 
 interface WebSocketProviderProps {
   shouldConnect: boolean;
+  children?: React.ReactNode;
 }
 
 type V = Connection | null;

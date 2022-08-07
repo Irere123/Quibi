@@ -8,6 +8,7 @@ interface MainLayoutProps {
   leftPanel?: React.ReactNode;
   rightPanel?: React.ReactNode;
   tabletSidebar?: React.ReactNode;
+  children?: React.ReactNode;
 }
 
 export const MainLayout: React.FC<MainLayoutProps> = ({
