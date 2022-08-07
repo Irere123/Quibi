@@ -1,16 +1,18 @@
 import Link from "next/link";
-import React, { FC } from "react";
+import React from "react";
 import { useScreenType } from "../../hooks/useScreenType";
 import { FixedGridPanel, GridPanel } from "../../ui/GridPanel";
 import LeftHeader from "../../ui/header/LeftHeader";
 import { MiddleHeader } from "../../ui/header/MiddleHeader";
 import RightHeader from "../../ui/header/RightHeader";
 
-interface LeftPanelProps {}
+interface LeftPanelProps {
+  children?: React.ReactNode;
+}
 
-const HeaderWrapper: FC = ({ children }) => (
-  <div className={`flex mb-7 h-6 items-center`}>{children}</div>
-);
+const HeaderWrapper: React.FC<{ children?: React.ReactNode }> = ({
+  children,
+}) => <div className={`flex mb-7 h-6 items-center`}>{children}</div>;
 
 export const LeftPanel: React.FC<LeftPanelProps> = ({ children }) => {
   return (

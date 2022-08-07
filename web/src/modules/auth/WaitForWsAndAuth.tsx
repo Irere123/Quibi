@@ -2,7 +2,9 @@ import React, { useContext } from "react";
 import { WebSocketContext } from "../ws/WebSocketProvider";
 import { useVerifyLoggedIn } from "./useVerifyLoggedIn";
 
-interface WaitForWsAndAuthProps {}
+interface WaitForWsAndAuthProps {
+  children?: React.ReactNode;
+}
 
 export const WaitForWsAndAuth: React.FC<WaitForWsAndAuthProps> = ({
   children,

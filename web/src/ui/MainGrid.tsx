@@ -3,6 +3,7 @@ import { useScreenType } from "../hooks/useScreenType";
 
 interface DashboardGridProps {
   className?: string;
+  children?: React.ReactNode;
 }
 
 export const ChatInnerGrid: React.FC<DashboardGridProps> = ({

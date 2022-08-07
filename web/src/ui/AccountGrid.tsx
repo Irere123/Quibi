@@ -3,6 +3,7 @@ import { useScreenType } from "../hooks/useScreenType";
 
 interface AccountGridProps {
   className?: string;
+  children?: React.ReactNode;
 }
 
 export const AccountInnerGrid: React.FC<AccountGridProps> = ({

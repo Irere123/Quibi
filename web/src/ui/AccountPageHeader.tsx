@@ -8,6 +8,7 @@ import { SingleUser } from "./Avatars";
 interface AccountPageHeaderProps {
   title: string;
   icon: React.ReactNode;
+  children?: React.ReactNode;
 }
 
 export const AccountPageHeader: React.FC<AccountPageHeaderProps> = ({

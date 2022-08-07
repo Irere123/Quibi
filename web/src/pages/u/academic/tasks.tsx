@@ -1,3 +1,3 @@
-import { GoalsPage } from "../../../modules/academic/goals/GoalsPage";
+import { TasksPage } from "../../../modules/academic/tasks/TasksPage";
 
-export default GoalsPage;
+export default TasksPage;

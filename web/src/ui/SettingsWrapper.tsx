@@ -1,6 +1,8 @@
 import React from "react";
 
-export interface SettingsWrapperProps {}
+export interface SettingsWrapperProps {
+  children?: React.ReactNode;
+}
 
 export const SettingsWrapper: React.FC<SettingsWrapperProps> = ({
   children,

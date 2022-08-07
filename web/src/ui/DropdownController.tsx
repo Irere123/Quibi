@@ -8,6 +8,7 @@ export const DropdownController: React.FC<{
   innerClassName?: string;
   overlay: (c: () => void) => React.ReactNode;
   zIndex?: number;
+  children?: React.ReactNode;
 }> = ({
   children,
   className,

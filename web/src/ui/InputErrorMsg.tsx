@@ -1,6 +1,8 @@
 import React from "react";
 
-interface InputErrorMsgProps {}
+interface InputErrorMsgProps {
+  children?: React.ReactNode;
+}
 
 // @todo verify with designer what color this should be
 export const InputErrorMsg: React.FC<InputErrorMsgProps> = ({ children }) => {

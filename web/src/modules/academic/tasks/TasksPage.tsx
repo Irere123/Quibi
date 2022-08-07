@@ -6,7 +6,7 @@ import { MiddlePanel } from "../../layouts/GridPanels";
 import { MainLayout } from "../../layouts/MainLayout";
 import { LeftPanel } from "../../layouts/Panels";
 
-export const GoalsPage: React.FC = () => {
+export const TasksPage: React.FC = () => {
   return (
     <MainLayout leftPanel={<LeftPanel />}>
       <HeaderController title="Goals" />

@@ -4,6 +4,7 @@ export interface NativeRadioProps {
   title: string;
   checked?: boolean;
   onClick?: () => void;
+  children?: React.ReactNode;
 }
 
 export const NativeRadio: React.FC<NativeRadioProps> = ({

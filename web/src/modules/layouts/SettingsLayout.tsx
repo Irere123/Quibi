@@ -3,7 +3,9 @@ import { MiddlePanel } from "./GridPanels";
 import { MainLayout } from "./MainLayout";
 import { RightPanel, SettingsLeftPanel } from "./Panels";
 
-interface SettingsLayoutProps {}
+interface SettingsLayoutProps {
+  children?: React.ReactNode;
+}
 
 export const SettingsLayout: React.FC<SettingsLayoutProps> = ({ children }) => {
   return (
