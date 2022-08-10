@@ -52,9 +52,10 @@ defmodule Broth.Translator.V0_1_0 do
     put_in(message, ["d"], get_in(message, ["d", "data"]))
   end
 
-  # def translate_in_body(message, "join_quiz_and_get_info") do
-  #   put_in(message, ["d"], get_in(message, ["d", "quizId"]))
-  # end
+  def translate_in_body(message, "join_quiz_and_get_info") do
+    put_in(message, ["d"], get_in(message, ["d", "quizId"]))
+  end
+
 
   def translate_in_body(message, "get_user_profile") do
     put_in(message, ["d", "userIdOrUsername"], get_in(message, ["d", "userId"]))
@@ -135,6 +136,7 @@ defmodule Broth.Translator.V0_1_0 do
 
   def translate_out_body(message, "quiz:jojn") do
     data = %{quiz: message.d}
+    IO.inspect(data)
     %{message | d: data}
   end
 

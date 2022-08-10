@@ -42,3 +42,4 @@ export { default as AppsIcon } from "./AppsIcon";
 export { default as ChatBubble } from "./ChatBubble";
 export { default as DoNotDisturb } from "./DoNotDisturb";
 export { default as Feather } from "./Feather";
+export { default as FullscreenIcon } from "./FullscreenIcon";

@@ -7,13 +7,12 @@ defmodule Broth.Message.Quiz.Join do
     field(:quizId, :binary_id)
   end
 
-  alias Okra.Utils.UUID
 
   def changeset(initializer \\ %__MODULE__{}, data) do
     initializer
     |> cast(data, [:quizId])
     |> validate_required([:quizId])
-    |> UUID.normalize(:quizId)
+    |> Okra.Utils.UUID.normalize(:quizId)
   end
 
   defmodule Reply do
@@ -33,6 +32,7 @@ defmodule Broth.Message.Quiz.Join do
     with {:ok, %{quizId: quiz_id}} <- apply_action(changeset, :validate) do
       case Okra.Quiz.join_quiz(state.user.id, quiz_id) do
         %{error: error} ->
+          IO.inspect(error)
           {:error, error, state}
 
         _ ->

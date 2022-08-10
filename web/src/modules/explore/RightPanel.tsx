@@ -1,10 +1,15 @@
 import React from "react";
 import avatar from "../../img/avatar.jpg";
+import { useCurrentQuizIdStore } from "../../stores/useCurrentQuizStore";
 import { FollowSuggCard } from "../../ui/FollowSuggCard";
+import { MinimizedQuizCardController } from "./MinimizedQuizCardController";
 
 export const RightPanel: React.FC = () => {
+  const { currentQuizId } = useCurrentQuizIdStore();
+
   return (
     <div className="mt-5">
+      <MinimizedQuizCardController quizId={currentQuizId!} />
       <FollowSuggCard
         users={[
           {
