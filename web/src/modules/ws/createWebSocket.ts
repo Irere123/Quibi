@@ -73,9 +73,19 @@ export const createWebSocket = (force?: boolean) => {
   });
 
   socket.addEventListener("open", () => {
+    console.info("WebSocket connection established...");
+
     useSocketStatus.getState().setStatus("open");
 
-    queryClient.prefetchQuery(
+    const id = setInterval(() => {
+      if (socket && socket.readyState !== socket.CLOSED) {
+        socket.send("ping");
+      } else {
+        clearInterval(id);
+      }
+    }, 8000);
+
+    queryClient.fetchQuery(
       auth_query,
       () =>
         wsAuthFetch({
@@ -87,15 +97,6 @@ export const createWebSocket = (force?: boolean) => {
         }),
       { staleTime: 0 }
     );
-
-    console.log("ws opened");
-    const id = setInterval(() => {
-      if (socket && socket.readyState !== socket.CLOSED) {
-        socket.send("ping");
-      } else {
-        clearInterval(id);
-      }
-    }, 8000);
   });
 
   socket.addEventListener("message", (e) => {
