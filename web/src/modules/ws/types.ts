@@ -1,3 +1,8 @@
+export type WsParam = {
+  op: string;
+  d: any;
+};
+
 export type UUID = string;
 
 export type User = {

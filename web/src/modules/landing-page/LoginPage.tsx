@@ -119,19 +119,18 @@ export const LoginPage: React.FC = () => {
               <LoginButton
                 dev
                 onClick={async () => {
-                  // eslint-disable-next-line no-alert
-                  modalPrompt("Username", async (name) => {
-                    if (!name) {
-                      return;
-                    }
-                    const r = await fetch(
-                      `${apiBaseUrl}/dev/test-info?username=` + name
-                    );
-                    const d = await r.json();
-                    useTokenStore.getState().setTokens({
-                      accessToken: d.accessToken,
-                      refreshToken: d.refreshToken,
-                    });
+                  const username = window.prompt("Username");
+
+                  if (!username) {
+                    return;
+                  }
+                  const r = await fetch(
+                    `${apiBaseUrl}/dev/test-info?username=` + username
+                  );
+                  const d = await r.json();
+                  useTokenStore.getState().setTokens({
+                    accessToken: d.accessToken,
+                    refreshToken: d.refreshToken,
                   });
                   push("/dash");
                 }}

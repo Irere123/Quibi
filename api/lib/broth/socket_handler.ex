@@ -95,7 +95,7 @@ defmodule Broth.SocketHandler do
   end
 
   def websocket_handle({:text, json}, state) do
-    with {:ok, json} <- Poison.decode(json) do
+    with {:ok, json} <- Jason.decode(json) do
       case json["op"] do
         "auth" ->
           %{
@@ -199,7 +199,7 @@ defmodule Broth.SocketHandler do
           data
 
         _ ->
-          data |> Poison.encode!()
+          data |> Jason.encode!()
       end
 
     case compression do
@@ -247,7 +247,7 @@ defmodule Broth.SocketHandler do
   end
 
   defp encode_data(data, _encoding) do
-    data |> Poison.encode!()
+    data |> Jason.encode!()
   end
 
   defp compress_data(data, :zlib) do

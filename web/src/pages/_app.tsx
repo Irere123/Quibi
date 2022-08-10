@@ -13,6 +13,7 @@ import { KeybindListener } from "../modules/keyboard-shotcuts/KeybindListener";
 import { ConfirmModal } from "../shared-components/ConfirmModal";
 import { ErrorToastController } from "../modules/errors/ErrorToastController";
 import { PromptModal } from "../shared-components/PromptModal";
+import { createWebSocket } from "../modules/ws/createWebSocket";
 
 if (!isServer) {
   init_i18n();
@@ -33,6 +34,10 @@ function App({ Component, pageProps }: any) {
     (Component as PageComponent<unknown>).ws
   ) {
     return null;
+  }
+
+  if (!isServer && (Component as PageComponent<unknown>).ws) {
+    createWebSocket();
   }
 
   return (
