@@ -5,9 +5,6 @@ import { SingleUser } from "./Avatars/SingleUser";
 import { CalendarMonth, CompassIcon, Friends } from "../icons";
 import { EditProfileModal } from "../modules/user/EditProfileModal";
 import { FormattedDate } from "./FormattedDate";
-import { usePreloadPush } from "../shared-components/ApiPreloadLink";
-import { useTypeSafeUpdateQuery } from "../hooks/useTypeSafeUpdateQuery";
-import { useTypeSafeMutation } from "../hooks/useTypeSafeMutation";
 import { UserBadge } from "./UserBadge";
 
 export interface ProfileHeaderProps {
@@ -27,16 +24,7 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
   isCurrentUser,
   pfp = "https://dogehouse.tv/favicon.ico",
 }) => {
-  const { mutateAsync, isLoading: followLoading } =
-    useTypeSafeMutation("follow");
-  const { mutateAsync: block, isLoading: blockLoading } =
-    useTypeSafeMutation("userBlock");
-  const { mutateAsync: unblock, isLoading: unblockLoading } =
-    useTypeSafeMutation("userUnblock");
   const [showEditProfileModal, setShowEditProfileModal] = useState(false);
-  const preloadPush = usePreloadPush();
-  const update = useTypeSafeUpdateQuery();
-  const updater = useTypeSafeUpdateQuery();
 
   return (
     <div className="bg-primary-800 rounded-lg relative">
@@ -46,17 +34,7 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
         <EditProfileModal
           isOpen={showEditProfileModal}
           onRequestClose={() => setShowEditProfileModal(!showEditProfileModal)}
-          onEdit={(d) => {
-            update(["getUserProfile", d.username], (x) =>
-              !x ? x : { ...x, ...d }
-            );
-            if (d.username !== username) {
-              preloadPush({
-                route: "profile",
-                data: { username: d.username },
-              });
-            }
-          }}
+          onEdit={() => {}}
         />
         <div className="flex mr-4 ">
           <SingleUser
@@ -88,52 +66,16 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
           <div className="flex flex-row justify-end content-end gap-2">
             {!isCurrentUser && (
               <Button
-                loading={blockLoading || unblockLoading}
                 size="small"
                 color={user.iBlockedThem ? "secondary" : "primary"}
-                onClick={async () => {
-                  if (user.iBlockedThem) {
-                    await unblock([user.id]);
-                    updater(["getUserProfile", username], (u) =>
-                      !u
-                        ? u
-                        : {
-                            ...u,
-                            iBlockedThem: false,
-                          }
-                    );
-                  } else {
-                    await block([user.id]);
-                    updater(["getUserProfile", username], (u) =>
-                      !u
-                        ? u
-                        : {
-                            ...u,
-                            iBlockedThem: true,
-                          }
-                    );
-                  }
-                }}
+                onClick={async () => {}}
               >
                 {user.iBlockedThem ? <>Unblock</> : <>Block</>}
               </Button>
             )}
             {!isCurrentUser && (
               <Button
-                loading={followLoading}
-                onClick={async () => {
-                  await mutateAsync([user.id, !user.youAreFollowing]);
-                  updater(["getUserProfile", username], (u) =>
-                    !u
-                      ? u
-                      : {
-                          ...u,
-                          numFollowers:
-                            u.numFollowers + (user.youAreFollowing ? -1 : 1),
-                          youAreFollowing: !user.youAreFollowing,
-                        }
-                  );
-                }}
+                onClick={async () => {}}
                 size="small"
                 color={user.youAreFollowing ? "secondary" : "primary"}
                 icon={user.youAreFollowing ? null : <Friends />}

@@ -1,14 +1,12 @@
 import { Form, Formik } from "formik";
-import React, { useContext } from "react";
+import React from "react";
 import { object, pattern, size, string } from "superstruct";
 import { InputField } from "../../form-fields/InputField";
-import { useTypeSafeMutation } from "../../hooks/useTypeSafeMutation";
 import { useTypeSafeTranslation } from "../../hooks/useTypeSafeTranslation";
 import { validateStruct } from "../../lib/validateStruct";
 import { Button } from "../../ui/Button";
 import { ButtonLink } from "../../ui/ButtonLink";
 import { Modal } from "../../ui/Modal";
-import { WebSocketContext } from "../ws/WebSocketProvider";
 
 const profileStruct = object({
   username: pattern(string(), /^(\w){4,15}$/),
@@ -33,15 +31,7 @@ export const EditProfileModal: React.FC<EditProfileModalProps> = ({
   onRequestClose,
   onEdit,
 }) => {
-  const { conn, setUser } = useContext(WebSocketContext);
-  const { mutateAsync } = useTypeSafeMutation("editProfile");
   const { t } = useTypeSafeTranslation();
-
-  if (!conn) {
-    return null;
-  }
-
-  const { user } = conn;
 
   return (
     <Modal
@@ -52,9 +42,9 @@ export const EditProfileModal: React.FC<EditProfileModalProps> = ({
       {isOpen ? (
         <Formik
           initialValues={{
-            displayName: user.displayName,
-            username: user.username,
-            bio: user.bio || "",
+            displayName: "",
+            username: "",
+            bio: "",
           }}
           validateOnChange={false}
           validate={(values) => {
@@ -64,15 +54,6 @@ export const EditProfileModal: React.FC<EditProfileModalProps> = ({
             });
           }}
           onSubmit={async (data) => {
-            await mutateAsync([data]);
-            if (conn) {
-              setUser({
-                ...conn?.user,
-                ...data,
-                bio: data.bio.trim(),
-                displayName: data.displayName.trim(),
-              });
-            }
             onEdit?.(data);
             onRequestClose();
           }}

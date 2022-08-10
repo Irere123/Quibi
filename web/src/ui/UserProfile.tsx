@@ -10,6 +10,7 @@ interface UserProfileProps {
     displayName: string;
     avatarUrl: string;
     bannerUrl: string;
+    inserted_at: string;
   };
   isCurrentUser?: boolean;
 }

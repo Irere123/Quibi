@@ -2,7 +2,6 @@ import { Form, Formik } from "formik";
 import { useRouter } from "next/router";
 import React, { useState } from "react";
 import { InputField } from "../../../form-fields/InputField";
-import { useWrappedConn } from "../../../hooks/useConn";
 import { DoneIcon, HashIcon, OutlineGlobe } from "../../../icons";
 import { Button } from "../../../ui/Button";
 import { Modal } from "../../../ui/Modal";
@@ -16,7 +15,6 @@ export const CreateRoomModal: React.FC<CreateRoomModalProps> = ({
   isOpen,
   onRequestClose,
 }) => {
-  const conn = useWrappedConn();
   const { push } = useRouter();
   const [type, setType] = useState("text");
 
@@ -46,12 +44,6 @@ export const CreateRoomModal: React.FC<CreateRoomModalProps> = ({
           }}
           onSubmit={async ({ name, privacy }) => {
             const d = { name, privacy, type };
-            const { room } = await conn.mutation.createRoom(d);
-
-            if (room.isForum) {
-              push(`/room/f/${room.id}/${room.id}`);
-            }
-            push(`/room/${room.id}/${room.id}`);
 
             onRequestClose();
           }}

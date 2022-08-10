@@ -1,5 +1,4 @@
-import React from "react";
-import { useModalStore } from "../../../stores/useModalStore";
+import React, { useState } from "react";
 import { MultipleUsers } from "../../../ui/Avatars";
 import avatar from "../../../img/avatar.jpg";
 import avatar2 from "../../../img/avatar2.jpg";
@@ -8,7 +7,7 @@ import { MembersModal } from "./MembersModals";
 import { HashIcon } from "../../../icons";
 
 export const RoomChatHeader: React.FC = () => {
-  const { openMembersModal, setOpenMembersModal } = useModalStore();
+  const [openMembersModal, setOpenMembersModal] = useState(false);
 
   return (
     <div className="flex p-3 border-b-2 border-primary-700">

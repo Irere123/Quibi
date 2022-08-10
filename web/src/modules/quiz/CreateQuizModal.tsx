@@ -2,16 +2,11 @@ import { Form, Formik } from "formik";
 import { useRouter } from "next/router";
 import React from "react";
 import { InputField } from "../../form-fields/InputField";
-import { useWrappedConn } from "../../hooks/useConn";
-import { useTypeSafePrefetch } from "../../hooks/useTypeSafePrefetch";
 import { useTypeSafeTranslation } from "../../hooks/useTypeSafeTranslation";
-import { showErrorToast } from "../../lib/showErrorToast";
-import { useCurrentQuizIdStore } from "../../stores/useCurrentQuizStore";
 import { Button } from "../../ui/Button";
 import { ButtonLink } from "../../ui/ButtonLink";
 import { Modal } from "../../ui/Modal";
 import { NativeSelect } from "../../ui/NativeSelect";
-import { useQuizChatStore } from "./chat/useQuizChatStore";
 
 interface CreateQuizModalProps {
   isOpen: boolean;
@@ -24,8 +19,6 @@ export const CreateQuizModal: React.FC<CreateQuizModalProps> = ({
 }) => {
   const { push } = useRouter();
   const { t } = useTypeSafeTranslation();
-  const prefetch = useTypeSafePrefetch();
-  const conn = useWrappedConn();
 
   return (
     <Modal
@@ -42,21 +35,6 @@ export const CreateQuizModal: React.FC<CreateQuizModalProps> = ({
           initialValues={{ name: "", description: "", privacy: "public" }}
           validateOnChange={false}
           onSubmit={async ({ name, privacy, description }) => {
-            const d = { name, privacy, description };
-            const resp = await conn.mutation.createQuiz(d);
-
-            if (typeof resp === "object" && "error" in resp) {
-              showErrorToast(resp.e);
-              return;
-            } else if (resp.quiz) {
-              const { quiz } = resp;
-
-              prefetch(["joinQuiz", quiz.id], [quiz.id]);
-              useQuizChatStore.getState().clearChat();
-              useCurrentQuizIdStore.getState().setCurrentQuizId(quiz.id);
-              push(`/quiz/[id]`, `/quiz/${quiz.id}`);
-            }
-
             onRequestClose();
           }}
         >

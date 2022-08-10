@@ -7,9 +7,6 @@ import { useMediaQuery } from "react-responsive";
 import { useTypeSafeTranslation } from "../../hooks/useTypeSafeTranslation";
 import { useRouter } from "next/router";
 import { useDebounce } from "use-debounce";
-import { useTypeSafeQuery } from "../../hooks/useTypeSafeQuery";
-import { InfoText } from "../../ui/InfoText";
-import { UserSearchResult } from "../../ui/search/SearchResult";
 
 export const SearchController: React.FC = () => {
   const { push } = useRouter();
@@ -28,15 +25,6 @@ export const SearchController: React.FC = () => {
   if (text && !isUsernameSearch && text.trim().length > 1) {
     enabled = true;
   }
-
-  const { data } = useTypeSafeQuery(
-    ["search", text],
-    {
-      enabled,
-    },
-    [text]
-  );
-  const results = data ? [...data.users] : [];
 
   return (
     <Downshift<any>
@@ -90,38 +78,7 @@ export const SearchController: React.FC = () => {
               <ul
                 className="w-full px-2 mb-2 mt-7  rounded-b-8 overflow-y-auto"
                 {...getMenuProps({ style: { top: 0 } })}
-              >
-                {data?.users.length === 0 ? (
-                  <InfoText className="mt-7">no results found</InfoText>
-                ) : null}
-                {results.map((item, index) =>
-                  "username" in item ? (
-                    // eslint-disable-next-line react/jsx-key
-                    <li
-                      className="mt-7"
-                      {...getItemProps({
-                        key: item.id,
-                        index,
-                        item,
-                      })}
-                    >
-                      <UserSearchResult
-                        user={{
-                          username: item.username,
-                          displayName: item.displayName,
-                          isOnline: item.online,
-                          avatar: item.avatarUrl,
-                        }}
-                        className={
-                          highlightedIndex === index
-                            ? "bg-primary-700"
-                            : "bg-primary-800"
-                        }
-                      />
-                    </li>
-                  ) : null
-                )}
-              </ul>
+              ></ul>
             </SearchOverlay>
           ) : null}
         </div>

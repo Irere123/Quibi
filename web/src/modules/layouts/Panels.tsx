@@ -12,7 +12,6 @@ import { UpcomingEventsCard } from "../../ui/UpcomingEventsCard";
 import { Button } from "../../ui/Button";
 import { modalConfirm } from "../../shared-components/ConfirmModal";
 import { useTokenStore } from "../auth/useTokenStore";
-import { useConn } from "../../hooks/useConn";
 
 export const LeftPanel: React.FC = () => {
   const { t } = useTypeSafeTranslation();
@@ -112,7 +111,6 @@ export const RightPanel: React.FC = () => {
 };
 
 export const SettingsLeftPanel: React.FC = () => {
-  const conn = useConn();
   const { pathname, push } = useRouter();
   const { t } = useTypeSafeTranslation();
   const activeCSS = (link: string) => {
@@ -179,7 +177,6 @@ export const SettingsLeftPanel: React.FC = () => {
           size="medium"
           onClick={() =>
             modalConfirm("Are you sure you want to logout", () => {
-              conn.close();
               useTokenStore
                 .getState()
                 .setTokens({ accessToken: "", refreshToken: "" });

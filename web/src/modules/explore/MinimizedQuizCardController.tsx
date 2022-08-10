@@ -1,6 +1,5 @@
 import { useRouter } from "next/router";
 import React from "react";
-import { useTypeSafeQuery } from "../../hooks/useTypeSafeQuery";
 import { MinimizedQuizCard } from "../../ui/MinimizedQuizCard";
 
 interface Props {
@@ -8,21 +7,15 @@ interface Props {
 }
 
 export const MinimizedQuizCardController: React.FC<Props> = ({ quizId }) => {
-  const { data } = useTypeSafeQuery(["joinQuiz", quizId], {}, [quizId]) as any;
   const router = useRouter();
 
-  if (!data || "error" in data) {
-    return null;
-  }
-
-  const { quiz } = data;
-  const dt = new Date(quiz.inserted_at);
+  const dt = new Date();
 
   return (
     <MinimizedQuizCard
       quiz={{
-        name: quiz.name,
-        peopleInside: quiz.numPeopleInside,
+        name: "Hello world",
+        peopleInside: ["Irere", "Jogn"],
         quizStartedAt: dt,
         myself: {
           leave() {
@@ -30,7 +23,7 @@ export const MinimizedQuizCardController: React.FC<Props> = ({ quizId }) => {
           },
         },
       }}
-      onFullscreenClick={() => router.push(`/room/${quiz.id}`)}
+      onFullscreenClick={() => router.push(`/room/${1}`)}
     />
   );
 };

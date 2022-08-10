@@ -5,17 +5,13 @@ import { AppsIcon, DownloadIcon, HomeIcon, SettingsIcon } from "../../icons";
 import { SingleUser } from "../Avatars";
 import { Button } from "../Button";
 import { BoxedIcon } from "../BoxedIcon";
-import { useConn } from "../../hooks/useConn";
-import { DropdownController } from "../DropdownController";
-import { MenuDropDown } from "../MenuDropDown";
-import { ApiPreloadLink } from "../../shared-components/ApiPreloadLink";
-import { SettingsDropdown } from "../SettingsDropdown";
+import avatar from "../../img/avatar.jpg";
+
 export interface RightHeaderProps {
   actionButton?: React.ReactNode;
 }
 
 const RightHeader: React.FC<RightHeaderProps> = ({ actionButton }) => {
-  const conn = useConn();
   const { pathname, push } = useRouter();
   let showHome = false;
 
@@ -53,14 +49,16 @@ const RightHeader: React.FC<RightHeaderProps> = ({ actionButton }) => {
 
       {actionButton}
 
-      <ApiPreloadLink data={{ username: conn.user.username }} route="profile">
-        <SingleUser
-          className={"focus:outline-no-chrome cursor-pointer"}
-          size="sm"
-          src={conn.user.avatarUrl}
-          username={conn.user.username}
-        />
-      </ApiPreloadLink>
+      <Link href={`/u/irere`}>
+        <a>
+          <SingleUser
+            className={"focus:outline-no-chrome cursor-pointer"}
+            size="sm"
+            src={avatar.src}
+            username={"irere"}
+          />
+        </a>
+      </Link>
     </div>
   );
 };
