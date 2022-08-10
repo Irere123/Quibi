@@ -12,6 +12,7 @@ import "nprogress/nprogress.css";
 import { KeybindListener } from "../modules/keyboard-shotcuts/KeybindListener";
 import { ConfirmModal } from "../shared-components/ConfirmModal";
 import { ErrorToastController } from "../modules/errors/ErrorToastController";
+import { PromptModal } from "../shared-components/PromptModal";
 
 if (!isServer) {
   init_i18n();
@@ -40,6 +41,7 @@ function App({ Component, pageProps }: any) {
       <ErrorToastController />
       <Component {...pageProps} />
       <ConfirmModal />
+      <PromptModal />
     </QueryClientProvider>
   );
 }

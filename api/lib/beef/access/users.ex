@@ -71,5 +71,4 @@ defmodule Beef.Access.Users do
     |> Query.limit_one()
     |> Repo.one()
   end
-
 end

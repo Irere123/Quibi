@@ -2,8 +2,8 @@ import create from "zustand";
 import { combine } from "zustand/middleware";
 import { isServer } from "../../lib/isServer";
 
-const accessTokenKey = "@toum/token";
-const refreshTokenKey = "@toum/refresh-token";
+const accessTokenKey = "@open/token";
+const refreshTokenKey = "@open/refresh-token";
 
 const getDefaultValues = () => {
   if (!isServer) {
