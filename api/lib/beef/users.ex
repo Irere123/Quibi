@@ -19,14 +19,9 @@ defmodule Beef.Users do
   defdelegate get(user_id), to: Beef.Access.Users
   defdelegate search(query, offset), to: Beef.Access.Users
   defdelegate search_username(query), to: Beef.Access.Users
-  defdelegate get_current_quiz_id(user_id), to: Beef.Access.Users
 
   # MUTATIONS
   defdelegate update(changeset), to: Beef.Repo
-  defdelegate set_current_quiz(user_id, quiz_id), to: Beef.Mutations.Users
-  defdelegate set_user_left_current_quiz(user_id), to: Beef.Mutations.Users
-  defdelegate set_current_quiz(user_id, quiz_id, returning), to: Beef.Mutations.Users
-
   defdelegate delete(user_id), to: Beef.Mutations.Users
   defdelegate bulk_insert(users), to: Beef.Mutations.Users
   defdelegate set_offline(user_id), to: Beef.Mutations.Users

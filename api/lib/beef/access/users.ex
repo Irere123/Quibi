@@ -72,16 +72,4 @@ defmodule Beef.Access.Users do
     |> Repo.one()
   end
 
-  def get_current_quiz_id(user_id) do
-    # DO NOT COPY/PASTE THIS FUNCTION
-    try do
-      Onion.UserSession.get_current_quiz_id(user_id)
-    catch
-      _, _ ->
-        case get_by_id(user_id) do
-          nil -> nil
-          %{currentQuizId: id} -> id
-        end
-    end
-  end
 end

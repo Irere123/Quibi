@@ -32,36 +32,6 @@ defmodule Beef.Mutations.Users do
     |> Repo.update_all([])
   end
 
-  def set_user_left_current_quiz(user_id) do
-    Onion.UserSession.set_current_quiz_id(user_id, nil)
-
-    Query.start()
-    |> Query.filter_by_id(user_id)
-    |> Query.update_set_current_quiz_nil()
-    |> Repo.update_all([])
-  end
-
-  def set_current_quiz(user_id, quiz_id, returning \\ false) do
-    Onion.UserSession.set_current_quiz_id(user_id, quiz_id)
-
-    q =
-      from(u in User,
-        where: u.id == ^user_id,
-        update: [
-          set: [
-            currentQuizId: ^quiz_id
-          ]
-        ]
-      )
-
-    q = if returning, do: select(q, [u], u), else: q
-
-    case Repo.update_all(q, []) do
-      {_, [user]} -> %{user: user}
-      _ -> nil
-    end
-  end
-
   def google_find_or_create(user) do
     googleId = user["sub"]
 
