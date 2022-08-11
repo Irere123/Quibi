@@ -3,11 +3,14 @@ import React from "react";
 import { object, pattern, size, string } from "superstruct";
 import { InputField } from "../../form-fields/InputField";
 import { useMeQuery } from "../../hooks/useMeQuery";
+import { useTypeSafeMutation } from "../../hooks/useTypeSafeMutation";
 import { useTypeSafeTranslation } from "../../hooks/useTypeSafeTranslation";
+import { useTypeSafeUpdateQuery } from "../../hooks/useTypeSafeUpdateQuery";
 import { validateStruct } from "../../lib/validateStruct";
 import { Button } from "../../ui/Button";
 import { ButtonLink } from "../../ui/ButtonLink";
 import { Modal } from "../../ui/Modal";
+import { auth_query } from "../ws/createWebSocket";
 
 const profileStruct = object({
   username: pattern(string(), /^(\w){4,15}$/),
@@ -34,6 +37,8 @@ export const EditProfileModal: React.FC<EditProfileModalProps> = ({
 }) => {
   const { me } = useMeQuery();
   const { t } = useTypeSafeTranslation();
+  const { mutateAsync, isLoading } = useTypeSafeMutation();
+  const update = useTypeSafeUpdateQuery();
 
   return (
     <Modal
@@ -56,6 +61,22 @@ export const EditProfileModal: React.FC<EditProfileModalProps> = ({
             });
           }}
           onSubmit={async (data) => {
+            const resp = await mutateAsync({
+              d: { data },
+              op: "edit_profile",
+            });
+
+            update(auth_query, (x) =>
+              !x
+                ? x
+                : {
+                    ...x,
+                    user: {
+                      ...x.user,
+                      ...data,
+                    },
+                  }
+            );
             onEdit?.(data);
             onRequestClose();
           }}
@@ -78,10 +99,11 @@ export const EditProfileModal: React.FC<EditProfileModalProps> = ({
               />
               <div className={`flex pt-2 items-center`}>
                 <Button
-                  loading={isSubmitting}
+                  loading={isLoading}
                   type="submit"
                   className={`mr-3`}
                   size="medium"
+                  disabled={isSubmitting}
                 >
                   {t("common.save")}
                 </Button>

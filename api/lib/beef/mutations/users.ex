@@ -9,6 +9,13 @@ defmodule Beef.Mutations.Users do
     %User{id: user_id} |> Repo.delete()
   end
 
+  def edit_profile(user_id, data) do
+    user_id
+    |> Beef.Users.get_by_id()
+    |> User.edit_changeset(data)
+    |> Repo.update()
+  end
+
   def bulk_insert(users) do
     Repo.insert_all(
       User,

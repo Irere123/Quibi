@@ -241,10 +241,18 @@ defmodule Broth.SocketHandler do
       {:ok, uuid} ->
         user = Beef.Users.get_by_id_with_follow_info(state.user_id, uuid)
         %{user: user}
+
       _ ->
         user = Beef.Users.get_by_username_with_follow_info(state.user_id, userIdOrUsername)
         %{user: user}
     end
+  end
+
+  def f_handler("edit_profile", %{"data" => data}, state) do
+    %{
+      isOk:
+        Okra.User.edit_profile(state.user_id, data)
+    }
   end
 
   defp prepare_socket_msg(data, %{compression: compression, encoding: encoding}) do
