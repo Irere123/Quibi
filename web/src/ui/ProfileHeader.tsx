@@ -6,6 +6,8 @@ import { CalendarMonth, CompassIcon, Friends } from "../icons";
 import { EditProfileModal } from "../modules/user/EditProfileModal";
 import { FormattedDate } from "./FormattedDate";
 import { UserBadge } from "./UserBadge";
+import { useTypeSafeUpdateQuery } from "../hooks/useTypeSafeUpdateQuery";
+import { usePreloadPush } from "../shared-components/ApiPreloadLink";
 
 export interface ProfileHeaderProps {
   displayName: string;
@@ -25,6 +27,8 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
   pfp = "https://dogehouse.tv/favicon.ico",
 }) => {
   const [showEditProfileModal, setShowEditProfileModal] = useState(false);
+  const preloadPush = usePreloadPush();
+  const update = useTypeSafeUpdateQuery();
 
   return (
     <div className="bg-primary-800 rounded-lg relative">
@@ -34,7 +38,15 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
         <EditProfileModal
           isOpen={showEditProfileModal}
           onRequestClose={() => setShowEditProfileModal(!showEditProfileModal)}
-          onEdit={() => {}}
+          onEdit={(d) => {
+            update("get_user_profile", (x) => (!x ? x : { ...x, ...d }));
+            if (d.username !== username) {
+              preloadPush({
+                route: "profile",
+                data: { username: d.username },
+              });
+            }
+          }}
         />
         <div className="flex mr-4 ">
           <SingleUser

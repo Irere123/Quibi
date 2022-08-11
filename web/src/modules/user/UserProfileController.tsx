@@ -17,11 +17,10 @@ export const UserProfileController: React.FC = () => {
     return <InfoText>Loading....</InfoText>;
   }
 
-  if (!data) {
+  if (!data?.user) {
     return <InfoText>User can not be found</InfoText>;
   }
 
-  console.log(data);
   return (
     <>
       <UserProfile user={data?.user} isCurrentUser={true} />{" "}

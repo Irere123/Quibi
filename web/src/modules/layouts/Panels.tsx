@@ -12,6 +12,7 @@ import { UpcomingEventsCard } from "../../ui/UpcomingEventsCard";
 import { Button } from "../../ui/Button";
 import { modalConfirm } from "../../shared-components/ConfirmModal";
 import { useTokenStore } from "../auth/useTokenStore";
+import { closeWebSocket } from "../ws/createWebSocket";
 
 export const LeftPanel: React.FC = () => {
   const { t } = useTypeSafeTranslation();
@@ -177,6 +178,7 @@ export const SettingsLeftPanel: React.FC = () => {
           size="medium"
           onClick={() =>
             modalConfirm("Are you sure you want to logout", () => {
+              closeWebSocket();
               useTokenStore
                 .getState()
                 .setTokens({ accessToken: "", refreshToken: "" });

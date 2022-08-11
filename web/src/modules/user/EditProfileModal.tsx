@@ -2,6 +2,7 @@ import { Form, Formik } from "formik";
 import React from "react";
 import { object, pattern, size, string } from "superstruct";
 import { InputField } from "../../form-fields/InputField";
+import { useMeQuery } from "../../hooks/useMeQuery";
 import { useTypeSafeTranslation } from "../../hooks/useTypeSafeTranslation";
 import { validateStruct } from "../../lib/validateStruct";
 import { Button } from "../../ui/Button";
@@ -31,6 +32,7 @@ export const EditProfileModal: React.FC<EditProfileModalProps> = ({
   onRequestClose,
   onEdit,
 }) => {
+  const { me } = useMeQuery();
   const { t } = useTypeSafeTranslation();
 
   return (
@@ -42,9 +44,9 @@ export const EditProfileModal: React.FC<EditProfileModalProps> = ({
       {isOpen ? (
         <Formik
           initialValues={{
-            displayName: "",
-            username: "",
-            bio: "",
+            displayName: me?.displayName!,
+            username: me?.username!,
+            bio: me?.bio || "",
           }}
           validateOnChange={false}
           validate={(values) => {
