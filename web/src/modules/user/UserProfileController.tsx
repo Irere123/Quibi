@@ -1,23 +1,30 @@
+import { useRouter } from "next/router";
 import React from "react";
+import { useTypeSafeQuery } from "../../hooks/useTypeSafeQuery";
 import avatar from "../../img/avatar.jpg";
+import { InfoText } from "../../ui/InfoText";
 import { UserProfile } from "../../ui/UserProfile";
 
 export const UserProfileController: React.FC = () => {
+  const { query } = useRouter();
+  const username = query.username;
+
+  const { data, isLoading } = useTypeSafeQuery("get_user_profile", {
+    userIdOrUsername: username,
+  });
+
+  if (isLoading) {
+    return <InfoText>Loading....</InfoText>;
+  }
+
+  if (!data) {
+    return <InfoText>User can not be found</InfoText>;
+  }
+
+  console.log(data);
   return (
     <>
-      <UserProfile
-        user={{
-          avatarUrl: avatar.src,
-          bannerUrl: avatar.src,
-          bio: "Hello world",
-          displayName: "Irere emmy",
-          id: "2332kjdsh327812saiusa9012",
-          online: true,
-          username: "irere emmy",
-          inserted_at: new Date().toISOString(),
-        }}
-        isCurrentUser={true}
-      />
+      <UserProfile user={data?.user} isCurrentUser={true} />{" "}
     </>
   );
 };

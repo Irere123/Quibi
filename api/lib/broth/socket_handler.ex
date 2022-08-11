@@ -158,7 +158,7 @@ defmodule Broth.SocketHandler do
             rescue
               e ->
                 err_msg = Exception.message(e)
-
+                IO.puts("JSON: #{Kernel.inspect(json)}")
                 IO.inspect(e)
                 Logger.error(err_msg)
                 Logger.error(Exception.format_stacktrace())
@@ -234,6 +234,17 @@ defmodule Broth.SocketHandler do
       )
 
     %{quizes: quizes, nextCursor: next_cursor, initial: data["cursor"] == 0}
+  end
+
+  def f_handler("get_user_profile", %{"userIdOrUsername" => userIdOrUsername}, state) do
+    case Ecto.UUID.cast(userIdOrUsername) do
+      {:ok, uuid} ->
+        user = Beef.Users.get_by_id_with_follow_info(state.user_id, uuid)
+        %{user: user}
+      _ ->
+        user = Beef.Users.get_by_username_with_follow_info(state.user_id, userIdOrUsername)
+        %{user: user}
+    end
   end
 
   defp prepare_socket_msg(data, %{compression: compression, encoding: encoding}) do

@@ -7,6 +7,7 @@ import { Button } from "../Button";
 import { BoxedIcon } from "../BoxedIcon";
 import avatar from "../../img/avatar.jpg";
 import { useMeQuery } from "../../hooks/useMeQuery";
+import { ApiPreloadLink } from "../../shared-components/ApiPreloadLink";
 
 export interface RightHeaderProps {
   actionButton?: React.ReactNode;
@@ -51,7 +52,7 @@ const RightHeader: React.FC<RightHeaderProps> = ({ actionButton }) => {
 
       {actionButton}
 
-      <Link href={`/u/${me?.username}`}>
+      <ApiPreloadLink route="profile" data={{ username: me?.username! }}>
         <a>
           <SingleUser
             className={"focus:outline-no-chrome cursor-pointer"}
@@ -60,7 +61,7 @@ const RightHeader: React.FC<RightHeaderProps> = ({ actionButton }) => {
             username={me?.username}
           />
         </a>
-      </Link>
+      </ApiPreloadLink>
     </div>
   );
 };
