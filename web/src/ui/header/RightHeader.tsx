@@ -6,12 +6,14 @@ import { SingleUser } from "../Avatars";
 import { Button } from "../Button";
 import { BoxedIcon } from "../BoxedIcon";
 import avatar from "../../img/avatar.jpg";
+import { useMeQuery } from "../../hooks/useMeQuery";
 
 export interface RightHeaderProps {
   actionButton?: React.ReactNode;
 }
 
 const RightHeader: React.FC<RightHeaderProps> = ({ actionButton }) => {
+  const { me } = useMeQuery();
   const { pathname, push } = useRouter();
   let showHome = false;
 
@@ -49,13 +51,13 @@ const RightHeader: React.FC<RightHeaderProps> = ({ actionButton }) => {
 
       {actionButton}
 
-      <Link href={`/u/irere`}>
+      <Link href={`/u/${me?.username}`}>
         <a>
           <SingleUser
             className={"focus:outline-no-chrome cursor-pointer"}
             size="sm"
-            src={avatar.src}
-            username={"irere"}
+            src={me?.avatarUrl!}
+            username={me?.username}
           />
         </a>
       </Link>
