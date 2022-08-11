@@ -255,6 +255,11 @@ defmodule Broth.SocketHandler do
     }
   end
 
+  def f_handler("search", %{"query" => query}, _state) do
+    users  =  Beef.Users.search_username(query)
+    %{users: users}
+  end
+
   defp prepare_socket_msg(data, %{compression: compression, encoding: encoding}) do
     data
     |> encode_data(encoding)
