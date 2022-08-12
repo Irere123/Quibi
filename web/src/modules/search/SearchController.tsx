@@ -30,11 +30,11 @@ export const SearchController: React.FC = () => {
   }
 
   const { data } = useTypeSafeQuery(
-    "search",
-    { query: text },
+    ["search", text],
     {
       enabled,
-    }
+    },
+    [text]
   );
 
   console.log(data);
