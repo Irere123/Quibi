@@ -5,6 +5,7 @@ defmodule Okra.User do
     case Users.edit_profile(user_id, data) do
       {:ok, _user} ->
         :ok
+
       _ ->
         :ok
     end

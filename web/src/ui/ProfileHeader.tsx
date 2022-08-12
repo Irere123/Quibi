@@ -8,6 +8,7 @@ import { FormattedDate } from "./FormattedDate";
 import { UserBadge } from "./UserBadge";
 import { useTypeSafeUpdateQuery } from "../hooks/useTypeSafeUpdateQuery";
 import { usePreloadPush } from "../shared-components/ApiPreloadLink";
+import { useTypeSafeMutation } from "../hooks/useTypeSafeMutation";
 
 export interface ProfileHeaderProps {
   displayName: string;
@@ -27,6 +28,10 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
   pfp = "https://dogehouse.tv/favicon.ico",
 }) => {
   const [showEditProfileModal, setShowEditProfileModal] = useState(false);
+  const { mutateAsync: follow, isLoading: followLoading } =
+    useTypeSafeMutation("follow");
+  const { mutateAsync: block, isLoading: blockLoading } =
+    useTypeSafeMutation("block");
   const preloadPush = usePreloadPush();
   const update = useTypeSafeUpdateQuery();
 
@@ -81,16 +86,42 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
             {!isCurrentUser && (
               <Button
                 size="small"
+                loading={blockLoading}
                 color={user.iBlockedThem ? "secondary" : "primary"}
-                onClick={async () => {}}
+                onClick={async () => {
+                  await block([user.id, !user.iBlockedThem]);
+
+                  update(["getUserProfile", username], (u) =>
+                    !u
+                      ? u
+                      : {
+                          ...u,
+                          iBlockedThem: !user.iBlockedThem,
+                        }
+                  );
+                }}
               >
                 {user.iBlockedThem ? <>Unblock</> : <>Block</>}
               </Button>
             )}
             {!isCurrentUser && (
               <Button
-                onClick={async () => {}}
+                onClick={async () => {
+                  await follow([user.id, !user.youAreFollowing]);
+
+                  update(["getUserProfile", username], (u) =>
+                    !u
+                      ? u
+                      : {
+                          ...u,
+                          numFollowers:
+                            u.numFollowers + (user.youAreFollowing ? -1 : 1),
+                          youAreFollowing: !user.youAreFollowing,
+                        }
+                  );
+                }}
                 size="small"
+                loading={followLoading}
                 color={user.youAreFollowing ? "secondary" : "primary"}
                 icon={user.youAreFollowing ? null : <Friends />}
               >

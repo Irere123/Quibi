@@ -10,6 +10,10 @@ export const wrap = (connection: Connection) => ({
       connection.fetch("get_user_profile", { userIdOrUsername: idOrUsername }),
   },
   mutation: {
+    follow: (userId: string, value: boolean): Promise<any> =>
+      connection.fetch("follow", { userId, value }),
+    block: (userId: string, value: boolean): Promise<any> =>
+      connection.fetch("block", { userId, value }),
     editProfile: (data: {
       displayName: string;
       username: string;

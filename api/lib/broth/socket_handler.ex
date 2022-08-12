@@ -237,24 +237,46 @@ defmodule Broth.SocketHandler do
   end
 
   def f_handler("get_user_profile", %{"userIdOrUsername" => userIdOrUsername}, state) do
-    case Ecto.UUID.cast(userIdOrUsername) do
-      {:ok, uuid} ->
-        Beef.Users.get_by_id_with_follow_info(state.user_id, uuid)
+    user =
+      case Ecto.UUID.cast(userIdOrUsername) do
+        {:ok, uuid} ->
+          Beef.Users.get_by_id_with_follow_info(state.user_id, uuid)
+
+        _ ->
+          Beef.Users.get_by_username_with_follow_info(state.user_id, userIdOrUsername)
+      end
+
+    case user do
+      nil ->
+        %{error: "could not find user"}
+
+      %{theyBlockedMe: true} ->
+        %{error: "blocked"}
+
       _ ->
-        Beef.Users.get_by_username_with_follow_info(state.user_id, userIdOrUsername)
+        user
     end
   end
 
   def f_handler("edit_profile", %{"data" => data}, state) do
     %{
-      isOk:
-        Okra.User.edit_profile(state.user_id, data)
+      isOk: Okra.User.edit_profile(state.user_id, data)
     }
   end
 
   def f_handler("search", %{"query" => query}, _state) do
-    users  =  Beef.Users.search_username(query)
+    users = Beef.Users.search_username(query)
     %{users: users}
+  end
+
+  def f_handler("follow", %{"userId" => userId, "value" => value}, state) do
+    Okra.Follow.follow(state.user_id, userId, value)
+    %{}
+  end
+
+  def f_handler("block", %{"userId" => userId, "value" => value}, state) do
+    Okra.UserBlock.block(state.user_id, userId, value)
+    %{}
   end
 
   defp prepare_socket_msg(data, %{compression: compression, encoding: encoding}) do
