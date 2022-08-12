@@ -239,12 +239,9 @@ defmodule Broth.SocketHandler do
   def f_handler("get_user_profile", %{"userIdOrUsername" => userIdOrUsername}, state) do
     case Ecto.UUID.cast(userIdOrUsername) do
       {:ok, uuid} ->
-        user = Beef.Users.get_by_id_with_follow_info(state.user_id, uuid)
-        %{user: user}
-
+        Beef.Users.get_by_id_with_follow_info(state.user_id, uuid)
       _ ->
-        user = Beef.Users.get_by_username_with_follow_info(state.user_id, userIdOrUsername)
-        %{user: user}
+        Beef.Users.get_by_username_with_follow_info(state.user_id, userIdOrUsername)
     end
   end
 

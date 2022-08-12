@@ -39,16 +39,8 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
           isOpen={showEditProfileModal}
           onRequestClose={() => setShowEditProfileModal(!showEditProfileModal)}
           onEdit={(d) => {
-            update("get_user_profile", (x) =>
-              !x
-                ? x
-                : {
-                    ...x,
-                    user: {
-                      ...x.user,
-                      ...d,
-                    },
-                  }
+            update(["getUserProfile", d.username], (x) =>
+              !x ? x : { ...x, ...d }
             );
             if (d.username !== username) {
               preloadPush({

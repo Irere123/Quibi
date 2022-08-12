@@ -5,16 +5,15 @@ import { AppsIcon, DownloadIcon, HomeIcon, SettingsIcon } from "../../icons";
 import { SingleUser } from "../Avatars";
 import { Button } from "../Button";
 import { BoxedIcon } from "../BoxedIcon";
-import avatar from "../../img/avatar.jpg";
-import { useMeQuery } from "../../hooks/useMeQuery";
 import { ApiPreloadLink } from "../../shared-components/ApiPreloadLink";
+import { useConn } from "../../hooks/useConn";
 
 export interface RightHeaderProps {
   actionButton?: React.ReactNode;
 }
 
 const RightHeader: React.FC<RightHeaderProps> = ({ actionButton }) => {
-  const { me } = useMeQuery();
+  const { user } = useConn();
   const { pathname, push } = useRouter();
   let showHome = false;
 
@@ -52,13 +51,13 @@ const RightHeader: React.FC<RightHeaderProps> = ({ actionButton }) => {
 
       {actionButton}
 
-      <ApiPreloadLink route="profile" data={{ username: me?.username! }}>
+      <ApiPreloadLink route="profile" data={{ username: user.username }}>
         <a>
           <SingleUser
             className={"focus:outline-no-chrome cursor-pointer"}
             size="sm"
-            src={me?.avatarUrl!}
-            username={me?.username}
+            src={user.avatarUrl}
+            username={user.username}
           />
         </a>
       </ApiPreloadLink>

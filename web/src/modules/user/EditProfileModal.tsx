@@ -1,16 +1,14 @@
 import { Form, Formik } from "formik";
-import React from "react";
+import React, { useContext } from "react";
 import { object, pattern, size, string } from "superstruct";
 import { InputField } from "../../form-fields/InputField";
-import { useMeQuery } from "../../hooks/useMeQuery";
 import { useTypeSafeMutation } from "../../hooks/useTypeSafeMutation";
 import { useTypeSafeTranslation } from "../../hooks/useTypeSafeTranslation";
-import { useTypeSafeUpdateQuery } from "../../hooks/useTypeSafeUpdateQuery";
 import { validateStruct } from "../../lib/validateStruct";
 import { Button } from "../../ui/Button";
 import { ButtonLink } from "../../ui/ButtonLink";
 import { Modal } from "../../ui/Modal";
-import { auth_query } from "../ws/createWebSocket";
+import { WebSocketContext } from "../ws/WebSocketProvider";
 
 const profileStruct = object({
   username: pattern(string(), /^(\w){4,15}$/),
@@ -35,10 +33,11 @@ export const EditProfileModal: React.FC<EditProfileModalProps> = ({
   onRequestClose,
   onEdit,
 }) => {
-  const { me } = useMeQuery();
+  const { conn, setUser } = useContext(WebSocketContext);
   const { t } = useTypeSafeTranslation();
-  const { mutateAsync, isLoading } = useTypeSafeMutation();
-  const update = useTypeSafeUpdateQuery();
+  const { mutateAsync } = useTypeSafeMutation("editProfile");
+
+  const { user } = conn!;
 
   return (
     <Modal
@@ -49,9 +48,9 @@ export const EditProfileModal: React.FC<EditProfileModalProps> = ({
       {isOpen ? (
         <Formik
           initialValues={{
-            displayName: me?.displayName!,
-            username: me?.username!,
-            bio: me?.bio || "",
+            displayName: user.displayName,
+            username: user.username,
+            bio: user.bio || "",
           }}
           validateOnChange={false}
           validate={(values) => {
@@ -61,22 +60,15 @@ export const EditProfileModal: React.FC<EditProfileModalProps> = ({
             });
           }}
           onSubmit={async (data) => {
-            const resp = await mutateAsync({
-              d: { data },
-              op: "edit_profile",
-            });
-
-            update(auth_query, (x) =>
-              !x
-                ? x
-                : {
-                    ...x,
-                    user: {
-                      ...x.user,
-                      ...data,
-                    },
-                  }
-            );
+            await mutateAsync([data]);
+            if (conn) {
+              setUser({
+                ...conn?.user,
+                ...data,
+                bio: data.bio.trim(),
+                displayName: data.displayName.trim(),
+              });
+            }
             onEdit?.(data);
             onRequestClose();
           }}
@@ -101,11 +93,10 @@ export const EditProfileModal: React.FC<EditProfileModalProps> = ({
               />
               <div className={`flex pt-2 items-center`}>
                 <Button
-                  loading={isLoading}
+                  loading={isSubmitting}
                   type="submit"
                   className={`mr-3`}
                   size="medium"
-                  disabled={isSubmitting}
                 >
                   {t("common.save")}
                 </Button>

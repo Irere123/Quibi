@@ -13,7 +13,8 @@ import { KeybindListener } from "../modules/keyboard-shotcuts/KeybindListener";
 import { ConfirmModal } from "../shared-components/ConfirmModal";
 import { ErrorToastController } from "../modules/errors/ErrorToastController";
 import { PromptModal } from "../shared-components/PromptModal";
-import { createWebSocket } from "../modules/ws/createWebSocket";
+import { WebSocketProvoder } from "../modules/ws/WebSocketProvider";
+import { WsMainHandlerProvider } from "../hooks/useWsMainHandler";
 
 if (!isServer) {
   init_i18n();
@@ -36,18 +37,20 @@ function App({ Component, pageProps }: any) {
     return null;
   }
 
-  if (!isServer && (Component as PageComponent<unknown>).ws) {
-    createWebSocket();
-  }
-
   return (
-    <QueryClientProvider client={queryClient}>
-      <KeybindListener />
-      <ErrorToastController />
-      <Component {...pageProps} />
-      <ConfirmModal />
-      <PromptModal />
-    </QueryClientProvider>
+    <WebSocketProvoder
+      shouldConnect={!!(Component as PageComponent<unknown>).ws}
+    >
+      <QueryClientProvider client={queryClient}>
+        <WsMainHandlerProvider>
+          <KeybindListener />
+          <ErrorToastController />
+          <Component {...pageProps} />
+          <ConfirmModal />
+          <PromptModal />
+        </WsMainHandlerProvider>
+      </QueryClientProvider>
+    </WebSocketProvoder>
   );
 }
 

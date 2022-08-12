@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useContext } from "react";
 import { useSocketStatus } from "../../stores/useSocketStatus";
 import { InfoText } from "../../ui/InfoText";
+import { WebSocketContext } from "../ws/WebSocketProvider";
 import { useVerifyLoggedIn } from "./useVerifyLoggedIn";
 
 interface WaitForWsAndAuthProps {
@@ -10,13 +11,14 @@ interface WaitForWsAndAuthProps {
 export const WaitForWsAndAuth: React.FC<WaitForWsAndAuthProps> = ({
   children,
 }) => {
-  const { status } = useSocketStatus();
+  const { conn } = useContext(WebSocketContext);
+
   if (!useVerifyLoggedIn()) {
     return null;
   }
 
   // TODO: make this better
-  if (status === "connecting") {
+  if (!conn) {
     return <InfoText>Loading...</InfoText>;
   }
 

@@ -14,10 +14,11 @@ import { UserSearchResult } from "../../ui/search/SearchResult";
 export const SearchController: React.FC = () => {
   const { push } = useRouter();
   const [rawText, setText] = useState("");
-  const visible = usePageVisibility();
   const [text] = useDebounce(rawText, 200);
-  const { t } = useTypeSafeTranslation();
+  const visible = usePageVisibility();
   const isOverflowing = useMediaQuery({ maxWidth: 475 });
+  const { t } = useTypeSafeTranslation();
+
   let enabled = false;
   const isUsernameSearch = text.startsWith("@");
 
@@ -28,15 +29,16 @@ export const SearchController: React.FC = () => {
     enabled = true;
   }
 
-  const { data, isLoading } = useTypeSafeQuery(
+  const { data } = useTypeSafeQuery(
     "search",
     { query: text },
-    { enabled }
+    {
+      enabled,
+    }
   );
 
-  if (isLoading) {
-    return <InfoText>Loading...</InfoText>;
-  }
+  console.log(data);
+
   const results = data ? [...data.users] : [];
 
   return (
@@ -67,11 +69,11 @@ export const SearchController: React.FC = () => {
     >
       {({
         getInputProps,
+        getItemProps,
         getMenuProps,
         isOpen,
-        getRootProps,
         highlightedIndex,
-        getItemProps,
+        getRootProps,
       }) => (
         <div className="relative w-full z-10 flex flex-col gap-3">
           <SearchBar
@@ -82,7 +84,7 @@ export const SearchController: React.FC = () => {
                 ? t("components.search.placeholderShort")
                 : t("components.search.placeholder")
             }
-            isLoading={isLoading}
+            isLoading={false}
           />
           {isOpen ? (
             <SearchOverlay
@@ -93,13 +95,13 @@ export const SearchController: React.FC = () => {
                 {...getMenuProps({ style: { top: 0 } })}
               >
                 {data?.users.length === 0 ? (
-                  <InfoText className="p-3">No results</InfoText>
+                  <InfoText className="mt-7">no results found</InfoText>
                 ) : null}
                 {results.map((item, index) =>
                   "username" in item ? (
                     // eslint-disable-next-line react/jsx-key
                     <li
-                      data-testid={`search:user:${item.username}`}
+                      className="mt-7"
                       {...getItemProps({
                         key: item.id,
                         index,
@@ -107,7 +109,12 @@ export const SearchController: React.FC = () => {
                       })}
                     >
                       <UserSearchResult
-                        user={item}
+                        user={{
+                          username: item.username,
+                          displayName: item.displayName,
+                          isOnline: item.online,
+                          avatar: item.avatarUrl,
+                        }}
                         className={
                           highlightedIndex === index
                             ? "bg-primary-700"

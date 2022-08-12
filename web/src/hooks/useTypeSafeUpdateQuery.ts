@@ -1,28 +1,25 @@
+import { wrap } from "../modules/ws";
 import { useCallback } from "react";
 import { useQueryClient } from "react-query";
+import { Await } from "../types/util-types";
+
+type Keys = keyof ReturnType<typeof wrap>["query"];
+
+type PaginatedKey<K extends Keys> = [K, ...(string | number | boolean)[]];
 
 export const useTypeSafeUpdateQuery = () => {
   const client = useQueryClient();
   return useCallback(
-    (op: string, fn: (x: any) => any) => {
-      client.setQueryData(op, fn as any);
+    <K extends Keys>(
+      key: K | PaginatedKey<K>,
+      fn: (
+        x: Await<ReturnType<ReturnType<typeof wrap>["query"][K]>>
+      ) => Await<ReturnType<ReturnType<typeof wrap>["query"][K]>>
+    ) => {
+      client.setQueryData<
+        Await<ReturnType<ReturnType<typeof wrap>["query"][K]>>
+      >(key, fn as any);
     },
     [client]
   );
 };
-
-// queryClient.setQueryData<{ user: BaseUser } | undefined>(
-//     auth_query,
-//     (x) =>
-//       !x
-//         ? x
-//         : {
-//             ...x,
-//             user: {
-//               ...x.user,
-//               ...data,
-//               bio: data.bio.trim(),
-//               displayName: data.displayName.trim(),
-//             },
-//           }
-//   );

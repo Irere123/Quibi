@@ -1,17 +1,29 @@
+import { wrap } from "../modules/ws";
 import { useQuery, UseQueryOptions } from "react-query";
 import { isServer } from "../lib/isServer";
-import { wsFetch } from "../modules/ws/createWebSocket";
-import { useSocketStatus } from "../stores/useSocketStatus";
+import { Await } from "../types/util-types";
+import { useWrappedConn } from "./useConn";
 
-export const useTypeSafeQuery = (
-  op: string,
-  data?: any,
-  opts?: UseQueryOptions
+type Keys = keyof ReturnType<typeof wrap>["query"];
+
+type PaginatedKey<K extends Keys> = [K, ...(string | number | boolean)[]];
+
+export const useTypeSafeQuery = <K extends Keys>(
+  key: K | PaginatedKey<K>,
+  opts?: UseQueryOptions,
+  params?: Parameters<ReturnType<typeof wrap>["query"][K]>
 ) => {
-  const { status } = useSocketStatus();
+  const conn = useWrappedConn();
 
-  return useQuery(op, () => wsFetch<any>({ d: data, op }), {
-    enabled: status === "auth-good" && !isServer,
-    ...opts,
-  } as any);
+  return useQuery<Await<ReturnType<ReturnType<typeof wrap>["query"][K]>>>(
+    key,
+    () => {
+      const fn = conn.query[typeof key === "string" ? key : key[0]] as any;
+      return fn(...(params || []));
+    },
+    {
+      enabled: !!conn && !isServer,
+      ...opts,
+    } as any
+  );
 };
