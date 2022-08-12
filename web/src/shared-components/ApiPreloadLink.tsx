@@ -11,8 +11,7 @@ const handlers = {
   profile: ({ username }: { username: string }) => ({
     href: "/u/[username]",
     as: `/u/${username}`,
-    onClick: (prefetch: Prefetch) =>
-      prefetch("get_user_profile", { userIdOrUsername: username }),
+    onClick: (prefetch: Prefetch) => prefetch("getUserProfile", [username]),
   }),
 };
 
