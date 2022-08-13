@@ -10,8 +10,10 @@ import { useDebounce } from "use-debounce";
 import { useTypeSafeQuery } from "../../hooks/useTypeSafeQuery";
 import { InfoText } from "../../ui/InfoText";
 import { UserSearchResult } from "../../ui/search/SearchResult";
+import { useConn } from "../../hooks/useConn";
 
 export const SearchController: React.FC = () => {
+  const { user } = useConn();
   const { push } = useRouter();
   const [rawText, setText] = useState("");
   const [text] = useDebounce(rawText, 200);
@@ -37,7 +39,9 @@ export const SearchController: React.FC = () => {
     [text]
   );
 
-  const results = data ? [...data.users] : [];
+  const results = data
+    ? [...data.users.filter((u: any) => u.id !== user.id)]
+    : [];
 
   return (
     <Downshift<any>

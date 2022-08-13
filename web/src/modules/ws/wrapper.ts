@@ -10,6 +10,8 @@ export const wrap = (connection: Connection) => ({
       connection.fetch("get_user_profile", { userIdOrUsername: idOrUsername }),
     getTopPublicQuizes: (cursor = 0): Promise<any> =>
       connection.fetch("get_top_public_quizes", { cursor }),
+    getMyFollowing: (limit = 7): Promise<any> =>
+      connection.fetch("get_my_following", { limit }),
     joinQuizAndGetInfo: (quizId: string): Promise<any> =>
       connection.fetch("join_quiz_and_get_info", { quizId }),
   },

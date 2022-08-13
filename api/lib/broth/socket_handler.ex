@@ -323,6 +323,12 @@ defmodule Broth.SocketHandler do
     %{}
   end
 
+  def f_handler("get_my_following", %{"limit" => limit}, state) do
+   {users, _} = Beef.Follows.get_my_following(state.user_id, 0, limit)
+   IO.inspect(users)
+    %{users: users}
+  end
+
   def f_handler("block", %{"userId" => userId, "value" => value}, state) do
     Okra.UserBlock.block(state.user_id, userId, value)
     %{}

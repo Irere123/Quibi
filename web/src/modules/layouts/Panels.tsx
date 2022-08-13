@@ -1,7 +1,7 @@
 import React from "react";
 import Link from "next/link";
 
-import { CompassIcon, HomeIcon, SchoolIcon } from "../../icons";
+import { CompassIcon, HomeIcon, PodcastIcon, SchoolIcon } from "../../icons";
 import AtIcon from "../../icons/AtIcon";
 import { BoxedIcon } from "../../ui/BoxedIcon";
 import { Tooltip } from "../../ui/Tooltip";
@@ -51,7 +51,7 @@ export const LeftPanel: React.FC = () => {
         <Link href={"/explore"}>
           <a>
             <BoxedIcon circle shadow>
-              <CompassIcon />
+              <PodcastIcon />
             </BoxedIcon>
           </a>
         </Link>
