@@ -49,7 +49,7 @@ defmodule Beef.Follows do
   end
 
   # fetch all the users
-  def get_my_following(user_id, offset \\ 0) do
+  def get_my_following(user_id, offset \\ 0, limit \\ 7) do
     items =
       from(
         f in Follow,
@@ -63,7 +63,7 @@ defmodule Beef.Follows do
           | followsYou: not is_nil(f2.userId),
             youAreFollowing: true
         },
-        limit: ^@fetch_limit,
+        limit: ^limit,
         offset: ^offset,
         order_by: [desc: u.online]
       )

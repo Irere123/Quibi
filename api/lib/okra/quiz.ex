@@ -41,32 +41,41 @@ defmodule Okra.Quiz do
   end
 
   def join_quiz(user_id, quiz_id) do
+    IO.puts("ID GIVEN: #{Kernel.inspect(quiz_id)}")
+
     currentQuizId = Beef.Users.get_current_quiz_id(user_id)
+
+    IO.puts("ID CURRENT: #{Kernel.inspect(currentQuizId)}")
 
     if currentQuizId == quiz_id do
       %{quiz: Quizes.get_quiz_by_id(quiz_id)}
     else
       case Quizes.can_join_quiz(quiz_id, user_id) do
         {:error, message} ->
+          err_msg = Kernel.inspect(message)
+          IO.inspect(err_msg)
           %{error: message}
 
         {:ok, quiz} ->
-          # private rooms can now be joined by anyone who has the link
-          # they are functioning closer to an "unlisted" room
+          # private quiz can now be joined by anyone who has the link
+          # they are functioning closer to an "unlisted" quiz
           if currentQuizId do
             leave_quiz(user_id, currentQuizId)
           end
 
+          IO.puts("QUIZ DB: #{Kernel.inspect(quiz)}")
+
           # subscribe to the new room chat
           PubSub.subscribe("chat:" <> quiz_id)
 
+          Quizes.join_quiz(quiz, user_id)
           Onion.QuizSession.join_quiz(quiz_id, user_id)
           %{quiz: quiz}
       end
     end
   catch
     _, _ ->
-      {:error, "that room doesn't exist"}
+      {:error, "that quiz doesn't exist"}
   end
 
   def leave_quiz(user_id, current_quiz_id \\ nil) do
@@ -77,8 +86,10 @@ defmodule Okra.Quiz do
 
     if current_quiz_id do
       case Quizes.leave_quiz(user_id, current_quiz_id) do
-        # the quiz should be destroyed
-        {:bye, _quiz} ->
+        # the room should be destroyed
+        {:bye, room} ->
+          msg = Kernel.inspect(room)
+          IO.puts(msg)
           Onion.QuizSession.destroy(current_quiz_id, user_id)
 
         # the room stays alive with new room creator

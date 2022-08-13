@@ -1,28 +1,24 @@
+import React, { ReactChild, useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/router";
-import React, { useEffect, useMemo, useRef, useState } from "react";
-import { connect, Connection } from "./createWebSocket";
-import { apiBaseUrl } from "../../lib/constants";
+import { raw, User } from ".";
 import { useTokenStore } from "../auth/useTokenStore";
-import { User } from "./types";
+import { apiUrl } from "./raw";
+import { useCurrentQuizIdStore } from "../../stores/useCurentQuizIdStore";
 
-interface WebSocketProviderProps {
+interface WebSocketProvoderProps {
   shouldConnect: boolean;
-  children?: React.ReactNode;
+  children?: ReactChild;
 }
 
-type V = Connection | null;
+type V = raw.Connection | null;
 
 export const WebSocketContext = React.createContext<{
   conn: V;
   setUser: (u: User) => void;
-  setConn: (u: Connection | null) => void;
-}>({
-  conn: null,
-  setUser: () => {},
-  setConn: () => {},
-});
+  setConn: (c: raw.Connection | null) => void;
+}>({ conn: null, setUser: () => {}, setConn: () => {} });
 
-export const WebSocketProvider: React.FC<WebSocketProviderProps> = ({
+export const WebSocketProvoder: React.FC<WebSocketProvoderProps> = ({
   shouldConnect,
   children,
 }) => {
@@ -34,32 +30,40 @@ export const WebSocketProvider: React.FC<WebSocketProviderProps> = ({
   useEffect(() => {
     if (!conn && shouldConnect && hasTokens && !isConnecting.current) {
       isConnecting.current = true;
+      raw
+        .connect("", "", {
+          url: apiUrl,
+          getAuthOptions: () => {
+            const { accessToken, refreshToken } = useTokenStore.getState();
 
-      connect("", "", {
-        waitToReconnect: true,
-        url: apiBaseUrl.replace("http", "ws") + "/socket",
-        getAuthOptions: () => {
-          const { accessToken, refreshToken } = useTokenStore.getState();
-
-          return {
-            accessToken,
-            refreshToken,
-          };
-        },
-        onConnectionTaken: () => {
-          replace("/connection-taken");
-        },
-        onClearTokens: () => {
-          console.log("clearing tokens...");
-          useTokenStore
-            .getState()
-            .setTokens({ accessToken: "", refreshToken: "" });
-          setConn(null);
-          replace("/logout");
-        },
-      })
+            return {
+              accessToken,
+              refreshToken,
+              currentQuizId: useCurrentQuizIdStore.getState().currentQuizId,
+            };
+          },
+          onConnectionTaken: () => {
+            useCurrentQuizIdStore.getState().setCurrentQuizId(null);
+            replace("/connection-taken");
+          },
+          onClearTokens: () => {
+            console.log("clearing tokens...");
+            useTokenStore
+              .getState()
+              .setTokens({ accessToken: "", refreshToken: "" });
+            setConn(null);
+            replace("/logout");
+          },
+        })
         .then((x) => {
           setConn(x);
+          if (x.user.currentQuizId) {
+            useCurrentQuizIdStore
+              .getState()
+              // if an id exists already, that means they are trying to join another quiz
+              // just let them join the other quiz rather than overwriting it
+              .setCurrentQuizId((id) => id || x.user.currentQuizId!);
+          }
         })
         .catch((err) => {
           if (err.code === 4001) {
@@ -94,7 +98,7 @@ export const WebSocketProvider: React.FC<WebSocketProviderProps> = ({
         () => ({
           conn,
           setConn,
-          setUser: (u: any) => {
+          setUser: (u: User) => {
             if (conn) {
               setConn({
                 ...conn,

@@ -2,7 +2,7 @@ defmodule Onion.QuizSession do
   use GenServer, restart: :temporary
 
   defmodule State do
-    defstruct quiz_id: "", users: []
+    defstruct quiz_id: "", users: [], inviteMap: %{}
   end
 
   #################################################################################
@@ -34,6 +34,7 @@ defmodule Onion.QuizSession do
   ## INITIALIZATION BOILERPLATE
 
   def start_link(init) do
+    IO.puts("quiz session starting: " <> init[:quiz_id])
     GenServer.start_link(__MODULE__, init, name: via(init[:quiz_id]))
   end
 
@@ -41,8 +42,8 @@ defmodule Onion.QuizSession do
     # adopt callers from the call point.
     Process.put(:"$callers", init[:callers])
 
-    # also launch a linked, supervised quiz.
-    # Onion.Chat.start_link_supervised(init[:quiz_id])
+    # also launch a linked, supervised room.
+    # Onion.RoomChat.start_link_supervised(init[:room_id])
     {:ok, struct(State, init)}
   end
 
@@ -64,10 +65,10 @@ defmodule Onion.QuizSession do
   def get_maps(quiz_id), do: call(quiz_id, :get_maps)
 
   defp get_maps_impl(_reply, state) do
-    {:reply, {state.muteMap, state.deafMap, state.auto_speaker, state.activeSpeakerMap}, state}
+    {:reply, {}, state}
   end
 
-  def redeem_invite(quiz_id, user_id), do: call(quiz_id, {:redeem_invite, user_id})
+  def redeem_invite(room_id, user_id), do: call(room_id, {:redeem_invite, user_id})
 
   defp redeem_invite_impl(user_id, _reply, state) do
     reply = if Map.has_key?(state.inviteMap, user_id), do: :ok, else: :error
@@ -94,7 +95,7 @@ defmodule Onion.QuizSession do
         op: "invitation_to_quiz",
         d:
           Map.merge(
-            %{quizId: state.quiz_id},
+            %{roomId: state.quiz_id},
             user_info
           )
       }
@@ -112,7 +113,7 @@ defmodule Onion.QuizSession do
   end
 
   defp join_quiz_impl(user_id, opts, state) do
-    # Onion.Chat.add_user(state.quiz_id, user_id)
+    # Onion.RoomChat.add_user(state.room_id, user_id)
 
     unless opts[:no_fan] do
       ws_fan(state.users, %{
@@ -148,12 +149,31 @@ defmodule Onion.QuizSession do
     {:stop, :normal, state}
   end
 
+  def kick_from_quiz(quiz_id, user_id), do: cast(quiz_id, {:kick_from_quiz, user_id})
+
+  defp kick_from_quiz_impl(user_id, state) do
+    users = Enum.filter(state.users, fn uid -> uid != user_id end)
+
+    # Onion.RoomChat.remove_user(state.room_id, user_id)
+
+    ws_fan(users, %{
+      op: "user_left_quiz",
+      d: %{userId: user_id, quizId: state.quiz_id, kicked: true}
+    })
+
+    {:noreply,
+     %{
+       state
+       | users: users
+     }}
+  end
+
   def leave_quiz(quiz_id, user_id), do: cast(quiz_id, {:leave_quiz, user_id})
 
   defp leave_quiz_impl(user_id, state) do
     users = Enum.reject(state.users, &(&1 == user_id))
 
-    # Onion.Chat.remove_user(state.quiz_id, user_id)
+    # Onion.RoomChat.remove_user(state.room_id, user_id)
 
     ws_fan(users, %{
       op: "user_left_quiz",
@@ -184,6 +204,10 @@ defmodule Onion.QuizSession do
 
   def handle_call({:redeem_invite, user_id}, reply, state) do
     redeem_invite_impl(user_id, reply, state)
+  end
+
+  def handle_cast({:kick_from_quiz, user_id}, state) do
+    kick_from_quiz_impl(user_id, state)
   end
 
   def handle_cast({:broadcast_ws, msg}, state) do

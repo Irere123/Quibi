@@ -1,17 +1,15 @@
 import ReconnectingWebSocket from "reconnecting-websocket";
-import { v4 as uuidv4 } from "uuid";
+import { v4 as generateUuid } from "uuid";
 import { apiBaseUrl, __prod__ } from "../../lib/constants";
-import { User } from "./types";
+import { User, UUID } from "./types";
 
 const heartbeatInterval = 8000;
 const wsProtocol = __prod__ ? "wss" : "ws";
-const apiUrl = apiBaseUrl.replace("http", wsProtocol) + "/socket";
+export const apiUrl = apiBaseUrl.replace("http", wsProtocol) + "/socket";
 const connectionTimeout = 15000;
 
-export type UUID = string;
 export type Token = string;
 export type FetchID = UUID;
-export type Ref = UUID;
 export type Opcode = string;
 export type Logger = (
   direction: "in" | "out",
@@ -20,19 +18,16 @@ export type Logger = (
   fetchId?: FetchID,
   raw?: string
 ) => void;
+
 export type ListenerHandler<Data = unknown> = (
   data: Data,
   fetchId?: FetchID
 ) => void;
-
 export type Listener<Data = unknown> = {
   opcode: Opcode;
   handler: ListenerHandler<Data>;
 };
 
-/**
- * A reference to the websocket connection, can be created using `connect()`
- */
 export type Connection = {
   close: () => void;
   once: <Data = unknown>(
@@ -44,21 +39,18 @@ export type Connection = {
     handler: ListenerHandler<Data>
   ) => () => void;
   user: User;
-  rooms: any;
+  initialCurrentQuizId?: string;
   send: (opcode: Opcode, data: unknown, fetchId?: FetchID) => void;
-  sendCast: (opcode: Opcode, data: unknown, ref?: Ref) => void;
   fetch: (
-    opcode: Opcode,
-    data: unknown,
-    doneOpcode?: Opcode
-  ) => Promise<unknown>;
-  sendCall: (
     opcode: Opcode,
     data: unknown,
     doneOpcode?: Opcode
   ) => Promise<unknown>;
 };
 
+// probably want to remove token/refreshToken
+// better to use getAuthOptions
+// when ws tries to reconnect it should use current tokens not the ones it initializes with
 export const connect = (
   token: Token,
   refreshToken: Token,
@@ -69,19 +61,13 @@ export const connect = (
     url = apiUrl,
     fetchTimeout,
     getAuthOptions,
-    waitToReconnect,
   }: {
     logger?: Logger;
     onConnectionTaken?: () => void;
     onClearTokens?: () => void;
     url?: string;
     fetchTimeout?: number;
-    waitToReconnect?: boolean;
     getAuthOptions?: () => Partial<{
-      reconnectToVoice: boolean;
-      currentRoomId: string | null;
-      muted: boolean;
-      deafened: boolean;
       token: Token;
       refreshToken: Token;
     }>;
@@ -92,28 +78,7 @@ export const connect = (
       connectionTimeout,
       WebSocket,
     });
-    const api2Send = (opcode: Opcode, data: unknown, ref?: Ref) => {
-      // tmp fix
-      // this is to avoid ws events queuing up while socket is closed
-      // then it reconnects and fires before auth goes off
-      // and you get logged out
-      if (socket.readyState !== socket.OPEN) return;
-
-      const raw = `{"v":"0.2.0", "op":"${opcode}","p":${JSON.stringify(data)}${
-        ref ? `,"ref":"${ref}"` : ""
-      }}`;
-
-      socket.send(raw);
-      logger("out", opcode, data, ref, raw);
-    };
     const apiSend = (opcode: Opcode, data: unknown, fetchId?: FetchID) => {
-      // tmp fix
-      // this is to avoid ws events queuing up while socket is closed
-      // then it reconnects and fires before auth goes off
-      // and you get logged out
-      if (socket.readyState !== socket.OPEN) {
-        return;
-      }
       const raw = `{"op":"${opcode}","d":${JSON.stringify(data)}${
         fetchId ? `,"fetchId":"${fetchId}"` : ""
       }}`;
@@ -127,9 +92,6 @@ export const connect = (
     // close & message listener needs to be outside of open
     // this prevents multiple listeners from being created on reconnect
     socket.addEventListener("close", (error) => {
-      // I want this here
-      // eslint-disable-next-line no-console
-      console.log(error);
       if (error.code === 4001) {
         socket.close();
         onClearTokens();
@@ -140,12 +102,11 @@ export const connect = (
         socket.close();
         onClearTokens();
       }
-
-      if (!waitToReconnect) reject(error);
+      reject(error);
     });
 
     socket.addEventListener("message", (e) => {
-      if (e.data === `"pong"` || e.data === `pong`) {
+      if (e.data === `"pong"`) {
         logger("in", "pong");
 
         return;
@@ -176,59 +137,10 @@ export const connect = (
             return () => listeners.splice(listeners.indexOf(listener), 1);
           },
           user: message.d.user,
-          rooms: message.d.rooms,
           send: apiSend,
-          sendCast: api2Send,
-          sendCall: (
-            opcode: Opcode,
-            parameters: unknown,
-            doneOpcode?: Opcode
-          ) =>
-            new Promise((resolveCall, rejectFetch) => {
-              // tmp fix
-              // this is to avoid ws events queuing up while socket is closed
-              // then it reconnects and fires before auth goes off
-              // and you get logged out
-              if (socket.readyState !== socket.OPEN) {
-                rejectFetch(new Error("websocket not connected"));
-
-                return;
-              }
-              const ref: FetchID | false = !doneOpcode && uuidv4();
-              let timeoutId: NodeJS.Timeout | null = null;
-              const unsubscribe = connection.addListener(
-                doneOpcode ?? opcode + ":reply",
-                (data, arrivedId) => {
-                  if (!doneOpcode && arrivedId !== ref) return;
-
-                  if (timeoutId) clearTimeout(timeoutId);
-
-                  unsubscribe();
-                  resolveCall(data);
-                }
-              );
-
-              if (fetchTimeout) {
-                timeoutId = setTimeout(() => {
-                  unsubscribe();
-                  rejectFetch(new Error("timed out"));
-                }, fetchTimeout);
-              }
-
-              api2Send(opcode, parameters, ref || undefined);
-            }),
           fetch: (opcode: Opcode, parameters: unknown, doneOpcode?: Opcode) =>
             new Promise((resolveFetch, rejectFetch) => {
-              // tmp fix
-              // this is to avoid ws events queuing up while socket is closed
-              // then it reconnects and fires before auth goes off
-              // and you get logged out
-              if (socket.readyState !== socket.OPEN) {
-                rejectFetch(new Error("websocket not connected"));
-
-                return;
-              }
-              const fetchId: FetchID | false = !doneOpcode && uuidv4();
+              const fetchId: FetchID | false = !doneOpcode && generateUuid();
               let timeoutId: NodeJS.Timeout | null = null;
               const unsubscribe = connection.addListener(
                 doneOpcode ?? "fetch_done",
@@ -257,9 +169,7 @@ export const connect = (
       } else {
         listeners
           .filter(({ opcode }) => opcode === message.op)
-          .forEach((it) =>
-            it.handler(message.d || message.p, message.fetchId || message.ref)
-          );
+          .forEach((it) => it.handler(message.d, message.fetchId));
       }
     });
 

@@ -67,6 +67,13 @@ defmodule Beef.Schemas.User do
     |> validate_required([:username, :avatarUrl, :bannerUrl])
   end
 
+  def edit_changeset(user, attrs) do
+    user
+    |> cast(attrs, [:displayName, :bio])
+    |> validate_required([:displayName, :username, :bio])
+    |> validate_length(:displayName, min: 2, max: 50)
+  end
+
   defimpl Jason.Encoder do
     @fields ~w(
       id username email displayName avatarUrl bannerUrl bio online

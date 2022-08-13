@@ -3,10 +3,11 @@ import { useRouter } from "next/router";
 import React from "react";
 import { InputField } from "../../form-fields/InputField";
 import { useWrappedConn } from "../../hooks/useConn";
+import { useTypeSafeMutation } from "../../hooks/useTypeSafeMutation";
 import { useTypeSafePrefetch } from "../../hooks/useTypeSafePrefetch";
 import { useTypeSafeTranslation } from "../../hooks/useTypeSafeTranslation";
 import { showErrorToast } from "../../lib/showErrorToast";
-import { useCurrentQuizIdStore } from "../../stores/useCurrentQuizStore";
+import { useCurrentQuizIdStore } from "../../stores/useCurentQuizIdStore";
 import { Button } from "../../ui/Button";
 import { ButtonLink } from "../../ui/ButtonLink";
 import { Modal } from "../../ui/Modal";
@@ -22,10 +23,10 @@ export const CreateQuizModal: React.FC<CreateQuizModalProps> = ({
   isOpen,
   onRequestClose,
 }) => {
+  const { mutateAsync } = useTypeSafeMutation("createQuiz");
   const { push } = useRouter();
   const { t } = useTypeSafeTranslation();
   const prefetch = useTypeSafePrefetch();
-  const conn = useWrappedConn();
 
   return (
     <Modal
@@ -43,18 +44,17 @@ export const CreateQuizModal: React.FC<CreateQuizModalProps> = ({
           validateOnChange={false}
           onSubmit={async ({ name, privacy, description }) => {
             const d = { name, privacy, description };
-            const resp = await conn.mutation.createQuiz(d);
+            const resp: any = await mutateAsync([d]);
 
             if (typeof resp === "object" && "error" in resp) {
-              showErrorToast(resp.e);
+              showErrorToast(resp.error);
               return;
             } else if (resp.quiz) {
               const { quiz } = resp;
-
-              prefetch(["joinQuiz", quiz.id], [quiz.id]);
+              prefetch(["joinQuizAndGetInfo", quiz.id], [quiz.id]);
               useQuizChatStore.getState().clearChat();
               useCurrentQuizIdStore.getState().setCurrentQuizId(quiz.id);
-              push(`/quiz/[id]`, `/quiz/${quiz.id}`);
+              push(`/quiz/[id]`, `/quiz/${resp?.quiz.id}`);
             }
 
             onRequestClose();

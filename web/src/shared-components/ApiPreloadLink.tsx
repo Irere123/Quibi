@@ -1,9 +1,11 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
-import React from "react";
+import React, { ReactChild } from "react";
 import { useTypeSafePrefetch } from "../hooks/useTypeSafePrefetch";
 
 type Prefetch = ReturnType<typeof useTypeSafePrefetch>;
+
+type Handler = typeof handlers;
 
 const handlers = {
   profile: ({ username }: { username: string }) => ({
@@ -13,24 +15,19 @@ const handlers = {
   }),
 };
 
-type Handler = typeof handlers;
-
 type ValueOf<T> = T[keyof T];
 type DifferentProps = {
   [K in keyof Handler]: {
     route: K;
     data: Parameters<Handler[K]>[0];
-    children?: React.ReactNode;
+    children?: ReactChild;
   };
 };
 
-// the purpose of this component is to start the query to the api before navigating to the page
-// this will result in less loading time for the user
 export const ApiPreloadLink: React.FC<ValueOf<DifferentProps>> = ({
   children,
   route,
   data,
-  ...props
 }) => {
   const prefetch = useTypeSafePrefetch();
 
@@ -38,9 +35,7 @@ export const ApiPreloadLink: React.FC<ValueOf<DifferentProps>> = ({
 
   return (
     <Link href={href} as={as}>
-      <a {...props} onClick={() => onClick(prefetch)}>
-        {children}
-      </a>
+      <a onClick={() => onClick(prefetch)}>{children}</a>
     </Link>
   );
 };

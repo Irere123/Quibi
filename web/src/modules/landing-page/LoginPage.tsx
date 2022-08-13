@@ -7,6 +7,7 @@ import { useRouter } from "next/router";
 import { useTokenStore } from "../auth/useTokenStore";
 import { isServer } from "../../lib/isServer";
 import { useSaveTokensFromQueryParams } from "../auth/useSaveTokensFromQueryParams";
+import { modalPrompt } from "../../shared-components/PromptModal";
 
 interface LoginButtonProps {
   dev?: boolean;
@@ -118,13 +119,13 @@ export const LoginPage: React.FC = () => {
               <LoginButton
                 dev
                 onClick={async () => {
-                  // eslint-disable-next-line no-alert
-                  const name = window.prompt("username");
-                  if (!name) {
+                  const username = window.prompt("Username");
+
+                  if (!username) {
                     return;
                   }
                   const r = await fetch(
-                    `${apiBaseUrl}/dev/test-info?username=` + name
+                    `${apiBaseUrl}/dev/test-info?username=` + username
                   );
                   const d = await r.json();
                   useTokenStore.getState().setTokens({
@@ -146,7 +147,9 @@ export const LoginPage: React.FC = () => {
           <h3 className="text-secondary-300">Quibi</h3>
         </div>
         <div className="flex flex-row gap-3 text-secondary-300">
-          <p>English</p>
+          <a href="/blog" className="ml-2">
+            Blog
+          </a>
           <a href="/developer" className="ml-2">
             {t("footer.link_1")}
           </a>

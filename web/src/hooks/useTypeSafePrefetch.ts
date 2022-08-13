@@ -1,4 +1,4 @@
-import { wrap } from "../modules/ws/wrapper";
+import { wrap } from "../modules/ws";
 import { useCallback, useContext } from "react";
 import { useQueryClient } from "react-query";
 import { WebSocketContext } from "../modules/ws/WebSocketProvider";

@@ -12,7 +12,9 @@ import "nprogress/nprogress.css";
 import { KeybindListener } from "../modules/keyboard-shotcuts/KeybindListener";
 import { ConfirmModal } from "../shared-components/ConfirmModal";
 import { ErrorToastController } from "../modules/errors/ErrorToastController";
-import { WebSocketProvider } from "../modules/ws/WebSocketProvider";
+import { PromptModal } from "../shared-components/PromptModal";
+import { WebSocketProvoder } from "../modules/ws/WebSocketProvider";
+import { WsMainHandlerProvider } from "../hooks/useWsMainHandler";
 
 if (!isServer) {
   init_i18n();
@@ -36,16 +38,19 @@ function App({ Component, pageProps }: any) {
   }
 
   return (
-    <WebSocketProvider
+    <WebSocketProvoder
       shouldConnect={!!(Component as PageComponent<unknown>).ws}
     >
       <QueryClientProvider client={queryClient}>
-        <KeybindListener />
-        <ErrorToastController />
-        <Component {...pageProps} />
-        <ConfirmModal />
+        <WsMainHandlerProvider>
+          <KeybindListener />
+          <ErrorToastController />
+          <Component {...pageProps} />
+          <ConfirmModal />
+          <PromptModal />
+        </WsMainHandlerProvider>
       </QueryClientProvider>
-    </WebSocketProvider>
+    </WebSocketProvoder>
   );
 }
 

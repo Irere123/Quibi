@@ -4,11 +4,22 @@ import { PlusIcon } from "../../icons";
 
 import { useState } from "react";
 import { CreateRoomModal } from "./room/CreateRoomModal";
-import { useConn } from "../../hooks/useConn";
 import { RoomAvatar } from "../../ui/Avatars";
 
+const rooms = [
+  {
+    id: "232skjds",
+    name: "hello",
+    isForum: true,
+  },
+  {
+    id: "232skjds",
+    name: "world",
+    isForum: true,
+  },
+];
+
 export const LeftPanel: React.FC = () => {
-  const { rooms } = useConn();
   const [createRoomModal, setCreateRoomModal] = useState<boolean>(false);
 
   return (

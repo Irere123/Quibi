@@ -1,4 +1,4 @@
-import { wrap } from "../modules/ws/wrapper";
+import { wrap } from "../modules/ws";
 import { useContext } from "react";
 import { useMutation, UseMutationOptions } from "react-query";
 import { WebSocketContext } from "../modules/ws/WebSocketProvider";

@@ -73,15 +73,41 @@ defmodule Beef.Access.Users do
   end
 
   def get_current_quiz_id(user_id) do
-    # DO NOT COPY/PASTE THIS FUNCTION
     try do
       Onion.UserSession.get_current_quiz_id(user_id)
     catch
       _, _ ->
         case get_by_id(user_id) do
           nil -> nil
-          %{currentQuizId: id} -> id
+          %{currentRoomId: id} -> id
         end
+    end
+  end
+
+  def get_users_in_current_quiz(user_id) do
+    case tuple_get_current_quiz_id(user_id) do
+      {:ok, nil} ->
+        {nil, []}
+
+      {:ok, current_quiz_id} ->
+        {current_quiz_id,
+         from(u in User,
+           where: u.currentQuizId == ^current_quiz_id
+         )
+         |> Repo.all()}
+
+      _ ->
+        {nil, []}
+    end
+  end
+
+  def tuple_get_current_quiz_id(user_id) do
+    case Onion.UserSession.get_current_quiz_id(user_id) do
+      {:ok, nil} ->
+        {nil, nil}
+
+      x ->
+        {:ok, x}
     end
   end
 end

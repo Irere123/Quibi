@@ -1,6 +1,5 @@
 defmodule Onion.UserSession do
   use GenServer, restart: :temporary
-  alias Beef.Users
   require Logger
 
   # TODO: change this
@@ -9,9 +8,8 @@ defmodule Onion.UserSession do
               pid: nil,
               username: nil,
               display_name: nil,
-              current_quiz_id: nil,
               avatar_url: nil,
-              banner_url: nil
+              current_quiz_id: nil
   end
 
   #################################################################################
@@ -37,8 +35,6 @@ defmodule Onion.UserSession do
   def child_spec(init), do: %{super(init) | id: Keyword.get(init, :user_id)}
 
   def count, do: Registry.count(Onion.UserSessionRegistry)
-
-  def lookup(user_id), do: Registry.lookup(Onion.UserSessionRegistry, user_id)
 
   ###############################################################################
   ## INITIALIZATION BOILERPLATE
@@ -67,7 +63,7 @@ defmodule Onion.UserSession do
 
   defp send_ws_impl(_platform, msg, state = %{pid: pid}) do
     # TODO: refactor this to not use ws-datastructures
-    if pid, do: Broth.SocketHandler.remote_send(pid, msg)
+    if pid, do: send(pid, {:remote_send, msg})
     {:noreply, state}
   end
 
@@ -75,7 +71,7 @@ defmodule Onion.UserSession do
 
   defp new_tokens_impl(tokens, state = %{pid: pid}) do
     # TODO: refactor this to not use ws-datastructures
-    if pid, do: Broth.SocketHandler.remote_send(pid, %{op: "new-tokens", d: tokens})
+    if pid, do: send(pid, {:remote_send, %{op: "new-tokens", d: tokens}})
     {:noreply, state}
   end
 
@@ -89,14 +85,14 @@ defmodule Onion.UserSession do
     set_state(user_id, %{current_quiz_id: current_quiz_id})
   end
 
-  def get_current_quiz_id(user_id) do
-    get(user_id, :current_quiz_id)
-  end
-
   def get_info_for_msg(user_id), do: call(user_id, :get_info_for_msg)
 
   defp get_info_for_msg_impl(_reply, state) do
     {:reply, {state.avatar_url, state.display_name, state.username}, state}
+  end
+
+  def get_current_quiz_id(user_id) do
+    get(user_id, :current_quiz_id)
   end
 
   def get(user_id, key), do: call(user_id, {:get, key})
@@ -105,22 +101,23 @@ defmodule Onion.UserSession do
     {:reply, Map.get(state, key), state}
   end
 
-  # temporary function that exists so that each user can only have
-  # one tenant websocket.
-  def set_active_ws(user_id, pid), do: call(user_id, {:set_active_ws, pid})
+  def set_pid(user_id, pid), do: call(user_id, {:set_pid, pid})
 
-  defp set_active_ws(pid, _reply, state) do
+  defp set_pid(pid, _reply, state) do
     if state.pid do
-      # terminates another websocket that happened to have been
-      # running.
-      Process.exit(state.pid, :normal)
+      send(state.pid, {:kill})
     else
-      Users.set_online(state.user_id)
+      Beef.Users.set_online(state.user_id)
     end
 
     Process.monitor(pid)
+
     {:reply, :ok, %{state | pid: pid}}
   end
+
+  def reconnect(user_pid), do: GenServer.cast(user_pid, {:reconnect})
+
+  defp reconnect_impl(state), do: {:noreply, state}
 
   ##############################################################################
   ## MESSAGING API.
@@ -128,6 +125,10 @@ defmodule Onion.UserSession do
 
   defp handle_disconnect(pid, state = %{pid: pid}) do
     Beef.Users.set_offline(state.user_id)
+
+    if state.current_quiz_id do
+      Okra.Quiz.leave_quiz(state.user_id, state.current_quiz_id)
+    end
 
     {:stop, :normal, state}
   end
@@ -142,12 +143,15 @@ defmodule Onion.UserSession do
   def handle_cast({:send_ws, platform, msg}, state),
     do: send_ws_impl(platform, msg, state)
 
+  def handle_cast({:reconnect}, state),
+    do: reconnect_impl(state)
+
   def handle_cast({:new_tokens, tokens}, state), do: new_tokens_impl(tokens, state)
   def handle_cast({:set_state, info}, state), do: set_state_impl(info, state)
 
   def handle_call(:get_info_for_msg, reply, state), do: get_info_for_msg_impl(reply, state)
   def handle_call({:get, key}, reply, state), do: get_impl(key, reply, state)
-  def handle_call({:set_active_ws, pid}, reply, state), do: set_active_ws(pid, reply, state)
+  def handle_call({:set_pid, pid}, reply, state), do: set_pid(pid, reply, state)
 
   def handle_info({:DOWN, _ref, :process, pid, _reason}, state), do: handle_disconnect(pid, state)
 end

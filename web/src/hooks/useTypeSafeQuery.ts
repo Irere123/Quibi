@@ -1,4 +1,4 @@
-import { wrap } from "../modules/ws/wrapper";
+import { wrap } from "../modules/ws";
 import { useQuery, UseQueryOptions } from "react-query";
 import { isServer } from "../lib/isServer";
 import { Await } from "../types/util-types";

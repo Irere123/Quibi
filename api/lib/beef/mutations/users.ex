@@ -9,6 +9,13 @@ defmodule Beef.Mutations.Users do
     %User{id: user_id} |> Repo.delete()
   end
 
+  def edit_profile(user_id, data) do
+    user_id
+    |> Beef.Users.get_by_id()
+    |> User.edit_changeset(data)
+    |> Repo.update()
+  end
+
   def bulk_insert(users) do
     Repo.insert_all(
       User,
@@ -32,15 +39,6 @@ defmodule Beef.Mutations.Users do
     |> Repo.update_all([])
   end
 
-  def set_user_left_current_quiz(user_id) do
-    Onion.UserSession.set_current_quiz_id(user_id, nil)
-
-    Query.start()
-    |> Query.filter_by_id(user_id)
-    |> Query.update_set_current_quiz_nil()
-    |> Repo.update_all([])
-  end
-
   def set_current_quiz(user_id, quiz_id, returning \\ false) do
     Onion.UserSession.set_current_quiz_id(user_id, quiz_id)
 
@@ -60,6 +58,15 @@ defmodule Beef.Mutations.Users do
       {_, [user]} -> %{user: user}
       _ -> nil
     end
+  end
+
+  def set_user_left_current_quiz(user_id) do
+    Onion.UserSession.set_current_quiz_id(user_id, nil)
+
+    Query.start()
+    |> Query.filter_by_id(user_id)
+    |> Query.update_set_current_quiz_nil()
+    |> Repo.update_all([])
   end
 
   def google_find_or_create(user) do

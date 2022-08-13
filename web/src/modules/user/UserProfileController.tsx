@@ -7,8 +7,9 @@ import { InfoText } from "../../ui/InfoText";
 import { UserProfile } from "../../ui/UserProfile";
 
 export const UserProfileController: React.FC = () => {
-  const conn = useConn();
+  const { user } = useConn();
   const { query } = useRouter();
+
   const { data, isLoading } = useTypeSafeQuery(
     ["getUserProfile", query.username as string],
     {
@@ -20,23 +21,20 @@ export const UserProfileController: React.FC = () => {
   );
 
   if (isLoading) {
-    // @todo: make this better
-    return <InfoText>Loading...</InfoText>;
+    return <InfoText>Loading....</InfoText>;
   }
 
   if (!data || ("error" in data && data.error.includes("could not find"))) {
-    // @todo: make this better
-    return <InfoText>The user could not be found</InfoText>;
+    return <InfoText>User can not be found</InfoText>;
   } else if ("error" in data && data.error.includes("blocked")) {
-    return <InfoText>You have been blocked by this user.</InfoText>;
+    return <InfoText>This user blocked you.</InfoText>;
   } else if ("error" in data) {
-    // @todo: make this better
     return <InfoText>{data.error}</InfoText>;
   }
 
   return (
     <>
-      <UserProfile user={data} isCurrentUser={conn.user.id === data.id} />
+      <UserProfile user={data} isCurrentUser={user.id === data?.id} />
     </>
   );
 };

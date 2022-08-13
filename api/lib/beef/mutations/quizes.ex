@@ -4,10 +4,41 @@ defmodule Beef.Mutations.Quizes do
   alias Beef.Repo
   alias Beef.Schemas.Quiz
   alias Beef.Users
-  # alias Beef.Schemas.User
+  alias Beef.Schemas.User
 
   def delete_quiz_by_id(quiz_id) do
     %Quiz{id: quiz_id} |> Repo.delete()
+  end
+
+  def join_quiz(quiz, user_id) do
+    IO.inspect(quiz)
+    user = Users.set_current_quiz(user_id, quiz.id, true)
+
+    if (length(quiz.peoplePreviewList) < 10 or
+          not is_nil(
+            Enum.find(quiz.peoplePreviewList, fn x ->
+              x.numFollowers < user.numFollowers
+            end)
+          )) and is_nil(Enum.find(quiz.peoplePreviewList, &(&1.id === user_id))) do
+      list =
+        [
+          %User.Preview{
+            id: user.id,
+            displayName: user.displayName,
+            numFollowers: user.numFollowers,
+            avatarUrl: user.avatarUrl
+          }
+          | quiz.peoplePreviewList
+        ]
+        |> Enum.sort(&(&1.numFollowers >= &2.numFollowers))
+        |> Enum.slice(0, 10)
+
+      increment_quiz_people_count(quiz.id, list)
+    else
+      increment_quiz_people_count(quiz.id)
+    end
+
+    user
   end
 
   # trusts that the user is in the quiz
@@ -16,6 +47,7 @@ defmodule Beef.Mutations.Quizes do
 
     if not is_nil(quiz) do
       if quiz.numPeopleInside <= 1 do
+        IO.puts("deleted1 by numPeopleinside")
         delete_quiz_by_id(quiz.id)
         {:bye, quiz}
       else
@@ -28,6 +60,7 @@ defmodule Beef.Mutations.Quizes do
             new_people_list
           )
         else
+          IO.puts("deleted2 creator")
           delete_quiz_by_id(quiz.id)
           {:bye, quiz}
         end
@@ -61,10 +94,6 @@ defmodule Beef.Mutations.Quizes do
     )
     |> Repo.update_all([])
   end
-
-  # def delete_quiz_by_id(quiz_id) do
-  #   %Quiz{id: quiz_id} |> Repo.delete()
-  # end
 
   def decrement_quiz_people_count(quiz_id, new_people_list) do
     from(q in Quiz,

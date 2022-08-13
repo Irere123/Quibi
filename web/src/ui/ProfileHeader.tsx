@@ -5,10 +5,10 @@ import { SingleUser } from "./Avatars/SingleUser";
 import { CalendarMonth, CompassIcon, Friends } from "../icons";
 import { EditProfileModal } from "../modules/user/EditProfileModal";
 import { FormattedDate } from "./FormattedDate";
-import { usePreloadPush } from "../shared-components/ApiPreloadLink";
-import { useTypeSafeUpdateQuery } from "../hooks/useTypeSafeUpdateQuery";
-import { useTypeSafeMutation } from "../hooks/useTypeSafeMutation";
 import { UserBadge } from "./UserBadge";
+import { useTypeSafeUpdateQuery } from "../hooks/useTypeSafeUpdateQuery";
+import { usePreloadPush } from "../shared-components/ApiPreloadLink";
+import { useTypeSafeMutation } from "../hooks/useTypeSafeMutation";
 
 export interface ProfileHeaderProps {
   displayName: string;
@@ -27,16 +27,13 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
   isCurrentUser,
   pfp = "https://dogehouse.tv/favicon.ico",
 }) => {
-  const { mutateAsync, isLoading: followLoading } =
+  const [showEditProfileModal, setShowEditProfileModal] = useState(false);
+  const { mutateAsync: follow, isLoading: followLoading } =
     useTypeSafeMutation("follow");
   const { mutateAsync: block, isLoading: blockLoading } =
-    useTypeSafeMutation("userBlock");
-  const { mutateAsync: unblock, isLoading: unblockLoading } =
-    useTypeSafeMutation("userUnblock");
-  const [showEditProfileModal, setShowEditProfileModal] = useState(false);
+    useTypeSafeMutation("block");
   const preloadPush = usePreloadPush();
   const update = useTypeSafeUpdateQuery();
-  const updater = useTypeSafeUpdateQuery();
 
   return (
     <div className="bg-primary-800 rounded-lg relative">
@@ -88,31 +85,20 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
           <div className="flex flex-row justify-end content-end gap-2">
             {!isCurrentUser && (
               <Button
-                loading={blockLoading || unblockLoading}
                 size="small"
+                loading={blockLoading}
                 color={user.iBlockedThem ? "secondary" : "primary"}
                 onClick={async () => {
-                  if (user.iBlockedThem) {
-                    await unblock([user.id]);
-                    updater(["getUserProfile", username], (u) =>
-                      !u
-                        ? u
-                        : {
-                            ...u,
-                            iBlockedThem: false,
-                          }
-                    );
-                  } else {
-                    await block([user.id]);
-                    updater(["getUserProfile", username], (u) =>
-                      !u
-                        ? u
-                        : {
-                            ...u,
-                            iBlockedThem: true,
-                          }
-                    );
-                  }
+                  await block([user.id, !user.iBlockedThem]);
+
+                  update(["getUserProfile", username], (u) =>
+                    !u
+                      ? u
+                      : {
+                          ...u,
+                          iBlockedThem: !user.iBlockedThem,
+                        }
+                  );
                 }}
               >
                 {user.iBlockedThem ? <>Unblock</> : <>Block</>}
@@ -120,10 +106,10 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
             )}
             {!isCurrentUser && (
               <Button
-                loading={followLoading}
                 onClick={async () => {
-                  await mutateAsync([user.id, !user.youAreFollowing]);
-                  updater(["getUserProfile", username], (u) =>
+                  await follow([user.id, !user.youAreFollowing]);
+
+                  update(["getUserProfile", username], (u) =>
                     !u
                       ? u
                       : {
@@ -135,6 +121,7 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
                   );
                 }}
                 size="small"
+                loading={followLoading}
                 color={user.youAreFollowing ? "secondary" : "primary"}
                 icon={user.youAreFollowing ? null : <Friends />}
               >

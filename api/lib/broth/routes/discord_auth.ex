@@ -38,7 +38,7 @@ defmodule Broth.Routes.DiscordAuth do
   end
 
   def get_base_url(conn) do
-    with true <- Application.get_env(:kousa, :staging?),
+    with true <- Application.get_env(:okra, :staging?),
          state <- Map.get(conn.query_params, "state", ""),
          {:ok, json} <- Base.decode64(state),
          {:ok, %{"redirect_base_url" => redirect_base_url}} when is_binary(redirect_base_url) <-

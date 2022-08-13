@@ -34,14 +34,10 @@ export const EditProfileModal: React.FC<EditProfileModalProps> = ({
   onEdit,
 }) => {
   const { conn, setUser } = useContext(WebSocketContext);
-  const { mutateAsync } = useTypeSafeMutation("editProfile");
   const { t } = useTypeSafeTranslation();
+  const { mutateAsync } = useTypeSafeMutation("editProfile");
 
-  if (!conn) {
-    return null;
-  }
-
-  const { user } = conn;
+  const { user } = conn!;
 
   return (
     <Modal
@@ -81,17 +77,19 @@ export const EditProfileModal: React.FC<EditProfileModalProps> = ({
             <Form className={`flex-col w-full`}>
               <InputField
                 className="mb-4"
-                errorMsg="There is an error with your display name"
+                errorMsg="the name must have at least 2 characters"
                 label="Display name"
                 name="displayName"
+                maxLength={50}
               />
               <InputField
                 className="mb-4"
-                errorMsg="There is an error with your bio"
+                errorMsg="the bio must have at least 5 characters"
                 label="About"
                 name="bio"
                 textarea={true}
                 rows={5}
+                maxLength={200}
               />
               <div className={`flex pt-2 items-center`}>
                 <Button

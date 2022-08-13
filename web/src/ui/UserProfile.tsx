@@ -1,16 +1,9 @@
 import React from "react";
+import { User } from "../modules/ws/types";
 import { ProfileHeader } from "./ProfileHeader";
 
 interface UserProfileProps {
-  user: {
-    username: string;
-    online: boolean;
-    id: string;
-    bio: string;
-    displayName: string;
-    avatarUrl: string;
-    bannerUrl: string;
-  };
+  user: User;
   isCurrentUser?: boolean;
 }
 

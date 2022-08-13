@@ -1,6 +1,12 @@
+export type WsParam = {
+  op: string;
+  d: any;
+};
+
 export type UUID = string;
 
 export type User = {
+  currentQuizId: any;
   id: UUID;
   displayName: string;
   username: string;
