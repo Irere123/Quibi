@@ -1,10 +1,11 @@
 import Link from "next/link";
 import { BoxedIcon } from "../../ui/BoxedIcon";
-import { PlusIcon } from "../../icons";
+import { CompassIcon, PlusIcon } from "../../icons";
 
 import { useState } from "react";
 import { CreateRoomModal } from "./room/CreateRoomModal";
 import { RoomAvatar } from "../../ui/Avatars";
+import { useRouter } from "next/router";
 
 const rooms = [
   {
@@ -21,9 +22,19 @@ const rooms = [
 
 export const LeftPanel: React.FC = () => {
   const [createRoomModal, setCreateRoomModal] = useState<boolean>(false);
+  const { push } = useRouter();
 
   return (
-    <div className="flex flex-col items-center gap-5 cursor-pointer overflow-y-auto">
+    <div className="flex flex-col  items-center gap-3 cursor-pointer overflow-y-auto">
+      <div className="space-y-3">
+        <BoxedIcon circle onClick={() => push("/explore-rooms")}>
+          <CompassIcon />
+        </BoxedIcon>
+
+        <BoxedIcon circle onClick={() => setCreateRoomModal(!createRoomModal)}>
+          <PlusIcon />
+        </BoxedIcon>
+      </div>
       {rooms.map((room: any) => {
         if (room.isForum) {
           return (
@@ -43,11 +54,7 @@ export const LeftPanel: React.FC = () => {
           </Link>
         );
       })}
-      <div onClick={() => setCreateRoomModal(!createRoomModal)}>
-        <BoxedIcon circle>
-          <PlusIcon />
-        </BoxedIcon>
-      </div>
+
       {createRoomModal && (
         <CreateRoomModal
           isOpen={createRoomModal}

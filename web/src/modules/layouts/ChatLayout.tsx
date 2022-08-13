@@ -1,4 +1,5 @@
 import React from "react";
+import { useScreenType } from "../../hooks/useScreenType";
 import { ChatInnerGrid } from "../../ui/MainGrid";
 import { LeftPanel, RightPanel } from "./GridPanels";
 
@@ -13,13 +14,42 @@ export const ChatLayout: React.FC<MainLayoutProps> = ({
   leftPanel = <div />,
   rightPanel = <div />,
 }) => {
-  let middle = (
-    <>
-      <LeftPanel>{leftPanel}</LeftPanel>
-      {children}
-      <RightPanel>{rightPanel}</RightPanel>
-    </>
-  );
+  const screenType = useScreenType();
+
+  let middle = null;
+
+  switch (screenType) {
+    case "3-cols":
+      middle = (
+        <>
+          <LeftPanel>{leftPanel}</LeftPanel>
+          {children}
+          <RightPanel>{rightPanel}</RightPanel>
+        </>
+      );
+      break;
+    case "2-cols":
+      middle = (
+        <>
+          <LeftPanel>{leftPanel}</LeftPanel>
+          {children}
+          <RightPanel>{rightPanel}</RightPanel>
+        </>
+      );
+      break;
+
+    case "1-cols":
+      middle = (
+        <>
+          <LeftPanel>{leftPanel}</LeftPanel>
+          {children}
+        </>
+      );
+      break;
+
+    case "fullscreen":
+      middle = <>{children}</>;
+  }
 
   return (
     <>
