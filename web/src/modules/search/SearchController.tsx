@@ -37,8 +37,6 @@ export const SearchController: React.FC = () => {
     [text]
   );
 
-  console.log(data);
-
   const results = data ? [...data.users] : [];
 
   return (

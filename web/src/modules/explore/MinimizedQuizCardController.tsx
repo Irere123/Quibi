@@ -1,5 +1,7 @@
 import { useRouter } from "next/router";
 import React from "react";
+import { useLeaveQuiz } from "../../hooks/useLeaveQuiz";
+import { useTypeSafeQuery } from "../../hooks/useTypeSafeQuery";
 import { MinimizedQuizCard } from "../../ui/MinimizedQuizCard";
 
 interface Props {
@@ -7,23 +9,37 @@ interface Props {
 }
 
 export const MinimizedQuizCardController: React.FC<Props> = ({ quizId }) => {
-  const router = useRouter();
+  const { data } = useTypeSafeQuery(["joinQuizAndGetInfo", quizId], {}, [
+    quizId,
+  ]);
+  const { leaveQuiz, isLoading } = useLeaveQuiz();
+  const { push } = useRouter();
 
-  const dt = new Date();
+  if (!data || "error" in data) {
+    return null;
+  }
+
+  const { quiz } = data;
+
+  const dt = new Date(quiz.inserted_at);
 
   return (
     <MinimizedQuizCard
+      onFullscreenClick={() => push(`/quiz/${quiz.id}`)}
+      onInviteClick={() => console.log("invite people")}
+      leaveLoading={isLoading}
       quiz={{
-        name: "Hello world",
-        peopleInside: ["Irere", "Jogn"],
+        name: quiz.name,
+        peopleInside: quiz.peoplePreviewList
+          .slice(0, 3)
+          .map((s: any) => s.displayName),
         quizStartedAt: dt,
         myself: {
           leave() {
-            console.log("yooo");
+            leaveQuiz();
           },
         },
       }}
-      onFullscreenClick={() => router.push(`/room/${1}`)}
     />
   );
 };

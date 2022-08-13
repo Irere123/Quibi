@@ -8,7 +8,8 @@ defmodule Onion.UserSession do
               pid: nil,
               username: nil,
               display_name: nil,
-              avatar_url: nil
+              avatar_url: nil,
+              current_quiz_id: nil
   end
 
   #################################################################################
@@ -80,10 +81,18 @@ defmodule Onion.UserSession do
     {:noreply, Map.merge(state, info)}
   end
 
+  def set_current_quiz_id(user_id, current_quiz_id) do
+    set_state(user_id, %{current_quiz_id: current_quiz_id})
+  end
+
   def get_info_for_msg(user_id), do: call(user_id, :get_info_for_msg)
 
   defp get_info_for_msg_impl(_reply, state) do
     {:reply, {state.avatar_url, state.display_name, state.username}, state}
+  end
+
+  def get_current_quiz_id(user_id) do
+    get(user_id, :current_quiz_id)
   end
 
   def get(user_id, key), do: call(user_id, {:get, key})
@@ -106,12 +115,20 @@ defmodule Onion.UserSession do
     {:reply, :ok, %{state | pid: pid}}
   end
 
+  def reconnect(user_pid), do: GenServer.cast(user_pid, {:reconnect})
+
+  defp reconnect_impl(state), do: {:noreply, state}
+
   ##############################################################################
   ## MESSAGING API.
   ## TODO: change the first one to a call
 
   defp handle_disconnect(pid, state = %{pid: pid}) do
     Beef.Users.set_offline(state.user_id)
+
+    if state.current_quiz_id do
+      Okra.Quiz.leave_quiz(state.user_id, state.current_quiz_id)
+    end
 
     {:stop, :normal, state}
   end
@@ -125,6 +142,9 @@ defmodule Onion.UserSession do
 
   def handle_cast({:send_ws, platform, msg}, state),
     do: send_ws_impl(platform, msg, state)
+
+  def handle_cast({:reconnect}, state),
+    do: reconnect_impl(state)
 
   def handle_cast({:new_tokens, tokens}, state), do: new_tokens_impl(tokens, state)
   def handle_cast({:set_state, info}, state), do: set_state_impl(info, state)

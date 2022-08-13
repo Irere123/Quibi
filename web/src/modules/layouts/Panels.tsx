@@ -13,6 +13,7 @@ import { Button } from "../../ui/Button";
 import { modalConfirm } from "../../shared-components/ConfirmModal";
 import { useTokenStore } from "../auth/useTokenStore";
 import { useConn } from "../../hooks/useConn";
+import { useCurrentQuizIdStore } from "../../stores/useCurentQuizIdStore";
 
 export const LeftPanel: React.FC = () => {
   const { t } = useTypeSafeTranslation();
@@ -180,6 +181,7 @@ export const SettingsLeftPanel: React.FC = () => {
           onClick={() =>
             modalConfirm("Are you sure you want to logout", () => {
               conn.close();
+              useCurrentQuizIdStore.getState().setCurrentQuizId(null);
               useTokenStore
                 .getState()
                 .setTokens({ accessToken: "", refreshToken: "" });

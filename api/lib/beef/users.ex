@@ -18,7 +18,9 @@ defmodule Beef.Users do
   defdelegate get_by_id_with_follow_info(me_id, them_id), to: Beef.Access.Users
   defdelegate get(user_id), to: Beef.Access.Users
   defdelegate search(query, offset), to: Beef.Access.Users
+  defdelegate get_current_quiz_id(user_id), to: Beef.Access.Users
   defdelegate search_username(query), to: Beef.Access.Users
+  defdelegate get_users_in_current_quiz(user_id), to: Beef.Access.Users
 
   # MUTATIONS
   defdelegate edit_profile(user_id, data), to: Beef.Mutations.Users
@@ -26,8 +28,11 @@ defmodule Beef.Users do
   defdelegate bulk_insert(users), to: Beef.Mutations.Users
   defdelegate set_offline(user_id), to: Beef.Mutations.Users
   defdelegate set_online(user_id), to: Beef.Mutations.Users
+  defdelegate set_current_quiz(user_id, quiz_id), to: Beef.Mutations.Users
+  defdelegate set_user_left_current_quiz(user_id), to: Beef.Mutations.Users
 
   # Authentications stuff
+  defdelegate set_current_quiz(user_id, quiz_id, returning), to: Beef.Mutations.Users
   defdelegate google_find_or_create(user), to: Beef.Mutations.Users
   defdelegate twitter_find_or_create(user), to: Beef.Mutations.Users
   defdelegate discord_find_or_create(user, discord_access_token), to: Beef.Mutations.Users

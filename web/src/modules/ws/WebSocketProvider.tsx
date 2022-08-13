@@ -3,6 +3,7 @@ import { useRouter } from "next/router";
 import { raw, User } from ".";
 import { useTokenStore } from "../auth/useTokenStore";
 import { apiUrl } from "./raw";
+import { useCurrentQuizIdStore } from "../../stores/useCurentQuizIdStore";
 
 interface WebSocketProvoderProps {
   shouldConnect: boolean;
@@ -38,9 +39,11 @@ export const WebSocketProvoder: React.FC<WebSocketProvoderProps> = ({
             return {
               accessToken,
               refreshToken,
+              currentQuizId: useCurrentQuizIdStore.getState().currentQuizId,
             };
           },
           onConnectionTaken: () => {
+            useCurrentQuizIdStore.getState().setCurrentQuizId(null);
             replace("/connection-taken");
           },
           onClearTokens: () => {
@@ -54,6 +57,13 @@ export const WebSocketProvoder: React.FC<WebSocketProvoderProps> = ({
         })
         .then((x) => {
           setConn(x);
+          if (x.user.currentQuizId) {
+            useCurrentQuizIdStore
+              .getState()
+              // if an id exists already, that means they are trying to join another quiz
+              // just let them join the other quiz rather than overwriting it
+              .setCurrentQuizId((id) => id || x.user.currentQuizId!);
+          }
         })
         .catch((err) => {
           if (err.code === 4001) {

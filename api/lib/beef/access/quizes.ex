@@ -2,14 +2,16 @@ defmodule Beef.Access.Quizes do
   import Ecto.Query
   @fetch_limit 16
 
+  alias Beef.Queries.Quizes, as: Query
   alias Beef.Repo
   alias Beef.Schemas.Quiz
   alias Beef.Schemas.UserBlock
   alias Beef.UserBlocks
 
   def can_join_quiz(quiz_id, user_id) do
+    IO.inspect(quiz_id)
     quiz = get_quiz_by_id(quiz_id)
-    max_quiz_size = Application.fetch_env!(:kousa, :max_quiz_size)
+    # max_quiz_size = Application.fetch_env!(:okra, :max_quiz_size)
 
     case quiz do
       nil ->
@@ -17,8 +19,8 @@ defmodule Beef.Access.Quizes do
 
       _ ->
         cond do
-          quiz.numPeopleInside >= max_quiz_size ->
-            {:error, "room is full"}
+          # quiz.numPeopleInside >= max_quiz_size ->
+          #   {:error, "quiz is full"}
 
           true ->
             if UserBlocks.blocked?(quiz.creatorId, user_id) do
@@ -54,5 +56,18 @@ defmodule Beef.Access.Quizes do
 
     {Enum.slice(items, 0, -1 + @fetch_limit),
      if(length(items) == @fetch_limit, do: -1 + offset + @fetch_limit, else: nil)}
+  end
+
+  def search_name(start_of_name) do
+    search_str = start_of_name <> "%"
+
+    Query.start()
+    |> where([r], ilike(r.name, ^search_str) and r.isPrivate == false)
+    |> limit([], 15)
+    |> Repo.all()
+  end
+
+  def all_quizes() do
+    Repo.all(Quiz)
   end
 end

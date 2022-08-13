@@ -1,11 +1,12 @@
 import React from "react";
-import { FullscreenIcon } from "../icons";
+import { FullscreenIcon, PersonAdd } from "../icons";
 import { BoxedIcon } from "./BoxedIcon";
 import { Button } from "./Button";
 import { DurationTicker } from "./DurationTicker";
 
 export interface MinimizedQuizCardProps {
   onFullscreenClick?: () => void;
+  onInviteClick?: () => void;
   leaveLoading?: boolean;
   quiz: {
     name: string;
@@ -22,6 +23,7 @@ export const MinimizedQuizCard: React.FC<MinimizedQuizCardProps> = ({
   quiz,
   leaveLoading,
   onFullscreenClick,
+  onInviteClick,
 }) => {
   return (
     <div
@@ -43,6 +45,9 @@ export const MinimizedQuizCard: React.FC<MinimizedQuizCardProps> = ({
         <div className="grid grid-cols-3 gap-2">
           <BoxedIcon transition onClick={onFullscreenClick}>
             <FullscreenIcon />
+          </BoxedIcon>
+          <BoxedIcon transition onClick={onInviteClick}>
+            <PersonAdd />
           </BoxedIcon>
         </div>
         <Button

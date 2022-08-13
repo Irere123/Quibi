@@ -39,6 +39,7 @@ export type Connection = {
     handler: ListenerHandler<Data>
   ) => () => void;
   user: User;
+  initialCurrentQuizId?: string;
   send: (opcode: Opcode, data: unknown, fetchId?: FetchID) => void;
   fetch: (
     opcode: Opcode,

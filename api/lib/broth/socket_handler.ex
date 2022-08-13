@@ -118,7 +118,8 @@ defmodule Broth.SocketHandler do
                   user_id: user_id,
                   username: user.username,
                   avatar_url: user.avatarUrl,
-                  display_name: user.displayName
+                  display_name: user.displayName,
+                  current_quiz_id: user.currentQuizId
                 )
 
                 Onion.UserSession.set_pid(user_id, self())
@@ -127,10 +128,31 @@ defmodule Broth.SocketHandler do
                   Onion.UserSession.new_tokens(user_id, tokens)
                 end
 
+                quizIdFromFrontend = Map.get(json["d"], "currentQuizId", nil)
+
+                currentQuiz =
+                  cond do
+                    not is_nil(user.currentQuizId) ->
+                      quiz = Beef.Quizes.get_quiz_by_id(user.currentQuizId)
+
+                      Onion.QuizSession.start_supervised(quiz_id: user.currentQuizId)
+
+                      Onion.QuizSession.join_quiz(quiz.id, user.id)
+
+                    not is_nil(quizIdFromFrontend) ->
+                      case Okra.Quiz.join_quiz(user.id, quizIdFromFrontend) do
+                        %{quiz: quiz} -> quiz
+                        _ -> nil
+                      end
+
+                    true ->
+                      nil
+                  end
+
                 {:reply,
                  construct_socket_msg(state.encoding, state.compression, %{
                    op: "auth-good",
-                   d: %{user: user}
+                   d: %{user: user, currentQuiz: currentQuiz}
                  }), %{state | user_id: user_id, awaiting_init: false}}
               else
                 {:reply, {:close, 4001, "invalid_authentication"}, state}
@@ -226,6 +248,33 @@ defmodule Broth.SocketHandler do
      }), state}
   end
 
+  def handler("leave_quiz", _data, state) do
+    case Okra.Quiz.leave_quiz(state.user_id) do
+      {:ok, d} ->
+        {:reply, prepare_socket_msg(%{op: "you_left_quiz", d: d}, state), state}
+
+      _ ->
+        {:ok, state}
+    end
+  end
+
+  def f_handler("create_quiz", data, state) do
+    case Okra.Quiz.create_quiz(
+           state.user_id,
+           data["name"],
+           data["description"] || "",
+           data["value"] == "private"
+         ) do
+      {:ok, d} ->
+        d
+
+      {:error, d} ->
+        %{
+          error: d
+        }
+    end
+  end
+
   def f_handler("get_top_public_quizes", data, state) do
     {quizes, next_cursor} =
       Beef.Quizes.get_top_public_quizes(
@@ -277,6 +326,31 @@ defmodule Broth.SocketHandler do
   def f_handler("block", %{"userId" => userId, "value" => value}, state) do
     Okra.UserBlock.block(state.user_id, userId, value)
     %{}
+  end
+
+  def f_handler("join_quiz_and_get_info", %{"quizId" => quiz_id_to_join}, state) do
+    case Okra.Quiz.join_quiz(state.user_id, quiz_id_to_join) do
+      %{error: err} ->
+        %{error: err}
+
+      %{quiz: quiz} ->
+        {quiz_id, users} = Beef.Users.get_users_in_current_quiz(state.user_id)
+
+        case Onion.QuizSession.lookup(quiz_id) do
+          [] ->
+            %{error: "Quiz no longer exists."}
+
+          _ ->
+            %{
+              quiz: quiz,
+              users: users,
+              quizId: quiz_id_to_join
+            }
+        end
+
+      _ ->
+        %{error: "you should never see this, email this to @irere_emmanauel"}
+    end
   end
 
   defp prepare_socket_msg(data, %{compression: compression, encoding: encoding}) do

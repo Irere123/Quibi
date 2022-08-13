@@ -1,10 +1,17 @@
 import React from "react";
 import avatar from "../../img/avatar.jpg";
+import { useCurrentQuizIdStore } from "../../stores/useCurentQuizIdStore";
 import { FollowSuggCard } from "../../ui/FollowSuggCard";
+import { MinimizedQuizCardController } from "./MinimizedQuizCardController";
 
 export const RightPanel: React.FC = () => {
+  const { currentQuizId } = useCurrentQuizIdStore();
+
   return (
-    <div className="mt-5">
+    <div className="flex flex-col gap-4 justify-between items-end mb-5 max-w-md overflow-y-auto">
+      {currentQuizId ? (
+        <MinimizedQuizCardController quizId={currentQuizId} />
+      ) : null}
       <FollowSuggCard
         users={[
           {
