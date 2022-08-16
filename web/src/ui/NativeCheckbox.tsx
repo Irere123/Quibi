@@ -40,7 +40,7 @@ export const NativeCheckbox: React.FC<NativeCheckboxProps> = ({
   disabled = false,
 }) => {
   return (
-    <button
+    <div
       className={`w-full flex px-3 py-2 ${
         !disabled ? "bg-primary-900" : "bg-primary-800"
       } rounded-md justify-between group`}
@@ -59,7 +59,7 @@ export const NativeCheckbox: React.FC<NativeCheckboxProps> = ({
       <div className="flex items-center justify-center">
         <Switch checked={checked} />
       </div>
-    </button>
+    </div>
   );
 };
 
