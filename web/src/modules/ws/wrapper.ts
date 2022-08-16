@@ -70,5 +70,11 @@ export const wrap = (connection: Connection) => ({
       connection.fetch("edit_quiz", data) as any,
     leaveQuiz: (): Promise<any> =>
       connection.fetch("leave_quiz", {}, "you_left_quiz"),
+
+    createRoom: (data: {
+      name: string;
+      isPrivate: boolean;
+    }): Promise<{ error: string } | { room: any }> =>
+      connection.fetch("create_room", data) as any,
   },
 });
