@@ -3,6 +3,15 @@ export type WsParam = {
   d: any;
 };
 
+export type JoinQuizAndGetInfoResponse = {
+  quiz: Quiz;
+  users: QuizUser[];
+  quizId: string;
+  activeSpeakerMap: Record<string, boolean>;
+  autoSpeaker: boolean;
+  chatMode: boolean;
+};
+
 export type UUID = string;
 
 export type UserPreview = {
@@ -43,3 +52,13 @@ export type Quiz = {
   peoplePreviewList: Array<UserPreview>;
   inserted_at: string;
 };
+
+export type QuizPermissions = {
+  askedToSpeak: boolean;
+  isSpeaker: boolean;
+  isMod: boolean;
+};
+
+export type QuizUser = {
+  quizPermissions?: QuizPermissions | null;
+} & User;

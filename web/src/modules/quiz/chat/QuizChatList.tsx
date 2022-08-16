@@ -14,19 +14,14 @@ interface ChatListProps {
   userMap: Record<string, User>;
 }
 
-interface BadgeIconData {
-  emoji: string;
-  title: string;
-}
-
 export const QuizChatList: React.FC<ChatListProps> = ({ quiz, userMap }) => {
   const { setData } = useContext(UserPreviewModalContext);
   const { messages, toggleFrozen } = useQuizChatStore();
+  const { isMod: iAmMod, isCreator: iAmCreator } = useCurrentQuizInfo();
+
   const me = useConn().user;
   const bottomRef = useRef<null | HTMLDivElement>(null);
   const chatListRef = useRef<null | HTMLDivElement>(null);
-
-  const iAmCreator = quiz.creatorId === me?.id;
 
   const {
     isQuizChatScrolledToTop,
@@ -42,7 +37,6 @@ export const QuizChatList: React.FC<ChatListProps> = ({ quiz, userMap }) => {
     }
   });
 
-  console.log(messages);
   const rowVirtualizer = useVirtual({
     overscan: 10,
     size: messages.length,
@@ -115,27 +109,15 @@ export const QuizChatList: React.FC<ChatListProps> = ({ quiz, userMap }) => {
                     >
                       {badgeIcon}
                       <button
-                        onClick={(e) => {
-                          // Auto mention on shift click
-                          if (e.shiftKey && messages[index].userId !== me.id) {
-                            setMessage(
-                              message +
-                                (message.endsWith(" ") ? "" : " ") +
-                                "@" +
-                                messages[index].username +
-                                " "
-                            );
-                            document.getElementById("quiz-chat-input")?.focus();
-
-                            return;
-                          }
-
+                        onClick={() => {
                           setData({
                             userId: messages[index].userId,
                             message:
-                              me?.id === messages[index].userId ||
-                              iAmCreator ||
-                              quiz.creatorId !== messages[index].userId
+                              (me?.id === messages[index].userId ||
+                                iAmCreator ||
+                                (iAmMod &&
+                                  quiz.creatorId !== messages[index].userId)) &&
+                              !messages[index].deleted
                                 ? messages[index]
                                 : undefined,
                           });

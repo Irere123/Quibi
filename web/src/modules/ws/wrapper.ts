@@ -1,5 +1,5 @@
 import { Connection } from "./raw";
-import { Quiz } from "./types";
+import { Quiz, User } from "./types";
 
 export const wrap = (connection: Connection) => ({
   connection,
@@ -17,6 +17,15 @@ export const wrap = (connection: Connection) => ({
       connection.fetch("get_invite_list", { cursor }),
     joinQuizAndGetInfo: (quizId: string): Promise<any> =>
       connection.fetch("join_quiz_and_get_info", { quizId }),
+    getBlockedFromQuizUsers: (
+      cursor = 0
+    ): Promise<{
+      users: User[];
+      nextCursor: number | null;
+    }> =>
+      connection.fetch("get_blocked_from_quiz_users", {
+        offset: cursor,
+      }) as any,
   },
   mutation: {
     follow: (userId: string, value: boolean): Promise<any> =>
@@ -35,10 +44,13 @@ export const wrap = (connection: Connection) => ({
       connection.send("delete_quiz_chat_message", { userId, messageId }) as any,
     blockFromQuiz: (userId: string): Promise<void> =>
       connection.send("block_from_quiz", { userId }) as any,
+    unbanFromQuiz: (userId: string): Promise<any> =>
+      connection.fetch("unban_from_quiz", { userId }),
     unbanFromQuizChat: (userId: string): Promise<void> =>
       connection.send("unban_from_quiz_chat", { userId }) as any,
     banFromQuizChat: (userId: string): Promise<void> =>
       connection.send("ban_from_quiz_chat", { userId }) as any,
+
     editProfile: (data: {
       displayName: string;
       username: string;

@@ -8,6 +8,7 @@ import { Modal } from "../../ui/Modal";
 import { NativeCheckbox } from "../../ui/NativeCheckbox";
 import { NativeRadio } from "../../ui/NativeRadio";
 import { Spinner } from "../../ui/Spinner";
+import { BlockedFromQuizUsers } from "./BlockedFromQuizUsers";
 
 interface Props {
   onRequestClose: () => void;
@@ -71,6 +72,7 @@ export const QuizSettingsModal: React.FC<Props> = ({
               conn.mutation.setQuizChatMode(chatMode);
             }}
           />
+          <BlockedFromQuizUsers />
         </div>
       )}
     </Modal>

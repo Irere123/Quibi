@@ -19,13 +19,38 @@ export const useCurrentQuizInfo = () => {
 
   if (!data || !conn || !currentQuizId || "error" in data) {
     return {
+      isMod: false,
       isCreator: false,
+      isSpeaker: false,
+      canSpeak: false,
     };
   }
 
+  let isMod = false;
+  let isSpeaker = false;
+
+  const { users } = data;
+
   const me = conn.user;
+
+  for (const u of users) {
+    if (u.id === me.id) {
+      if (u.quizPermissions?.isSpeaker) {
+        isSpeaker = true;
+      }
+      if (u.quizPermissions?.isMod) {
+        isMod = true;
+      }
+      break;
+    }
+  }
 
   const isCreator = me.id === data.quiz.creatorId;
 
-  return { isCreator: isCreator, me };
+  return {
+    isCreator,
+    isMod,
+    isSpeaker,
+    canSpeak: isCreator || isSpeaker,
+  };
 };

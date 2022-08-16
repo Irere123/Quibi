@@ -15,6 +15,7 @@ export const ErrorToastController: React.FC<
       className={`flex w-full fixed bottom-0 justify-center`}
     >
       <MainInnerGrid>
+        <div />
         <div className={`flex flex-col w-full`}>
           {toasts.map((t) => (
             <div key={t.id} className={`flex mb-3`}>
@@ -26,6 +27,7 @@ export const ErrorToastController: React.FC<
             </div>
           ))}
         </div>
+        <div />
       </MainInnerGrid>
     </div>
   );

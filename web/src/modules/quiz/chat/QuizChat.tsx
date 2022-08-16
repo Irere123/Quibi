@@ -1,5 +1,5 @@
 import React, { useMemo } from "react";
-import { Quiz, User } from "../../ws";
+import { Quiz, QuizUser } from "../../ws";
 import { QuizChatHeader } from "./QuizChatHeader";
 import { QuizChatInput } from "./QuizChatInput";
 import { QuizChatList } from "./QuizChatList";
@@ -7,12 +7,12 @@ import { QuizChatMentions } from "./QuizChatMentions";
 
 interface ChatProps {
   quiz: Quiz;
-  users: User[];
+  users: QuizUser[];
 }
 
 export const QuizChat: React.FC<ChatProps> = ({ quiz, users }) => {
   const userMap = useMemo(() => {
-    const map: Record<string, User> = {};
+    const map: Record<string, QuizUser> = {};
 
     users.forEach((u) => {
       map[u.id] = u;

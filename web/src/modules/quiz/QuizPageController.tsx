@@ -58,7 +58,7 @@ export const QuizPageController: React.FC<QuizPageControllerProps> = () => {
         )
       }
     >
-      <UserPreviewModal />
+      <UserPreviewModal {...data} />
       <HeaderController
         description={data.quiz.description}
         title={data.quiz.name}

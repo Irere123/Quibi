@@ -39,8 +39,6 @@ function App({ Component, pageProps }: any) {
     return null;
   }
 
-  console.log(useCurrentQuizIdStore.getState().currentQuizId);
-
   return (
     <WebSocketProvoder
       shouldConnect={!!(Component as PageComponent<unknown>).ws}
