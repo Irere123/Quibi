@@ -2,10 +2,10 @@ import React from "react";
 
 import { HeaderController } from "../../display/HeaderController";
 import { ChatLayout } from "../../layouts/ChatLayout";
-import { RoomChat } from "./RoomChat";
+import { RoomChat } from "./chat/RoomChat";
 import { LeftPanel } from "../LeftPanel";
 import { MiddlePanel } from "../../layouts/GridPanels";
-import { RoomChatRightPanel } from "./RoomChatRightPanel";
+import { RoomChatRightPanel } from "./chat/RoomChatRightPanel";
 import { WaitForWsAndAuth } from "../../auth/WaitForWsAndAuth";
 import { PageComponent } from "../../../types/PageComponent";
 

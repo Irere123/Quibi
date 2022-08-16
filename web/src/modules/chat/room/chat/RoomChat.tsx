@@ -1,6 +1,6 @@
 import React from "react";
-import { ChatInput } from "../ChatInput";
-import { RoomMessages } from "./RoomMessages";
+import { RoomChatInput } from "./RoomChatInput";
+import { RoomMessages } from "../RoomMessages";
 
 import { RoomChatHeader } from "./RoomChatHeader";
 
@@ -10,7 +10,7 @@ export const RoomChat: React.FC = () => {
       <div className="flex flex-1 w-full flex-col">
         <RoomChatHeader />
         <RoomMessages />
-        <ChatInput />
+        <RoomChatInput />
       </div>
     </div>
   );

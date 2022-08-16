@@ -1,10 +1,10 @@
 import React, { useState } from "react";
-import { MultipleUsers } from "../../../ui/Avatars";
-import avatar from "../../../img/avatar.jpg";
-import avatar2 from "../../../img/avatar2.jpg";
-import avatar3 from "../../../img/avatar3.jpg";
-import { MembersModal } from "./MembersModals";
-import { HashIcon } from "../../../icons";
+import { MultipleUsers } from "../../../../ui/Avatars";
+import avatar from "../../../../img/avatar.jpg";
+import avatar2 from "../../../../img/avatar2.jpg";
+import avatar3 from "../../../../img/avatar3.jpg";
+import { MembersModal } from "../MembersModals";
+import { HashIcon } from "../../../../icons";
 
 export const RoomChatHeader: React.FC = () => {
   const [openMembersModal, setOpenMembersModal] = useState(false);

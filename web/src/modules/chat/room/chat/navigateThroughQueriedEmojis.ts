@@ -1,5 +1,5 @@
-import { useEmojiPickerStore } from "../../stores/useEmojiPickerStore";
-import { useChatStore } from "../../stores/useChatStore";
+import { useEmojiPickerStore } from "../../../../stores/useEmojiPickerStore";
+import { useChatStore } from "../../../../stores/useChatStore";
 
 export const navigateThroughQueriedEmojis = (e: any) => {
   const { message, setMessage } = useChatStore.getState();

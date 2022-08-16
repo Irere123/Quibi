@@ -1,15 +1,15 @@
 import React, { useEffect, useRef, useState } from "react";
-import { useTypeSafeTranslation } from "../../hooks/useTypeSafeTranslation";
-import { Smiley } from "../../icons";
-import { EmojiPicker } from "../../ui/EmojiPicker";
-import { Input } from "../../ui/Input";
+import { useTypeSafeTranslation } from "../../../../hooks/useTypeSafeTranslation";
+import { Smiley } from "../../../../icons";
+import { EmojiPicker } from "../../../../ui/EmojiPicker";
+import { Input } from "../../../../ui/Input";
 import { customEmojis } from "./EmoteData";
 import { navigateThroughQueriedEmojis } from "./navigateThroughQueriedEmojis";
-import { useChatStore } from "../../stores/useChatStore";
-import { useEmojiPickerStore } from "../../stores/useEmojiPickerStore";
-import { showErrorToast } from "../../lib/showErrorToast";
+import { useChatStore } from "../../../../stores/useChatStore";
+import { useEmojiPickerStore } from "../../../../stores/useEmojiPickerStore";
+import { showErrorToast } from "../../../../lib/showErrorToast";
 
-export const ChatInput: React.FC = () => {
+export const RoomChatInput: React.FC = () => {
   const { message, setMessage } = useChatStore();
   const { setOpen, open } = useEmojiPickerStore();
   const [lastMessageTimestamp, setLastMessageTimestamp] = useState<number>(0);

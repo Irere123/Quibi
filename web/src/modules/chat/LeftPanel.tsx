@@ -25,7 +25,7 @@ export const LeftPanel: React.FC = () => {
   const { push } = useRouter();
 
   return (
-    <div className="flex flex-col  items-center gap-3 cursor-pointer overflow-y-auto">
+    <div className="flex flex-col items-center gap-3 cursor-pointer">
       <div className="space-y-3">
         <BoxedIcon circle onClick={() => push("/explore-rooms")}>
           <CompassIcon />
@@ -35,25 +35,13 @@ export const LeftPanel: React.FC = () => {
           <PlusIcon />
         </BoxedIcon>
       </div>
-      {rooms.map((room: any) => {
-        if (room.isForum) {
-          return (
-            <Link href={`/room/f/${room.id}/${room.id}`} key={room.id}>
-              <a>
-                <RoomAvatar name={room.name} size="sm" />
-              </a>
-            </Link>
-          );
-        }
-
-        return (
-          <Link href={`/room/${room.id}/${room.id}`} key={room.id}>
-            <a>
-              <RoomAvatar name={room.name} size="sm" isOnline />
-            </a>
-          </Link>
-        );
-      })}
+      {rooms.map((room: any) => (
+        <Link href={`/room/${room.id}/${room.id}`} key={room.id}>
+          <a>
+            <RoomAvatar name={room.name} size="sm" isOnline />
+          </a>
+        </Link>
+      ))}
 
       {createRoomModal && (
         <CreateRoomModal
