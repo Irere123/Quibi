@@ -1,3 +1,3 @@
-import { RoomController } from "../modules/chat/room/RoomController";
+import { RoomPage } from "../modules/chat/room/RoomPage";
 
-export default RoomController;
+export default RoomPage;

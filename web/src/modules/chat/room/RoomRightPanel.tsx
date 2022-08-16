@@ -1,18 +1,13 @@
 import React from "react";
-import {
-  AccountTree,
-  MoreVert,
-  PersonAdd,
-  SearchIcon,
-} from "../../../../icons";
-import avatar from "../../../../img/avatar3.jpg";
-import { kFormatter } from "../../../../lib/kFormatter";
-import { truncate } from "../../../../lib/truncate";
-import { BoxedIcon } from "../../../../ui/BoxedIcon";
-import { Tag } from "../../../../ui/Tag";
-import { SingleUser } from "../../../../ui/Avatars";
+import { AccountTree, MoreVert, PersonAdd, SearchIcon } from "../../../icons";
+import avatar from "../../../img/avatar3.jpg";
+import { kFormatter } from "../../../lib/kFormatter";
+import { truncate } from "../../../lib/truncate";
+import { BoxedIcon } from "../../../ui/BoxedIcon";
+import { Tag } from "../../../ui/Tag";
+import { SingleUser } from "../../../ui/Avatars";
 
-export const RoomChatRightPanel: React.FC = () => {
+export const RoomRightPanel: React.FC = () => {
   return (
     <div className="flex flex-col gap-4 py-3 bg-primary-800 rounded">
       <div className="flex flex-1 pb-1 items-center border-b-2 border-primary-700 px-3">

@@ -1,7 +1,7 @@
 import React from "react";
-import avatar from "../../../img/avatar2.jpg";
-import avatar2 from "../../../img/avatar.jpg";
-import { MessageElement } from "../../../ui/MessageElement";
+import avatar from "../../../../img/avatar2.jpg";
+import avatar2 from "../../../../img/avatar.jpg";
+import { MessageElement } from "../../../../ui/MessageElement";
 
 export const RoomMessages: React.FC = () => {
   return (

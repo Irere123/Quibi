@@ -1,6 +1,6 @@
 import React from "react";
 import { RoomChatInput } from "./RoomChatInput";
-import { RoomMessages } from "../RoomMessages";
+import { RoomMessages } from "./RoomMessages";
 
 import { RoomChatHeader } from "./RoomChatHeader";
 

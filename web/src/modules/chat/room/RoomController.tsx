@@ -1,27 +1,13 @@
 import React from "react";
-
-import { HeaderController } from "../../display/HeaderController";
-import { ChatLayout } from "../../layouts/ChatLayout";
-import { RoomChat } from "./chat/RoomChat";
-import { LeftPanel } from "../LeftPanel";
 import { MiddlePanel } from "../../layouts/GridPanels";
-import { RoomChatRightPanel } from "./chat/RoomChatRightPanel";
-import { WaitForWsAndAuth } from "../../auth/WaitForWsAndAuth";
-import { PageComponent } from "../../../types/PageComponent";
+import { RoomChat } from "./chat/RoomChat";
 
 interface RoomControllerProps {}
 
-export const RoomController: PageComponent<RoomControllerProps> = () => {
+export const RoomController: React.FC<RoomControllerProps> = () => {
   return (
-    <WaitForWsAndAuth>
-      <ChatLayout leftPanel={<LeftPanel />} rightPanel={<RoomChatRightPanel />}>
-        <HeaderController title="Group name" embed={{}} />
-        <MiddlePanel>
-          <RoomChat />
-        </MiddlePanel>
-      </ChatLayout>
-    </WaitForWsAndAuth>
+    <MiddlePanel>
+      <RoomChat />
+    </MiddlePanel>
   );
 };
-
-RoomController.ws = true;

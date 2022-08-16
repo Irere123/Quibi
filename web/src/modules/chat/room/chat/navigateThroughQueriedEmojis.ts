@@ -1,8 +1,8 @@
 import { useEmojiPickerStore } from "../../../../stores/useEmojiPickerStore";
-import { useChatStore } from "../../../../stores/useChatStore";
+import { useRoomChatStore } from "./useRoomChatStore";
 
 export const navigateThroughQueriedEmojis = (e: any) => {
-  const { message, setMessage } = useChatStore.getState();
+  const { message, setMessage } = useRoomChatStore.getState();
   const {
     queryMatches,
     keyboardHoveredEmoji,
