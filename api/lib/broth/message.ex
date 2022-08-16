@@ -1,5 +1,6 @@
 defmodule Broth.Message do
   alias Broth.SocketHandler
+  alias Beef.Follows
 
   #######################################################################
   #### HANDLER FUNCTIONS
@@ -112,13 +113,22 @@ defmodule Broth.Message do
   end
 
   def f_handler("search", %{"query" => query}, _state) do
+    quizes = Beef.Quizes.search_name(query)
     users = Beef.Users.search_username(query)
-    %{users: users}
+
+    items = Enum.concat(quizes, users)
+    %{items: items, users: users, quizes: quizes}
   end
 
   def f_handler("follow", %{"userId" => userId, "value" => value}, state) do
     Okra.Follow.follow(state.user_id, userId, value)
     %{}
+  end
+
+  def f_handler("get_invite_list", %{"cursor" => cursor}, state) do
+    {users, next_cursor} = Follows.fetch_invite_list(state.user_id, cursor)
+
+    %{users: users, nextCursor: next_cursor}
   end
 
   def f_handler("get_my_following", %{"limit" => limit}, state) do

@@ -12,6 +12,8 @@ export const wrap = (connection: Connection) => ({
       connection.fetch("get_top_public_quizes", { cursor }),
     getMyFollowing: (limit = 7): Promise<any> =>
       connection.fetch("get_my_following", { limit }),
+    getInviteList: (cursor = 0): Promise<any> =>
+      connection.fetch("get_invite_list", { cursor }),
     joinQuizAndGetInfo: (quizId: string): Promise<any> =>
       connection.fetch("join_quiz_and_get_info", { quizId }),
   },
@@ -26,7 +28,8 @@ export const wrap = (connection: Connection) => ({
 
     setQuizChatMode: (value: boolean) =>
       connection.send(`set_quiz_chat_mode`, { value }),
-
+    inviteToQuiz: (userId: string) =>
+      connection.send("invite_to_quiz", { userId }),
     deleteQuizChatMessage: (userId: string, messageId: string): Promise<void> =>
       connection.send("delete_quiz_chat_message", { userId, messageId }) as any,
     blockFromQuiz: (userId: string): Promise<void> =>

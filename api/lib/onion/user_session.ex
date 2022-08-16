@@ -135,9 +135,9 @@ defmodule Onion.UserSession do
   defp handle_disconnect(pid, state = %{pid: pid}) do
     Beef.Users.set_offline(state.user_id)
 
-    if state.current_quiz_id do
-      Okra.Quiz.leave_quiz(state.user_id, state.current_quiz_id)
-    end
+    # if state.current_quiz_id do
+    #   Okra.Quiz.leave_quiz(state.user_id, state.current_quiz_id)
+    # end
 
     {:stop, :normal, state}
   end

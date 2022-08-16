@@ -11,6 +11,7 @@ import { useTypeSafeQuery } from "../../hooks/useTypeSafeQuery";
 import { InfoText } from "../../ui/InfoText";
 import { UserSearchResult } from "../../ui/search/SearchResult";
 import { useConn } from "../../hooks/useConn";
+import { QuizSearchResult } from "../../ui/search/SearchResult/QuizSearchResult";
 
 export const SearchController: React.FC = () => {
   const { user } = useConn();
@@ -40,7 +41,7 @@ export const SearchController: React.FC = () => {
   );
 
   const results = data
-    ? [...data.users.filter((u: any) => u.id !== user.id)]
+    ? [...data.users.filter((u: any) => u.id !== user.id), ...data.quizes]
     : [];
 
   return (
@@ -52,8 +53,10 @@ export const SearchController: React.FC = () => {
 
         if ("username" in selection) {
           push(`/u/[username]`, `/u/${selection.username}`);
+
           return;
         }
+        push(`/quiz/[id]`, `/quiz/${selection.id}`);
       }}
       onInputValueChange={(v) => {
         if (visible) {
@@ -96,14 +99,15 @@ export const SearchController: React.FC = () => {
                 className="w-full px-2 mb-2 mt-7  rounded-b-8 overflow-y-auto"
                 {...getMenuProps({ style: { top: 0 } })}
               >
-                {data?.users.length === 0 ? (
+                {data?.quizes.length === 0 && data?.users.length === 0 ? (
                   <InfoText className="mt-7">no results found</InfoText>
                 ) : null}
                 {results.map((item, index) =>
                   "username" in item ? (
                     // eslint-disable-next-line react/jsx-key
                     <li
-                      className="mt-7"
+                      data-testid={`search:user:${item.username}`}
+                      className={"mt-7"}
                       {...getItemProps({
                         key: item.id,
                         index,
@@ -124,7 +128,29 @@ export const SearchController: React.FC = () => {
                         }
                       />
                     </li>
-                  ) : null
+                  ) : (
+                    <li
+                      className="mt-7"
+                      {...getItemProps({
+                        key: item.id,
+                        index,
+                        item,
+                      })}
+                    >
+                      <QuizSearchResult
+                        quiz={{
+                          displayName: item.name,
+                          hosts: item.peoplePreviewList,
+                          userCount: item.numPeopleInside,
+                        }}
+                        className={
+                          highlightedIndex === index
+                            ? "bg-primary-700"
+                            : "bg-primary-800"
+                        }
+                      />
+                    </li>
+                  )
                 )}
               </ul>
             </SearchOverlay>
