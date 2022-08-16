@@ -23,7 +23,7 @@ export const CreateQuizModal: React.FC<CreateQuizModalProps> = ({
   isOpen,
   onRequestClose,
 }) => {
-  const { mutateAsync } = useTypeSafeMutation("createQuiz");
+  const conn = useWrappedConn();
   const { push } = useRouter();
   const { t } = useTypeSafeTranslation();
   const prefetch = useTypeSafePrefetch();
@@ -44,7 +44,8 @@ export const CreateQuizModal: React.FC<CreateQuizModalProps> = ({
           validateOnChange={false}
           onSubmit={async ({ name, privacy, description }) => {
             const d = { name, privacy, description };
-            const resp: any = await mutateAsync([d]);
+
+            const resp = await conn.mutation.createQuiz(d);
 
             if (typeof resp === "object" && "error" in resp) {
               showErrorToast(resp.error);
@@ -61,24 +62,19 @@ export const CreateQuizModal: React.FC<CreateQuizModalProps> = ({
           }}
         >
           {({ isSubmitting, values, setFieldValue }) => (
-            <Form>
-              <InputField
-                name="name"
-                placeholder="Quiz title"
-                autoComplete="off"
-                maxLength={70}
-                autoFocus
-              />
+            <Form
+              className={`grid grid-cols-3 gap-4 focus:outline-none w-full`}
+            >
+              <div className={`flex h-full w-full col-span-2`}>
+                <InputField
+                  name="name"
+                  placeholder="Quiz title"
+                  autoComplete="off"
+                  maxLength={70}
+                  autoFocus
+                />
+              </div>
 
-              <InputField
-                textarea
-                name="description"
-                placeholder="Quiz description"
-                autoComplete="off"
-                maxLength={200}
-                className={`mt-4`}
-                rows={4}
-              />
               <div className={`grid items-start grid-cols-1 h-6`}>
                 <NativeSelect
                   value={values.privacy}
@@ -94,6 +90,18 @@ export const CreateQuizModal: React.FC<CreateQuizModalProps> = ({
                   </option>
                 </NativeSelect>
               </div>
+              <div className={`flex col-span-3 bg-primary-700 rounded-lg`}>
+                <InputField
+                  textarea
+                  name="description"
+                  placeholder="Quiz description"
+                  autoComplete="off"
+                  maxLength={200}
+                  className={`mt-4`}
+                  rows={4}
+                />
+              </div>
+
               <div className={`flex pt-4 space-x-3 col-span-full items-center`}>
                 <Button
                   loading={isSubmitting}

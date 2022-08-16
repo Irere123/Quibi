@@ -58,7 +58,9 @@ defmodule Broth.Message do
            state.user_id,
            data["name"],
            data["description"] || "",
-           data["value"] == "private"
+           data["privacy"] == "private",
+           nil,
+           true
          ) do
       {:ok, d} ->
         d

@@ -1,4 +1,5 @@
 import { Connection } from "./raw";
+import { Quiz } from "./types";
 
 export const wrap = (connection: Connection) => ({
   connection,
@@ -47,12 +48,14 @@ export const wrap = (connection: Connection) => ({
       name: string;
       privacy: string;
       description: string;
-    }): Promise<void> => connection.fetch("create_quiz", data) as any,
+    }): Promise<{ error: string } | { quiz: Quiz }> =>
+      connection.fetch("create_quiz", data) as any,
     editQuiz: (data: {
       name?: string;
       privacy?: string;
       description?: string;
-    }): Promise<void> => connection.fetch("edit_quiz", data) as any,
+    }): Promise<{ error: string } | { quiz: Quiz }> =>
+      connection.fetch("edit_quiz", data) as any,
     leaveQuiz: (): Promise<any> =>
       connection.fetch("leave_quiz", {}, "you_left_quiz"),
   },
