@@ -62,7 +62,6 @@ defmodule Beef.ScheduledQuizes do
     end
   end
 
-
   def add_cursor(q, "") do
     q
   end
@@ -132,7 +131,6 @@ defmodule Beef.ScheduledQuizes do
     )
   end
 
-
   def get_mine(user_id) do
     from(sq in ScheduledQuiz,
       inner_join: u in assoc(sq, :creator),
@@ -145,5 +143,4 @@ defmodule Beef.ScheduledQuizes do
     )
     |> Repo.one()
   end
-
 end

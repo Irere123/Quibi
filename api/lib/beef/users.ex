@@ -7,8 +7,6 @@ defmodule Beef.Users do
   library:
 
   https://hex.pm/packages/boundary
-
-  NB (5 Mar 2021): these functions are probably going to get streamlined =D
   """
 
   # ACCESS Functions
@@ -22,6 +20,7 @@ defmodule Beef.Users do
   defdelegate get_current_quiz(user_id), to: Beef.Access.Users
   defdelegate search_username(query), to: Beef.Access.Users
   defdelegate get_users_in_current_quiz(user_id), to: Beef.Access.Users
+  defdelegate tuple_get_current_quiz_id(user_id), to: Beef.Access.Users
 
   # MUTATIONS
   defdelegate edit_profile(user_id, data), to: Beef.Mutations.Users

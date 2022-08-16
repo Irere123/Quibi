@@ -50,6 +50,15 @@ defmodule Broth.Message do
     {:ok, state}
   end
 
+  def handler(
+        "block_from_quiz",
+        %{"userId" => user_id_to_block_from_quiz},
+        state
+      ) do
+    Okra.Quiz.block_from_quiz(state.user_id, user_id_to_block_from_quiz)
+    {:ok, state}
+  end
+
   #######################################################################
   #### FETCH HANDLER FUNCTIONS
 
@@ -200,6 +209,21 @@ defmodule Broth.Message do
 
       _ ->
         true
+    end
+  end
+
+  def f_handler("unban_from_quiz", %{"userId" => user_id}, state) do
+    Okra.QuizBlock.unban(state.user_id, user_id)
+    %{}
+  end
+
+  def f_handler("get_blocked_from_quiz_users", %{"offset" => offset}, state) do
+    case Okra.QuizBlock.get_blocked_users(state.user_id, offset) do
+      {users, next_cursor} ->
+        %{users: users, nextCursor: next_cursor}
+
+      _ ->
+        %{users: [], nextCursor: nil}
     end
   end
 end

@@ -30,8 +30,6 @@ defmodule Beef.Follows do
     |> Beef.Repo.all()
   end
 
-
-
   def bulk_insert(follows) do
     Beef.Repo.insert_all(
       Follow,

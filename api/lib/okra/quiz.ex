@@ -2,6 +2,7 @@ defmodule Okra.Quiz do
   alias Beef.Quizes
   alias Beef.Users
   alias Beef.QuizPermissions
+  alias Beef.QuizBlocks
 
   def set_auto_speaker(user_id, value) do
     if quiz = Quizes.get_quiz_by_creator_id(user_id) do
@@ -12,6 +13,30 @@ defmodule Okra.Quiz do
   def set_chat_mode(user_id, value) do
     if quiz = Quizes.get_quiz_by_creator_id(user_id) do
       Onion.QuizSession.set_chat_mode(quiz.id, value)
+    end
+  end
+
+  defp internal_kick_from_quiz(user_id_to_kick, quiz_id) do
+    current_quiz_id = Beef.Users.get_current_quiz_id(user_id_to_kick)
+
+    if current_quiz_id == quiz_id do
+      Quizes.kick_from_quiz(user_id_to_kick, current_quiz_id)
+      Onion.QuizSession.kick_from_quiz(current_quiz_id, user_id_to_kick)
+    end
+  end
+
+  def block_from_quiz(user_id, user_id_to_block_from_quiz) do
+    with {status, quiz} when status in [:creator, :mod] <-
+           Quizes.get_quiz_status(user_id) do
+      if quiz.creatorId != user_id_to_block_from_quiz do
+        QuizBlocks.insert(%{
+          modId: user_id,
+          userId: user_id_to_block_from_quiz,
+          quizId: quiz.id
+        })
+
+        internal_kick_from_quiz(user_id_to_block_from_quiz, quiz.id)
+      end
     end
   end
 

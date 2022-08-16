@@ -1,7 +1,7 @@
 defmodule Beef.Schemas.ScheduledQuizCohosts do
   use Ecto.Schema
 
-  import  Ecto.Changeset
+  import Ecto.Changeset
   alias Beef.Schemas.User
   alias Beef.Schemas.ScheduledQuiz
   @timestamps_opts [type: :utc_datetime_usec]

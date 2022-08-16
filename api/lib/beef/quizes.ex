@@ -11,6 +11,7 @@ defmodule Beef.Quizes do
   defdelegate get_quiz_status(user_id), to: Beef.Access.Quizes
   defdelegate get_next_creator_for_quiz(quiz_id), to: Beef.Access.Quizes
   defdelegate can_join_quiz(quiz_id, user_id), to: Beef.Access.Quizes
+  defdelegate owner?(quiz_id, user_id), to: Beef.Access.Quizes
   defdelegate get_quiz_by_creator_id(creator_id), to: Beef.Access.Quizes
   defdelegate get_top_public_quizes(user_id, offset \\ 0), to: Beef.Access.Quizes
   defdelegate all_quizes(), to: Beef.Access.Quizes

@@ -7,16 +7,16 @@ defmodule Beef.Schemas.ScheduledQuiz do
   @timestamps_opts [type: :utc_datetime_usec]
 
   @derive {Jason.Encoder,
-  only: [
-    :id,
-    :name,
-    :numAttending,
-    :scheduledFor,
-    :description,
-    :quizId,
-    :creator,
-    :creatorId
-  ]}
+           only: [
+             :id,
+             :name,
+             :numAttending,
+             :scheduledFor,
+             :description,
+             :quizId,
+             :creator,
+             :creatorId
+           ]}
   @primary_key {:id, :binary_id, []}
   schema "scheduled_quizes" do
     field(:name, :string)
@@ -31,8 +31,8 @@ defmodule Beef.Schemas.ScheduledQuiz do
     timestamps()
   end
 
-  def validate_future_date(%{changes: changes} =  changeset, field) do
-    if date =  changes[field] do
+  def validate_future_date(%{changes: changes} = changeset, field) do
+    if date = changes[field] do
       if DateTime.compare(date, DateTime.utc_now()) == :gt do
         changeset
       else
@@ -42,12 +42,12 @@ defmodule Beef.Schemas.ScheduledQuiz do
     end
   end
 
-  def validate_not_too_far_into_future_date(%{changes: changes} =  changeset, field) do
+  def validate_not_too_far_into_future_date(%{changes: changes} = changeset, field) do
     if date = changes[field] do
-       # 1 extra day to avoid conflicts with frontend
-       max_date = DateTime.utc_now() |> Timex.shift(months: 6, days: 1)
+      # 1 extra day to avoid conflicts with frontend
+      max_date = DateTime.utc_now() |> Timex.shift(months: 6, days: 1)
 
-       if DateTime.compare(date, max_date) == :lt do
+      if DateTime.compare(date, max_date) == :lt do
         changeset
       else
         changeset

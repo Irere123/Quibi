@@ -9,6 +9,7 @@ defmodule Beef.Access.Quizes do
   alias Beef.Schemas.User
   alias Beef.Schemas.UserBlock
   alias Beef.UserBlocks
+  alias Beef.QuizBlocks
   alias Beef.Users
 
   def get_quiz_status(user_id) do
@@ -31,6 +32,14 @@ defmodule Beef.Access.Quizes do
     end
   end
 
+  def owner?(quiz_id, user_id) do
+    not is_nil(
+      Query.start()
+      |> Query.filter_by_quiz_id_and_creator_id(quiz_id, user_id)
+      |> Repo.one()
+    )
+  end
+
   def can_join_quiz(quiz_id, user_id) do
     quiz = get_quiz_by_id(quiz_id)
     max_quiz_size = Application.fetch_env!(:okra, :max_quiz_size)
@@ -43,6 +52,9 @@ defmodule Beef.Access.Quizes do
         cond do
           quiz.numPeopleInside >= max_quiz_size ->
             {:error, "quiz is full"}
+
+          QuizBlocks.blocked?(quiz_id, user_id) ->
+            {:error, "you are blocked from the quiz"}
 
           true ->
             if UserBlocks.blocked?(quiz.creatorId, user_id) do

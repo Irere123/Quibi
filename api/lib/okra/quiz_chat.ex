@@ -127,6 +127,7 @@ defmodule Okra.QuizChat do
 
         {:listener, quiz} when user_id == deleter_id ->
           quiz
+
         _ ->
           nil
       end
