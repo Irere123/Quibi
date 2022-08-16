@@ -4,6 +4,7 @@ defmodule Beef.Mutations.Users do
   alias Beef.Repo
   alias Beef.Schemas.User
   alias Beef.Queries.Users, as: Query
+  alias Beef.QuizPermissions
 
   def delete(user_id) do
     %User{id: user_id} |> Repo.delete()
@@ -39,7 +40,19 @@ defmodule Beef.Mutations.Users do
     |> Repo.update_all([])
   end
 
-  def set_current_quiz(user_id, quiz_id, returning \\ false) do
+  def set_current_quiz(user_id, quiz_id, can_speak \\ false, returning \\ false) do
+    quizPermissions =
+      case can_speak do
+        true ->
+          case QuizPermissions.set_speaker(user_id, quiz_id, true, true) do
+            {:ok, x} -> x
+            _ -> nil
+          end
+
+        _ ->
+          QuizPermissions.get(user_id, quiz_id)
+      end
+
     Onion.UserSession.set_current_quiz_id(user_id, quiz_id)
 
     q =
@@ -55,7 +68,7 @@ defmodule Beef.Mutations.Users do
     q = if returning, do: select(q, [u], u), else: q
 
     case Repo.update_all(q, []) do
-      {_, [user]} -> %{user: user}
+      {_, [user]} -> %{user | quizPermissions: quizPermissions}
       _ -> nil
     end
   end

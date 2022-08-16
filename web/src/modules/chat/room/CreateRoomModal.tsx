@@ -16,7 +16,7 @@ export const CreateRoomModal: React.FC<CreateRoomModalProps> = ({
   onRequestClose,
 }) => {
   const { push } = useRouter();
-  const [type, setType] = useState("text");
+  const [isForum, setIsForum] = useState(false);
 
   return (
     <Modal
@@ -28,7 +28,8 @@ export const CreateRoomModal: React.FC<CreateRoomModalProps> = ({
         <Formik
           initialValues={{
             name: "",
-            privacy: "private",
+            isPrivate: true,
+            isForum: false,
           }}
           validateOnChange={false}
           validate={({ name }) => {
@@ -42,9 +43,7 @@ export const CreateRoomModal: React.FC<CreateRoomModalProps> = ({
 
             return errors;
           }}
-          onSubmit={async ({ name, privacy }) => {
-            const d = { name, privacy, type };
-
+          onSubmit={async (data) => {
             onRequestClose();
           }}
         >
@@ -56,12 +55,12 @@ export const CreateRoomModal: React.FC<CreateRoomModalProps> = ({
                     room type
                   </p>
                   <div
-                    onClick={() => setType("text")}
+                    onClick={() => setIsForum(false)}
                     className={`flex gap-3 text-primary-100 items-center cursor-pointer px-3 py-1 ${
-                      type === "text" ? "bg-primary-600" : "bg-primary-700"
+                      !isForum ? "bg-primary-600" : "bg-primary-700"
                     } rounded`}
                   >
-                    {type === "text" ? (
+                    {!isForum ? (
                       <span>
                         <DoneIcon width={24} height={24} />
                       </span>
@@ -78,12 +77,12 @@ export const CreateRoomModal: React.FC<CreateRoomModalProps> = ({
                     </span>
                   </div>
                   <div
-                    onClick={() => setType("forum")}
+                    onClick={() => setIsForum(true)}
                     className={`flex gap-3 text-primary-100 items-center cursor-pointer px-3 py-1 ${
-                      type === "forum" ? "bg-primary-700" : "bg-primary-600"
+                      isForum ? "bg-primary-700" : "bg-primary-600"
                     } rounded`}
                   >
-                    {type === "forum" ? (
+                    {isForum ? (
                       <span>
                         <DoneIcon width={24} height={24} />
                       </span>

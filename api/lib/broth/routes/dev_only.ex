@@ -30,8 +30,8 @@ defmodule Broth.Routes.DevOnly do
                     email: username <> "@test.com",
                     googleId: "id:" <> username,
                     avatarUrl: "https://placekitten.com/200/200",
-                    bannerUrl: "https://picsum.photos/100/300",
-                    displayName: Okra.Utils.Random.big_ascii_id(),
+                    bannerUrl: "https://placekitten.com/200/300",
+                    displayName: String.capitalize(username),
                     bio:
                       "This is some interesting info about the ex-founder of nothing, welcome to the bio of such a cool person !"
                   },

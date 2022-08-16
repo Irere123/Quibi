@@ -122,7 +122,7 @@ defmodule Broth.SocketHandler do
                   current_quiz_id: user.currentQuizId
                 )
 
-                Onion.UserSession.set_pid(user_id, self())
+                Onion.UserSession.set_active_ws(user_id, self())
 
                 if tokens do
                   Onion.UserSession.new_tokens(user_id, tokens)
@@ -168,19 +168,18 @@ defmodule Broth.SocketHandler do
                    prepare_socket_msg(
                      %{
                        op: "fetch_done",
-                       d: f_handler(op, d, state),
+                       d: Broth.Message.f_handler(op, d, state),
                        fetchId: fetch_id
                      },
                      state
                    ), state}
 
                 %{"op" => op, "d" => d} ->
-                  handler(op, d, state)
+                  Broth.Message.handler(op, d, state)
               end
             rescue
               e ->
                 err_msg = Exception.message(e)
-                IO.puts("JSON: #{Kernel.inspect(json)}")
                 IO.inspect(e)
                 Logger.error(err_msg)
                 Logger.error(Exception.format_stacktrace())
@@ -240,126 +239,7 @@ defmodule Broth.SocketHandler do
     end
   end
 
-  def handler("get_top_public_quizes", data, state) do
-    {:reply,
-     construct_socket_msg(state.encoding, state.compression, %{
-       op: "get_top_public_quizes_done",
-       d: f_handler("get_top_public_quizes", data, state)
-     }), state}
-  end
-
-  def handler("leave_quiz", _data, state) do
-    case Okra.Quiz.leave_quiz(state.user_id) do
-      {:ok, d} ->
-        {:reply, prepare_socket_msg(%{op: "you_left_quiz", d: d}, state), state}
-
-      _ ->
-        {:ok, state}
-    end
-  end
-
-  def f_handler("create_quiz", data, state) do
-    case Okra.Quiz.create_quiz(
-           state.user_id,
-           data["name"],
-           data["description"] || "",
-           data["value"] == "private"
-         ) do
-      {:ok, d} ->
-        d
-
-      {:error, d} ->
-        %{
-          error: d
-        }
-    end
-  end
-
-  def f_handler("get_top_public_quizes", data, state) do
-    {quizes, next_cursor} =
-      Beef.Quizes.get_top_public_quizes(
-        state.user_id,
-        data["cursor"]
-      )
-
-    %{quizes: quizes, nextCursor: next_cursor, initial: data["cursor"] == 0}
-  end
-
-  def f_handler("get_user_profile", %{"userIdOrUsername" => userIdOrUsername}, state) do
-    user =
-      case Ecto.UUID.cast(userIdOrUsername) do
-        {:ok, uuid} ->
-          Beef.Users.get_by_id_with_follow_info(state.user_id, uuid)
-
-        _ ->
-          Beef.Users.get_by_username_with_follow_info(state.user_id, userIdOrUsername)
-      end
-
-    case user do
-      nil ->
-        %{error: "could not find user"}
-
-      %{theyBlockedMe: true} ->
-        %{error: "blocked"}
-
-      _ ->
-        user
-    end
-  end
-
-  def f_handler("edit_profile", %{"data" => data}, state) do
-    %{
-      isOk: Okra.User.edit_profile(state.user_id, data)
-    }
-  end
-
-  def f_handler("search", %{"query" => query}, _state) do
-    users = Beef.Users.search_username(query)
-    %{users: users}
-  end
-
-  def f_handler("follow", %{"userId" => userId, "value" => value}, state) do
-    Okra.Follow.follow(state.user_id, userId, value)
-    %{}
-  end
-
-  def f_handler("get_my_following", %{"limit" => limit}, state) do
-   {users, _} = Beef.Follows.get_my_following(state.user_id, 0, limit)
-   IO.inspect(users)
-    %{users: users}
-  end
-
-  def f_handler("block", %{"userId" => userId, "value" => value}, state) do
-    Okra.UserBlock.block(state.user_id, userId, value)
-    %{}
-  end
-
-  def f_handler("join_quiz_and_get_info", %{"quizId" => quiz_id_to_join}, state) do
-    case Okra.Quiz.join_quiz(state.user_id, quiz_id_to_join) do
-      %{error: err} ->
-        %{error: err}
-
-      %{quiz: quiz} ->
-        {quiz_id, users} = Beef.Users.get_users_in_current_quiz(state.user_id)
-
-        case Onion.QuizSession.lookup(quiz_id) do
-          [] ->
-            %{error: "Quiz no longer exists."}
-
-          _ ->
-            %{
-              quiz: quiz,
-              users: users,
-              quizId: quiz_id_to_join
-            }
-        end
-
-      _ ->
-        %{error: "you should never see this, email this to @irere_emmanauel"}
-    end
-  end
-
-  defp prepare_socket_msg(data, %{compression: compression, encoding: encoding}) do
+  def prepare_socket_msg(data, %{compression: compression, encoding: encoding}) do
     data
     |> encode_data(encoding)
     |> compress_data(compression)

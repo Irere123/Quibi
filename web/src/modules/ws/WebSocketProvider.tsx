@@ -51,6 +51,7 @@ export const WebSocketProvoder: React.FC<WebSocketProvoderProps> = ({
             useTokenStore
               .getState()
               .setTokens({ accessToken: "", refreshToken: "" });
+            useCurrentQuizIdStore.getState().setCurrentQuizId(null);
             setConn(null);
             replace("/logout");
           },

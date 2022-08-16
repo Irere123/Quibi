@@ -70,6 +70,7 @@ export const connect = (
     getAuthOptions?: () => Partial<{
       token: Token;
       refreshToken: Token;
+      currentQuizId: string | null;
     }>;
   }
 ): Promise<Connection> =>
@@ -186,6 +187,7 @@ export const connect = (
       apiSend("auth", {
         accessToken: token,
         refreshToken,
+        currentQuizId: null,
         ...getAuthOptions?.(),
       });
     });

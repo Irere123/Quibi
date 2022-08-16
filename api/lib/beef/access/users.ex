@@ -4,6 +4,7 @@ defmodule Beef.Access.Users do
   alias Beef.Repo
   alias Beef.Queries.Users, as: Query
   alias Beef.Schemas.User
+  alias Beef.Quizes
 
   def get(user_id) do
     Repo.get(User, user_id)
@@ -30,6 +31,17 @@ defmodule Beef.Access.Users do
 
   def get_by_id(user_id) do
     Repo.get(User, user_id)
+  end
+
+  def get_by_id_with_quiz_permissions(user_id) do
+    from(u in User,
+      where: u.id == ^user_id,
+      left_join: qp in Beef.Schemas.QuizPermission,
+      on: qp.userId == u.id and qp.quizId == u.currentQuizId,
+      select: %{u | quizPermissions: qp},
+      limit: 1
+    )
+    |> Repo.one()
   end
 
   @fetch_limit 16
@@ -72,6 +84,15 @@ defmodule Beef.Access.Users do
     |> Repo.one()
   end
 
+  def get_current_quiz(user_id) do
+    quiz_id = get_current_quiz_id(user_id)
+
+    case quiz_id do
+      nil -> nil
+      id -> Quizes.get_quiz_by_id(id)
+    end
+  end
+
   def get_current_quiz_id(user_id) do
     try do
       Onion.UserSession.get_current_quiz_id(user_id)
@@ -92,7 +113,10 @@ defmodule Beef.Access.Users do
       {:ok, current_quiz_id} ->
         {current_quiz_id,
          from(u in User,
-           where: u.currentQuizId == ^current_quiz_id
+           where: u.currentQuizId == ^current_quiz_id,
+           left_join: qp in Beef.Schemas.QuizPermission,
+           on: qp.userId == u.id and qp.quizId == u.currentQuizId,
+           select: %{u | quizPermissions: qp}
          )
          |> Repo.all()}
 

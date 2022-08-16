@@ -9,6 +9,7 @@ const badgeVariants = {
 const colorVariants = {
   white: "text-primary-100",
   grey: "text-primary-300",
+  black: "text-black",
 };
 
 interface UserBadgeProps {

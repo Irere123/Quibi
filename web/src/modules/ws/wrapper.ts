@@ -20,6 +20,21 @@ export const wrap = (connection: Connection) => ({
       connection.fetch("follow", { userId, value }),
     block: (userId: string, value: boolean): Promise<any> =>
       connection.fetch("block", { userId, value }),
+
+    setAutoSpeaker: (value: boolean) =>
+      connection.send(`set_auto_speaker`, { value }),
+
+    setQuizChatMode: (value: boolean) =>
+      connection.send(`set_quiz_chat_mode`, { value }),
+
+    deleteQuizChatMessage: (userId: string, messageId: string): Promise<void> =>
+      connection.send("delete_quiz_chat_message", { userId, messageId }) as any,
+    blockFromQuiz: (userId: string): Promise<void> =>
+      connection.send("block_from_quiz", { userId }) as any,
+    unbanFromQuizChat: (userId: string): Promise<void> =>
+      connection.send("unban_from_quiz_chat", { userId }) as any,
+    banFromQuizChat: (userId: string): Promise<void> =>
+      connection.send("ban_from_quiz_chat", { userId }) as any,
     editProfile: (data: {
       displayName: string;
       username: string;
@@ -30,6 +45,11 @@ export const wrap = (connection: Connection) => ({
       privacy: string;
       description: string;
     }): Promise<void> => connection.fetch("create_quiz", data) as any,
+    editQuiz: (data: {
+      name?: string;
+      privacy?: string;
+      description?: string;
+    }): Promise<void> => connection.fetch("edit_quiz", data) as any,
     leaveQuiz: (): Promise<any> =>
       connection.fetch("leave_quiz", {}, "you_left_quiz"),
   },

@@ -4,7 +4,7 @@ import { ChevronLeft } from "react-feather";
 export const QuizChatHeader: React.FC<{ description: string }> = ({
   description,
 }) => {
-  const [open, setOpen] = useState(true);
+  const [open, setOpen] = useState(false);
 
   return (
     <div className="px-3">

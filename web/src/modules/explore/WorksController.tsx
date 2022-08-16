@@ -60,14 +60,16 @@ const Page = ({
           key={quiz.id}
           title={quiz.name}
           avatars={[
-            quiz.peoplePreviewList.slice(0, 3).map((x: any) => x.avatarUrl),
+            "peoplePreviewList" in quiz
+              ? quiz.peoplePreviewList.slice(0, 3).map((x: any) => x.avatarUrl)
+              : "",
           ]}
           live={true}
           subtitle={
             "peoplePreviewList" in quiz
               ? quiz.peoplePreviewList
                   .slice(0, 3)
-                  .map((x: any) => x.username)
+                  .map((x: any) => x.displayName)
                   .join(", ")
               : ""
           }

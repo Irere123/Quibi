@@ -15,6 +15,8 @@ import { ErrorToastController } from "../modules/errors/ErrorToastController";
 import { PromptModal } from "../shared-components/PromptModal";
 import { WebSocketProvoder } from "../modules/ws/WebSocketProvider";
 import { WsMainHandlerProvider } from "../hooks/useWsMainHandler";
+import { useCurrentQuizIdStore } from "../stores/useCurentQuizIdStore";
+import { SoundEffectPlayer } from "../modules/sound-effects/SoundEffectPlayer";
 
 if (!isServer) {
   init_i18n();
@@ -37,12 +39,15 @@ function App({ Component, pageProps }: any) {
     return null;
   }
 
+  console.log(useCurrentQuizIdStore.getState().currentQuizId);
+
   return (
     <WebSocketProvoder
       shouldConnect={!!(Component as PageComponent<unknown>).ws}
     >
       <QueryClientProvider client={queryClient}>
         <WsMainHandlerProvider>
+          <SoundEffectPlayer />
           <KeybindListener />
           <ErrorToastController />
           <Component {...pageProps} />

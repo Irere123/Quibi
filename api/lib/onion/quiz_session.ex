@@ -2,7 +2,12 @@ defmodule Onion.QuizSession do
   use GenServer, restart: :temporary
 
   defmodule State do
-    defstruct quiz_id: "", users: [], inviteMap: %{}
+    defstruct quiz_id: "",
+              users: [],
+              inviteMap: %{},
+              activeSpeakerMap: %{},
+              auto_speaker: false,
+              chatMode: true
   end
 
   #################################################################################
@@ -43,7 +48,7 @@ defmodule Onion.QuizSession do
     Process.put(:"$callers", init[:callers])
 
     # also launch a linked, supervised room.
-    # Onion.RoomChat.start_link_supervised(init[:room_id])
+    Onion.QuizChat.start_link_supervised(init[:quiz_id])
     {:ok, struct(State, init)}
   end
 
@@ -65,15 +70,49 @@ defmodule Onion.QuizSession do
   def get_maps(quiz_id), do: call(quiz_id, :get_maps)
 
   defp get_maps_impl(_reply, state) do
-    {:reply, {}, state}
+    {:reply, {state.chatMode, state.auto_speaker, state.activeSpeakerMap}, state}
   end
 
-  def redeem_invite(room_id, user_id), do: call(room_id, {:redeem_invite, user_id})
+  def redeem_invite(quiz_id, user_id), do: call(quiz_id, {:redeem_invite, user_id})
 
   defp redeem_invite_impl(user_id, _reply, state) do
     reply = if Map.has_key?(state.inviteMap, user_id), do: :ok, else: :error
 
     {:reply, reply, %{state | inviteMap: Map.delete(state.inviteMap, user_id)}}
+  end
+
+  def speaking_change(quiz_id, user_id, value) do
+    cast(quiz_id, {:speaking_change, user_id, value})
+  end
+
+  defp speaking_change_impl(user_id, value, state) when is_boolean(value) do
+    newActiveSpeakerMap =
+      if value,
+        do: Map.put(state.activeSpeakerMap, user_id, true),
+        else: Map.delete(state.activeSpeakerMap, user_id)
+
+    ws_fan(state.users, %{
+      op: "active_speaker_change",
+      d: %{activeSpeakerMap: newActiveSpeakerMap, quizId: state.quiz_id}
+    })
+
+    {:noreply, %{state | activeSpeakerMap: newActiveSpeakerMap}}
+  end
+
+  def set_auto_speaker(quiz_id, value) when is_boolean(value) do
+    cast(quiz_id, {:set_auto_speaker, value})
+  end
+
+  defp set_auto_speaker_impl(value, state) do
+    {:noreply, %{state | auto_speaker: value}}
+  end
+
+  def set_chat_mode(quiz_id, value) when is_boolean(value) do
+    cast(quiz_id, {:set_chat_mode, value})
+  end
+
+  defp set_chat_mode_impl(value, state) do
+    {:noreply, %{state | chatMode: value}}
   end
 
   def broadcast_ws(quiz_id, msg), do: cast(quiz_id, {:broadcast_ws, msg})
@@ -108,12 +147,43 @@ defmodule Onion.QuizSession do
      }}
   end
 
+  def remove_speaker(quiz_id, user_id), do: cast(quiz_id, {:remove_speaker, user_id})
+
+  defp remove_speaker_impl(user_id, state) do
+    ws_fan(state.users, %{
+      op: "speaker_removed",
+      d: %{
+        userId: user_id,
+        roomId: state.room_id,
+        raiseHandMap: %{}
+      }
+    })
+
+    {:noreply, %{state | users: state.users}}
+  end
+
+  def add_speaker(quiz_id, user_id) do
+    cast(quiz_id, {:add_speaker, user_id})
+  end
+
+  def add_speaker_impl(user_id, state) do
+    ws_fan(state.users, %{
+      op: "speaker_added",
+      d: %{
+        userId: user_id,
+        quizId: state.quiz_id
+      }
+    })
+
+    {:noreply, %{state | users: state.users}}
+  end
+
   def join_quiz(quiz_id, user_id, opts \\ []) do
     cast(quiz_id, {:join_quiz, user_id, opts})
   end
 
   defp join_quiz_impl(user_id, opts, state) do
-    # Onion.RoomChat.add_user(state.room_id, user_id)
+    Onion.QuizChat.add_user(state.quiz_id, user_id)
 
     unless opts[:no_fan] do
       ws_fan(state.users, %{
@@ -154,7 +224,7 @@ defmodule Onion.QuizSession do
   defp kick_from_quiz_impl(user_id, state) do
     users = Enum.filter(state.users, fn uid -> uid != user_id end)
 
-    # Onion.RoomChat.remove_user(state.room_id, user_id)
+    Onion.QuizChat.remove_user(state.quiz_id, user_id)
 
     ws_fan(users, %{
       op: "user_left_quiz",
@@ -173,7 +243,7 @@ defmodule Onion.QuizSession do
   defp leave_quiz_impl(user_id, state) do
     users = Enum.reject(state.users, &(&1 == user_id))
 
-    # Onion.RoomChat.remove_user(state.room_id, user_id)
+    Onion.QuizChat.remove_user(state.quiz_id, user_id)
 
     ws_fan(users, %{
       op: "user_left_quiz",
@@ -218,6 +288,18 @@ defmodule Onion.QuizSession do
     create_invite_impl(user_id, user_info, state)
   end
 
+  def handle_cast({:speaking_change, user_id, value}, state) do
+    speaking_change_impl(user_id, value, state)
+  end
+
+  def handle_cast({:set_auto_speaker, value}, state) do
+    set_auto_speaker_impl(value, state)
+  end
+
+  def handle_cast({:set_chat_mode, value}, state) do
+    set_chat_mode_impl(value, state)
+  end
+
   def handle_cast({:join_quiz, user_id, opts}, state) do
     join_quiz_impl(user_id, opts, state)
   end
@@ -228,5 +310,13 @@ defmodule Onion.QuizSession do
 
   def handle_cast({:leave_quiz, user_id}, state) do
     leave_quiz_impl(user_id, state)
+  end
+
+  def handle_cast({:remove_speaker, user_id}, state) do
+    remove_speaker_impl(user_id, state)
+  end
+
+  def handle_cast({:add_speaker, user_id}, state) do
+    add_speaker_impl(user_id, state)
   end
 end
