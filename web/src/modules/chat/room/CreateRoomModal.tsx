@@ -54,13 +54,13 @@ export const CreateRoomModal: React.FC<CreateRoomModalProps> = ({
             const d = { roomName, isPrivate };
 
             const resp = await conn.mutation.createRoom(d);
+            console.log(resp);
 
             if (typeof resp === "object" && "error" in resp) {
               showErrorToast(resp.error);
               return;
             } else if (resp.room) {
               const { room } = resp;
-              console.log(room);
 
               updater(["getMyRooms"], (r) => {
                 if (!r) {
@@ -77,7 +77,7 @@ export const CreateRoomModal: React.FC<CreateRoomModalProps> = ({
                 };
               });
 
-              push(`/room/[roomId]/[subId]`, `/room/${room.id}/${room.id}`);
+              push(`/room/[id]`, `/room/${room.id}`);
             }
 
             onRequestClose();
