@@ -13,6 +13,7 @@ export const wrap = (connection: Connection) => ({
       connection.fetch("get_top_public_quizes", { cursor }),
     getMyFollowing: (limit = 7): Promise<any> =>
       connection.fetch("get_my_following", { limit }),
+    getMyRooms: (): Promise<any> => connection.fetch("get_my_rooms", {}),
     getInviteList: (cursor = 0): Promise<any> =>
       connection.fetch("get_invite_list", { cursor }),
     joinQuizAndGetInfo: (quizId: string): Promise<any> =>
@@ -62,6 +63,11 @@ export const wrap = (connection: Connection) => ({
       description: string;
     }): Promise<{ error: string } | { quiz: Quiz }> =>
       connection.fetch("create_quiz", data) as any,
+    createRoom: (data: {
+      roomName: string;
+      isPrivate: boolean;
+    }): Promise<{ error: string } | { room: any }> =>
+      connection.fetch("create_room", data) as any,
     editQuiz: (data: {
       name?: string;
       privacy?: string;
@@ -70,11 +76,5 @@ export const wrap = (connection: Connection) => ({
       connection.fetch("edit_quiz", data) as any,
     leaveQuiz: (): Promise<any> =>
       connection.fetch("leave_quiz", {}, "you_left_quiz"),
-
-    createRoom: (data: {
-      name: string;
-      isPrivate: boolean;
-    }): Promise<{ error: string } | { room: any }> =>
-      connection.fetch("create_room", data) as any,
   },
 });

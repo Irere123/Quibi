@@ -36,7 +36,7 @@ export const TabletSidebar: React.FC<TabletSidebarProps> = ({}) => {
         </a>
       </Link>
 
-      <Link href={"/chat"}>
+      <Link href={"/explore-rooms"}>
         <a>
           <BoxedIcon circle shadow>
             <AtIcon />

@@ -13,9 +13,8 @@ import { KeybindListener } from "../modules/keyboard-shotcuts/KeybindListener";
 import { ConfirmModal } from "../shared-components/ConfirmModal";
 import { ErrorToastController } from "../modules/errors/ErrorToastController";
 import { PromptModal } from "../shared-components/PromptModal";
-import { WebSocketProvoder } from "../modules/ws/WebSocketProvider";
+import { WebSocketProvider } from "../modules/ws/WebSocketProvider";
 import { WsMainHandlerProvider } from "../hooks/useWsMainHandler";
-import { useCurrentQuizIdStore } from "../stores/useCurentQuizIdStore";
 import { SoundEffectPlayer } from "../modules/sound-effects/SoundEffectPlayer";
 
 if (!isServer) {
@@ -40,7 +39,7 @@ function App({ Component, pageProps }: any) {
   }
 
   return (
-    <WebSocketProvoder
+    <WebSocketProvider
       shouldConnect={!!(Component as PageComponent<unknown>).ws}
     >
       <QueryClientProvider client={queryClient}>
@@ -53,7 +52,7 @@ function App({ Component, pageProps }: any) {
           <PromptModal />
         </WsMainHandlerProvider>
       </QueryClientProvider>
-    </WebSocketProvoder>
+    </WebSocketProvider>
   );
 }
 

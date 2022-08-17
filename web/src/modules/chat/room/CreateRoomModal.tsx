@@ -2,7 +2,11 @@ import { Form, Formik } from "formik";
 import { useRouter } from "next/router";
 import React, { useState } from "react";
 import { InputField } from "../../../form-fields/InputField";
+import { useConn, useWrappedConn } from "../../../hooks/useConn";
+import { useTypeSafeMutation } from "../../../hooks/useTypeSafeMutation";
+import { useTypeSafeUpdateQuery } from "../../../hooks/useTypeSafeUpdateQuery";
 import { DoneIcon, HashIcon, OutlineGlobe } from "../../../icons";
+import { showErrorToast } from "../../../lib/showErrorToast";
 import { Button } from "../../../ui/Button";
 import { Modal } from "../../../ui/Modal";
 import { NativeCheckbox } from "../../../ui/NativeCheckbox";
@@ -16,7 +20,9 @@ export const CreateRoomModal: React.FC<CreateRoomModalProps> = ({
   isOpen,
   onRequestClose,
 }) => {
+  const conn = useWrappedConn();
   const { push } = useRouter();
+  const updater = useTypeSafeUpdateQuery();
 
   return (
     <Modal
@@ -28,23 +34,52 @@ export const CreateRoomModal: React.FC<CreateRoomModalProps> = ({
       {isOpen ? (
         <Formik
           initialValues={{
-            name: "",
+            roomName: "",
             isPrivate: true,
           }}
           validateOnChange={false}
           validateOnBlur={false}
-          validate={({ name }) => {
+          validate={({ roomName }) => {
             const errors: Record<string, string> = {};
 
-            if (name.length < 2 || name.length > 60) {
+            if (roomName.length < 2 || roomName.length > 60) {
               return {
-                name: "must be between 2 to 60 characters long",
+                roomName: "must be between 2 to 60 characters long",
               };
             }
 
             return errors;
           }}
-          onSubmit={async (data) => {
+          onSubmit={async ({ isPrivate, roomName }) => {
+            const d = { roomName, isPrivate };
+
+            const resp = await conn.mutation.createRoom(d);
+
+            if (typeof resp === "object" && "error" in resp) {
+              showErrorToast(resp.error);
+              return;
+            } else if (resp.room) {
+              const { room } = resp;
+              console.log(room);
+
+              updater(["getMyRooms"], (r) => {
+                if (!r) {
+                  return r;
+                }
+
+                return {
+                  rooms: [
+                    ...r.rooms,
+                    {
+                      ...room,
+                    },
+                  ],
+                };
+              });
+
+              push(`/room/[roomId]/[subId]`, `/room/${room.id}/${room.id}`);
+            }
+
             onRequestClose();
           }}
         >
@@ -52,7 +87,7 @@ export const CreateRoomModal: React.FC<CreateRoomModalProps> = ({
             <Form>
               <div className="flex flex-col gap-4 mt-4">
                 <InputField
-                  name="name"
+                  name="roomName"
                   placeholder="#room-name"
                   maxLength={60}
                   autoFocus

@@ -39,7 +39,7 @@ export const LeftPanel: React.FC = () => {
         </Link>
       </Tooltip>
       <Tooltip text={t("components.panels.right.chat")}>
-        <Link href={"/chat"}>
+        <Link href={"/explore-rooms"}>
           <a>
             <BoxedIcon circle shadow>
               <AtIcon />
