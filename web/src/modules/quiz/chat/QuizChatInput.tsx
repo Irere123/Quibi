@@ -13,7 +13,7 @@ interface ChatInputProps {
 }
 
 export const QuizChatInput: React.FC<ChatInputProps> = ({ users }) => {
-  const { setQueriedUsernames } = useQuizChatMentionStore();
+  const { setQueriedUsernames, mentions } = useQuizChatMentionStore();
   const { message, setMessage } = useQuizChatStore();
   const { t } = useTypeSafeTranslation();
   const inputRef = useRef<HTMLInputElement>(null);
@@ -41,7 +41,7 @@ export const QuizChatInput: React.FC<ChatInputProps> = ({ users }) => {
     }
 
     const tmp = message;
-    const messageData = createQuizChatMessage(tmp, users);
+    const messageData = createQuizChatMessage(tmp, mentions, users);
 
     // dont empty the input, if no tokens
     if (!messageData.tokens.length) return;

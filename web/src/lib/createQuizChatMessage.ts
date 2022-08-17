@@ -2,7 +2,11 @@ import normalizeUrl from "normalize-url";
 import { User } from "../modules/ws";
 import { linkRegex, codeBlockRegex } from "./constants";
 
-export const createQuizChatMessage = (message: string, mentions: User[]) => {
+export const createQuizChatMessage = (
+  message: string,
+  mentions: User[],
+  roomUsers: User[] = []
+) => {
   const tokens = [] as unknown as [
     {
       t: string;

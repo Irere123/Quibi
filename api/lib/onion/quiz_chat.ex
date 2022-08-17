@@ -96,6 +96,7 @@ defmodule Onion.QuizChat do
   end
 
   def new_msg(quiz_id, user_id, msg) do
+    IO.inspect(msg)
     cast(quiz_id, {:new_msg, user_id, msg})
   end
 
