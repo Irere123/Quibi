@@ -1,7 +1,6 @@
 defmodule Beef.Mutations.Rooms do
   alias Beef.Repo
   alias Beef.Schemas.Room
-  # alias Beef.Schemas.SubRoom
   alias Beef.Schemas.RoomMember
 
   def insert(data) do
@@ -13,7 +12,7 @@ defmodule Beef.Mutations.Rooms do
     case room do
       {:ok, r} ->
         %RoomMember{}
-        |> RoomMember.insert_changeset(%{"userId" => data["creatorId"], "roomId" => r.id})
+        |> RoomMember.insert_changeset(%{"userId" => r.creatorId, "roomId" => r.id})
         |> Repo.insert(returning: false)
 
         {:ok, r}

@@ -68,6 +68,7 @@ defmodule Broth.Message do
     case Room.create_room(state.user_id, data["roomName"], data["isPrivate"]) do
       {:ok, d} ->
         d
+
       {:error, d} ->
         d
     end

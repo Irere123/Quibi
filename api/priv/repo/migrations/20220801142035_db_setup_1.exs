@@ -44,14 +44,6 @@ defmodule Beef.Repo.Migrations.DbSetup1 do
 
     end
 
-    create table(:sub_rooms, primary_key: false) do
-      add :id, :uuid, primary_key: true, default: fragment("uuid_generate_v4()")
-      add :name, :text, null: false
-      add :description, :text, null: true
-      add :isPrivate, :boolean, default: true
-
-    end
-
     create table(:schools, primary_key: false) do
       add :id, :uuid, primary_key: true, default: fragment("uuid_generate_v4()")
       add :name, :text, null: false
