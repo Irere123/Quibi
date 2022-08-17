@@ -1,17 +1,19 @@
 defmodule Broth.Message do
   alias Broth.SocketHandler
   alias Beef.Follows
+  alias Okra.Quiz
+  alias Okra.Room
 
   #######################################################################
   #### HANDLER FUNCTIONS
 
   def handler("set_auto_speaker", %{"value" => value}, state) do
-    Okra.Quiz.set_auto_speaker(state.user_id, value)
+    Quiz.set_auto_speaker(state.user_id, value)
     {:ok, state}
   end
 
   def handler("set_quiz_chat_mode", %{"value" => value}, state) do
-    Okra.Quiz.set_chat_mode(state.user_id, value)
+    Quiz.set_chat_mode(state.user_id, value)
 
     {:ok, state}
   end
@@ -36,7 +38,7 @@ defmodule Broth.Message do
   end
 
   def handler("leave_quiz", _data, state) do
-    case Okra.Quiz.leave_quiz(state.user_id) do
+    case Quiz.leave_quiz(state.user_id) do
       {:ok, d} ->
         {:reply, SocketHandler.prepare_socket_msg(%{op: "you_left_quiz", d: d}, state), state}
 
@@ -46,7 +48,7 @@ defmodule Broth.Message do
   end
 
   def handler("invite_to_quiz", %{"userId" => user_id_to_invite}, state) do
-    Okra.Quiz.invite_to_quiz(state.user_id, user_id_to_invite)
+    Quiz.invite_to_quiz(state.user_id, user_id_to_invite)
     {:ok, state}
   end
 
@@ -55,15 +57,24 @@ defmodule Broth.Message do
         %{"userId" => user_id_to_block_from_quiz},
         state
       ) do
-    Okra.Quiz.block_from_quiz(state.user_id, user_id_to_block_from_quiz)
+    Quiz.block_from_quiz(state.user_id, user_id_to_block_from_quiz)
     {:ok, state}
   end
 
   #######################################################################
   #### FETCH HANDLER FUNCTIONS
 
+  def f_handler("create_room", data, state) do
+    case Room.create_room(state.user_id, data["roomName"], data["isPrivate"]) do
+      {:ok, d} ->
+        d
+      {:error, d} ->
+        d
+    end
+  end
+
   def f_handler("create_quiz", data, state) do
-    case Okra.Quiz.create_quiz(
+    case Quiz.create_quiz(
            state.user_id,
            data["name"],
            data["description"] || "",
@@ -79,10 +90,6 @@ defmodule Broth.Message do
           error: d
         }
     end
-  end
-
-  def f_handler("create_room", data, state) do
-    Okra.Room.create_room(state.user_id, data)
   end
 
   def f_handler("get_top_public_quizes", data, state) do
@@ -212,18 +219,9 @@ defmodule Broth.Message do
     end
   end
 
-  def f_handler("unban_from_quiz", %{"userId" => user_id}, state) do
-    Okra.QuizBlock.unban(state.user_id, user_id)
-    %{}
-  end
+  def f_handler("get_my_rooms", _data, state) do
+    rooms = Okra.Room.get_my_rooms(state.user_id)
 
-  def f_handler("get_blocked_from_quiz_users", %{"offset" => offset}, state) do
-    case Okra.QuizBlock.get_blocked_users(state.user_id, offset) do
-      {users, next_cursor} ->
-        %{users: users, nextCursor: next_cursor}
-
-      _ ->
-        %{users: [], nextCursor: nil}
-    end
+    %{rooms: rooms}
   end
 end

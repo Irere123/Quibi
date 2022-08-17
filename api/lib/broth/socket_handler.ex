@@ -213,7 +213,7 @@ defmodule Broth.SocketHandler do
     end
   end
 
-  defp construct_socket_msg(encoding, compression, data) do
+  def construct_socket_msg(encoding, compression, data) do
     data =
       case encoding do
         :etf ->

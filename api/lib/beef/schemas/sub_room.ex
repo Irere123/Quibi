@@ -8,7 +8,6 @@ defmodule Beef.Schemas.SubRoom do
   @derive {Jason.Encoder, ~w(
     id
     name
-    description
     isPrivate
     creatorId
     roomId
@@ -16,7 +15,6 @@ defmodule Beef.Schemas.SubRoom do
   @primary_key {:id, :binary_id, []}
   schema "sub_rooms" do
     field(:name, :string)
-    field(:description, :string)
     field(:isPrivate, :string)
 
     belongs_to(:user, User, foreign_key: :creatorId, type: :binary_id)
@@ -27,7 +25,7 @@ defmodule Beef.Schemas.SubRoom do
 
   def changeset(sub_room, attrs) do
     sub_room
-    |> cast(attrs, ~w(name description isPrivate)a)
+    |> cast(attrs, ~w(name isPrivate)a)
     |> validate_required(:name)
   end
 end
