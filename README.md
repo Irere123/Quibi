@@ -1,5 +1,5 @@
 <p align="center">
- <img height=100 src="https://raw.githubusercontent.com/irere123/Quibi/dev/.assets/quibi.png"/>
+  <h1 align="center">QUIBI</h1>
 </p>
 
 <p align="center">
