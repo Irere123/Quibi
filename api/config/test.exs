@@ -1,6 +1,6 @@
 import Config
 
-database_url = "postgres://postgres:postgres@localhost/kousa_repo2_test"
+database_url = "postgres://postgres:postgres@localhost/quibi_repo_test"
 
 config :okra, Beef.Repo,
   url: database_url,

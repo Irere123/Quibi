@@ -1,27 +1,17 @@
 <p align="center">
-  <strong>Quibi</strong>
+  <strong>Making an open world for learning 🚀</strong>
 </p>
-
-<h3 align="center">
-  <a href="#">Documentation</a>
-</h3>
-
 ---
 
 ## Structure
 
-| Codebase               |    Description     |
-| :--------------------- | :----------------: |
-| [web](kousa)           |  Next.js frontend  |
-| [extension](extension) |     Extensions     |
-| [extension/feta](feta) | Electron Admin App |
+| Codebase         |   Description    |
+| :--------------- | :--------------: |
+| [web](kousa)     | Next.js frontend |
+| [api](kousa)     |    Elixir API    |
+| [client](client) |    API Client    |
 
 ## Branches
 
 - dev -> development where all things are developed
 - prod -> don't touch, this is what's running in prod
-
-## DogeHouse Desktop
-
-**_Notes:_**
-Cooming soon

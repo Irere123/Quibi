@@ -18,7 +18,7 @@ export const WebSocketContext = React.createContext<{
   setConn: (c: raw.Connection | null) => void;
 }>({ conn: null, setUser: () => {}, setConn: () => {} });
 
-export const WebSocketProvoder: React.FC<WebSocketProvoderProps> = ({
+export const WebSocketProvider: React.FC<WebSocketProvoderProps> = ({
   shouldConnect,
   children,
 }) => {
@@ -51,6 +51,7 @@ export const WebSocketProvoder: React.FC<WebSocketProvoderProps> = ({
             useTokenStore
               .getState()
               .setTokens({ accessToken: "", refreshToken: "" });
+            useCurrentQuizIdStore.getState().setCurrentQuizId(null);
             setConn(null);
             replace("/logout");
           },

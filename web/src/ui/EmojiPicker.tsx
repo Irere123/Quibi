@@ -2,8 +2,8 @@
 /* eslint-disable @next/next/no-img-element */
 import React, { useEffect } from "react";
 import { useEmojiPickerStore } from "../stores/useEmojiPickerStore";
-import { CustomEmote } from "../modules/chat/EmoteData";
-import { useChatStore } from "../stores/useChatStore";
+import { CustomEmote } from "../modules/chat/room/chat/EmoteData";
+import { useRoomChatStore } from "../modules/chat/room/chat/useRoomChatStore";
 interface EmojiPickerProps {
   emojiSet: CustomEmote[];
   onEmojiSelect: (emoji: CustomEmote) => void;
@@ -13,7 +13,7 @@ export const EmojiPicker: React.FC<EmojiPickerProps> = ({
   emojiSet,
   onEmojiSelect,
 }) => {
-  const { message } = useChatStore();
+  const { message } = useRoomChatStore();
   const {
     open,
     setOpen,

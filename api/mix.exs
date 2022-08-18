@@ -51,7 +51,11 @@ defmodule Okra.MixProject do
       {:prometheus_plugs, "~> 1.1"},
       {:timex, "~> 3.7"},
       # style ENFORCEMENT
-      {:credo, "~> 1.6"}
+      {:credo, "~> 1.6"},
+      # test helpers
+      {:faker, "~> 0.16.0", only: :test},
+      {:excoveralls, "~> 0.10", only: :test},
+      {:websockex, "~> 0.4.3", only: :test}
     ]
   end
 

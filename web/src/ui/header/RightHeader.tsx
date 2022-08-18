@@ -7,12 +7,14 @@ import { Button } from "../Button";
 import { BoxedIcon } from "../BoxedIcon";
 import { ApiPreloadLink } from "../../shared-components/ApiPreloadLink";
 import { useConn } from "../../hooks/useConn";
+import { useScreenType } from "../../hooks/useScreenType";
 
 export interface RightHeaderProps {
   actionButton?: React.ReactNode;
 }
 
 const RightHeader: React.FC<RightHeaderProps> = ({ actionButton }) => {
+  const screenType = useScreenType();
   const { user } = useConn();
   const { pathname, push } = useRouter();
   let showHome = false;
@@ -29,7 +31,7 @@ const RightHeader: React.FC<RightHeaderProps> = ({ actionButton }) => {
         <AppsIcon />
       </BoxedIcon>
 
-      {showHome ? (
+      {showHome && screenType !== "fullscreen" ? (
         <Link href={"/dash"}>
           <a>
             <BoxedIcon circle={true} shadow={true}>
@@ -47,8 +49,9 @@ const RightHeader: React.FC<RightHeaderProps> = ({ actionButton }) => {
         </Link>
       )}
 
-      <Button icon={<DownloadIcon />}>Download</Button>
-
+      {screenType === "3-cols" && (
+        <Button icon={<DownloadIcon />}>Download</Button>
+      )}
       {actionButton}
 
       <ApiPreloadLink route="profile" data={{ username: user.username }}>

@@ -1,5 +1,6 @@
 import create from "zustand";
 import { combine } from "zustand/middleware";
+import { useQuizChatMentionStore } from "./useQuizChatMentionStore";
 
 interface TextToken {
   t: "text";
@@ -11,7 +12,21 @@ interface LinkToken {
   v: string;
 }
 
-export type QuizChatMessageToken = TextToken | LinkToken;
+interface BlockToken {
+  t: "block";
+  v: string;
+}
+
+interface MentionToken {
+  t: "mention";
+  v: string;
+}
+
+export type QuizChatMessageToken =
+  | TextToken
+  | LinkToken
+  | BlockToken
+  | MentionToken;
 
 const colors = [
   "#ff2366",
@@ -39,9 +54,10 @@ export interface QuizChatMessage {
   color: string;
   username: string;
   displayName: string;
-  tokens: QuizChatMessageToken[];
   deleted?: boolean;
   deleterId?: string;
+  tokens: QuizChatMessageToken[];
+  sentAt: string;
 }
 
 export const useQuizChatStore = create(
@@ -49,12 +65,23 @@ export const useQuizChatStore = create(
     {
       open: false,
       messages: [] as QuizChatMessage[],
+      bannedUserIdMap: {} as Record<string, boolean>,
       newUnreadMessages: false,
       message: "" as string,
       isQuizChatScrolledToTop: false,
       frozen: false,
     },
     (set) => ({
+      unbanUser: (userId: string) =>
+        set(({ bannedUserIdMap: { [userId]: _, ...banMap }, ...s }) => ({
+          messages: s.messages.filter((m) => m.userId !== userId),
+          bannedUserIdMap: banMap,
+        })),
+      addBannedUser: (userId: string) =>
+        set((s) => ({
+          messages: s.messages.filter((m) => m.userId !== userId),
+          bannedUserIdMap: { ...s.bannedUserIdMap, [userId]: true },
+        })),
       addMessage: (m: QuizChatMessage) =>
         set((s) => ({
           newUnreadMessages: !s.open,
@@ -73,15 +100,19 @@ export const useQuizChatStore = create(
         set({
           messages: [],
           newUnreadMessages: false,
+          bannedUserIdMap: {},
         }),
       reset: () =>
         set({
           messages: [],
           newUnreadMessages: false,
           message: "",
+          bannedUserIdMap: {},
         }),
       toggleOpen: () =>
         set((s) => {
+          // Reset mention state
+          useQuizChatMentionStore.getState().resetIAmMentioned();
           if (s.open) {
             return {
               open: false,
@@ -99,7 +130,7 @@ export const useQuizChatStore = create(
           message,
         }),
       setOpen: (open: boolean) => set((s) => ({ ...s, open })),
-      setIsRoomChatScrolledToTop: (isQuizChatScrolledToTop: boolean) =>
+      setIsQuizhatScrolledToTop: (isQuizChatScrolledToTop: boolean) =>
         set({
           isQuizChatScrolledToTop,
         }),

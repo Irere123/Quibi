@@ -1,29 +1,22 @@
 import React from "react";
-import { QuizChatHeader } from "./chat/QuizChatHeader";
-import { QuizChatInput } from "./chat/QuizChatInput";
-import { QuizChatList } from "./chat/QuizChatList";
-import { useGetQuizByQueryParams } from "./useGetQuizByQueryParams";
+import { useTypeSafeQuery } from "../../hooks/useTypeSafeQuery";
+import { useCurrentQuizIdStore } from "../../stores/useCurentQuizIdStore";
+import { QuizChat } from "./chat/QuizChat";
 
 export const QuizChatController: React.FC = () => {
-  const { data, isLoading } = useGetQuizByQueryParams();
+  const { currentQuizId } = useCurrentQuizIdStore();
 
-  if (!data) {
-    return null;
-  }
-
-  if (isLoading) {
-    return null;
-  }
-
-  return (
-    <div
-      className={`flex flex-1 w-full mb-7 overflow-y-auto bg-primary-800 h-full rounded-lg`}
-    >
-      <div className={`flex flex-1 w-full flex-col mt-4`}>
-        <QuizChatHeader description={data.quiz.description} />
-        <QuizChatList />
-        <QuizChatInput />
-      </div>
-    </div>
+  const { data } = useTypeSafeQuery(
+    ["joinQuizAndGetInfo", currentQuizId || ""],
+    {
+      enabled: false,
+    },
+    [currentQuizId || ""]
   );
+
+  if (!data || "error" in data) {
+    return null;
+  }
+
+  return <>{data.chatMode ? <QuizChat {...data} /> : null}</>;
 };

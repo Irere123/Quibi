@@ -12,9 +12,9 @@ defmodule Okra do
       # top-level supervisor for UserSession group
       Onion.Supervisors.UserSession,
       Onion.Supervisors.QuizSession,
+      Onion.Supervisors.QuizChat,
       Onion.StatsCache,
       {Beef.Repo, []},
-      {Phoenix.PubSub, name: Onion.PubSub},
       Plug.Cowboy.child_spec(
         scheme: :http,
         plug: Broth,
@@ -32,6 +32,7 @@ defmodule Okra do
 
     case Supervisor.start_link(children, opts) do
       {:ok, pid} ->
+        start_quizes()
         {:ok, pid}
 
       error ->
@@ -47,5 +48,11 @@ defmodule Okra do
          {:_, Plug.Cowboy.Handler, {Broth, []}}
        ]}
     ]
+  end
+
+  defp start_quizes() do
+    Enum.each(Beef.Quizes.all_quizes(), fn quiz ->
+      Onion.QuizSession.start_supervised(quiz_id: quiz.id)
+    end)
   end
 end

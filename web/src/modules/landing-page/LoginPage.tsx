@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from "react";
+import React, { useCallback, useContext, useEffect } from "react";
 import { Twitter, Google, Discord, Bug } from "../../icons";
 import { HeaderController } from "../display/HeaderController";
 import { useTypeSafeTranslation } from "../../hooks/useTypeSafeTranslation";
@@ -8,6 +8,8 @@ import { useTokenStore } from "../auth/useTokenStore";
 import { isServer } from "../../lib/isServer";
 import { useSaveTokensFromQueryParams } from "../auth/useSaveTokensFromQueryParams";
 import { modalPrompt } from "../../shared-components/PromptModal";
+import { useConn } from "../../hooks/useConn";
+import { WebSocketContext } from "../ws/WebSocketProvider";
 
 interface LoginButtonProps {
   dev?: boolean;
@@ -50,9 +52,15 @@ const LoginButton: React.FC<LoginButtonProps> = ({
 
 export const LoginPage: React.FC = () => {
   useSaveTokensFromQueryParams();
-  const { t } = useTypeSafeTranslation();
   const hasTokens = useTokenStore((s) => !!(s.accessToken && s.refreshToken));
+  const { t } = useTypeSafeTranslation();
+  const { setConn } = useContext(WebSocketContext);
   const { push } = useRouter();
+
+  useEffect(() => {
+    setConn(null);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
     if (hasTokens) {

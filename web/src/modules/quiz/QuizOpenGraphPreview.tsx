@@ -1,26 +1,27 @@
-import React from "react";
+import React, { ReactNode } from "react";
 import { isServer } from "../../lib/isServer";
 import { HeaderController } from "../display/HeaderController";
+import { Quiz } from "../ws";
 
 interface QuizOpenGraphPreviewProps {
-  // @TODO: make any into a Quiz Type
-  quiz: any | null | undefined;
-  children?: React.ReactNode;
+  quiz: Quiz | null | undefined;
+  children?: ReactNode;
 }
 
 export const QuizOpenGraphPreview: React.FC<QuizOpenGraphPreviewProps> = ({
   quiz,
   children,
 }) => {
-  if (!isServer && quiz) {
-    const { title, description } = quiz;
+  if (isServer && quiz) {
+    const { name, description, peoplePreviewList } = quiz;
     return (
       <HeaderController
-        title={title}
+        title={name}
         description={description}
-        embed={{ image: quiz.creator.avatarUrl }}
+        embed={{ image: peoplePreviewList.map((u) => u.avatarUrl)[0] as any }}
       />
     );
   }
+
   return <>{children}</>;
 };

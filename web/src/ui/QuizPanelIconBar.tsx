@@ -1,5 +1,6 @@
 import React from "react";
-import { ChatBubble, PersonAdd, SettingsIcon } from "../icons";
+import { useScreenType } from "../hooks/useScreenType";
+import { ChatBubble, GroupIcon, PersonAdd, SettingsIcon } from "../icons";
 import { BoxedIcon } from "./BoxedIcon";
 import { Button } from "./Button";
 import { Input } from "./Input";
@@ -15,6 +16,7 @@ interface QuizPanelIconBarprops {
 }
 
 export const QuizPanelIconBar: React.FC<QuizPanelIconBarprops> = ({
+  onToggleChat,
   onTextMode,
   onInvitePeopleToQuiz,
   onLeaveQuiz,
@@ -22,6 +24,8 @@ export const QuizPanelIconBar: React.FC<QuizPanelIconBarprops> = ({
   open,
   enableAnswer,
 }) => {
+  const screenType = useScreenType();
+
   return (
     <div className="flex gap-3 flex-col bg-primary-700 rounded-b-lg py-3 px-4 w-full">
       <div className="flex flex-wrap justify-center  sm:justify-between">
@@ -34,6 +38,18 @@ export const QuizPanelIconBar: React.FC<QuizPanelIconBarprops> = ({
               onClick={onTextMode}
             >
               <ChatBubble />
+            </BoxedIcon>
+          ) : null}
+
+          {screenType === "1-cols" || screenType === "fullscreen" ? (
+            <BoxedIcon
+              transition
+              className="mx-1 h-6.5 w-6.5"
+              color="800"
+              onClick={onToggleChat}
+              data-testid="chat"
+            >
+              <GroupIcon />
             </BoxedIcon>
           ) : null}
 

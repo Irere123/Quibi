@@ -175,6 +175,27 @@ defmodule Beef.Follows do
     end
   end
 
+  def fetch_invite_list(user_id, offset \\ 0) do
+    user = Beef.Users.get_by_id(user_id)
+
+    items =
+      from(
+        f in Follow,
+        inner_join: u in User,
+        on: f.followerId == u.id,
+        where:
+          f.userId == ^user_id and u.online == true and
+            (u.currentQuizId != ^user.currentQuizId or is_nil(u.currentQuizId)),
+        select: u,
+        limit: ^@fetch_limit,
+        offset: ^offset
+      )
+      |> Beef.Repo.all()
+
+    {Enum.slice(items, 0, -1 + @fetch_limit),
+     if(length(items) == @fetch_limit, do: -1 + offset + @fetch_limit, else: nil)}
+  end
+
   def get_info(me_id, other_user_id) do
     from(f in Follow,
       where:

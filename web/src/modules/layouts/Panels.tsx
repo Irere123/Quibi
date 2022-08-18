@@ -1,7 +1,7 @@
 import React from "react";
 import Link from "next/link";
 
-import { CompassIcon, HomeIcon, PodcastIcon, SchoolIcon } from "../../icons";
+import { CompassIcon, HomeIcon, SchoolIcon } from "../../icons";
 import AtIcon from "../../icons/AtIcon";
 import { BoxedIcon } from "../../ui/BoxedIcon";
 import { Tooltip } from "../../ui/Tooltip";
@@ -39,7 +39,7 @@ export const LeftPanel: React.FC = () => {
         </Link>
       </Tooltip>
       <Tooltip text={t("components.panels.right.chat")}>
-        <Link href={"/chat"}>
+        <Link href={"/explore-rooms"}>
           <a>
             <BoxedIcon circle shadow>
               <AtIcon />
@@ -51,7 +51,7 @@ export const LeftPanel: React.FC = () => {
         <Link href={"/explore"}>
           <a>
             <BoxedIcon circle shadow>
-              <PodcastIcon />
+              <CompassIcon />
             </BoxedIcon>
           </a>
         </Link>

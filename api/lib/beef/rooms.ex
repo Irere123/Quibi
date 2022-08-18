@@ -6,7 +6,8 @@ defmodule Beef.Rooms do
   """
 
   # ACCESS
-  defdelegate get_user_rooms(user_id), to: Beef.Access.Rooms
+  defdelegate get_my_rooms(user_id), to: Beef.Access.Rooms
+  defdelegate get_room_by_id(room_id), to: Beef.Access.Rooms
 
   # MUTATIONS
   defdelegate insert(data), to: Beef.Mutations.Rooms

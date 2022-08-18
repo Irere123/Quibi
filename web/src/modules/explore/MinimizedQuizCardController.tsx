@@ -26,7 +26,9 @@ export const MinimizedQuizCardController: React.FC<Props> = ({ quizId }) => {
   return (
     <MinimizedQuizCard
       onFullscreenClick={() => push(`/quiz/${quiz.id}`)}
-      onInviteClick={() => console.log("invite people")}
+      onInviteClick={() => {
+        push(`/quiz/${quiz.id}/invite`);
+      }}
       leaveLoading={isLoading}
       quiz={{
         name: quiz.name,

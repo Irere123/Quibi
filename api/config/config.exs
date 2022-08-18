@@ -7,11 +7,6 @@ config :okra, max_quiz_size: 512
 
 config :extwitter, :json_library, Poison
 
-# Configures Elixir's Logger
-config :logger, :console,
-  format: "$time $metadata[$level] $message\n",
-  metadata: [:request_id]
-
 # Ueberauth config
 config :ueberauth, Ueberauth,
   providers: [

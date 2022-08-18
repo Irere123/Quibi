@@ -1,5 +1,5 @@
 import React from "react";
-import { ChatInput } from "../ChatInput";
+import { RoomChatInput } from "../room/chat/RoomChatInput";
 import { DmChatHeader } from "./DmChatHeader";
 import { DmMessages } from "./DmMessages";
 
@@ -9,7 +9,7 @@ export const DmChat: React.FC = () => {
       <div className="flex flex-1 w-full flex-col">
         <DmChatHeader />
         <DmMessages />
-        <ChatInput />
+        <RoomChatInput />
       </div>
     </div>
   );

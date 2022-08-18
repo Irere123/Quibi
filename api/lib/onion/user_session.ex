@@ -101,10 +101,13 @@ defmodule Onion.UserSession do
     {:reply, Map.get(state, key), state}
   end
 
-  def set_pid(user_id, pid), do: call(user_id, {:set_pid, pid})
+  def set_active_ws(user_id, pid), do: call(user_id, {:set_active_ws, pid})
 
-  defp set_pid(pid, _reply, state) do
+  defp set_active_ws(pid, _reply, state) do
     if state.pid do
+      # if you want to maje it multi-connection ws come here
+      # terminates another websocket that happened to have been
+      # running.
       send(state.pid, {:kill})
     else
       Beef.Users.set_online(state.user_id)
@@ -115,13 +118,19 @@ defmodule Onion.UserSession do
     {:reply, :ok, %{state | pid: pid}}
   end
 
+  @all [{{:_, :"$1", :_}, [], [:"$1"]}]
+  def force_reconnects() do
+    Onion.UserSessionRegistry
+    |> Registry.select(@all)
+    |> Enum.each(&reconnect(&1))
+  end
+
   def reconnect(user_pid), do: GenServer.cast(user_pid, {:reconnect})
 
   defp reconnect_impl(state), do: {:noreply, state}
 
   ##############################################################################
   ## MESSAGING API.
-  ## TODO: change the first one to a call
 
   defp handle_disconnect(pid, state = %{pid: pid}) do
     Beef.Users.set_offline(state.user_id)
@@ -151,7 +160,7 @@ defmodule Onion.UserSession do
 
   def handle_call(:get_info_for_msg, reply, state), do: get_info_for_msg_impl(reply, state)
   def handle_call({:get, key}, reply, state), do: get_impl(key, reply, state)
-  def handle_call({:set_pid, pid}, reply, state), do: set_pid(pid, reply, state)
+  def handle_call({:set_active_ws, pid}, reply, state), do: set_active_ws(pid, reply, state)
 
   def handle_info({:DOWN, _ref, :process, pid, _reason}, state), do: handle_disconnect(pid, state)
 end

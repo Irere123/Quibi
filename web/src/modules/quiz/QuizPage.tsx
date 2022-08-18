@@ -5,23 +5,29 @@ import { PageComponent } from "../../types/PageComponent";
 import { WaitForWsAndAuth } from "../auth/WaitForWsAndAuth";
 import { MainLayout } from "../layouts/MainLayout";
 import { LeftPanel } from "../layouts/Panels";
+import { Quiz } from "../ws";
 import { QuizChatController } from "./QuizChatController";
 import { QuizOpenGraphPreview } from "./QuizOpenGraphPreview";
 import { QuizPageController } from "./QuizPageController";
+import { UserPreviewModalProvider } from "./UserPreviewModalProvider";
 
-interface QuizPageProps {}
+interface QuizPageProps {
+  quiz?: Quiz;
+}
 
-export const QuizPage: PageComponent<QuizPageProps> = () => {
+export const QuizPage: PageComponent<QuizPageProps> = ({ quiz }) => {
   return (
-    <QuizOpenGraphPreview quiz={undefined}>
-      <WaitForWsAndAuth>
-        <MainLayout
-          leftPanel={<LeftPanel />}
-          rightPanel={<QuizChatController />}
-        >
-          <QuizPageController />
-        </MainLayout>
-      </WaitForWsAndAuth>
+    <QuizOpenGraphPreview quiz={quiz}>
+      <UserPreviewModalProvider>
+        <WaitForWsAndAuth>
+          <MainLayout
+            leftPanel={<LeftPanel />}
+            rightPanel={<QuizChatController />}
+          >
+            <QuizPageController />
+          </MainLayout>
+        </WaitForWsAndAuth>
+      </UserPreviewModalProvider>
     </QuizOpenGraphPreview>
   );
 };
@@ -37,7 +43,7 @@ QuizPage.getInitialProps = async ({ query }) => {
     try {
       const resp = await defaultQueryFn({ queryKey: `/quiz/${key}` });
       if ("quiz" in resp) {
-        quiz = resp.room;
+        quiz = resp.quiz;
       }
     } catch {}
   }

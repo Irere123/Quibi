@@ -6,7 +6,7 @@ defmodule Beef.Schemas.User do
   defmodule Preview do
     use Ecto.Schema
 
-    @derive {Jason.Encoder, only: [:id, :displayName, :username, :avatarUrl]}
+    @derive {Jason.Encoder, only: [:id, :displayName, :avatarUrl]}
 
     @primary_key false
     embedded_schema do
@@ -14,7 +14,6 @@ defmodule Beef.Schemas.User do
       field(:id, :binary_id)
 
       field(:displayName, :string)
-      field(:username, :string)
       field(:avatarUrl, :string)
       field(:numFollowers, :integer)
     end
@@ -42,6 +41,7 @@ defmodule Beef.Schemas.User do
     field(:followsYou, :boolean, virtual: true)
     field(:theyBlockedMe, :boolean, virtual: true)
     field(:iBlockedThem, :boolean, virtual: true)
+    field(:quizPermissions, :map, virtual: true)
 
     belongs_to(:currentQuiz, Beef.Schemas.Quiz, foreign_key: :currentQuizId, type: :binary_id)
 
@@ -78,7 +78,7 @@ defmodule Beef.Schemas.User do
     @fields ~w(
       id username email displayName avatarUrl bannerUrl bio online
       last_online  inserted_at youAreFollowing followsYou iBlockedThem
-      numFollowing numFollowers currentQuizId currentQuiz
+      numFollowing numFollowers currentQuizId currentQuiz quizPermissions
     )a
 
     defp transform_current_quiz(fields = %{currentQuiz: %Ecto.Association.NotLoaded{}}) do
