@@ -1,7 +1,10 @@
 <p align="center">
+ <img height=100 src="https://raw.githubusercontent.com/irere123/Quibi/dev/.assets/quibi.png"/>
+</p>
+
+<p align="center">
   <strong>Making an open world for learning 🚀</strong>
 </p>
----
 
 ## Structure
 

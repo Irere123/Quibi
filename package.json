@@ -1,5 +1,17 @@
 {
   "name": "quibi",
+  "private": "true",
+  "workspaces": {
+    "packages": [
+      "web",
+      "client"
+    ],
+    "nohoist": [
+      "**",
+      "node_modules/@tailwindcss/line-clamp",
+      "node_modules/@tailwindcss/line-clamp/**"
+    ]
+  },
   "devDependencies": {
     "@commitlint/cli": "^12.1.1",
     "@commitlint/config-conventional": "^12.1.1",
