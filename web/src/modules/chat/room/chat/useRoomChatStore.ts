@@ -1,55 +1,16 @@
 import create from "zustand";
 import { combine } from "zustand/middleware";
 
-interface TextToken {
-  t: "text";
-  v: string;
-}
-interface MentionToken {
-  t: "mention";
-  v: string;
-}
-interface LinkToken {
-  t: "link";
-  v: string;
-}
-
-interface BlockToken {
-  t: "block";
-  v: string;
-}
-
-interface EmoteToken {
-  t: "emote";
-  v: string;
-}
-
-export type RoomChatMessageToken =
-  | TextToken
-  | MentionToken
-  | LinkToken
-  | BlockToken
-  | EmoteToken;
-
-export interface RoomChatMessage {
-  id: string;
-  userId: string;
-  avatarUrl: string;
-  color: string;
-  username: string;
-  displayName: string;
-  tokens: RoomChatMessageToken[];
-  deleted?: boolean;
-  deleterId?: string;
-  sentAt: string;
-  isWhisper?: boolean;
-}
-
 export const useRoomChatStore = create(
   combine(
-    { messages: [] as RoomChatMessage[], message: "" as string },
+    {
+      messages: [] as any[],
+      message: "" as string,
+      isRoomChatScrolledToTop: false,
+      frozen: false,
+    },
     (set) => ({
-      addMessage: (m: RoomChatMessage) =>
+      addMessage: (m: any) =>
         set((s) => ({
           messages: [
             { ...m },
@@ -58,7 +19,7 @@ export const useRoomChatStore = create(
               : s.messages),
           ],
         })),
-      setMessages: (messages: RoomChatMessage[]) =>
+      setMessages: (messages: any[]) =>
         set((s) => ({
           messages,
         })),
@@ -66,6 +27,11 @@ export const useRoomChatStore = create(
         set({
           message,
         }),
+      setIsRoomChatScrolledToTop: (isRoomChatScrolledToTop: boolean) =>
+        set({
+          isRoomChatScrolledToTop,
+        }),
+      toggleFrozen: () => set((s) => ({ frozen: !s.frozen })),
     })
   )
 );

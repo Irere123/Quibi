@@ -75,10 +75,7 @@ export const BlockedFromQuizUsersPage: React.FC<{
   return (
     <>
       {data.users.map((profile) => (
-        <div
-          className={`flex w-full flex py-4 px-2 items-center`}
-          key={profile.id}
-        >
+        <div className={`flex w-full py-4 px-2 items-center`} key={profile.id}>
           <div className="flex">
             <SingleUser size="md" src={profile.avatarUrl} />
           </div>
@@ -94,7 +91,7 @@ export const BlockedFromQuizUsersPage: React.FC<{
         </div>
       ))}
       {isLastPage && data.nextCursor ? (
-        <div className={`flex flex items-center justify-center mt-4`}>
+        <div className={`flex items-center justify-center mt-4`}>
           <Button
             size="small"
             onClick={() => {

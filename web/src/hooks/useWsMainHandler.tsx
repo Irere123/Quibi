@@ -91,6 +91,26 @@ export const useWsMainHandler = () => {
         });
       }),
 
+      conn.addListener<any>("new_room_chat_msg", (message) => {
+        updateQuery(["getRoomMessages", message.roomId], (data) => {
+          if (data && "error" in data) {
+            return data;
+          }
+
+          console.log("ROOM:", data);
+          console.log("<M>:", message);
+
+          return {
+            messages: [
+              ...data.messages,
+              {
+                ...message,
+              },
+            ],
+          };
+        });
+      }),
+
       conn.addListener<any>("new_user_join_quiz", ({ user, quizId }) => {
         updateQuery(["joinQuizAndGetInfo", quizId], (data) =>
           !data || "error" in data

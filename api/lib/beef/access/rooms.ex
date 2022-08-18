@@ -4,6 +4,14 @@ defmodule Beef.Access.Rooms do
   alias Beef.Schemas.Room
   alias Beef.Schemas.RoomMember
   alias Beef.Repo
+  alias Beef.Queries.Rooms, as: Query
+
+  def get_room_by_id(room_id) do
+    Query.start()
+    |> Query.filter_room_by_id(room_id)
+    |> Query.limit_one()
+    |> Repo.one()
+  end
 
   def get_my_rooms(user_id) do
     from(r in Room,

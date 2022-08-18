@@ -53,9 +53,7 @@ export const ChatLayout: React.FC<MainLayoutProps> = ({
 
   return (
     <>
-      <div
-        className={`flex flex-col items-center w-full scrollbar-thin scrollbar-thumb-primary-700 `}
-      >
+      <div className={`flex flex-col items-center w-full`}>
         <ChatInnerGrid>{middle}</ChatInnerGrid>
       </div>
     </>

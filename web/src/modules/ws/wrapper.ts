@@ -14,6 +14,10 @@ export const wrap = (connection: Connection) => ({
     getMyFollowing: (limit = 7): Promise<any> =>
       connection.fetch("get_my_following", { limit }),
     getMyRooms: (): Promise<any> => connection.fetch("get_my_rooms", {}),
+    getRoomInfo: (roomId: string): Promise<any> =>
+      connection.fetch("get_room_info", { roomId }),
+    getRoomMessages: (roomId: string): Promise<any> =>
+      connection.fetch("get_room_messages", { roomId }),
     getInviteList: (cursor = 0): Promise<any> =>
       connection.fetch("get_invite_list", { cursor }),
     joinQuizAndGetInfo: (quizId: string): Promise<any> =>
@@ -51,6 +55,11 @@ export const wrap = (connection: Connection) => ({
       connection.send("unban_from_quiz_chat", { userId }) as any,
     banFromQuizChat: (userId: string): Promise<void> =>
       connection.send("ban_from_quiz_chat", { userId }) as any,
+
+    sendRoomChatMessage: (data: {
+      roomId: string;
+      message: string;
+    }): Promise<any> => connection.send("send_room_chat_msg", data) as any,
 
     editProfile: (data: {
       displayName: string;

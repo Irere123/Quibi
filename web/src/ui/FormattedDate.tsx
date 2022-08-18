@@ -13,7 +13,7 @@ interface FormattedDateProps {
 
 export const FormattedDate: React.FC<FormattedDateProps> = ({ date }) => {
   if (isToday(date)) {
-    return <>Today</>;
+    return <>Today at {format(date, `HH:mm`)}</>;
   } else if (isYesterday(date)) {
     return <>Yesterday</>;
   } else if (isThisWeek(date)) {

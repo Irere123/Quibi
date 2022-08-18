@@ -3,6 +3,7 @@ defmodule Broth.Message do
   alias Beef.Follows
   alias Okra.Quiz
   alias Okra.Room
+  alias Okra.RoomChat
 
   #######################################################################
   #### HANDLER FUNCTIONS
@@ -61,8 +62,23 @@ defmodule Broth.Message do
     {:ok, state}
   end
 
+  def handler("send_room_chat_msg", %{"message" => message, "roomId" => room_id}, state) do
+    case RoomChat.send_msg(state.user_id, room_id, message) do
+      {:ok, d} ->
+        {:reply, SocketHandler.prepare_socket_msg(%{op: "new_room_chat_msg", d: d}, state), state}
+      _ ->
+        {:ok, state}
+    end
+  end
+
   #######################################################################
   #### FETCH HANDLER FUNCTIONS
+
+  def f_handler("get_room_messages", %{"roomId" => room_id}, _state) do
+    messages = Beef.Messages.get_messages(room_id)
+
+    %{messages: messages}
+  end
 
   def f_handler("create_room", data, state) do
     case Room.create_room(state.user_id, data["roomName"], data["isPrivate"]) do
@@ -224,5 +240,9 @@ defmodule Broth.Message do
     rooms = Okra.Room.get_my_rooms(state.user_id)
 
     %{rooms: rooms}
+  end
+
+  def f_handler("get_room_info", %{"roomId" => room_id}, _state) do
+    Beef.Rooms.get_room_by_id(room_id)
   end
 end

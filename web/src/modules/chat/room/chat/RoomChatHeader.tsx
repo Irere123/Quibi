@@ -6,7 +6,11 @@ import avatar3 from "../../../../img/avatar3.jpg";
 import { MembersModal } from "../MembersModals";
 import { HashIcon } from "../../../../icons";
 
-export const RoomChatHeader: React.FC = () => {
+interface RoomChatHeaderProps {
+  room: any;
+}
+
+export const RoomChatHeader: React.FC<RoomChatHeaderProps> = ({ room }) => {
   const [openMembersModal, setOpenMembersModal] = useState(false);
 
   return (
@@ -16,7 +20,7 @@ export const RoomChatHeader: React.FC = () => {
           <span>
             <HashIcon />
           </span>
-          <p> Sub-room name</p>
+          <p>{room.name}</p>
         </div>
       </div>
       <div className="flex gap-2 items-center">

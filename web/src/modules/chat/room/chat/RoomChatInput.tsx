@@ -8,13 +8,22 @@ import { navigateThroughQueriedEmojis } from "./navigateThroughQueriedEmojis";
 import { useRoomChatStore } from "./useRoomChatStore";
 import { useEmojiPickerStore } from "../../../../stores/useEmojiPickerStore";
 import { showErrorToast } from "../../../../lib/showErrorToast";
+import { useRoomChatMentionStore } from "./useRoomMentionStore";
+import { useConn } from "../../../../hooks/useConn";
+import { useGetRoomFromQueryParams } from "../../useGetRoomFromQueryParams";
+import { useTypeSafeMutation } from "../../../../hooks/useTypeSafeMutation";
 
 export const RoomChatInput: React.FC = () => {
+  const { data } = useGetRoomFromQueryParams();
+  const { setQueriedUsernames } = useRoomChatMentionStore();
   const { message, setMessage } = useRoomChatStore();
   const { setOpen, open } = useEmojiPickerStore();
   const [lastMessageTimestamp, setLastMessageTimestamp] = useState<number>(0);
   const inputRef = useRef<HTMLInputElement>(null);
+  const conn = useConn();
   const { t } = useTypeSafeTranslation();
+  const me = conn.user;
+  const { mutate } = useTypeSafeMutation("sendRoomChatMessage");
 
   let position = 0;
 
@@ -27,15 +36,14 @@ export const RoomChatInput: React.FC = () => {
   ) => {
     e.preventDefault();
 
+    if (!me) return;
+
     if (Date.now() - lastMessageTimestamp <= 1000) {
       showErrorToast(
         "You have to wait a second before sending another message"
       );
-
       return;
     }
-
-    setMessage("");
 
     if (
       !message ||
@@ -44,6 +52,9 @@ export const RoomChatInput: React.FC = () => {
     ) {
       return;
     }
+
+    mutate([{ roomId: data.id, message }]);
+    setQueriedUsernames([]);
 
     setLastMessageTimestamp(Date.now());
   };

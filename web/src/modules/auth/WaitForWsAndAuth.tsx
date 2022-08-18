@@ -1,5 +1,4 @@
 import React, { useContext } from "react";
-import { useSocketStatus } from "../../stores/useSocketStatus";
 import { InfoText } from "../../ui/InfoText";
 import { WebSocketContext } from "../ws/WebSocketProvider";
 import { useVerifyLoggedIn } from "./useVerifyLoggedIn";
