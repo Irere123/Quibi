@@ -9,11 +9,15 @@ defmodule Broth.Routes.GoogleAuth do
 
   get "/web" do
     state =
-      %{
-        redirect_base_url: fetch_query_params(conn).query_params["redirect_after_base"]
-      }
-      |> Poison.encode!()
-      |> Base.encode64()
+      if Application.get_env(:okra, :staging?) do
+        %{
+          redirect_base_url: fetch_query_params(conn).query_params["redirect_after_base"]
+        }
+        |> Poison.encode!()
+        |> Base.encode64()
+      else
+        "web"
+      end
 
     %{conn | params: Map.put(conn.params, "state", state)}
     |> Plug.Conn.put_private(:ueberauth_request_options, %{
@@ -29,14 +33,12 @@ defmodule Broth.Routes.GoogleAuth do
     conn
     |> fetch_query_params()
     |> Plug.Conn.put_private(:ueberauth_request_options, %{
-      callback_url: Application.get_env(:okra, :api_url) <> "/auth/google/callback",
       options: []
     })
     |> Ueberauth.Strategy.Google.handle_callback!()
     |> handle_callback()
   end
 
-  ######## This thing needs a refactor man????
   def get_base_url(conn) do
     with false <- Application.get_env(:okra, :staging?),
          state <- Map.get(conn.query_params, "state", ""),
@@ -63,7 +65,7 @@ defmodule Broth.Routes.GoogleAuth do
   end
 
   def handle_callback(%Plug.Conn{assigns: %{ueberauth_failure: failure}} = conn) do
-    IO.puts("Google oauth failure")
+    IO.puts("google oauth failure")
     IO.inspect(failure)
 
     conn

@@ -1,27 +1,31 @@
 import React from "react";
 import { RoomChatInput } from "./RoomChatInput";
 import { RoomMessages } from "./RoomMessages";
-
-import { RoomChatHeader } from "./RoomChatHeader";
-import { useGetRoomFromQueryParams } from "../../useGetRoomFromQueryParams";
-import { CenterLoader } from "../../../../ui/CenterLoader";
 import { HeaderController } from "../../../display/HeaderController";
+import { useScreenType } from "../../../../hooks/useScreenType";
 
-export const RoomChat: React.FC = () => {
-  const { data, isLoading } = useGetRoomFromQueryParams();
+interface RoomChatProps {
+  room: any;
+}
 
-  if (isLoading) {
-    return <CenterLoader />;
-  }
+export const RoomChat: React.FC<RoomChatProps> = ({ room }) => {
+  const screenType = useScreenType();
 
   return (
-    <div className="flex flex-1 w-full mb-3 bg-primary-800 h-full rounded-lg">
-      <HeaderController title={data.name} />
-      <div className="flex flex-1 w-full flex-col">
-        <RoomChatHeader room={data} />
-        <RoomMessages room={data} />
-        <RoomChatInput />
+    <>
+      <HeaderController title={room.name} />
+      <div className="flex flex-col w-full bg-primary-800 h-full">
+        <RoomMessages room={room} />
+        <div
+          className={`sticky bottom-3 bg-primary-800 ${
+            screenType === "fullscreen" || screenType === "1-cols"
+              ? "flex-1"
+              : ""
+          }`}
+        >
+          <RoomChatInput />
+        </div>
       </div>
-    </div>
+    </>
   );
 };
