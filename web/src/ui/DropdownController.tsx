@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import { createPortal } from "react-dom";
 import { usePopper } from "react-popper";
 
@@ -7,17 +7,17 @@ export const DropdownController: React.FC<{
   className?: string;
   innerClassName?: string;
   overlay: (c: () => void) => React.ReactNode;
-  zIndex?: number;
   children?: React.ReactNode;
+  zIndex?: number;
 }> = ({
-  children,
+  overlay,
   className,
   innerClassName,
-  overlay,
   portal = true,
   zIndex,
+  children,
 }) => {
-  const [visible, setVisibility] = useState(false);
+  const [visible, setVisiblity] = useState(false);
 
   const referenceRef = useRef<HTMLButtonElement>(null);
   const popperRef = useRef<HTMLDivElement>(null);
@@ -39,14 +39,15 @@ export const DropdownController: React.FC<{
       ) {
         return;
       }
-      setVisibility(false);
+      setVisiblity(false);
     };
+
     // listen for clicks and close dropdown on body
     document.addEventListener("mousedown", handleDocumentClick);
     return () => {
-      document.removeEventListener("mousedown", handleDocumentClick);
+      document.addEventListener("mousedown", handleDocumentClick);
     };
-  }, []);
+  });
 
   const body = (
     <div
@@ -59,17 +60,16 @@ export const DropdownController: React.FC<{
         style={styles.offset}
         className={`${visible ? "" : "hidden"} ${innerClassName}`}
       >
-        {visible ? overlay(() => setVisibility(false)) : null}
+        {visible ? overlay(() => setVisiblity(false)) : null}
       </div>
     </div>
   );
-
   return (
     <React.Fragment>
       <button
         className="flex focus:outline-no-chrome"
         ref={referenceRef}
-        onClick={() => setVisibility(!visible)}
+        onClick={() => setVisiblity(!visible)}
         data-testid="dropdown-trigger"
       >
         {children}

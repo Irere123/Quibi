@@ -80,7 +80,7 @@ export const SearchController: React.FC = () => {
         highlightedIndex,
         getRootProps,
       }) => (
-        <div className="relative w-full z-10 flex flex-col gap-3">
+        <div className="relative w-full z-10 flex flex-col">
           <SearchBar
             {...getInputProps()}
             value={rawText}
@@ -96,18 +96,17 @@ export const SearchController: React.FC = () => {
               {...getRootProps({ refKey: "ref" }, { suppressRefError: true })}
             >
               <ul
-                className="w-full px-2 mb-2 mt-7  rounded-b-8 overflow-y-auto"
+                className="w-full px-2 mb-2 mt-7 bg-primary-800 rounded-b-8 overflow-y-auto"
                 {...getMenuProps({ style: { top: 0 } })}
               >
                 {data?.quizes.length === 0 && data?.users.length === 0 ? (
-                  <InfoText className="mt-7">no results found</InfoText>
+                  <InfoText className="p-3">no results found</InfoText>
                 ) : null}
                 {results.map((item, index) =>
                   "username" in item ? (
                     // eslint-disable-next-line react/jsx-key
                     <li
                       data-testid={`search:user:${item.username}`}
-                      className={"mt-7"}
                       {...getItemProps({
                         key: item.id,
                         index,
@@ -130,7 +129,6 @@ export const SearchController: React.FC = () => {
                     </li>
                   ) : (
                     <li
-                      className="mt-7"
                       {...getItemProps({
                         key: item.id,
                         index,

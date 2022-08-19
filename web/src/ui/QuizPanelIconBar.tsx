@@ -78,25 +78,19 @@ export const QuizPanelIconBar: React.FC<QuizPanelIconBarprops> = ({
           ) : null}
         </div>
 
-        <Button
-          transition
-          className={`my-1 mx-1 text-base sm:my-0 sm:mx-0 sm:w-15`}
-          size="medium"
-          onClick={() => {
-            onLeaveQuiz();
-          }}
-        >
-          Leave
-        </Button>
+        {screenType !== "fullscreen" && (
+          <Button
+            transition
+            className={`my-1 mx-1 text-base sm:my-0 sm:mx-0 sm:w-15`}
+            size="medium"
+            onClick={() => {
+              onLeaveQuiz();
+            }}
+          >
+            Leave
+          </Button>
+        )}
       </div>
-      {open && enableAnswer ? (
-        <div>
-          <Input
-            placeholder="Your answer"
-            className="border-2 border-primary-600"
-          />
-        </div>
-      ) : null}
     </div>
   );
 };

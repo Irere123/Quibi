@@ -22,7 +22,7 @@ export const QuizChat: React.FC<ChatProps> = ({ quiz, users }) => {
 
   return (
     <div
-      className={`flex flex-1 w-full mb-7 overflow-y-auto bg-primary-800 h-full rounded-lg`}
+      className={`flex flex-1 w-full mb-5 overflow-y-auto bg-primary-800 h-full rounded-lg`}
     >
       <div className={`flex flex-1 w-full flex-col mt-4`}>
         <QuizChatHeader description={quiz.description!} />

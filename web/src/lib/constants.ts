@@ -1,7 +1,7 @@
 export const __prod__ = process.env.NODE_ENV === "production";
 export const apiBaseUrl = !__prod__
   ? "http://localhost:4001"
-  : "https://api-neox-next.herokuapp.com";
+  : "https://api.quibi.me";
 
 export const linkRegex2 = /(https?:\/\/[^\s]+)/g;
 export const linkRegex3 = /^(https?|chrome):\/\/[^\s$.?#].[^\s]*$/gm;

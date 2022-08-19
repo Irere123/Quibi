@@ -14,11 +14,12 @@ defmodule Beef.Messages do
   def get_messages(room_id) do
     messages =
       from(m in Message,
-      where: m.roomId == ^room_id,
-      inner_join: u in assoc(m, :creator),
-      preload: [
-        creator: u
-      ])
+        where: m.roomId == ^room_id,
+        inner_join: u in assoc(m, :creator),
+        preload: [
+          creator: u
+        ]
+      )
       |> Repo.all()
 
     messages

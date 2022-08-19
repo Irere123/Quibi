@@ -12,7 +12,7 @@ export const SearchOverlay = forwardRef<
   return (
     <div
       ref={ref}
-      className={`absolute flex flex-col py-2 rounded bg-primary-800 border-primary-700 border   ${className}`}
+      className={`absolute flex flex-col py-2 rounded-8 bg-primary-800 border-primary-700 border ${className}`}
       style={{
         minHeight: "198px",
         maxHeight: "50vh",

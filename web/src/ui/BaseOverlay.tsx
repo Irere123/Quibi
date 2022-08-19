@@ -19,7 +19,7 @@ export const BaseOverlay: React.FC<BaseOverlayProps> = ({
 }) => {
   return (
     <div
-      className="flex flex-col w-full rounded-8 bg-primary-800 border border-primary-700 overflow-hidden relative"
+      className="flex flex-col w-full rounded-md bg-primary-800 border border-primary-700 overflow-hidden relative"
       data-testid="base-overlay"
       {...props}
     >
@@ -38,7 +38,7 @@ export const BaseOverlay: React.FC<BaseOverlayProps> = ({
           style={{
             paddingTop: 8,
             paddingBottom: 12,
-            borderRadius: "0 0 8px 8px",
+            borderRadius: "0 0 6px 6px",
           }}
           onClick={onActionButtonClicked}
         >

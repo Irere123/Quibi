@@ -7,6 +7,7 @@ import { InfoText } from "../../ui/InfoText";
 import { Spinner } from "../../ui/Spinner";
 import { HeaderController } from "../display/HeaderController";
 import { MiddlePanel } from "../layouts/GridPanels";
+import { JoinQuizAndGetInfoResponse } from "../ws";
 import { useQuizChatStore } from "./chat/useQuizChatStore";
 import { QuizIconBarPanel } from "./QuizIconBarPanel";
 import { QuizInfoPanel } from "./QuizInfoPanel";
@@ -14,9 +15,15 @@ import { QuizQuestionsPanel } from "./QuizQuestionsPanel";
 import { useGetQuizByQueryParams } from "./useGetQuizByQueryParams";
 import { UserPreviewModal } from "./UserPreviewModal";
 
-interface QuizPageControllerProps {}
+interface QuizPageControllerProps {
+  setQuizData?: React.Dispatch<
+    React.SetStateAction<JoinQuizAndGetInfoResponse | undefined>
+  >;
+}
 
-export const QuizPageController: React.FC<QuizPageControllerProps> = () => {
+export const QuizPageController: React.FC<QuizPageControllerProps> = ({
+  setQuizData,
+}) => {
   const conn = useConn();
   const { currentQuizId } = useCurrentQuizIdStore();
   const { data, isLoading } = useGetQuizByQueryParams();
@@ -43,6 +50,7 @@ export const QuizPageController: React.FC<QuizPageControllerProps> = () => {
   }
 
   const quizCreator = data.users.find((x: any) => x.id === data.quiz.creatorId);
+  if (setQuizData) setQuizData(data);
 
   return (
     <MiddlePanel
@@ -66,7 +74,7 @@ export const QuizPageController: React.FC<QuizPageControllerProps> = () => {
       <div className="flex flex-col h-full w-full">
         {screenType === "fullscreen" && open ? null : <QuizQuestionsPanel />}
         <div
-          className={`sticky bottom-0 pb-7 bg-primary-900 ${
+          className={`sticky bottom-0 pb-5 bg-primary-900 ${
             (screenType === "fullscreen" || screenType === "1-cols") && open
               ? "flex-1"
               : ""

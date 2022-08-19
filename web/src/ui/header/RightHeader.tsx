@@ -1,13 +1,25 @@
 import React from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { AppsIcon, DownloadIcon, HomeIcon, SettingsIcon } from "../../icons";
+import {
+  AppsIcon,
+  DownloadIcon,
+  HomeIcon,
+  Notification,
+  SettingsIcon,
+} from "../../icons";
 import { SingleUser } from "../Avatars";
 import { Button } from "../Button";
 import { BoxedIcon } from "../BoxedIcon";
 import { ApiPreloadLink } from "../../shared-components/ApiPreloadLink";
 import { useConn } from "../../hooks/useConn";
 import { useScreenType } from "../../hooks/useScreenType";
+import { DropdownController } from "../DropdownController";
+import { SettingsDropdown } from "../SettingsDropdown";
+import { modalConfirm } from "../../shared-components/ConfirmModal";
+import { useCurrentQuizIdStore } from "../../stores/useCurentQuizIdStore";
+import { useTokenStore } from "../../modules/auth/useTokenStore";
+import { NotificationsDropdown } from "../NotificationsDropdown";
 
 export interface RightHeaderProps {
   actionButton?: React.ReactNode;
@@ -15,7 +27,7 @@ export interface RightHeaderProps {
 
 const RightHeader: React.FC<RightHeaderProps> = ({ actionButton }) => {
   const screenType = useScreenType();
-  const { user } = useConn();
+  const conn = useConn();
   const { pathname, push } = useRouter();
   let showHome = false;
 
@@ -31,39 +43,35 @@ const RightHeader: React.FC<RightHeaderProps> = ({ actionButton }) => {
         <AppsIcon />
       </BoxedIcon>
 
-      {showHome && screenType !== "fullscreen" ? (
-        <Link href={"/dash"}>
-          <a>
-            <BoxedIcon circle={true} shadow={true}>
-              <HomeIcon />
-            </BoxedIcon>
-          </a>
-        </Link>
-      ) : (
-        <Link href={"/settings"}>
-          <a>
-            <BoxedIcon circle={true}>
-              <SettingsIcon />
-            </BoxedIcon>
-          </a>
-        </Link>
-      )}
-
-      {screenType === "3-cols" && (
-        <Button icon={<DownloadIcon />}>Download</Button>
-      )}
       {actionButton}
 
-      <ApiPreloadLink route="profile" data={{ username: user.username }}>
-        <a>
-          <SingleUser
-            className={"focus:outline-no-chrome cursor-pointer"}
-            size="sm"
-            src={user.avatarUrl}
-            username={user.username}
+      <DropdownController
+        zIndex={20}
+        className="top-9 right-3 md:right-0 fixed"
+        innerClassName="fixed  transform -translate-x-full"
+        overlay={(close) => (
+          <SettingsDropdown
+            onActionButtonClicked={() => {
+              modalConfirm("Are you sure", () => {
+                conn.close();
+                useCurrentQuizIdStore.getState().setCurrentQuizId(null);
+                useTokenStore
+                  .getState()
+                  .setTokens({ accessToken: "", refreshToken: "" });
+                push("/logout");
+              });
+            }}
+            onCloseDropdown={close}
+            user={conn.user}
           />
-        </a>
-      </ApiPreloadLink>
+        )}
+      >
+        <SingleUser
+          className={"focus:outline-no-chrome"}
+          size="sm"
+          src={conn.user.avatarUrl}
+        />
+      </DropdownController>
     </div>
   );
 };

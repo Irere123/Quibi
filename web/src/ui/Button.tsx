@@ -6,9 +6,9 @@ import React, {
 import { Spinner } from "./Spinner";
 
 const sizeClassnames = {
-  big: "py-2 px-6 text-sm rounded-lg",
+  big: "py-2 px-6 text-sm rounded-8",
   medium: "py-2 px-5 text-sm rounded",
-  small: "px-2 py-1 text-sm rounded-md",
+  small: "px-2 py-1 text-sm rounded-5",
   tiny: "px-1 text-sm rounded-5",
 };
 

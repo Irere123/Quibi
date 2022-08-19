@@ -6,7 +6,7 @@ import { CalendarMonth, PlusIcon } from "../../icons";
 import { isServer } from "../../lib/isServer";
 import { useCurrentQuizIdStore } from "../../stores/useCurentQuizIdStore";
 import { BoxedIcon } from "../../ui/BoxedIcon";
-import { Card } from "../../ui/Card";
+import { QuizCard } from "../../ui/QuizCard";
 import { InfoText } from "../../ui/InfoText";
 import { PageHeader } from "../../ui/PageHeader";
 import { MiddlePanel } from "../layouts/GridPanels";
@@ -48,7 +48,16 @@ const Page = ({
   return (
     <>
       {data.quizes.map((quiz: any) => (
-        <Card
+        <QuizCard
+          title={quiz.name}
+          subtitle={
+            "peoplePreviewList" in quiz
+              ? quiz.peoplePreviewList
+                  .slice(0, 3)
+                  .map((x: any) => x.displayName)
+                  .join(", ")
+              : ""
+          }
           onClick={() => {
             if (quiz.id !== currentQuizId) {
               useQuizChatStore.getState().reset();
@@ -58,22 +67,15 @@ const Page = ({
             push(`/quiz/[id]`, `/quiz/${quiz.id}`);
           }}
           key={quiz.id}
-          title={quiz.name}
-          avatars={[
-            "peoplePreviewList" in quiz
-              ? quiz.peoplePreviewList.slice(0, 3).map((x: any) => x.avatarUrl)
-              : "",
-          ]}
-          live={true}
-          subtitle={
+          avatars={
             "peoplePreviewList" in quiz
               ? quiz.peoplePreviewList
+                  .map((x: any) => x.avatarUrl!)
                   .slice(0, 3)
-                  .map((x: any) => x.displayName)
-                  .join(", ")
-              : ""
+                  .filter((x: any) => x !== null)
+              : []
           }
-          people={"numPeopleInside" in quiz ? quiz.numPeopleInside : 0}
+          numPeopleInside={"numPeopleInside" in quiz ? quiz.numPeopleInside : 0}
           tags={[]}
         />
       ))}

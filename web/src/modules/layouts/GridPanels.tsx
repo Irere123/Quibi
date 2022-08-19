@@ -12,7 +12,7 @@ interface LeftPanelProps {
 
 const HeaderWrapper: React.FC<{ children?: React.ReactNode }> = ({
   children,
-}) => <div className={`flex mb-7 h-6 items-center`}>{children}</div>;
+}) => <div className={`flex mb-4 h-6 items-center`}>{children}</div>;
 
 export const LeftPanel: React.FC<LeftPanelProps> = ({ children }) => {
   return (

@@ -52,7 +52,7 @@ export const MainInnerGrid: React.FC<DashboardGridProps> = ({
   } else if (screenType === "1-cols") {
     gridTemplateColumns = "60px 640px";
   } else if (screenType === "fullscreen") {
-    myClassName = "w-full";
+    myClassName = "w-full px-3";
     gridTemplateColumns = "1fr";
   }
 
@@ -73,7 +73,10 @@ export const MainInnerGrid: React.FC<DashboardGridProps> = ({
 
 export const MainGrid: React.FC<DashboardGridProps> = ({ children }) => {
   return (
-    <div className={`flex justify-center w-full min-h-screen bg-primary-900`}>
+    <div
+      className={`flex justify-center w-full min-h-screen bg-primary-900`}
+      data-testid="main-grid"
+    >
       <MainInnerGrid>{children}</MainInnerGrid>
     </div>
   );

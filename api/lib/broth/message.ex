@@ -66,6 +66,7 @@ defmodule Broth.Message do
     case RoomChat.send_msg(state.user_id, room_id, message) do
       {:ok, d} ->
         {:reply, SocketHandler.prepare_socket_msg(%{op: "new_room_chat_msg", d: d}, state), state}
+
       _ ->
         {:ok, state}
     end

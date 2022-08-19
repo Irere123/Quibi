@@ -32,6 +32,7 @@ export const WebSocketProvider: React.FC<WebSocketProvoderProps> = ({
       isConnecting.current = true;
       raw
         .connect("", "", {
+          waitToReconnect: true,
           url: apiUrl,
           getAuthOptions: () => {
             const { accessToken, refreshToken } = useTokenStore.getState();

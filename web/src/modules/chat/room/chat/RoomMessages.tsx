@@ -24,7 +24,7 @@ export const RoomMessages: React.FC<RoomMessagesProps> = ({ room }) => {
   }
 
   return (
-    <div className="flex flex-col px-5 flex-1 justify-end overflow-y-scroll scrollbar-thin scrollbar-thumb-rounded-xl scrollbar-thumb-primary-700">
+    <div className={`flex flex-col pt-4 px-4 flex-1`}>
       {data.messages.map((m: any) => (
         <MessageElement
           key={m.id}

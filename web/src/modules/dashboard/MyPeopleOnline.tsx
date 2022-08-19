@@ -28,9 +28,9 @@ export const MyPeopleOnline: React.FC<MyPeopleOnlineProps> = () => {
 
   return (
     <>
-      <div className="flex gap-3">
+      <div className="flex gap-2">
         <div
-          className={`bg-gradient-to-r from-secondary-300 to-secondary-200 flex justify-center shadow-md shadow-primary-300 items-center cursor-pointer bg-secondary-300 w-12 h-12 rounded-full`}
+          className={`bg-gradient-to-r from-secondary-300 to-secondary-200 flex justify-center shadow-md shadow-primary-300 items-center cursor-pointer bg-secondary-300 w-6.5 h-6.5 rounded-full`}
         >
           <PlusIcon />
         </div>
