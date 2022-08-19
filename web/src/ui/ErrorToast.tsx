@@ -4,12 +4,14 @@ import { PlusIcon } from "../icons";
 export type ToastDurations = "default" | "sticky";
 
 export interface ErrorMessageProps {
+  button?: React.ReactNode;
   message: string;
   duration?: ToastDurations;
   onClose?: () => void;
 }
 
 export const ErrorToast: React.FC<ErrorMessageProps> = ({
+  button,
   message,
   duration = "default",
   onClose,
@@ -32,19 +34,28 @@ export const ErrorToast: React.FC<ErrorMessageProps> = ({
 
   return (
     <div
-      className={`flex gap-3 rounded p-3 w-full items-center justify-center text-button transition-transform duration-300 bg-primary-700 border-2 border-secondary-300`}
+      className={`flex rounded-8 p-3 relative w-full items-center justify-center text-primary-100 transition-transform duration-300 bg-primary-600`}
+      data-testid="error-message"
     >
-      <div className={`flex space-x-4 items-center`}>
-        <div className={`text-primary-100 bold`}>{message}</div>
-      </div>
       {onClose ? (
         <div
-          className={`flex text-primary-100 cursor-pointer`}
+          className={`flex absolute cursor-pointer`}
+          style={{
+            top: 5,
+            right: 7,
+            width: 13,
+            height: 13,
+          }}
           onClick={onClose}
+          data-testid="close-btn"
         >
           <PlusIcon style={{ transform: "rotate(45deg)" }} />
         </div>
       ) : null}
+      <div className={`flex space-x-4 items-center`}>
+        <div className={`bold`}>{message}</div>
+        {button}
+      </div>
     </div>
   );
 };

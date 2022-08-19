@@ -1,7 +1,13 @@
 import React from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { AppsIcon, DownloadIcon, HomeIcon, SettingsIcon } from "../../icons";
+import {
+  AppsIcon,
+  DownloadIcon,
+  HomeIcon,
+  Notification,
+  SettingsIcon,
+} from "../../icons";
 import { SingleUser } from "../Avatars";
 import { Button } from "../Button";
 import { BoxedIcon } from "../BoxedIcon";
@@ -13,6 +19,7 @@ import { SettingsDropdown } from "../SettingsDropdown";
 import { modalConfirm } from "../../shared-components/ConfirmModal";
 import { useCurrentQuizIdStore } from "../../stores/useCurentQuizIdStore";
 import { useTokenStore } from "../../modules/auth/useTokenStore";
+import { NotificationsDropdown } from "../NotificationsDropdown";
 
 export interface RightHeaderProps {
   actionButton?: React.ReactNode;
