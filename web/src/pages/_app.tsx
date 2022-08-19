@@ -16,6 +16,8 @@ import { PromptModal } from "../shared-components/PromptModal";
 import { WebSocketProvider } from "../modules/ws/WebSocketProvider";
 import { WsMainHandlerProvider } from "../hooks/useWsMainHandler";
 import { SoundEffectPlayer } from "../modules/sound-effects/SoundEffectPlayer";
+import Head from "next/head";
+import { AppProps } from "next/app";
 
 if (!isServer) {
   init_i18n();
@@ -29,7 +31,7 @@ Router.events.on("routeChangeError", () => NProgress.done());
 
 ReactModal.setAppElement("#__next");
 
-function App({ Component, pageProps }: any) {
+function App({ Component, pageProps }: AppProps) {
   if (
     isServer &&
     !Component.getInitialProps &&
@@ -44,10 +46,18 @@ function App({ Component, pageProps }: any) {
     >
       <QueryClientProvider client={queryClient}>
         <WsMainHandlerProvider>
-          <SoundEffectPlayer />
-          <KeybindListener />
-          <ErrorToastController />
+          <Head>
+            <link rel="icon" href="/favicon.ico" type="image/x-icon" />
+            <link rel="manifest" href="/manifest.json" />
+            <meta
+              name="viewport"
+              content="width=device-width, initial-scale=1, user-scalable=no, user-scalable=0"
+            />
+          </Head>
           <Component {...pageProps} />
+          <SoundEffectPlayer />
+          <ErrorToastController />
+          <KeybindListener />
           <ConfirmModal />
           <PromptModal />
         </WsMainHandlerProvider>

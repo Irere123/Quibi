@@ -3,7 +3,7 @@ import Link from "next/link";
 import React from "react";
 import { PlusIcon } from "../icons";
 import { BoxedIcon } from "./BoxedIcon";
-import { CardHeading } from "./CardHeading";
+import { QuizCardHeading } from "./QuizCardHeading";
 import { MultipleUsers } from "./Avatars";
 
 interface FormattedEventDateProps {
@@ -65,7 +65,7 @@ export const ScheduledRoomSummaryCard: React.FC<
       <div className="flex text-accent text-sm uppercase">
         <FormattedEventDate scheduledFor={scheduledFor} />
       </div>
-      <CardHeading text={title} />
+      <QuizCardHeading text={title} />
       <UserCard {...planersInfo} />
     </button>
   );

@@ -45,3 +45,4 @@ export { default as Feather } from "./Feather";
 export { default as FullscreenIcon } from "./FullscreenIcon";
 export { default as PodcastIcon } from "./PodcastIcon";
 export { default as GroupIcon } from "./GroupIcon";
+export { default as TimeIcon } from "./TimeIcon";

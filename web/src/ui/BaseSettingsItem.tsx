@@ -5,7 +5,7 @@ export const BaseSettingsItem: React.FC<{
   children?: React.ReactNode;
 }> = ({ children, className = "" }) => {
   return (
-    <div className={`bg-primary-700 p-4 rounded-lg ${className}`}>
+    <div className={`bg-primary-700 p-4 rounded-8 ${className}`}>
       {children}
     </div>
   );

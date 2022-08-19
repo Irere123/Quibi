@@ -61,12 +61,14 @@ export const connect = (
     url = apiUrl,
     fetchTimeout,
     getAuthOptions,
+    waitToReconnect,
   }: {
     logger?: Logger;
     onConnectionTaken?: () => void;
     onClearTokens?: () => void;
     url?: string;
     fetchTimeout?: number;
+    waitToReconnect?: boolean;
     getAuthOptions?: () => Partial<{
       token: Token;
       refreshToken: Token;
@@ -80,6 +82,8 @@ export const connect = (
       WebSocket,
     });
     const apiSend = (opcode: Opcode, data: unknown, fetchId?: FetchID) => {
+      if (socket.readyState !== socket.OPEN) return;
+
       const raw = `{"op":"${opcode}","d":${JSON.stringify(data)}${
         fetchId ? `,"fetchId":"${fetchId}"` : ""
       }}`;
@@ -103,7 +107,8 @@ export const connect = (
         socket.close();
         onClearTokens();
       }
-      reject(error);
+
+      if (!waitToReconnect) reject(error);
     });
 
     socket.addEventListener("message", (e) => {
@@ -141,6 +146,16 @@ export const connect = (
           send: apiSend,
           fetch: (opcode: Opcode, parameters: unknown, doneOpcode?: Opcode) =>
             new Promise((resolveFetch, rejectFetch) => {
+              // tmp fix
+              // this is to avoid ws events queuing up while socket is closed
+              // then it reconnects and fires before auth goes off
+              // and you get logged out
+              if (socket.readyState !== socket.OPEN) {
+                rejectFetch(new Error("websocket not connected"));
+
+                return;
+              }
+
               const fetchId: FetchID | false = !doneOpcode && generateUuid();
               let timeoutId: NodeJS.Timeout | null = null;
               const unsubscribe = connection.addListener(

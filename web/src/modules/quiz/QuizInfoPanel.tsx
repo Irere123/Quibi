@@ -22,7 +22,7 @@ export const QuizInfoPanel: React.FC<QuizInfoPanelProps> = ({
         >
           {quizTitle}
         </button>
-        <BubbleText>{kFormatter(numPeopleInside)}</BubbleText>
+        <BubbleText live={true}>{kFormatter(numPeopleInside)}</BubbleText>
       </div>
       <div className={`flex text-primary-200 text-sm`}>
         <span style={{ marginRight: 4 }}>with</span>{" "}
