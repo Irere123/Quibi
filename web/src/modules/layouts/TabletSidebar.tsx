@@ -16,21 +16,21 @@ export const TabletSidebar: React.FC<TabletSidebarProps> = ({}) => {
     <div className="items-center gap-5 pb-5 w-full flex flex-col flex-1 overflow-y-auto text-primary-100">
       <Link href={"/dash"}>
         <a>
-          <BoxedIcon circle shadow>
+          <BoxedIcon circle>
             <HomeIcon />
           </BoxedIcon>
         </a>
       </Link>
       <Link href={"/explore"}>
         <a>
-          <BoxedIcon circle shadow>
+          <BoxedIcon circle>
             <CompassIcon />
           </BoxedIcon>
         </a>
       </Link>
       <Link href={"/u/academic"}>
         <a>
-          <BoxedIcon circle shadow>
+          <BoxedIcon circle>
             <SchoolIcon />
           </BoxedIcon>
         </a>
@@ -38,7 +38,7 @@ export const TabletSidebar: React.FC<TabletSidebarProps> = ({}) => {
 
       <Link href={"/explore-rooms"}>
         <a>
-          <BoxedIcon circle shadow>
+          <BoxedIcon circle>
             <AtIcon />
           </BoxedIcon>
         </a>
@@ -46,7 +46,7 @@ export const TabletSidebar: React.FC<TabletSidebarProps> = ({}) => {
 
       <Link href={"/settings"}>
         <a>
-          <BoxedIcon circle shadow>
+          <BoxedIcon circle>
             <SettingsIcon />
           </BoxedIcon>
         </a>
