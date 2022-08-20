@@ -39,7 +39,6 @@ defmodule Onion.QuizSession do
   ## INITIALIZATION BOILERPLATE
 
   def start_link(init) do
-    IO.puts("quiz session starting: " <> init[:quiz_id])
     GenServer.start_link(__MODULE__, init, name: via(init[:quiz_id]))
   end
 
@@ -134,7 +133,7 @@ defmodule Onion.QuizSession do
         op: "invitation_to_quiz",
         d:
           Map.merge(
-            %{roomId: state.quiz_id},
+            %{quizId: state.quiz_id},
             user_info
           )
       }

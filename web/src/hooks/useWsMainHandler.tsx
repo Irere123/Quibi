@@ -7,6 +7,7 @@ import {
   useQuizChatStore,
 } from "../modules/quiz/chat/useQuizChatStore";
 import { WebSocketContext } from "../modules/ws/WebSocketProvider";
+import { invitedToQuizConfirm } from "../shared-components/InvitedToJoinQuizModal";
 import { useCurrentQuizIdStore } from "../stores/useCurentQuizIdStore";
 import { useTypeSafeUpdateQuery } from "./useTypeSafeUpdateQuery";
 
@@ -30,6 +31,15 @@ export const useWsMainHandler = () => {
       }),
       conn.addListener<any>("chat_user_banned", ({ userId }) => {
         useQuizChatStore.getState().addBannedUser(userId);
+      }),
+
+      conn.addListener<any>("invitation_to_quiz", (value) => {
+        console.log(value);
+        invitedToQuizConfirm(value, push);
+      }),
+
+      conn.addListener<any>("someone_you_follow_created_a_quiz", (value) => {
+        invitedToQuizConfirm(value, push);
       }),
 
       conn.addListener<any>("new_chat_msg", ({ msg }) => {
@@ -68,7 +78,6 @@ export const useWsMainHandler = () => {
           // @todo change to an error code
           error: "quiz gone",
         }));
-        showErrorToast("quiz destroyed");
       }),
 
       conn.addListener<any>("user_left_quiz", ({ userId, quizId }) => {
@@ -77,10 +86,12 @@ export const useWsMainHandler = () => {
             return data;
           }
 
+          const { [userId]: _, ...asm } = data.activeSpeakerMap;
           return {
             ...data,
+            activeSpeakerMap: asm,
             quiz: {
-              ...data.room,
+              ...data.quiz,
               peoplePreviewList: data.quiz.peoplePreviewList.filter(
                 (x: any) => x.id !== userId
               ),

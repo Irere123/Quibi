@@ -71,6 +71,10 @@ defmodule Okra.Quiz do
           auto_speaker: auto_speaker
         )
 
+        if not is_private do
+          Okra.Follow.notify_followers_you_created_a_quiz(user_id, quiz)
+        end
+
         Onion.QuizSession.join_quiz(quiz.id, user_id, no_fan: true)
 
         {:ok, %{quiz: quiz}}

@@ -2,6 +2,7 @@
   "_comment": "if you change this file, do: yarn i18",
   "common": {
     "loadMore": "Charger Plus",
+    "showMore": "Show more",
     "loading": "Chargement...",
     "noUsersFound": "Aucun utilisateur trouvé!",
     "ok": "Ok",
@@ -17,7 +18,8 @@
   "header": {
     "_comment": "Main title Internationalization Strings",
     "title": "Quibi",
-    "dashboard": "Dashboard"
+    "dashboard": "Tableau de board",
+    "connectionTaken": "Lien Pris"
   },
   "pages": {
     "_comment": "Pages UI Internationalization Strings",
@@ -42,6 +44,23 @@
         "title": "Paramètres du raccourcis clavier",
         "label": "Clavier"
       }
+    },
+    "viewUser": {
+      "editProfile": "Éditer le profil",
+      "followsYou": "Vous suit",
+      "followers": "Abonnés",
+      "following": "Abonnements",
+      "followHim": "S'abonner",
+      "followingHim": "Abonné",
+      "copyProfileUrl": "Copier le lien du profil",
+      "urlCopied": "Lien copié dans le presse-papier",
+      "unfollow": "Unfollow",
+      "block": "Block",
+      "unblock": "Unblock",
+      "errors": {
+        "blocked": "This user has blocked you.",
+        "default": "Whoops! We couldn't load this user."
+      }
     }
   },
   "footer": {
@@ -49,7 +68,28 @@
     "link_1": "Développeur",
     "link_2": "Aider"
   },
-  "modules": { "chat": { "sendMessage": "Envoyer le message" } },
+  "modules": {
+    "chat": { "sendMessage": "Envoyer le message" },
+    "quizChat": {
+      "title": "Chat",
+      "emotesSoon": "[emotes soon]",
+      "bannedAlert": "You have been banned from chat",
+      "waitAlert": "You have to wait a second before sending another message",
+      "search": "Search",
+      "searchResults": "Search Results",
+      "recent": "Frequently Used",
+      "sendMessage": "Send a Message",
+      "whisper": "Whisper",
+      "welcomeMessage": "Welcome to chat!",
+      "quizDescription": "Quiz description",
+      "disabled": "room chat has been disabled",
+      "messageDeletion": {
+        "message": "message",
+        "retracted": "retracted",
+        "deleted": "deleted"
+      }
+    }
+  },
   "components": {
     "search": {
       "placeholder": "Chercher des ecoles, personnes ou questions",
@@ -63,6 +103,54 @@
         "chat": "Chat",
         "explore": "Explorer",
         "acedemic": "Acedemic"
+      }
+    },
+    "inviteButton": {
+      "invited": "Invité!",
+      "inviteToRoom": "Inviter dans la salle",
+      "inviteToQuiz": "Invite to quiz"
+    },
+    "upcomingEventsCard": { "upcomingEvents": "Upcoming events" }
+  },
+  "modals": {
+    "createQuizModal": {
+      "subtitle": "Remplis les champs suivants pour créer",
+      "public": "Publique",
+      "private": "Privée",
+      "quizName": "Nom",
+      "quizDescription": "Description",
+      "descriptionError": "Taille maximum de 500 caractères",
+      "nameError": "Ce champ doit être entre 2 et 60 caractères de longueur"
+    },
+    "invitedToJoinQuizModal": {
+      "newQuizCreated": "Nouvelle salle créée",
+      "quizInviteFrom": "Invitation à la salle de",
+      "justStarted": "Viennent de commencer",
+      "likeToJoin": ", voulez-vous les rejoindre ?",
+      "inviteReceived": "vous avez été invité à",
+      "QuizInviteFrom": "Quiz Invite from"
+    },
+    "editProfileModal": {
+      "displayNameError": "Longueur de 2 à 50 caractères",
+      "displayNameLabel": "Nom affiché",
+      "usernameError": "Longueur de 4 à 15 caractères et ne doit contenir que des caractères alphanumériques ou des tirets du bas",
+      "usernameLabel": "Pseudo",
+      "bioError": "Longueur maximum de 160 caractères",
+      "bioLabel": "Biographie"
+    },
+    "quizSettingsModal": {
+      "requirePermission": "requiert la permission de parler",
+      "makePublic": "rendre la salle publique",
+      "makePrivate": "rendre la salle privée",
+      "renamePublic": "Changer le nom de la salle publique",
+      "renamePrivate": "Changer le nom de la salle privée",
+      "chatDisabled": "Désactiver tchat",
+      "chatCooldown": "Chat Cooldown (milliseconds)",
+      "chat": {
+        "label": "Chat",
+        "enabled": "Enabled",
+        "disabled": "Disabled",
+        "followerOnly": "Follower Only"
       }
     }
   }

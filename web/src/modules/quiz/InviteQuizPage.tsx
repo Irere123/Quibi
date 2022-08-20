@@ -23,6 +23,7 @@ const InviteButton: React.FC<{ onClick: () => void }> = ({ onClick }) => {
   return (
     <Button
       size="small"
+      color="secondary"
       disabled={invited}
       onClick={() => {
         onClick();

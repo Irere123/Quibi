@@ -89,17 +89,15 @@ export const SingleUser: React.FC<AvatarProps> = ({
       <img
         alt={username ? `${username}-s-avatar` : "your-avatar"}
         style={{
-          boxShadow: shadow ? "0 0 0 4px var(--color-accent)" : "",
+          boxShadow: outline ? "0 0 0 2px var(--color-accent)" : "",
         }}
-        className={`rounded-full w-full h-full object-cover ${
-          outline && "border-4 border-secondary-300 hover:scale-105"
-        }`}
+        className={`rounded-full w-full h-full object-cover`}
         onError={() => setError(true)}
         src={
           isError
             ? `https://ui-avatars.com/api/${
                 username ? `&name=${username}` : "&name"
-              }&rounded=true&background=86efac&bold=true&color=00000`
+              }&rounded=true&background=B23439&bold=true&color=FFFFFF`
             : src
         }
       />

@@ -29,19 +29,18 @@ export const MyPeopleOnline: React.FC<MyPeopleOnlineProps> = () => {
   return (
     <>
       <div className="flex gap-2">
-        <div
-          className={`bg-gradient-to-r from-secondary-300 to-secondary-200 flex justify-center shadow-md shadow-primary-300 items-center cursor-pointer bg-secondary-300 w-6.5 h-6.5 rounded-full`}
-        >
-          <PlusIcon />
-        </div>
-
         {data?.users.map((u: User) => (
           <ApiPreloadLink
             route="profile"
             data={{ username: u.username }}
             key={u.id}
           >
-            <SingleUser src={u.avatarUrl} isOnline={u.online} size="md" />
+            <SingleUser
+              src={u.avatarUrl}
+              isOnline={u.online}
+              size="sm"
+              outline={true}
+            />
           </ApiPreloadLink>
         ))}
       </div>

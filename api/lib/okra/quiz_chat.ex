@@ -72,7 +72,7 @@ defmodule Okra.QuizChat do
   end
 
   defp validate_token(token = %{"t" => type, "v" => _})
-       when type in ["text", "mention", "block"],
+       when type in ["text", "mention", "block", "emote"],
        do: {:ok, token}
 
   defp validate_token(token = %{"t" => "link", "v" => link}) do

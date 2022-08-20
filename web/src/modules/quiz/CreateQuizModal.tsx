@@ -3,7 +3,6 @@ import { useRouter } from "next/router";
 import React from "react";
 import { InputField } from "../../form-fields/InputField";
 import { useWrappedConn } from "../../hooks/useConn";
-import { useTypeSafeMutation } from "../../hooks/useTypeSafeMutation";
 import { useTypeSafePrefetch } from "../../hooks/useTypeSafePrefetch";
 import { useTypeSafeTranslation } from "../../hooks/useTypeSafeTranslation";
 import { showErrorToast } from "../../lib/showErrorToast";
@@ -68,7 +67,7 @@ export const CreateQuizModal: React.FC<CreateQuizModalProps> = ({
               <div className={`flex h-full w-full col-span-2`}>
                 <InputField
                   name="name"
-                  placeholder="Quiz title"
+                  placeholder={t("modals.createQuizModal.quizName")}
                   autoComplete="off"
                   maxLength={70}
                   autoFocus
@@ -83,10 +82,10 @@ export const CreateQuizModal: React.FC<CreateQuizModalProps> = ({
                   }}
                 >
                   <option value="public" className={`hover:bg-primary-900`}>
-                    public
+                    {t("modals.createQuizModal.public")}
                   </option>
                   <option value="private" className={`hover:bg-primary-900`}>
-                    private
+                    {t("modals.createQuizModal.private")}
                   </option>
                 </NativeSelect>
               </div>
@@ -94,7 +93,7 @@ export const CreateQuizModal: React.FC<CreateQuizModalProps> = ({
                 <InputField
                   textarea
                   name="description"
-                  placeholder="Quiz description"
+                  placeholder={t("modals.createQuizModal.quizDescription")}
                   autoComplete="off"
                   maxLength={200}
                   className={`mt-4`}
