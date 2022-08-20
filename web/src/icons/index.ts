@@ -46,3 +46,5 @@ export { default as FullscreenIcon } from "./FullscreenIcon";
 export { default as PodcastIcon } from "./PodcastIcon";
 export { default as GroupIcon } from "./GroupIcon";
 export { default as TimeIcon } from "./TimeIcon";
+export { default as RecordIcon } from "./RecordIcon";
+export { default as BroadcastIcon } from "./BroadcastIcon";
