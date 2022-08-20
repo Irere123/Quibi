@@ -2,7 +2,7 @@
 /* eslint-disable @next/next/no-img-element */
 import React, { useEffect } from "react";
 import { useEmojiPickerStore } from "../stores/useEmojiPickerStore";
-import { CustomEmote } from "../modules/chat/room/chat/EmoteData";
+import { CustomEmote } from "../shared-components/EmoteData";
 import { useRoomChatStore } from "../modules/chat/room/chat/useRoomChatStore";
 interface EmojiPickerProps {
   emojiSet: CustomEmote[];

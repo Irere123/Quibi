@@ -3,7 +3,7 @@ import { useTypeSafeTranslation } from "../../../../hooks/useTypeSafeTranslation
 import { Smiley } from "../../../../icons";
 import { EmojiPicker } from "../../../../ui/EmojiPicker";
 import { Input } from "../../../../ui/Input";
-import { customEmojis } from "./EmoteData";
+import { customEmojis } from "../../../../shared-components/EmoteData";
 import { navigateThroughQueriedEmojis } from "./navigateThroughQueriedEmojis";
 import { useRoomChatStore } from "./useRoomChatStore";
 import { useEmojiPickerStore } from "../../../../stores/useEmojiPickerStore";
