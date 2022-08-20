@@ -18,5 +18,5 @@ export const QuizChatController: React.FC = () => {
     return null;
   }
 
-  return <>{data.chatMode ? <QuizChat {...data} /> : null}</>;
+  return <QuizChat {...data} />;
 };

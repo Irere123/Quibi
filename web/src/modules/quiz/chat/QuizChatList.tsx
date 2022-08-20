@@ -1,9 +1,11 @@
+/* eslint-disable @next/next/no-img-element */
 import normalizeUrl from "normalize-url";
 import React, { useContext, useEffect, useRef } from "react";
 import { useVirtual, VirtualItem } from "react-virtual";
 import { useConn } from "../../../hooks/useConn";
 import { useCurrentQuizInfo } from "../../../hooks/useCurrentQuizInfo";
-import { UserBadge } from "../../../ui/UserBadge";
+import { useTypeSafeTranslation } from "../../../hooks/useTypeSafeTranslation";
+import { emoteMap } from "../../../shared-components/EmoteData";
 import { Quiz, User } from "../../ws";
 import { UserPreviewModalContext } from "../UserPreviewModalProvider";
 import { useQuizChatMentionStore } from "./useQuizChatMentionStore";
@@ -15,6 +17,7 @@ interface ChatListProps {
 }
 
 export const QuizChatList: React.FC<ChatListProps> = ({ quiz, userMap }) => {
+  const { t } = useTypeSafeTranslation();
   const { setData } = useContext(UserPreviewModalContext);
   const { messages, toggleFrozen } = useQuizChatStore();
   const { isMod: iAmMod, isCreator: iAmCreator } = useCurrentQuizInfo();
@@ -128,11 +131,11 @@ export const QuizChatList: React.FC<ChatListProps> = ({ quiz, userMap }) => {
                       <div className={`inline mr-1 space-x-1`}>
                         {messages[index].deleted ? (
                           <span className="inline text-primary-300">
-                            [message{" "}
+                            [{t("modules.quizChat.messageDeletion.message")}{" "}
                             {messages[index].deleterId ===
                             messages[index].userId
-                              ? "retracted"
-                              : "deleted"}
+                              ? t("modules.quizChat.messageDeletion.retracted")
+                              : t("modules.quizChat.messageDeletion.deleted")}
                             ]
                           </span>
                         ) : (
@@ -143,6 +146,19 @@ export const QuizChatList: React.FC<ChatListProps> = ({ quiz, userMap }) => {
                                   <React.Fragment
                                     key={i}
                                   >{`${v} `}</React.Fragment>
+                                );
+
+                              case "emote":
+                                return emoteMap[v.toLowerCase()] ? (
+                                  <React.Fragment key={i}>
+                                    <img
+                                      className="inline"
+                                      alt={`:${v}:`}
+                                      src={emoteMap[v.toLowerCase()]}
+                                    />
+                                  </React.Fragment>
+                                ) : (
+                                  ":" + v + ":"
                                 );
 
                               case "mention":
