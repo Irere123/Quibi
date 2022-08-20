@@ -2,6 +2,7 @@ defmodule Broth.SocketHandler do
   require Logger
 
   defstruct awaiting_init: true,
+            ip: nil,
             user_id: nil,
             encoding: nil,
             compression: nil,
@@ -24,7 +25,10 @@ defmodule Broth.SocketHandler do
         _ -> :json
       end
 
+      ip = request.headers["x-forwarded-for"]
+
     state = %__MODULE__{
+      ip: ip,
       awaiting_init: true,
       user_id: nil,
       encoding: encoding,
@@ -90,6 +94,7 @@ defmodule Broth.SocketHandler do
     {:reply, construct_socket_msg(state.encoding, state.compression, "pong"), state}
   end
 
+  # this is for firefox
   def websocket_handle({:ping, _}, state) do
     {:reply, construct_socket_msg(state.encoding, state.compression, "pong"), state}
   end
@@ -110,11 +115,11 @@ defmodule Broth.SocketHandler do
                   {user_id, tokens} -> {user_id, tokens, Beef.Users.get_by_id(user_id)}
                   y -> y
                 end
-
               if user do
                 # note that this will start the session and will be ignored if the
                 # session is already running.
                 Onion.UserSession.start_supervised(
+                  ip: state.ip,
                   user_id: user_id,
                   username: user.username,
                   avatar_url: user.avatarUrl,

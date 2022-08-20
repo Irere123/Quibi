@@ -11,9 +11,7 @@ defmodule Beef.Schemas.Quiz do
     field(:description, :string, default: "")
     field(:numPeopleInside, :integer)
     field(:isPrivate, :boolean)
-    field(:autoSpeaker, :boolean, default: false)
-    field(:chatThrottle, :integer, default: 1000)
-    field(:chatMode, Ecto.Enum, values: [:default, :disabled, :follower_only])
+
 
     belongs_to(:user, User, foreign_key: :creatorId, type: :binary_id)
     embeds_many(:peoplePreviewList, User.Preview)
@@ -30,10 +28,7 @@ defmodule Beef.Schemas.Quiz do
       :creatorId,
       :isPrivate,
       :numPeopleInside,
-      :description,
-      :chatMode,
-      :chatThrottle,
-      :autoSpeaker
+      :description
     ])
     |> validate_required([:name, :creatorId])
     |> validate_length(:name, min: 2, max: 60)
@@ -43,10 +38,9 @@ defmodule Beef.Schemas.Quiz do
 
   def edit_changeset(quiz, attrs) do
     quiz
-    |> cast(attrs, [:id, :name, :isPrivate, :description, :autoSpeaker, :chatMode, :chatThrottle])
+    |> cast(attrs, [:id, :name, :isPrivate, :description])
     |> validate_required([:name])
     |> validate_length(:name, min: 2, max: 60)
-    |> validate_number(:chatThrottle, greater_than_or_equal_to: 0)
     |> validate_length(:description, max: 500)
   end
 
@@ -54,7 +48,7 @@ defmodule Beef.Schemas.Quiz do
     @fields ~w(
       id name description creatorId
       numPeopleInside isPrivate peoplePreviewList
-      inserted_at chatMode chatThrottle autoSpeaker
+      inserted_at
     )a
 
     def encode(user, opts) do
