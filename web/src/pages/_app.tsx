@@ -2,6 +2,8 @@ import React from "react";
 import ReactModal from "react-modal";
 import Router from "next/router";
 import NProgress from "nprogress";
+import Head from "next/head";
+import { AppProps } from "next/app";
 import { QueryClientProvider } from "react-query";
 import { PageComponent } from "../types/PageComponent";
 import { isServer } from "../lib/isServer";
@@ -16,8 +18,7 @@ import { PromptModal } from "../shared-components/PromptModal";
 import { WebSocketProvider } from "../modules/ws/WebSocketProvider";
 import { WsMainHandlerProvider } from "../hooks/useWsMainHandler";
 import { SoundEffectPlayer } from "../modules/sound-effects/SoundEffectPlayer";
-import Head from "next/head";
-import { AppProps } from "next/app";
+import { InvitedToJoinQuizModal } from "../shared-components/InvitedToJoinQuizModal";
 
 if (!isServer) {
   init_i18n();
@@ -58,6 +59,7 @@ function App({ Component, pageProps }: AppProps) {
           <SoundEffectPlayer />
           <ErrorToastController />
           <KeybindListener />
+          <InvitedToJoinQuizModal />
           <ConfirmModal />
           <PromptModal />
         </WsMainHandlerProvider>

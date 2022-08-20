@@ -133,7 +133,7 @@ defmodule Onion.QuizSession do
         op: "invitation_to_quiz",
         d:
           Map.merge(
-            %{roomId: state.quiz_id},
+            %{quizId: state.quiz_id},
             user_info
           )
       }
