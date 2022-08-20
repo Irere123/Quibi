@@ -48,13 +48,6 @@ export const QuizChatList: React.FC<ChatListProps> = ({ quiz, userMap }) => {
     const user = userMap[m.userId];
     const isCreator = quiz.creatorId === user?.id;
     let badge: React.ReactNode | null = null;
-    if (isCreator) {
-      badge = (
-        <UserBadge color="black" variant="secondary">
-          ADMIN
-        </UserBadge>
-      );
-    }
     return <span style={{ marginRight: 4 }}>{badge}</span>;
   };
 

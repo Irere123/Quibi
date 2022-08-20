@@ -12,7 +12,6 @@ export default {
 const userSummary: UserSummaryCardProps = {
   onClick: () => {},
   avatarUrl: avatar as any,
-  id: "1",
   displayName: "Irere Emmanuel",
   username: "irere",
   numFollowing: 89,

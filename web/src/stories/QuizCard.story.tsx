@@ -10,7 +10,7 @@ export default {
 };
 
 const TheQuizCard: Story<QuizCardProps> = ({
-  title = "Why CI & CD is important when working with a teamhewhewhyewhjydfshjdfshjdfhjdfhjdfhjfdhjdfhjjjjjjjjjj",
+  title = "Why CI & CD is important when working with a team",
   subtitle = "Terry Owen, Grace Abraham, Richard Cameron",
 }) => {
   return (
