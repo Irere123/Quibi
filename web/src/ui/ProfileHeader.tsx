@@ -70,8 +70,11 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
               data-testid="profile-info-username"
             >{`@${username}`}</p>
             <div className="flex items-center gap-3 text-primary-600">
-              <p>followers {user.numFollowers}</p>
-              <p>following {user.numFollowing}</p>
+              <p>
+                {user.numFollowers}
+                followers
+              </p>
+              <p> {user.numFollowing} following</p>
             </div>
             {user.followsYou ? (
               <UserBadge color="grey" variant="primary-700">
