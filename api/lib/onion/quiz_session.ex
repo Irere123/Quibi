@@ -5,9 +5,8 @@ defmodule Onion.QuizSession do
     defstruct quiz_id: "",
               users: [],
               inviteMap: %{},
-              activeSpeakerMap: %{},
-              auto_speaker: false,
-              chatMode: true
+              activeSpeakerMap: %{}
+
   end
 
   #################################################################################
@@ -70,7 +69,7 @@ defmodule Onion.QuizSession do
   def get_maps(quiz_id), do: call(quiz_id, :get_maps)
 
   defp get_maps_impl(_reply, state) do
-    {:reply, {state.chatMode, state.auto_speaker, state.activeSpeakerMap}, state}
+    {:reply, {state.activeSpeakerMap}, state}
   end
 
   def redeem_invite(quiz_id, user_id), do: call(quiz_id, {:redeem_invite, user_id})
