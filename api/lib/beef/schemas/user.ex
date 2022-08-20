@@ -23,7 +23,9 @@ defmodule Beef.Schemas.User do
   schema "users" do
     field(:twitterId, :string)
     field(:googleId, :string)
+    field(:githubId, :string)
     field(:discordId, :string)
+    field(:githubAccessToken, :string)
     field(:discordAccessToken, :string)
     field(:username, :string)
     field(:displayName, :string)
@@ -39,6 +41,7 @@ defmodule Beef.Schemas.User do
     field(:numFollowers, :integer)
     field(:youAreFollowing, :boolean, virtual: true)
     field(:followsYou, :boolean, virtual: true)
+    field(:ip, :string)
     field(:theyBlockedMe, :boolean, virtual: true)
     field(:iBlockedThem, :boolean, virtual: true)
     field(:quizPermissions, :map, virtual: true)
