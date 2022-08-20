@@ -41,7 +41,7 @@ const LoginButton: React.FC<LoginButtonProps> = ({
         dev
           ? "bg-secondary-300 text-primary-900"
           : "bg-primary-700 hover:bg-primary-600 text-primary-200"
-      } rounded justify-center py-2 mt-2`}
+      } rounded justify-center py-2 mt-1`}
       onClick={oauthUrl ? clickHandler : onClick}
     >
       <span>{children[0]}</span>
