@@ -23,7 +23,7 @@ export const LeftPanel: React.FC = () => {
       <Tooltip text={t("components.panels.right.home")}>
         <Link href={"/dash"}>
           <a>
-            <BoxedIcon circle shadow>
+            <BoxedIcon circle>
               <HomeIcon />
             </BoxedIcon>
           </a>
@@ -32,7 +32,7 @@ export const LeftPanel: React.FC = () => {
       <Tooltip text={t("components.panels.right.acedemic")}>
         <Link href={"/u/academic"}>
           <a>
-            <BoxedIcon circle shadow>
+            <BoxedIcon circle>
               <SchoolIcon />
             </BoxedIcon>
           </a>
@@ -41,7 +41,7 @@ export const LeftPanel: React.FC = () => {
       <Tooltip text={t("components.panels.right.chat")}>
         <Link href={"/explore-rooms"}>
           <a>
-            <BoxedIcon circle shadow>
+            <BoxedIcon circle>
               <AtIcon />
             </BoxedIcon>
           </a>
@@ -50,7 +50,7 @@ export const LeftPanel: React.FC = () => {
       <Tooltip text={t("components.panels.right.explore")}>
         <Link href={"/explore"}>
           <a>
-            <BoxedIcon circle shadow>
+            <BoxedIcon circle>
               <CompassIcon />
             </BoxedIcon>
           </a>

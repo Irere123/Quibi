@@ -11,14 +11,13 @@ export type badge = {
 
 export interface UserSummaryCardProps {
   onClick: () => void;
-  id: string;
   displayName: string;
   username: string;
   numFollowers: number;
   numFollowing: number;
-  isOnline: boolean;
+  isOnline?: boolean;
   avatarUrl: string;
-  badges: badge[];
+  badges?: badge[];
   bio?: string;
   website?: string;
 }
@@ -86,7 +85,7 @@ export const UserSummaryCard: React.FC<UserSummaryCardProps> = ({
             <span className="text-primary-300 text-left break-all">
               @{username}
             </span>
-            <Badges badges={badges} />
+            {badges && <Badges badges={badges} />}
           </div>
         </div>
       </button>
@@ -95,13 +94,13 @@ export const UserSummaryCard: React.FC<UserSummaryCardProps> = ({
           <span className="text-primary-100 font-bold">
             {kFormatter(numFollowers)}
           </span>
-          <span className="text-primary-300 ml-1.5 lowercase">Followers</span>
+          <span className="text-primary-300 ml-1.5 lowercase">followers</span>
         </div>
         <div className="flex ml-4">
           <span className="text-primary-100 font-bold">
             {kFormatter(numFollowing)}
           </span>
-          <span className="text-primary-300 ml-1.5 lowercase">Following</span>
+          <span className="text-primary-300 ml-1.5 lowercase">following</span>
         </div>
       </div>
       <div
