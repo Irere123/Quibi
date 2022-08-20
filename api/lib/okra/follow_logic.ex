@@ -1,4 +1,5 @@
 defmodule Okra.Follow do
+  alias Beef.Schemas.Follow
   alias Beef.Follows
   alias Beef.Users
 
@@ -40,5 +41,36 @@ defmodule Okra.Follow do
         user_id
       )
     end
+  end
+
+  def sync_notify_followers_you_created_a_quiz(user_id, quiz) do
+    followers_to_notify = Follows.get_followers_online_and_not_in_a_quiz(user_id)
+
+    if length(followers_to_notify) > 0 do
+      user = Beef.Users.get_by_id(user_id)
+
+      Enum.each(followers_to_notify, fn %Follow{followerId: followerId} ->
+        Onion.UserSession.send_ws(followerId, nil, %{
+          op: "someone_you_follow_created_a_quiz",
+          d: %{
+            quizId: quiz.id,
+            quizName: quiz.name,
+            displayName: user.displayName,
+            username: user.username,
+            avatarUrl: user.avatarUrl,
+            # Here if banner will be included in the refactored someone you followed created a room popup
+            bannerUrl: user.bannerUrl,
+            type: "someone_you_follow_created_a_quiz"
+          }
+        })
+      end)
+    end
+
+    {:ok}
+  end
+
+  @spec notify_followers_you_created_a_quiz(String.t(), Quiz.t()) :: {:ok, pid()}
+  def notify_followers_you_created_a_quiz(user_id, quiz) do
+    Task.start(fn -> sync_notify_followers_you_created_a_quiz(user_id, quiz) end)
   end
 end

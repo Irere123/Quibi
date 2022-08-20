@@ -6,6 +6,16 @@ defmodule Beef.Follows do
   alias Beef.Schemas.Follow
   alias Beef.Schemas.User
 
+  def get_followers_online_and_not_in_a_quiz(user_id) do
+    from(
+      f in Follow,
+      inner_join: u in User,
+      on: f.followerId == u.id,
+      where: f.userId == ^user_id and u.online == true and is_nil(u.currentQuizId)
+    )
+    |> Beef.Repo.all()
+  end
+
   def get_followers_online(user_id) do
     from(
       f in Follow,
