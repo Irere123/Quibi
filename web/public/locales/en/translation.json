@@ -3,10 +3,12 @@
   "header": {
     "_comment": "Main title Internationalization Strings",
     "title": "Quibi - Open world",
-    "dashboard": "Dashboard"
+    "dashboard": "Dashboard",
+    "connectionTaken": "Connection Taken"
   },
   "common": {
     "loadMore": "Load More",
+    "showMore": "Show more",
     "loading": "Loading...",
     "noUsersFound": "No users found !",
     "ok": "Ok",
@@ -31,11 +33,26 @@
     },
     "chat": {
       "title": "Chat",
-      "groups": "Groups",
       "people": "People",
       "members": "{{membersNum}} Members",
       "add_members": "Add Members",
       "messages": "{{messageNum}} Messages"
+    },
+    "viewUser": {
+      "editProfile": "Edit profile",
+      "followsYou": "Follows you",
+      "followers": "followers",
+      "following": "following",
+      "followHim": "Follow",
+      "unfollow": "Unfollow",
+      "followingHim": "Following",
+      "block": "Block",
+      "unblock": "Unblock",
+      "errors": {
+        "blocked": "This user has blocked you.",
+
+        "default": "Whoops! We couldn't load this user."
+      }
     },
     "settings": {
       "security": {
@@ -63,6 +80,25 @@
   "modules": {
     "chat": {
       "sendMessage": "Send Message"
+    },
+    "quizChat": {
+      "title": "Chat",
+      "emotesSoon": "[emotes soon]",
+      "bannedAlert": "You have been banned from chat",
+      "waitAlert": "You have to wait a second before sending another message",
+      "search": "Search",
+      "searchResults": "Search Results",
+      "recent": "Frequently Used",
+      "sendMessage": "Send a Message",
+      "whisper": "Whisper",
+      "welcomeMessage": "Welcome to chat!",
+      "quizDescription": "Quiz description",
+      "disabled": "room chat has been disabled",
+      "messageDeletion": {
+        "message": "message",
+        "retracted": "retracted",
+        "deleted": "deleted"
+      }
     }
   },
   "components": {
@@ -79,6 +115,53 @@
         "explore": "Explore",
         "acedemic": "Academic"
       }
+    },
+    "inviteButton": {
+      "invited": "Invited!",
+      "inviteToQuiz": "Invite to quiz"
+    },
+    "upcomingEventsCard": {
+      "upcomingEvents": "Upcoming events"
+    }
+  },
+  "modals": {
+    "createQuizModal": {
+      "subtitle": "Fill the following fields to start a new room",
+      "public": "Public",
+      "private": "Private",
+      "quizName": "Quiz name",
+      "quizDescription": "Quiz description",
+      "descriptionError": "Max length 500",
+      "nameError": "Must be between 2 to 60 characters long"
+    },
+    "invitedToJoinQuizModal": {
+      "newQuizCreated": "New Quiz Created",
+      "QuizInviteFrom": "Quiz Invite from",
+      "justStarted": "They just started",
+      "likeToJoin": ", would you like to join?",
+      "inviteReceived": "you've been invited to"
+    },
+    "editProfileModal": {
+      "displayNameError": "Length 2 to 50 characters",
+      "displayNameLabel": "Display Name",
+      "usernameError": "Length 4 to 15 characters and only alphanumeric/underscore",
+      "usernameLabel": "Username",
+      "bioError": "Max length of 160 characters",
+      "bioLabel": "About"
+    },
+    "quizSettingsModal": {
+      "requirePermission": "require permission to speak",
+      "chatCooldown": "Chat Cooldown (milliseconds)",
+      "chat": {
+        "label": "Chat",
+        "enabled": "Enabled",
+        "disabled": "Disabled",
+        "followerOnly": "Follower Only"
+      },
+      "makePublic": "make quiz public",
+      "makePrivate": "make quiz private",
+      "renamePublic": "Set public quiz name",
+      "renamePrivate": "Set private quiz name"
     }
   }
 }

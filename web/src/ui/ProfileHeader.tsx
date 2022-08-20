@@ -9,6 +9,7 @@ import { UserBadge } from "./UserBadge";
 import { useTypeSafeUpdateQuery } from "../hooks/useTypeSafeUpdateQuery";
 import { usePreloadPush } from "../shared-components/ApiPreloadLink";
 import { useTypeSafeMutation } from "../hooks/useTypeSafeMutation";
+import { useTypeSafeTranslation } from "../hooks/useTypeSafeTranslation";
 
 export interface ProfileHeaderProps {
   displayName: string;
@@ -27,6 +28,7 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
   isCurrentUser,
   pfp = "https://dogehouse.tv/favicon.ico",
 }) => {
+  const { t } = useTypeSafeTranslation();
   const [showEditProfileModal, setShowEditProfileModal] = useState(false);
   const { mutateAsync: follow, isLoading: followLoading } =
     useTypeSafeMutation("follow");
@@ -71,14 +73,15 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
             >{`@${username}`}</p>
             <div className="flex items-center gap-3 text-primary-600">
               <p>
-                {user.numFollowers}
-                followers
+                {user.numFollowers} {t("pages.viewUser.followers")}
               </p>
-              <p> {user.numFollowing} following</p>
+              <p>
+                {user.numFollowing} {t("pages.viewUser.following")}
+              </p>
             </div>
             {user.followsYou ? (
               <UserBadge color="grey" variant="primary-700">
-                follows you
+                {t("pages.viewUser.followsYou")}
               </UserBadge>
             ) : null}
           </div>
@@ -104,7 +107,9 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
                   );
                 }}
               >
-                {user.iBlockedThem ? <>Unblock</> : <>Block</>}
+                {user.iBlockedThem
+                  ? t("pages.viewUser.unblock")
+                  : t("pages.viewUser.block")}
               </Button>
             )}
             {!isCurrentUser && (
@@ -128,7 +133,9 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
                 color={user.youAreFollowing ? "secondary" : "primary"}
                 icon={user.youAreFollowing ? null : <Friends />}
               >
-                {user.youAreFollowing ? <>Unfollow</> : <>Follow</>}
+                {user.youAreFollowing
+                  ? t("pages.viewUser.unfollow")
+                  : t("pages.viewUser.followHim")}
               </Button>
             )}
             {isCurrentUser ? (
@@ -137,7 +144,7 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
                 icon={<CompassIcon />}
                 onClick={() => setShowEditProfileModal(!showEditProfileModal)}
               >
-                Edit profile
+                {t("pages.viewUser.editProfile")}
               </Button>
             ) : null}
           </div>

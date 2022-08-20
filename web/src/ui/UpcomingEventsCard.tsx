@@ -5,6 +5,7 @@ import { PlusIcon } from "../icons";
 import { BoxedIcon } from "./BoxedIcon";
 import { QuizCardHeading } from "./QuizCardHeading";
 import { MultipleUsers } from "./Avatars";
+import { useTypeSafeTranslation } from "../hooks/useTypeSafeTranslation";
 
 interface FormattedEventDateProps {
   scheduledFor: Date;
@@ -75,10 +76,14 @@ export const UpcomingEventsCard: React.FC<UpcomingEventsCardProps> = ({
   onCreateScheduledEvent,
   events,
 }) => {
+  const { t } = useTypeSafeTranslation();
+
   return (
     <div className="w-full rounded overflow-y-auto flex flex-col">
       <div className="px-4 py-3 bg-primary-800 border-b border-primary-600 flex justify-between items-center">
-        <p className="text-primary-100 font-bold">Upcoming events</p>
+        <p className="text-primary-100 font-bold">
+          {t("components.upcomingEventsCard.upcomingEvents")}
+        </p>
         <BoxedIcon
           onClick={onCreateScheduledEvent}
           style={{ height: "26px", width: "26px" }}
@@ -99,7 +104,7 @@ export const UpcomingEventsCard: React.FC<UpcomingEventsCardProps> = ({
 
       <Link href="/dash">
         <a className="px-4 py-3 text-primary-100 font-bold bg-primary-700">
-          Show more
+          {t("common.showMore")}
         </a>
       </Link>
     </div>

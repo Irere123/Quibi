@@ -43,7 +43,7 @@ export const EditProfileModal: React.FC<EditProfileModalProps> = ({
     <Modal
       isOpen={isOpen}
       onRequestClose={onRequestClose}
-      title={`Edit profile`}
+      title={t("pages.viewUser.editProfile")}
     >
       {isOpen ? (
         <Formik
@@ -77,15 +77,15 @@ export const EditProfileModal: React.FC<EditProfileModalProps> = ({
             <Form className={`flex-col w-full`}>
               <InputField
                 className="mb-4"
-                errorMsg="the name must have at least 2 characters"
-                label="Display name"
+                errorMsg={t("modals.editProfileModal.displayNameError")}
+                label={t("modals.editProfileModal.displayNameLabel")}
                 name="displayName"
                 maxLength={50}
               />
               <InputField
                 className="mb-4"
-                errorMsg="the bio must have at least 5 characters"
-                label="About"
+                errorMsg={t("modals.editProfileModal.bioError")}
+                label={t("modals.editProfileModal.bioLabel")}
                 name="bio"
                 textarea={true}
                 rows={5}
