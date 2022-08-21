@@ -57,7 +57,7 @@ export const CreateRoomModal: React.FC<CreateRoomModalProps> = ({
             console.log(resp);
 
             if (typeof resp === "object" && "error" in resp) {
-              showErrorToast(resp.error);
+              showErrorToast(resp.error, "error");
               return;
             } else if (resp.room) {
               const { room } = resp;

@@ -23,7 +23,7 @@ export const useWsMainHandler = () => {
 
     const unsubs = [
       conn.addListener<any>("error", (message) => {
-        showErrorToast(message);
+        showErrorToast(message, "error");
       }),
 
       conn.addListener<any>("chat_user_unbanned", ({ userId }) => {

@@ -48,3 +48,7 @@ export { default as GroupIcon } from "./GroupIcon";
 export { default as TimeIcon } from "./TimeIcon";
 export { default as RecordIcon } from "./RecordIcon";
 export { default as BroadcastIcon } from "./BroadcastIcon";
+export { default as InfoIcon } from "./InfoIcon";
+export { default as ErrorIcon } from "./ErrorIcon";
+export { default as WarningIcon } from "./WarningIcon";
+export { default as SuccessIcon } from "./SuccessIcon";

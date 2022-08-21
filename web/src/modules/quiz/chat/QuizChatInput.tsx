@@ -61,12 +61,12 @@ export const QuizChatInput: React.FC<ChatInputProps> = ({ users }) => {
     if (!me) return;
 
     if (me.id in useQuizChatStore.getState().bannedUserIdMap) {
-      showErrorToast(t("modules.quizChat.bannedAlert"));
+      showErrorToast(t("modules.quizChat.bannedAlert"), "error");
       return;
     }
 
     if (Date.now() - lastMessageTimestamp <= 1000) {
-      showErrorToast(t("modules.quizChat.waitAlert"));
+      showErrorToast(t("modules.quizChat.waitAlert"), "info");
       return;
     }
 

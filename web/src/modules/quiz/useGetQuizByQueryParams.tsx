@@ -53,7 +53,7 @@ export const useGetQuizByQueryParams = () => {
     if (errMsg) {
       setCurrentQuizId(null);
       console.log(errMsg, isLoading);
-      showErrorToast(errMsg);
+      showErrorToast(errMsg, "error");
       push("/dash");
     }
   }, [noData, errMsg, isLoading, push, setCurrentQuizId]);

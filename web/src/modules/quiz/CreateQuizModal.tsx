@@ -47,7 +47,7 @@ export const CreateQuizModal: React.FC<CreateQuizModalProps> = ({
             const resp = await conn.mutation.createQuiz(d);
 
             if (typeof resp === "object" && "error" in resp) {
-              showErrorToast(resp.error);
+              showErrorToast(resp.error, "error");
               return;
             } else if (resp.quiz) {
               const { quiz } = resp;

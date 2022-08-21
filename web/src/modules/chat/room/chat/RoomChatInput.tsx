@@ -39,9 +39,7 @@ export const RoomChatInput: React.FC = () => {
     if (!me) return;
 
     if (Date.now() - lastMessageTimestamp <= 1000) {
-      showErrorToast(
-        "You have to wait a second before sending another message"
-      );
+      showErrorToast(t("modules.quizChat.waitAlert"), "info");
       return;
     }
 

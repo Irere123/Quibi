@@ -1,6 +1,6 @@
 import React from "react";
 import { MainInnerGrid } from "../../ui/MainGrid";
-import { ErrorToast } from "../../ui/ErrorToast";
+import { Alert } from "../../ui/Alert";
 import { useErrorToastStore } from "./useErrorToastStore";
 
 interface ErrorToastControllerProps {}
@@ -19,7 +19,8 @@ export const ErrorToastController: React.FC<
         <div className={`flex flex-col w-full`}>
           {toasts.map((t) => (
             <div key={t.id} className={`flex mb-3`}>
-              <ErrorToast
+              <Alert
+                type={t.type}
                 message={t.message}
                 duration={t.duration}
                 onClose={() => hideToast(t.id)}
