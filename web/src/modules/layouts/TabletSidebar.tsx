@@ -2,8 +2,10 @@ import React from "react";
 import Link from "next/link";
 import {
   AtIcon,
-  CompassIcon,
+  BroadcastIcon,
+  CalendarMonth,
   HomeIcon,
+  Notification,
   SchoolIcon,
   SettingsIcon,
 } from "../../icons";
@@ -24,30 +26,22 @@ export const TabletSidebar: React.FC<TabletSidebarProps> = ({}) => {
       <Link href={"/explore"}>
         <a>
           <BoxedIcon circle>
-            <CompassIcon />
+            <BroadcastIcon />
           </BoxedIcon>
         </a>
       </Link>
-      <Link href={"/u/academic"}>
+      <Link href={"/events"}>
         <a>
           <BoxedIcon circle>
-            <SchoolIcon />
-          </BoxedIcon>
-        </a>
-      </Link>
-
-      <Link href={"/explore-rooms"}>
-        <a>
-          <BoxedIcon circle>
-            <AtIcon />
+            <CalendarMonth />
           </BoxedIcon>
         </a>
       </Link>
 
-      <Link href={"/settings"}>
+      <Link href={"/notifications"}>
         <a>
           <BoxedIcon circle>
-            <SettingsIcon />
+            <Notification />
           </BoxedIcon>
         </a>
       </Link>

@@ -1,7 +1,16 @@
 import React from "react";
 import Link from "next/link";
 
-import { CompassIcon, HomeIcon, SchoolIcon } from "../../icons";
+import {
+  BroadcastIcon,
+  Calendar,
+  CalendarMonth,
+  CompassIcon,
+  HomeIcon,
+  Notification,
+  RecordIcon,
+  SchoolIcon,
+} from "../../icons";
 import AtIcon from "../../icons/AtIcon";
 import { BoxedIcon } from "../../ui/BoxedIcon";
 import { Tooltip } from "../../ui/Tooltip";
@@ -29,29 +38,29 @@ export const LeftPanel: React.FC = () => {
           </a>
         </Link>
       </Tooltip>
-      <Tooltip text={t("components.panels.right.acedemic")}>
-        <Link href={"/u/academic"}>
-          <a>
-            <BoxedIcon circle>
-              <SchoolIcon />
-            </BoxedIcon>
-          </a>
-        </Link>
-      </Tooltip>
-      <Tooltip text={t("components.panels.right.chat")}>
-        <Link href={"/explore-rooms"}>
-          <a>
-            <BoxedIcon circle>
-              <AtIcon />
-            </BoxedIcon>
-          </a>
-        </Link>
-      </Tooltip>
-      <Tooltip text={t("components.panels.right.explore")}>
+      <Tooltip text={"Live"}>
         <Link href={"/explore"}>
           <a>
             <BoxedIcon circle>
-              <CompassIcon />
+              <BroadcastIcon />
+            </BoxedIcon>
+          </a>
+        </Link>
+      </Tooltip>
+      <Tooltip text={"Events"}>
+        <Link href={"/events"}>
+          <a>
+            <BoxedIcon circle>
+              <CalendarMonth />
+            </BoxedIcon>
+          </a>
+        </Link>
+      </Tooltip>
+      <Tooltip text={"Updates"}>
+        <Link href={"/notifications"}>
+          <a>
+            <BoxedIcon circle>
+              <Notification />
             </BoxedIcon>
           </a>
         </Link>
