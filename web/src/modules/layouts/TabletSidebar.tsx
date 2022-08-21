@@ -23,7 +23,7 @@ export const TabletSidebar: React.FC<TabletSidebarProps> = ({}) => {
           </BoxedIcon>
         </a>
       </Link>
-      <Link href={"/explore"}>
+      <Link href={"/live"}>
         <a>
           <BoxedIcon circle>
             <BroadcastIcon />

@@ -8,9 +8,9 @@ import { LeftPanel } from "../layouts/Panels";
 import { RightPanel } from "./RightPanel";
 import { WorksController } from "./WorksController";
 
-interface WorksPageProps {}
+interface LivePageProps {}
 
-export const ExplorePage: PageComponent<WorksPageProps> = () => {
+export const LivePage: PageComponent<LivePageProps> = () => {
   const { t } = useTypeSafeTranslation();
 
   return (
@@ -26,4 +26,4 @@ export const ExplorePage: PageComponent<WorksPageProps> = () => {
   );
 };
 
-ExplorePage.ws = true;
+LivePage.ws = true;

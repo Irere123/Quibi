@@ -70,7 +70,7 @@ export const FollowSuggCard: React.FC<FollowSuggCardProps> = ({
           />
         ))}
       </div>
-      <Link href="/u/people">
+      <Link href="/people">
         <a className="px-4 py-3 text-primary-100 font-bold bg-primary-700">
           Show more
         </a>

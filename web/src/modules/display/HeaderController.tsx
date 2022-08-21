@@ -19,7 +19,7 @@ export const HeaderController: React.FC<HeaderControllerProps> = ({
   return (
     <Header>
       {title ? (
-        <title>{title} | Quibi</title>
+        <title>{title} / Quibi</title>
       ) : (
         <title>Quibi - Open world</title>
       )}
