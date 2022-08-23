@@ -25,7 +25,7 @@ defmodule Broth.SocketHandler do
         _ -> :json
       end
 
-      ip = request.headers["x-forwarded-for"]
+    ip = request.headers["x-forwarded-for"]
 
     state = %__MODULE__{
       ip: ip,

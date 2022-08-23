@@ -3,15 +3,10 @@ import Link from "next/link";
 
 import {
   BroadcastIcon,
-  Calendar,
   CalendarMonth,
-  CompassIcon,
   HomeIcon,
   Notification,
-  RecordIcon,
-  SchoolIcon,
 } from "../../icons";
-import AtIcon from "../../icons/AtIcon";
 import { BoxedIcon } from "../../ui/BoxedIcon";
 import { Tooltip } from "../../ui/Tooltip";
 import avatar from "../../img/avatar.jpg";

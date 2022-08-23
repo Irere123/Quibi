@@ -12,7 +12,6 @@ defmodule Beef.Schemas.Quiz do
     field(:numPeopleInside, :integer)
     field(:isPrivate, :boolean)
 
-
     belongs_to(:user, User, foreign_key: :creatorId, type: :binary_id)
     embeds_many(:peoplePreviewList, User.Preview)
 

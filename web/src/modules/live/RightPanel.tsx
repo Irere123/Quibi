@@ -2,6 +2,7 @@ import React from "react";
 import avatar from "../../img/avatar.jpg";
 import { useCurrentQuizIdStore } from "../../stores/useCurentQuizIdStore";
 import { FollowSuggCard } from "../../ui/FollowSuggCard";
+import { UpcomingEventsCard } from "../../ui/UpcomingEventsCard";
 import { MinimizedQuizCardController } from "./MinimizedQuizCardController";
 
 export const RightPanel: React.FC = () => {
@@ -12,30 +13,35 @@ export const RightPanel: React.FC = () => {
       {currentQuizId ? (
         <MinimizedQuizCardController quizId={currentQuizId} />
       ) : null}
-      <FollowSuggCard
-        users={[
+      <UpcomingEventsCard
+        events={[
           {
-            id: 1,
-            avatarUrl: avatar.src,
-            displayName: "John Mike",
-            username: "john_mike",
+            onClick: () => {
+              console.log("hello world");
+            },
+            id: "34",
+            scheduledFor: new Date(),
+            planersInfo: {
+              avatars: [avatar.src, avatar.src],
+              planers: ["Irere", "John"],
+            },
+            title: "Chemistry hangout",
           },
           {
-            id: 2,
-            avatarUrl: avatar.src,
-            displayName: "Kallen Jerry",
-            username: "jerry_k",
-          },
-          {
-            id: 3,
-            avatarUrl: avatar.src,
-            displayName: "Youwan Hong",
-            username: "youwanHong",
+            onClick: () => {
+              console.log("hello world");
+            },
+            id: "34",
+            scheduledFor: new Date(),
+            planersInfo: {
+              avatars: [avatar.src, avatar.src],
+              planers: ["Irere", "John"],
+            },
+            title: "Maths Course",
           },
         ]}
-        onClick={() => console.log("Hello world")}
-        onFollow={() => console.log("followed")}
-      />
+        onCreateScheduledEvent={() => {}}
+      />{" "}
     </div>
   );
 };

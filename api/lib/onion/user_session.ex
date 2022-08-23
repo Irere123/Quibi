@@ -5,7 +5,7 @@ defmodule Onion.UserSession do
   # TODO: change this
   defmodule State do
     defstruct user_id: nil,
-               ip: nil,
+              ip: nil,
               pid: nil,
               username: nil,
               display_name: nil,
