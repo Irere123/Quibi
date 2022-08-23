@@ -1,6 +1,8 @@
 defmodule Broth do
   import Plug.Conn
 
+  alias Broth.Routes.DevOnly
+  alias Broth.Routes.Stats
   use Plug.Router
 
   if Mix.env() == :test do
@@ -25,9 +27,13 @@ defmodule Broth do
   end
 
   use Sentry.PlugCapture
+  plug(Kousa.Metric.PrometheusExporter)
   plug(Broth.Plugs.Cors)
   plug(:match)
   plug(:dispatch)
+
+  forward("/dev", to: DevOnly)
+  forward("/stats", to: Stats)
 
   options _ do
     send_resp(conn, 200, "")

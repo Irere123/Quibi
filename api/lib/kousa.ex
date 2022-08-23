@@ -7,9 +7,19 @@ defmodule Kousa do
   def start(_type, _args) do
     import Supervisor.Spec, warn: false
 
+    Kousa.Metric.PrometheusExporter.setup()
+    Kousa.Metric.PipelineInstrumenter.setup()
+    Kousa.Metric.UserSessions.setup()
+
     children = [
       # top-level supervisor for UserSession group
+      Onion.Supervisors.UserSession,
+      Onion.Supervisors.QuizSession,
+      Onion.Supervisors.Chat,
+      Onion.StatsCache,
       {Beef.Repo, []},
+      {Phoenix.PubSub, name: Onion.PubSub},
+      Onion.Telemetry,
       Plug.Cowboy.child_spec(
         scheme: :http,
         plug: Broth,
@@ -38,6 +48,7 @@ defmodule Kousa do
     [
       {:_,
        [
+        {"/socket", Broth.SocketHandler, []},
          {:_, Plug.Cowboy.Handler, {Broth, []}}
        ]}
     ]

@@ -1,7 +1,6 @@
 defmodule Beef.Schemas.ScheduledQuiz do
   use Ecto.Schema
   import Ecto.Changeset
-  alias Beef.Schemas.Quiz
   alias Beef.Schemas.User
   @timestamps_opts [type: :utc_datetime_usec]
 
@@ -26,7 +25,7 @@ defmodule Beef.Schemas.ScheduledQuiz do
     field(:started, :boolean)
 
     belongs_to(:creator, User, foreign_key: :creatorId, type: :binary_id)
-    belongs_to(:quiz, Quiz, foreign_key: :quizId, type: :binary_id)
+    belongs_to(:quiz, Beef.Schemas.Quiz, foreign_key: :quizId, type: :binary_id)
 
     timestamps()
   end
