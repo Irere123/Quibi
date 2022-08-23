@@ -2,6 +2,9 @@ defmodule Broth do
   import Plug.Conn
 
   alias Broth.Routes.DevOnly
+  alias Broth.Routes.GitHubAuth
+  alias Broth.Routes.TwitterAuth
+  alias Broth.Routes.DiscordAuth
   alias Broth.Routes.Stats
   alias Broth.Routes.User
   use Plug.Router
@@ -33,6 +36,9 @@ defmodule Broth do
   plug(:match)
   plug(:dispatch)
 
+  forward("/auth/twitter", to: TwitterAuth)
+  forward("/auth/discord", to: DiscordAuth)
+  forward("/auth/github", to: GitHubAuth)
   forward("/dev", to: DevOnly)
   forward("/stats", to: Stats)
   forward("/user", to: User)

@@ -26,7 +26,7 @@ defmodule Kousa.MixProject do
       # moved logger to 2nd position to kill this error
       # calling logger:remove_handler(default) failed: :error {:badmatch, {:error, {:not_found, :default}}}
       extra_applications:
-        [:logger, :ueberauth_google, :prometheus_ex] ++
+        [:logger, :ueberauth_google, :ueberauth_github, :prometheus_ex] ++
           dev_only_apps ++ test_only_apps
     ]
   end
@@ -49,6 +49,7 @@ defmodule Kousa.MixProject do
       {:postgrex, ">= 0.16.3"},
       {:remix, "~> 0.0.2", only: :dev},
       {:ueberauth, "~> 0.7"},
+      {:ueberauth_github, "~> 0.7"},
       {:oauther, "~> 1.3"},
       {:extwitter, "~> 0.13.0"},
       {:ueberauth_twitter, "~> 0.4.1"},
