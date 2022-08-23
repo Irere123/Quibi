@@ -25,6 +25,7 @@ defmodule Broth do
   end
 
   use Sentry.PlugCapture
+  plug(Broth.Plugs.Cors)
   plug(:match)
   plug(:dispatch)
 
