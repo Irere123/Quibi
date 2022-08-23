@@ -6,73 +6,67 @@ import { MiddlePanel } from "../layouts/GridPanels";
 import { SingleUser } from "../../ui/Avatars";
 import { PageHeader } from "../../ui/PageHeader";
 import { Button } from "../../ui/Button";
+import { PersonElement } from "../../ui/PersonElement";
 
 interface PageProps {}
 
 const users = [
   {
-    id: 2,
+    id: "ie39pew0932032kj2",
     displayName: "Irere Emmy",
     username: "irere",
+    bio: "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Magnam, aspernatur",
     avatarUrl: avatar.src,
+    online: true,
   },
   {
-    id: 2,
+    id: "ie39pew0932032kj2",
     displayName: "Jack Dorsey",
     username: "jack_dorsey",
+    bio: "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Magnam, aspernatur",
     avatarUrl: avatar2.src,
+    online: false,
   },
   {
-    id: 2,
+    id: "ie39pew0932032kj2",
     displayName: "Elon musk",
     username: "elon_musk",
+    bio: "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Magnam, aspernatur",
     avatarUrl: avatar3.src,
+    online: true,
   },
   {
-    id: 2,
+    id: "ie39pew0932032kj2",
     displayName: "Peter Thiel",
     username: "peter",
+    bio: "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Magnam, aspernatur",
     avatarUrl: avatar.src,
+    online: false,
   },
   {
-    id: 2,
+    id: "ie39pew0932032kj2",
     displayName: "Garry tan",
     username: "garry_tan",
+    bio: "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Magnam, aspernatur",
     avatarUrl: avatar.src,
+    online: true,
   },
 ];
 
 const Page: React.FC<PageProps> = () => {
   return (
-    <>
+    <div className="flex flex-col gap-3 mt-1">
       {users.map((user) => (
-        <div key={user.id} className="flex items-center mb-6 cursor-pointer">
-          <div className="flex">
-            <SingleUser size="md" src={user.avatarUrl} />
-          </div>
-          <div className="flex px-4 flex-1">
-            <div className="flex flex-col w-full">
-              <div className="block max-w-md text-primary-100 truncate w-full">
-                {user.displayName}
-              </div>
-              <div className="flex text-primary-200">@{user.username}</div>
-            </div>
-          </div>
-          <div className="flex">
-            <Button>Follow</Button>
-          </div>
-        </div>
+        <PersonElement key={user.id} user={user} />
       ))}
-    </>
+    </div>
   );
 };
 
 export const PeopleController: React.FC = () => {
   return (
     <MiddlePanel stickyChildren={<PageHeader title="People" />}>
-      <div className="flex flex-col mt-4 mb-6">
-        <Page />
-      </div>
+      <Page />
     </MiddlePanel>
   );
 };

@@ -10,7 +10,6 @@ Object.defineProperty(NextImage, "default", {
 });
 
 export const parameters = {
-  layout: "centered",
   backgrounds: {
     default: "bg-on-figma",
     values: [
