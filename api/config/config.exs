@@ -1,4 +1,4 @@
-use MixConfig
+use Mix.Config
 
 config :kousa, ecto_repos: [Beef.Repo]
 config :kousa, web_socket_auth_timeout: 10_000

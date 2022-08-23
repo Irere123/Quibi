@@ -2,8 +2,7 @@ import Config
 
 database_url =
   System.get_env("DATABASE_URL") ||
-  "postgres://postgres:postgres@localhost/quibi_repo2_test"
-
+    "postgres://postgres:postgres@localhost/quibi_repo2_test"
 
 config :kousa, Beef.Repo,
   url: database_url,
@@ -22,6 +21,6 @@ config :kousa,
   api_url: System.get_env("API_URL") || "http://localhost:4001",
   access_token_secret: "thisisthescreetacesstokenscertr",
   refresh_token_secret: "thisistherefreshtokensecret",
-  irere_github_id: "notreallyireregithubid",
+  irere_github_id: "notreallyireregithubid"
 
 config :kousa, websocket_auth_timeout: 50

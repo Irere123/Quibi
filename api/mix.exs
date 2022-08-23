@@ -8,6 +8,10 @@ defmodule Kousa.MixProject do
       elixir: "~> 1.12",
       start_permanent: Mix.env() == :prod,
       deps: deps(),
+      preferred_cli_env: [
+        coveralls: :test,
+        "coveralls.html": :test
+      ],
       elixirc_paths: elixirc_paths(Mix.env()),
       aliases: aliases()
     ]
@@ -19,11 +23,11 @@ defmodule Kousa.MixProject do
 
     [
       mod: {Kousa, []},
-       # moved logger to 2nd position to kill this error
+      # moved logger to 2nd position to kill this error
       # calling logger:remove_handler(default) failed: :error {:badmatch, {:error, {:not_found, :default}}}
       extra_applications:
-      [:amqp, :logger, :ueberauth_github, :ueberauth_google, :prometheus_ex] ++
-        dev_only_apps ++ test_only_apps
+        [:logger, :ueberauth_google, :prometheus_ex] ++
+          dev_only_apps ++ test_only_apps
     ]
   end
 
