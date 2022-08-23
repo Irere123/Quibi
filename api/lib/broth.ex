@@ -3,6 +3,7 @@ defmodule Broth do
 
   alias Broth.Routes.DevOnly
   alias Broth.Routes.Stats
+  alias Broth.Routes.User
   use Plug.Router
 
   if Mix.env() == :test do
@@ -34,6 +35,7 @@ defmodule Broth do
 
   forward("/dev", to: DevOnly)
   forward("/stats", to: Stats)
+  forward("/user", to: User)
 
   options _ do
     send_resp(conn, 200, "")
