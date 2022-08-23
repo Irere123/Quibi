@@ -1,0 +1,11 @@
+version: "3.3"
+
+services:
+  kousa:
+    image: quibi/kousa
+    env_file:
+      - kousa.env
+  postgres:
+    env_file:
+      - pg.env
+  adminer:

@@ -1,9 +1,9 @@
-defmodule Okra.MixProject do
+defmodule Kousa.MixProject do
   use Mix.Project
 
   def project do
     [
-      app: :okra,
+      app: :kousa,
       version: "0.1.0",
       elixir: "~> 1.12",
       start_permanent: Mix.env() == :prod,
@@ -15,11 +15,15 @@ defmodule Okra.MixProject do
 
   def application do
     dev_only_apps = List.wrap(if Mix.env() == :dev, do: :remix)
+    test_only_apps = List.wrap(if Mix.env() == :test, do: :websockex)
 
     [
+      mod: {Kousa, []},
+       # moved logger to 2nd position to kill this error
+      # calling logger:remove_handler(default) failed: :error {:badmatch, {:error, {:not_found, :default}}}
       extra_applications:
-        [:ueberauth_google, :logger, :ueberauth_facebook, :prometheus_ex] ++ dev_only_apps,
-      mod: {Okra, []}
+      [:amqp, :logger, :ueberauth_github, :ueberauth_google, :prometheus_ex] ++
+        dev_only_apps ++ test_only_apps
     ]
   end
 

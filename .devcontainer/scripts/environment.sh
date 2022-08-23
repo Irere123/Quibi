@@ -1,0 +1,27 @@
+#kousa 
+cat >> "/home/$USERNAME/.bashrc" << EOL
+
+#API Environment variables
+export DATABASE_URL=postgres://postgres:postgres@localhost/quibi_repo
+export IRERE_GITHUB_ID=7872329
+export SECRET_KEY_BASE=rewuirewuwejksdkjy373y7eds7uiewiu3273wyisdhyuewyue7yhuiehdsikswj
+export ACCESS_TOKEN_SECRET=one23843843uthateuhew2323dsathoeu5487thuaonehntoauhaeuheae
+export REFRESH_TOKEN_SECRET=zzaneuthaonuewiu34734812hjashj932823eheaouhnaoehunstasenuth
+export GITHUB_CLIENT_ID=
+export GITHUB_CLIENT_SECRET=
+export TWITTER_API_KEY=zAzhaCUlZSmzOxLNirD63g4D0
+export TWITTER_SECRET_KEY=6UTIrg80iQbVHXP7JUbVq84sVqye6TShn70ad11jQuVk2wTpZP
+export TWITTER_BEARER_TOKEN=AAAAAAAAAAAAAAAAAAAAAD4tfQEAAAAAh8bUZXRtP4Ln2%2BVQ3RxkdwG9FQQ%3DXeiAYeJLkEBaALASCKRTpobOA3G9Ny9s7xuyXklQy8qIGzlfNY
+export DISCORD_CLIENT_ID=1002860531092299866
+export DISCORD_CLIENT_SECRET=ClkMDtgicZnGqzjL6kH8rLF1TH51LlLT
+export GOOGLE_CLIENT_ID=1022380030031-7ttj98r440qo8amanjpssv8r4pdk2heq.apps.googleusercontent.com
+export GOOGLE_CLIENT_SECRET=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
+export SENTRY_DNS=
+export API_URL=http://localhost:4001
+export WEB_URL=http://localhost:3000
+export PORT=4001
+EOL
+
+
+# kibbeh
+cp web/.env.example web/.env
