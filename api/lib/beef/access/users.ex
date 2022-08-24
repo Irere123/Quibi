@@ -3,6 +3,7 @@ defmodule Beef.Access.Users do
 
   alias Beef.Queries.Users, as: Query
   alias Beef.Repo
+  alias Beef.Quizes
   alias Beef.Schemas.User
 
   def get(user_id) do
@@ -44,6 +45,17 @@ defmodule Beef.Access.Users do
 
   def get_by_id(user_id) do
     Repo.get(User, user_id)
+  end
+
+  def get_by_id_with_quiz_permissions(user_id) do
+    from(u in User,
+      where: u.id == ^user_id,
+      left_join: qp in Beef.Schemas.QuizPermission,
+      on: qp.userId == u.id and qp.quizId == u.currentQuizId,
+      select: %{u | quizPermissions: qp},
+      limit: 1
+    )
+    |> Repo.one()
   end
 
   def get_by_username(username) do
@@ -90,5 +102,61 @@ defmodule Beef.Access.Users do
 
   def get_by_api_key(api_key) do
     Repo.get_by(User, apiKey: api_key)
+  end
+
+  def get_users_in_current_quiz(user_id) do
+    case tuple_get_current_quiz_id(user_id) do
+      {:ok, nil} ->
+        {nil, []}
+
+      {:ok, current_quiz_id} ->
+        {current_quiz_id,
+         from(u in User,
+           where: u.currentQuizId == ^current_quiz_id,
+           left_join: rp in Beef.Schemas.QuizPermission,
+           on: rp.userId == u.id and rp.quizId == u.currentQuizId,
+           select: %{u | quizPermissions: rp}
+         )
+         |> Repo.all()}
+
+      _ ->
+        {nil, []}
+    end
+  end
+
+  # NB: Anything that touches Gen will have to be refactored away
+  # out of the database layer, but we are keeping it here for now
+  # to keep the transition smooth.
+  def tuple_get_current_quiz_id(user_id) do
+    # DO NOT COPY/PASTE THIS FUNCTION
+    case Onion.UserSession.get_current_quiz_id(user_id) do
+      {:ok, nil} ->
+        {nil, nil}
+
+      x ->
+        {:ok, x}
+    end
+  end
+
+  def get_current_quiz(user_id) do
+    quiz_id = get_current_quiz_id(user_id)
+
+    case quiz_id do
+      nil -> nil
+      id -> Quizes.get_quiz_by_id(id)
+    end
+  end
+
+  def get_current_quiz_id(user_id) do
+    # DO NOT COPY/PASTE THIS FUNCTION
+    try do
+      Onion.UserSession.get_current_quiz_id(user_id)
+    catch
+      _, _ ->
+        case get_by_id(user_id) do
+          nil -> nil
+          %{currentQuizId: id} -> id
+        end
+    end
   end
 end

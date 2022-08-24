@@ -4,6 +4,7 @@ defmodule Beef.Mutations.Users do
   alias Beef.Repo
   alias Beef.Queries.Users, as: Query
   alias Beef.Schemas.User
+  alias Beef.QuizPermissions
 
   def edit_profile(user_id, data) do
     # TODO: make this not perform a db query
@@ -44,6 +45,48 @@ defmodule Beef.Mutations.Users do
     |> Query.filter_by_id(user_id)
     |> Query.update_set_ip(ip)
     |> Repo.update_all([])
+  end
+
+  def set_user_left_current_quiz(user_id) do
+    Onion.UserSession.set_current_quiz_id(user_id, nil)
+
+    Query.start()
+    |> Query.filter_by_id(user_id)
+    |> Query.update_set_current_quiz_nil()
+    |> Repo.update_all([])
+  end
+
+  def set_current_quiz(user_id, quiz_id, can_speak \\ false, returning \\ false) do
+    quizPermissions =
+      case can_speak do
+        true ->
+          case QuizPermissions.set_speaker(user_id, quiz_id, true, true) do
+            {:ok, x} -> x
+            _ -> nil
+          end
+
+        _ ->
+          QuizPermissions.get(user_id, quiz_id)
+      end
+
+    Onion.UserSession.set_current_quiz_id(user_id, quiz_id)
+
+    q =
+      from(u in User,
+        where: u.id == ^user_id,
+        update: [
+          set: [
+            currentQuizId: ^quiz_id
+          ]
+        ]
+      )
+
+    q = if returning, do: select(q, [u], u), else: q
+
+    case Repo.update_all(q, []) do
+      {_, [user]} -> %{user | quizPermissions: quizPermissions}
+      _ -> nil
+    end
   end
 
   def set_online(user_id) do
