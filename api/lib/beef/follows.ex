@@ -12,6 +12,7 @@ defmodule Beef.Follows do
 
   alias Beef.Schemas.Follow
   alias Beef.Schemas.User
+  alias Beef.Schemas.Quiz
 
   def bulk_insert(follows) do
     Beef.Repo.insert_all(
@@ -45,6 +46,37 @@ defmodule Beef.Follows do
         limit: ^@fetch_limit,
         offset: ^offset,
         order_by: [desc: f.inserted_at]
+      )
+      |> Beef.Repo.all()
+
+    {Enum.slice(items, 0, -1 + @fetch_limit),
+     if(length(items) == @fetch_limit, do: -1 + offset + @fetch_limit, else: nil)}
+  end
+
+  # fetch all the users
+  def get_my_following(user_id, offset \\ 0) do
+    items =
+      from(
+        f in Follow,
+        inner_join: u in User,
+        on: f.userId == u.id,
+        left_join: f2 in Follow,
+        on: f2.userId == ^user_id and f2.followerId == u.id,
+        left_join: cq in Quiz,
+        on: u.currentQuizId == cq.id,
+        where:
+          f.followerId == ^user_id and
+            (is_nil(cq.isPrivate) or
+               cq.isPrivate == false),
+        select: %{
+          u
+          | currentQuiz: cq,
+            followsYou: not is_nil(f2.userId),
+            youAreFollowing: true
+        },
+        limit: ^@fetch_limit,
+        offset: ^offset,
+        order_by: [desc: u.online]
       )
       |> Beef.Repo.all()
 

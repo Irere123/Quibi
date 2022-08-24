@@ -4,7 +4,15 @@ defmodule Broth.Message.Manifest do
 
   @actions %{
     "auth:request" => Auth.Request,
-    "user:get_info" => User.GetInfo
+    "user:get_info" => User.GetInfo,
+    "user:ban" => User.Ban,
+    "user:block" => User.Block,
+    "user:unblock" => User.Unblock,
+    "user:follow" => User.Follow,
+    "user:get_following" => User.GetFollowing,
+    "user:get_followers" => User.GetFollowers,
+    "user:unfollow" => User.Unfollow,
+    "user:update" => User.Update
   }
 
   # verify that all of the actions are accounted for in the

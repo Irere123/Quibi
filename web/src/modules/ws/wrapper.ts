@@ -27,6 +27,25 @@ export const wrap = (connection: Connection) => ({
    */
 
   query: {
+    getFollowList: (
+      username: string,
+      isFollowing: boolean,
+      cursor = 0
+    ): Promise<{
+      users: User[];
+      nextCursor: number | null;
+    }> =>
+      connection.sendCall("user:get_followers", {
+        username,
+        isFollowing,
+        cursor,
+      }) as any,
+    getMyFollowing: (
+      cursor = 0
+    ): Promise<{
+      users: User[];
+      nextCursor: number | null;
+    }> => connection.sendCall("user:get_following", { cursor }) as any,
     getUserProfile: (
       userIdOrUsername: string
     ): Promise<User | null | { error: string }> =>
@@ -37,5 +56,22 @@ export const wrap = (connection: Connection) => ({
   /**
    * Allows you to call functions that mutate the ws state
    */
-  mutation: {},
+  mutation: {
+    userUpdate: (data: Partial<User>): Promise<any> =>
+      connection.sendCall("user:update", data),
+    userBlock: (userId: string): Promise<any> =>
+      connection.sendCall("user:block", { userId }),
+    userUnblock: (userId: string): Promise<any> =>
+      connection.sendCall("user:unblock", { userId }),
+    ban: (username: string, reason: string) =>
+      connection.sendCall(`user:ban`, { username, reason }),
+    follow: (userId: string, value: boolean): Promise<any> =>
+      connection.sendCall("user:follow", { userId, value }),
+    editProfile: (data: {
+      displayName: string;
+      username: string;
+      bio: string;
+    }): Promise<{ isUsernameTaken: boolean }> =>
+      connection.sendCall("user:update", { data }) as any,
+  },
 });

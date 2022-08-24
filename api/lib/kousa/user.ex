@@ -30,6 +30,30 @@ defmodule Kousa.User do
     end
   end
 
+  def edit_profile(user_id, data) do
+    case Users.edit_profile(user_id, data) do
+      {:error, %Ecto.Changeset{errors: [{_, {"has already been taken", _}}]}} ->
+        :username_taken
+
+      {:ok, user} ->
+        Onion.UserSession.set_state(
+          user_id,
+          %{
+            display_name: user.displayName,
+            username: user.username,
+            avatar_url: user.avatarUrl,
+            banner_url: user.bannerUrl
+          }
+        )
+
+        PubSub.broadcast("user:update:" <> user.id, user)
+        {:ok, user}
+
+      _ ->
+        :ok
+    end
+  end
+
   @doc """
   bans a user from the platform.  Must be an admin operator (currently irere) to run
   this function.  Authorization passed in via the opts (:admin_id) field.
