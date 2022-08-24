@@ -47,7 +47,6 @@ defmodule Broth.Message.User.GetInfo do
       field(:followsYou, :boolean, virtual: true)
       field(:iBlockedThem, :boolean, virtual: true)
       field(:error, :string, virtual: true)
-
     end
   end
 
