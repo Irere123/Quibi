@@ -20,6 +20,8 @@ export const UserProfileController: React.FC = () => {
     [query.username as string]
   );
 
+  console.log(data);
+
   if (isLoading) {
     return <InfoText>Loading....</InfoText>;
   }

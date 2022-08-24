@@ -30,7 +30,6 @@ export type User = {
   bio: string | null;
   email: string;
   online: boolean;
-  last_online: boolean;
   numFollowing: number;
   numFollowers: number;
   youAreFollowing?: boolean;
