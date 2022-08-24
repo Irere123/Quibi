@@ -55,7 +55,7 @@ defmodule Beef.Access.Quizes do
     end
   end
 
-  def get_top_public_quizs(user_id, offset \\ 0) do
+  def get_top_public_quizes(user_id, offset \\ 0) do
     items =
       from(q in Quiz,
         left_join: qb in QuizBlock,

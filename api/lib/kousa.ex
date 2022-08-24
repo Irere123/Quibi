@@ -37,11 +37,22 @@ defmodule Kousa do
 
     case Supervisor.start_link(children, opts) do
       {:ok, pid} ->
+        start_quizes()
         {:ok, pid}
 
       error ->
         error
     end
+  end
+
+  defp start_quizes() do
+    Enum.each(Beef.Quizes.all_quizes(), fn quiz ->
+      Onion.QuizSession.start_supervised(
+        quiz_id: quiz.id,
+        chat_mode: quiz.chatMode,
+        quiz_creator_id: quiz.creatorId
+      )
+    end)
   end
 
   defp dispatch do

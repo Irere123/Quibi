@@ -7,6 +7,8 @@ defmodule Broth.Message.Manifest do
   @actions %{
     "misc:search" => Misc.Search,
     "quiz:create" => Quiz.Create,
+    "quiz:join" => Quiz.Join,
+    "quiz:get_top" => Quiz.GetTop,
     "auth:request" => Auth.Request,
     "user:get_info" => User.GetInfo,
     "user:ban" => User.Ban,

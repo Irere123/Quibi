@@ -16,10 +16,10 @@ defmodule Kousa.Auth do
     end
   end
 
-  defp do_auth(user, tokens, _request, ip) do
+  defp do_auth(user, tokens, request, ip) do
     alias Onion.UserSession
-    # alias Onion.RoomSession
-    # alias Beef.Rooms
+    alias Onion.QuizSession
+    alias Beef.Quizes
 
     if user do
       # note that this will start the session and will be ignored if the
@@ -47,33 +47,28 @@ defmodule Kousa.Auth do
         UserSession.new_tokens(user.id, tokens)
       end
 
-      # roomIdFromFrontend = request.currentRoomId
+      quizIdFromFrontend = request.currentQuizId
 
-      # cond do
-      #   user.currentRoomId ->
-      #     # TODO: move toroom business logic
-      #     room = Rooms.get_room_by_id(user.currentRoomId)
+      cond do
+        user.currentQuizId ->
+          # TODO: move to quiz business logic
+          quiz = Quizes.get_quiz_by_id(user.currentQuizId)
 
-      #     RoomSession.start_supervised(
-      #       room_id: user.currentRoomId,
-      #       voice_server_id: room.voiceServerId,
-      #       chat_mode: room.chatMode,
-      #       room_creator_id: room.creatorId
-      #     )
+          QuizSession.start_supervised(
+            quiz_id: user.currentQuizId,
+            chat_mode: quiz.chatMode,
+            quiz_creator_id: quiz.creatorId
+          )
 
-      #     PubSub.subscribe("chat:" <> room.id)
-      #     RoomSession.join_room(room.id, user.id, request.muted, request.deafened)
+          PubSub.subscribe("chat:" <> quiz.id)
+          QuizSession.join_quiz(quiz.id, user.id)
 
-      #     if request.reconnectToVoice == true do
-      #       Kousa.Room.join_vc_room(user.id, room)
-      #     end
+        quizIdFromFrontend ->
+          Kousa.Quiz.join_quiz(user.id, quizIdFromFrontend)
 
-      #   roomIdFromFrontend ->
-      #     Kousa.Room.join_room(user.id, roomIdFromFrontend)
-
-      #   true ->
-      #     :ok
-      # end
+        true ->
+          :ok
+      end
 
       # subscribe to chats directed to oneself.
       PubSub.subscribe("chat:" <> user.id)

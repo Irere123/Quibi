@@ -8,8 +8,7 @@ defmodule Broth.Message.Quiz.Create do
              :creatorId,
              :name,
              :description,
-             :isPrivate,
-             :scheduledQuizId
+             :isPrivate
            ]}
 
   @primary_key {:id, :binary_id, []}
@@ -18,9 +17,7 @@ defmodule Broth.Message.Quiz.Create do
     field(:name, :string)
     field(:description, :string)
     field(:isPrivate, :boolean, default: false)
-    field(:userIdToInvite, {:array, :binary_id}, virtual: true)
     field(:autoSpeaker, :boolean)
-    field(:scheduledQuizId, :binary_id, virtual: true)
   end
 
   # inbound data.
@@ -30,7 +27,6 @@ defmodule Broth.Message.Quiz.Create do
       :name,
       :description,
       :isPrivate,
-      :userIdToInvite,
       :autoSpeaker
     ])
     |> validate_required([:name])
@@ -58,7 +54,7 @@ defmodule Broth.Message.Quiz.Create do
       #     nil
       # end
 
-      {:reply, struct(__MODULE__, Map.from_struct(quiz)), state}
+      {:reply, %{quiz: struct(__MODULE__, Map.from_struct(quiz))}, state}
     end
   end
 end

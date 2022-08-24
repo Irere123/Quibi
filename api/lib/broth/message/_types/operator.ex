@@ -18,8 +18,10 @@ defenum(
     {User.Block, 10},
     {User.Unblock, 11},
     {User.Unfollow, 12},
-     # quiz commands and casts: 64..127
-     {Quiz.Create, 64},
+    # quiz commands and casts: 64..127
+    {Quiz.Create, 64},
+    {Quiz.Join, 65},
+    {Quiz.GetTop, 66},
     # auth and maintenance commands 192..254
     {Auth.Request, 193},
     {Misc.Search, 210}

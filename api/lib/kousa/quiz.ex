@@ -311,6 +311,43 @@ defmodule Kousa.Quiz do
       {:error, "quiz not found"}
   end
 
+  # NB this function does not correctly return an updated quiz struct if the
+  # action is valid.
+
+  # NB2, this function has an non-idiomatic parameter order.  quiz_id should
+  # come first.
+  def join_quiz(user_id, quiz_id) do
+    currentQuizId = Beef.Users.get_current_quiz_id(user_id)
+
+    if currentQuizId == quiz_id do
+      %{quiz: Quizes.get_quiz_by_id(quiz_id)}
+    else
+      case Quizes.can_join_quiz(quiz_id, user_id) do
+        {:error, message} ->
+          %{error: message}
+
+        {:ok, quiz} ->
+          # private quizs can now be joined by anyone who has the link
+          # they are functioning closer to an "unlisted" quiz
+          if currentQuizId do
+            leave_quiz(user_id, currentQuizId)
+          end
+
+          # subscribe to the new quiz chat
+          PubSub.subscribe("chat:" <> quiz_id)
+
+          Quizes.join_quiz(quiz, user_id)
+
+          Onion.QuizSession.join_quiz(quiz_id, user_id)
+
+          %{quiz: quiz}
+      end
+    end
+  catch
+    _, _ ->
+      {:error, "that quiz doesn't exist"}
+  end
+
   # only you can raise your own hand
   defp set_raised_hand(quiz_id, user_id, setter_id) do
     if user_id == setter_id do
