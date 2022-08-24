@@ -2,9 +2,11 @@ defmodule Broth.Message.Manifest do
   alias Broth.Message.Auth
   alias Broth.Message.User
   alias Broth.Message.Misc
+  alias Broth.Message.Quiz
 
   @actions %{
     "misc:search" => Misc.Search,
+    "quiz:create" => Quiz.Create,
     "auth:request" => Auth.Request,
     "user:get_info" => User.GetInfo,
     "user:ban" => User.Ban,
