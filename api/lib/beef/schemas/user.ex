@@ -74,7 +74,7 @@ defmodule Beef.Schemas.User do
       :displayName,
       :avatarUrl,
       :bannerUrl,
-      :apiKey,
+      :apiKey
     ])
     |> validate_required([:username, :displayName, :avatarUrl])
     |> update_change(:displayName, &String.trim/1)
@@ -89,7 +89,6 @@ defmodule Beef.Schemas.User do
     lastOnline displayName numFollowing numFollowers
     youAreFollowing followsYou quizPermissions iBlockedThem
   )a
-
 
     def encode(user, opts) do
       user

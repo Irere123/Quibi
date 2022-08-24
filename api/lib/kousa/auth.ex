@@ -31,7 +31,7 @@ defmodule Kousa.Auth do
         avatar_url: user.avatarUrl,
         banner_url: user.bannerUrl,
         display_name: user.displayName,
-        current_quiz_id: user.currentQuizId,
+        current_quiz_id: user.currentQuizId
       )
 
       if user.ip != ip do

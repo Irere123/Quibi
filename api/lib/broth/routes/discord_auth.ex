@@ -7,7 +7,6 @@ defmodule Broth.Routes.DiscordAuth do
   plug(:match)
   plug(:dispatch)
 
-
   get "/web" do
     state =
       if Application.get_env(:kousa, :staging?) do
@@ -56,32 +55,32 @@ defmodule Broth.Routes.DiscordAuth do
   end
 
   def handle_callback(
-    %Plug.Conn{assigns: %{ueberauth_failure: %{errors: [%{message_key: "missing_code"}]}}} =
-      conn
-  ) do
-conn
-|> Broth.Plugs.Redirect.redirect(
-  get_base_url(conn) <>
-    "/?error=" <>
-    URI.encode("try again")
-)
-end
+        %Plug.Conn{assigns: %{ueberauth_failure: %{errors: [%{message_key: "missing_code"}]}}} =
+          conn
+      ) do
+    conn
+    |> Broth.Plugs.Redirect.redirect(
+      get_base_url(conn) <>
+        "/?error=" <>
+        URI.encode("try again")
+    )
+  end
 
-def handle_callback(%Plug.Conn{assigns: %{ueberauth_failure: failure}} = conn) do
-  IO.puts("Discord oauth failure")
-  IO.inspect(failure)
+  def handle_callback(%Plug.Conn{assigns: %{ueberauth_failure: failure}} = conn) do
+    IO.puts("Discord oauth failure")
+    IO.inspect(failure)
 
-  conn
-  |> Broth.Plugs.Redirect.redirect(
-    get_base_url(conn) <>
-      "/?error=" <>
-      URI.encode(
-        "something went wrong, try again and if the error persists, tell ben to check the server logs"
-      )
-  )
-end
+    conn
+    |> Broth.Plugs.Redirect.redirect(
+      get_base_url(conn) <>
+        "/?error=" <>
+        URI.encode(
+          "something went wrong, try again and if the error persists, tell ben to check the server logs"
+        )
+    )
+  end
 
-def handle_callback(
+  def handle_callback(
         %Plug.Conn{private: %{discord_user: user, discord_token: %{access_token: access_token}}} =
           conn
       ) do

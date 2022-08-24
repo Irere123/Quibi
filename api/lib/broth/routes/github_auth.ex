@@ -71,31 +71,31 @@ defmodule Broth.Routes.GitHubAuth do
   end
 
   def handle_callback(
-    %Plug.Conn{assigns: %{ueberauth_failure: %{errors: [%{message_key: "missing_code"}]}}} =
-      conn
-  ) do
-conn
-|> Broth.Plugs.Redirect.redirect(
-  get_base_url(conn) <>
-    "/?error=" <>
-    URI.encode("try again")
-)
-end
+        %Plug.Conn{assigns: %{ueberauth_failure: %{errors: [%{message_key: "missing_code"}]}}} =
+          conn
+      ) do
+    conn
+    |> Broth.Plugs.Redirect.redirect(
+      get_base_url(conn) <>
+        "/?error=" <>
+        URI.encode("try again")
+    )
+  end
 
-def handle_callback(%Plug.Conn{assigns: %{ueberauth_failure: failure}} = conn) do
-  Logger.warn("github oauth failure: #{inspect(failure)}")
+  def handle_callback(%Plug.Conn{assigns: %{ueberauth_failure: failure}} = conn) do
+    Logger.warn("github oauth failure: #{inspect(failure)}")
 
-  conn
-  |> Broth.Plugs.Redirect.redirect(
-    get_base_url(conn) <>
-      "/?error=" <>
-      URI.encode(
-        "something went wrong, try again and if the error persists, tell ben to check the server logs"
-      )
-  )
-end
+    conn
+    |> Broth.Plugs.Redirect.redirect(
+      get_base_url(conn) <>
+        "/?error=" <>
+        URI.encode(
+          "something went wrong, try again and if the error persists, tell ben to check the server logs"
+        )
+    )
+  end
 
-def handle_callback(
+  def handle_callback(
         %Plug.Conn{private: %{github_user: user, github_token: %{access_token: access_token}}} =
           conn
       ) do
@@ -151,5 +151,4 @@ def handle_callback(
         )
     )
   end
-
 end

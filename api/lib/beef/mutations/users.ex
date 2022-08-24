@@ -97,7 +97,7 @@ defmodule Beef.Mutations.Users do
                do: "Novice",
                else: user.displayName
              ),
-           bio: user.bio,
+           bio: user.bio
          },
          returning: true
        )}
@@ -144,7 +144,7 @@ defmodule Beef.Mutations.Users do
                do: "Novice",
                else: user["name"]
              ),
-           bio: user["bio"],
+           bio: user["bio"]
          },
          returning: true
        )}
@@ -185,11 +185,10 @@ defmodule Beef.Mutations.Users do
            email: if(user["email"] == "", do: nil, else: user["email"]),
            discordAccessToken: discord_access_token,
            avatarUrl: Kousa.Discord.get_avatar_url(user),
-           displayName: user["username"],
+           displayName: user["username"]
          },
          returning: true
        )}
     end
   end
-
 end

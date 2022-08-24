@@ -11,11 +11,11 @@ defmodule Beef.Users do
   NB (5 Mar 2021): these functions are probably going to get streamlined =D
   """
 
-   # ACCESS functions
-   defdelegate get(user_id), to: Beef.Access.Users
-   defdelegate find_by_github_ids(ids), to: Beef.Access.Users
+  # ACCESS functions
+  defdelegate get(user_id), to: Beef.Access.Users
+  defdelegate find_by_github_ids(ids), to: Beef.Access.Users
 
-   #####################################################################################
+  #####################################################################################
   # CHOPPING BLOCK
   # we should strive to make the queries simpler and *reduce code*, so
   # these functions are on the chopping block.  Strategy should be to query the get
@@ -23,7 +23,6 @@ defmodule Beef.Users do
   defdelegate get_by_id(user_id), to: Beef.Access.Users
   defdelegate get_by_username(username), to: Beef.Access.Users
   defdelegate search_username(username), to: Beef.Access.Users
-
 
   defdelegate get_ip(user_id), to: Beef.Access.Users
   defdelegate get_by_api_key(api_key), to: Beef.Access.Users
@@ -41,7 +40,6 @@ defmodule Beef.Users do
   defdelegate set_reason_for_ban(user_id, reason_for_ban), to: Beef.Mutations.Users
   defdelegate set_online(user_id), to: Beef.Mutations.Users
   defdelegate set_offline(user_id), to: Beef.Mutations.Users
-
 
   # TODO: make can_speak, returning, a single keyword list
   defdelegate twitter_find_or_create(user), to: Beef.Mutations.Users

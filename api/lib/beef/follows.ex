@@ -1,5 +1,5 @@
 defmodule Beef.Follows do
-    @moduledoc """
+  @moduledoc """
   Context module for Follows.
 
   This will eventually go away and be replaced
@@ -31,7 +31,6 @@ defmodule Beef.Follows do
       |> Beef.Repo.one()
     )
   end
-
 
   def get_followers(user_id, user_id_to_get_followers_for, offset \\ 20) do
     items =

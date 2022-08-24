@@ -61,7 +61,6 @@ defmodule Beef.Queries.Users do
         online: false
       ]
     )
-
   end
 
   def update_set_last_online_to_now(query) do
@@ -87,5 +86,4 @@ defmodule Beef.Queries.Users do
       ]
     )
   end
-
 end

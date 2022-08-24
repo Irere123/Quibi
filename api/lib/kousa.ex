@@ -48,7 +48,7 @@ defmodule Kousa do
     [
       {:_,
        [
-        {"/socket", Broth.SocketHandler, []},
+         {"/socket", Broth.SocketHandler, []},
          {:_, Plug.Cowboy.Handler, {Broth, []}}
        ]}
     ]

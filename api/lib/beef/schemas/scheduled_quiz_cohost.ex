@@ -5,7 +5,6 @@ defmodule Beef.Schemas.ScheduledQuizCohost do
   alias Beef.Schemas.ScheduledQuiz
   @timestamps_opts [type: :utc_datetime_usec]
 
-
   @primary_key false
   schema "scheduled_quiz_cohosts" do
     belongs_to(:user, User, foreign_key: :userId, type: :binary_id)

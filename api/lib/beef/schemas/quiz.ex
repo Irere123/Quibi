@@ -4,6 +4,7 @@ defmodule Beef.Schemas.Quiz do
   @timestamps_opts [type: :utc_datetime_usec]
 
   alias Beef.Schemas.User
+
   @derive {Jason.Encoder,
            only:
              ~w(id name description numPeopleInside isPrivate chatMode chatThrottle autoSpeaker

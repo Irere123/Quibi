@@ -12,9 +12,8 @@ defmodule Onion.UserSession do
               banner_url: nil
   end
 
-    #################################################################################
+  #################################################################################
   # REGISTRY AND SUPERVISION BOILERPLATE
-
 
   defp via(user_id), do: {:via, Registry, {Onion.UserSessionRegistry, user_id}}
 
@@ -39,7 +38,7 @@ defmodule Onion.UserSession do
 
   def lookup(user_id), do: Registry.lookup(Onion.UserSessionRegistry, user_id)
 
-   ###############################################################################
+  ###############################################################################
   ## INITIALIZATION BOILERPLATE
 
   def start_link(init) do
@@ -52,7 +51,7 @@ defmodule Onion.UserSession do
     {:ok, struct(State, init)}
   end
 
-   ##############################################################################
+  ##############################################################################
   ## API HOOKS
   ## TODO: CHANGE CASTS TO CALLS
 
@@ -104,7 +103,7 @@ defmodule Onion.UserSession do
     {:reply, Map.get(state, key), state}
   end
 
-   # temporary function that exists so that each user can only have
+  # temporary function that exists so that each user can only have
   # one tenant websocket.
   def set_active_ws(user_id, pid), do: call(user_id, {:set_active_ws, pid})
 
@@ -137,7 +136,7 @@ defmodule Onion.UserSession do
 
   defp handle_disconnect(_, state), do: {:noreply, state}
 
-   #############################################################################
+  #############################################################################
   ## ROUTER
 
   def handle_cast({:set, key, value}, state), do: set_impl(key, value, state)

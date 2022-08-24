@@ -108,7 +108,9 @@ defmodule Broth.Routes.TwitterAuth do
           |> Redirect.redirect(
             base_url <>
               "/?error=" <>
-              URI.encode("twitter login callback failed for some reason, tell irere to check logs")
+              URI.encode(
+                "twitter login callback failed for some reason, tell irere to check logs"
+              )
           )
       end
     rescue
@@ -126,7 +128,6 @@ defmodule Broth.Routes.TwitterAuth do
         )
     end
   end
-
 
   def get_base_url(conn) do
     case conn |> get_session(:redirect_to_beta) do
