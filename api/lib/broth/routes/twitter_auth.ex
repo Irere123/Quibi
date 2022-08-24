@@ -36,7 +36,7 @@ defmodule Broth.Routes.TwitterAuth do
     |> put_session(
       :redirect_to_beta,
       Enum.any?(conn.req_headers, fn {k, v} ->
-        k == "referer" and Urls.beta_site_url?(v)
+        k == "referer" and Urls.is_beta_site_url(v)
       end)
     )
     |> Redirect.redirect(authenticate_url)

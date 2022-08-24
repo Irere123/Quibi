@@ -19,12 +19,6 @@ defmodule Kousa.Utils.Version do
 
   def dump(_), do: :error
 
-  def dump(v = %Version{}) do
-    {:ok, to_string(v)}
-  end
-
-  def dump(_), do: :error
-
   def load(v) when is_binary(v) do
     Version.parse(v)
   end
