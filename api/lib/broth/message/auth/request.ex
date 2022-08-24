@@ -60,7 +60,7 @@ defmodule Broth.Message.Auth.Request do
         |> Map.get(:blocking)
         |> Enum.map(& &1.id)
 
-      {:reply, user, %{state | user: user, user_ids_i_am_blocking: user_ids_i_am_blocking}}
+      {:reply, %{user: user}, %{state | user: user, user_ids_i_am_blocking: user_ids_i_am_blocking}}
     else
       # don't tolerate malformed requests with any response besides closing
       # out websocket.

@@ -1,7 +1,9 @@
 defmodule Beef.Schemas.User do
   use Ecto.Schema
 
+  use Broth.Message.Push
   import Ecto.Changeset
+  alias Beef.Schemas.Quiz
 
   defmodule Preview do
     use Ecto.Schema
@@ -48,6 +50,19 @@ defmodule Beef.Schemas.User do
     field(:theyBlockedMe, :boolean, virtual: true)
     field(:iBlockedThem, :boolean, virtual: true)
 
+    belongs_to(:botOwner, Beef.Schemas.User, foreign_key: :botOwnerId, type: :binary_id)
+    belongs_to(:currentQuiz, Quiz, foreign_key: :currentQuizId, type: :binary_id)
+
+    many_to_many(:blocked_by, __MODULE__,
+      join_through: "user_blocks",
+      join_keys: [userIdBlocked: :id, userId: :id]
+    )
+
+    many_to_many(:blocking, __MODULE__,
+      join_through: "user_blocks",
+      join_keys: [userId: :id, userIdBlocked: :id]
+    )
+
     timestamps()
   end
 
@@ -88,11 +103,19 @@ defmodule Beef.Schemas.User do
     @fields ~w(id username avatarUrl bannerUrl bio online
     lastOnline displayName numFollowing numFollowers
     youAreFollowing followsYou quizPermissions iBlockedThem
+    botOwnerId currentQuizId currentQuiz
   )a
+
+    defp transform_current_quiz(fields = %{currentQuiz: %Ecto.Association.NotLoaded{}}) do
+      Map.delete(fields, :currentQuiz)
+    end
+
+    defp transform_current_quiz(fields), do: fields
 
     def encode(user, opts) do
       user
       |> Map.take(@fields)
+      |> transform_current_quiz()
       |> Jason.Encoder.encode(opts)
     end
   end

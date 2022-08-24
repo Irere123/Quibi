@@ -1,7 +1,4 @@
 defmodule Broth.SocketHandler do
-  @moduledoc """
-   this is the module that handle all the websocket requests
-  """
   require Logger
 
   defstruct user: nil,
@@ -14,7 +11,7 @@ defmodule Broth.SocketHandler do
 
   @behaviour :cowboy_websocket
 
-  #######################################################################################
+  ###############################################################
   ## initialization boilerplate
 
   @impl true
@@ -56,16 +53,16 @@ defmodule Broth.SocketHandler do
     {:ok, state}
   end
 
-  #############################################################################
+  #######################################################################
   ## API
 
   # exit
   def exit(pid), do: send(pid, :exit)
 
   defp exit_impl(state) do
-    # note the remote webserver will then close the connection. The
+    # note the remote webserver will then close the connection.  The
     # second command forces a shutdown in case the client is a jerk and
-    # tries to DOS us by holding open connection.
+    # tries to DOS us by holding open connections.
     # frontend expects 4003
     ws_push([{:close, 4003, "killed by server"}, shutdown: :normal], state)
   end
@@ -79,7 +76,7 @@ defmodule Broth.SocketHandler do
     end
   end
 
-  # unsub from pubsub topic
+  # unsub from PubSub topic
   def unsub(socket, topic), do: send(socket, {:unsub, topic})
 
   alias Onion.PubSub
@@ -99,6 +96,15 @@ defmodule Broth.SocketHandler do
   ##########################################################################
   ## USER UPDATES
 
+  def user_update_impl({"user:update:" <> user_id, user}, state = %{user: %{id: user_id}}) do
+    %Broth.Message{operator: "user:update", payload: user}
+    |> adopt_version(state)
+    |> prepare_socket_msg(state)
+    |> ws_push(%{state | user: user})
+  end
+
+  def user_update_impl(_, state), do: ws_push(nil, state)
+
   ##########################################################################
   ## CHAT MESSAGES
 
@@ -114,11 +120,17 @@ defmodule Broth.SocketHandler do
 
   def websocket_handle({:text, command_json}, state) do
     with {:ok, message_map!} <- Jason.decode(command_json),
-         # translation
-         message_map! = Broth.Translator.translate_inbound(message_map!),
          {:ok, message = %{errors: nil}} <- validate(message_map!, state),
          :ok <- auth_check(message, state) do
-      dispatch(message, state)
+      # make the state adopt the version of the inbound message.
+      new_state =
+        if message.operator == Broth.Message.Auth.Request do
+          adopt_version(state, message)
+        else
+          state
+        end
+
+      dispatch(message, new_state)
     else
       {:error, :auth} ->
         ws_push({:close, 4004, "not_authenticated"}, state)
@@ -280,6 +292,9 @@ defmodule Broth.SocketHandler do
   def websocket_info(:auth_timeout, state), do: auth_timeout_impl(state)
   def websocket_info({:remote_send, message}, state), do: remote_send_impl(message, state)
   def websocket_info({:unsub, topic}, state), do: unsub_impl(topic, state)
+
+  def websocket_info(message = {"user:update:" <> _, _}, state),
+    do: user_update_impl(message, state)
 
   # throw out all other messages
   def websocket_info(_, state) do

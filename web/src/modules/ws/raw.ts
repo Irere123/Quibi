@@ -9,39 +9,37 @@ export const apiUrl = apiBaseUrl.replace("http", wsProtocol) + "/socket";
 const connectionTimeout = 15000;
 
 export type Token = string;
-export type FetchID = UUID;
+export type Ref = UUID;
 export type Opcode = string;
 export type Logger = (
   direction: "in" | "out",
   opcode: Opcode,
   data?: unknown,
-  fetchId?: FetchID,
+  fetchId?: Ref,
   raw?: string
 ) => void;
-
 export type ListenerHandler<Data = unknown> = (
   data: Data,
-  fetchId?: FetchID
+  fetchId?: Ref
 ) => void;
 export type Listener<Data = unknown> = {
   opcode: Opcode;
   handler: ListenerHandler<Data>;
 };
 
+/**
+ * A reference to the websocket connection, can be created using `connect()`
+ */
 export type Connection = {
   close: () => void;
-  once: <Data = unknown>(
-    opcode: Opcode,
-    handler: ListenerHandler<Data>
-  ) => void;
   addListener: <Data = unknown>(
     opcode: Opcode,
     handler: ListenerHandler<Data>
   ) => () => void;
   user: User;
   initialCurrentQuizId?: string;
-  send: (opcode: Opcode, data: unknown, fetchId?: FetchID) => void;
-  fetch: (
+  sendCast: (opcode: Opcode, data: unknown, ref?: Ref) => void;
+  sendCall: (
     opcode: Opcode,
     data: unknown,
     doneOpcode?: Opcode
@@ -51,6 +49,12 @@ export type Connection = {
 // probably want to remove token/refreshToken
 // better to use getAuthOptions
 // when ws tries to reconnect it should use current tokens not the ones it initializes with
+/**
+ * Creates a Connection object
+ * @param {Token} token Your quibi token
+ * @param {Token} refreshToken Your quibi refresh token
+ * @returns {Promise<Connection>} Connection object
+ */
 export const connect = (
   token: Token,
   refreshToken: Token,
@@ -70,9 +74,9 @@ export const connect = (
     fetchTimeout?: number;
     waitToReconnect?: boolean;
     getAuthOptions?: () => Partial<{
+      currentQuizId: string | null;
       token: Token;
       refreshToken: Token;
-      currentQuizId: string | null;
     }>;
   }
 ): Promise<Connection> =>
@@ -81,15 +85,19 @@ export const connect = (
       connectionTimeout,
       WebSocket,
     });
-    const apiSend = (opcode: Opcode, data: unknown, fetchId?: FetchID) => {
+    const apiSend = (opcode: Opcode, data: unknown, ref?: Ref) => {
+      // tmp fix
+      // this is to avoid ws events queuing up while socket is closed
+      // then it reconnects and fires before auth goes off
+      // and you get logged out
       if (socket.readyState !== socket.OPEN) return;
 
-      const raw = `{"op":"${opcode}","d":${JSON.stringify(data)}${
-        fetchId ? `,"fetchId":"${fetchId}"` : ""
+      const raw = `{"v":"0.1.0", "op":"${opcode}","p":${JSON.stringify(data)}${
+        ref ? `,"ref":"${ref}"` : ""
       }}`;
 
       socket.send(raw);
-      logger("out", opcode, data, fetchId, raw);
+      logger("out", opcode, data, ref, raw);
     };
 
     const listeners: Listener[] = [];
@@ -97,6 +105,9 @@ export const connect = (
     // close & message listener needs to be outside of open
     // this prevents multiple listeners from being created on reconnect
     socket.addEventListener("close", (error) => {
+      // I want this here
+      // eslint-disable-next-line no-console
+      console.log(error);
       if (error.code === 4001) {
         socket.close();
         onClearTokens();
@@ -112,7 +123,7 @@ export const connect = (
     });
 
     socket.addEventListener("message", (e) => {
-      if (e.data === `"pong"`) {
+      if (e.data === `"pong"` || e.data === `pong`) {
         logger("in", "pong");
 
         return;
@@ -120,21 +131,11 @@ export const connect = (
 
       const message = JSON.parse(e.data);
 
-      logger("in", message.op, message.d, message.fetchId, e.data);
+      logger("in", message.op, message.p, message.fetchId, e.data);
 
-      if (message.op === "auth-good") {
+      if (message.op === "auth:request:reply") {
         const connection: Connection = {
           close: () => socket.close(),
-          once: (opcode, handler) => {
-            const listener = { opcode, handler } as Listener<unknown>;
-
-            listener.handler = (...params) => {
-              handler(...(params as Parameters<typeof handler>));
-              listeners.splice(listeners.indexOf(listener), 1);
-            };
-
-            listeners.push(listener);
-          },
           addListener: (opcode, handler) => {
             const listener = { opcode, handler } as Listener<unknown>;
 
@@ -142,10 +143,14 @@ export const connect = (
 
             return () => listeners.splice(listeners.indexOf(listener), 1);
           },
-          user: message.d.user,
-          send: apiSend,
-          fetch: (opcode: Opcode, parameters: unknown, doneOpcode?: Opcode) =>
-            new Promise((resolveFetch, rejectFetch) => {
+          user: message.p.user,
+          sendCast: apiSend,
+          sendCall: (
+            opcode: Opcode,
+            parameters: unknown,
+            doneOpcode?: Opcode
+          ) =>
+            new Promise((resolveCall, rejectFetch) => {
               // tmp fix
               // this is to avoid ws events queuing up while socket is closed
               // then it reconnects and fires before auth goes off
@@ -155,18 +160,17 @@ export const connect = (
 
                 return;
               }
-
-              const fetchId: FetchID | false = !doneOpcode && generateUuid();
+              const ref: Ref | false = !doneOpcode && generateUuid();
               let timeoutId: NodeJS.Timeout | null = null;
               const unsubscribe = connection.addListener(
-                doneOpcode ?? "fetch_done",
+                doneOpcode ?? opcode + ":reply",
                 (data, arrivedId) => {
-                  if (!doneOpcode && arrivedId !== fetchId) return;
+                  if (!doneOpcode && arrivedId !== ref) return;
 
                   if (timeoutId) clearTimeout(timeoutId);
 
                   unsubscribe();
-                  resolveFetch(data);
+                  resolveCall(data);
                 }
               );
 
@@ -177,7 +181,7 @@ export const connect = (
                 }, fetchTimeout);
               }
 
-              apiSend(opcode, parameters, fetchId || undefined);
+              apiSend(opcode, parameters, ref || undefined);
             }),
         };
 
@@ -185,7 +189,9 @@ export const connect = (
       } else {
         listeners
           .filter(({ opcode }) => opcode === message.op)
-          .forEach((it) => it.handler(message.d, message.fetchId));
+          .forEach((it) =>
+            it.handler(message.d || message.p, message.fetchId || message.ref)
+          );
       }
     });
 
@@ -199,11 +205,15 @@ export const connect = (
         }
       }, heartbeatInterval);
 
-      apiSend("auth", {
-        accessToken: token,
-        refreshToken,
-        currentQuizId: null,
-        ...getAuthOptions?.(),
-      });
+      apiSend(
+        "auth:request",
+        {
+          accessToken: token,
+          refreshToken,
+          currentQuizId: null,
+          ...getAuthOptions?.(),
+        },
+        generateUuid()
+      );
     });
   });

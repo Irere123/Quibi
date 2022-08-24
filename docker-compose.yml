@@ -1,4 +1,4 @@
-version: "3.3"
+version: "3"
 
 # We will be making use of docker-compose overloads, so be sure to check the other compose files before reporting a missing field
 # On local the containers will be built locally and tagged, able to be published.

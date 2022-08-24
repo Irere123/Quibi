@@ -15,6 +15,14 @@ defmodule Broth.Message do
     field(:errors, :map)
   end
 
+  @type t :: %__MODULE__{
+          operator: module(),
+          payload: map(),
+          reference: Kousa.Utils.UUID.t(),
+          inbound_operator: String.t()
+        }
+
+  @spec changeset(%{String.t() => Broth.json()}, Broth.SocketHandler.state()) :: Changeset.t()
   @doc """
   Primary validation function for all websocket messages.
   """
@@ -34,6 +42,8 @@ defmodule Broth.Message do
     |> cast_version
   end
 
+  @type message_field :: :operator | :payload | :reference
+
   #########################################################################
   # TODO: deprecate other forms, convert into them in "Translator".
   # then collapse find into some simpler methods.
@@ -51,6 +61,8 @@ defmodule Broth.Message do
   defp find(changeset, field, optional) when is_atom(field) do
     find(changeset, field, @valid_forms[field], optional)
   end
+
+  @spec find(Changeset.t(), message_field, [String.t()], :optional | false) :: Changeset.t()
 
   defp find(changeset = %{params: params}, field, [form | _], _)
        when is_map_key(params, form) do
@@ -152,7 +164,6 @@ defmodule Broth.Message do
       }
       |> add_reference(message)
       |> add_errors(message)
-      |> Broth.Translator.translate_outbound(message)
       |> Jason.Encode.map(opts)
     end
 
