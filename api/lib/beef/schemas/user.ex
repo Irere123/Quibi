@@ -103,7 +103,7 @@ defmodule Beef.Schemas.User do
     @fields ~w(id username avatarUrl bannerUrl bio online
     lastOnline displayName numFollowing numFollowers
     youAreFollowing followsYou quizPermissions iBlockedThem
-    botOwnerId currentQuizId currentQuiz
+    botOwnerId currentQuizId currentQuiz inserted_at
   )a
 
     defp transform_current_quiz(fields = %{currentQuiz: %Ecto.Association.NotLoaded{}}) do

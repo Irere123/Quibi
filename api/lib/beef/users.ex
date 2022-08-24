@@ -14,6 +14,8 @@ defmodule Beef.Users do
   # ACCESS functions
   defdelegate get(user_id), to: Beef.Access.Users
   defdelegate find_by_github_ids(ids), to: Beef.Access.Users
+  defdelegate get_by_id_with_follow_info(me_id, them_id), to: Beef.Access.Users
+  defdelegate get_by_username_with_follow_info(user_id, username), to: Beef.Access.Users
 
   #####################################################################################
   # CHOPPING BLOCK
