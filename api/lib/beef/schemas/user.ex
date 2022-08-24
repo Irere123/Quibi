@@ -101,10 +101,10 @@ defmodule Beef.Schemas.User do
 
   defimpl Jason.Encoder do
     @fields ~w(id username avatarUrl bannerUrl bio online
-    lastOnline displayName numFollowing numFollowers
-    youAreFollowing followsYou quizPermissions iBlockedThem
-    botOwnerId currentQuizId currentQuiz inserted_at
-  )a
+    lastOnline currentQuizId currentQuiz displayName numFollowing numFollowers
+    youAreFollowing followsYou botOwnerId quizPermissions iBlockedThem
+    inserted_at
+    )a
 
     defp transform_current_quiz(fields = %{currentQuiz: %Ecto.Association.NotLoaded{}}) do
       Map.delete(fields, :currentQuiz)

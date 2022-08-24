@@ -20,13 +20,14 @@ import { modalConfirm } from "../../shared-components/ConfirmModal";
 import { useCurrentQuizIdStore } from "../../stores/useCurentQuizIdStore";
 import { useTokenStore } from "../../modules/auth/useTokenStore";
 import { NotificationsDropdown } from "../NotificationsDropdown";
+import { useTypeSafeTranslation } from "../../hooks/useTypeSafeTranslation";
 
 export interface RightHeaderProps {
   actionButton?: React.ReactNode;
 }
 
 const RightHeader: React.FC<RightHeaderProps> = ({ actionButton }) => {
-  const screenType = useScreenType();
+  const { t } = useTypeSafeTranslation();
   const conn = useConn();
   const { pathname, push } = useRouter();
   let showHome = false;
@@ -52,14 +53,17 @@ const RightHeader: React.FC<RightHeaderProps> = ({ actionButton }) => {
         overlay={(close) => (
           <SettingsDropdown
             onActionButtonClicked={() => {
-              modalConfirm("Are you sure", () => {
-                conn.close();
-                useCurrentQuizIdStore.getState().setCurrentQuizId(null);
-                useTokenStore
-                  .getState()
-                  .setTokens({ accessToken: "", refreshToken: "" });
-                push("/logout");
-              });
+              modalConfirm(
+                t("components.settingsDropdown.logOut.modalSubtitle"),
+                () => {
+                  conn.close();
+                  useCurrentQuizIdStore.getState().setCurrentQuizId(null);
+                  useTokenStore
+                    .getState()
+                    .setTokens({ accessToken: "", refreshToken: "" });
+                  push("/logout");
+                }
+              );
             }}
             onCloseDropdown={close}
             user={conn.user}

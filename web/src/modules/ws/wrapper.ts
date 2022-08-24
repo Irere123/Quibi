@@ -27,6 +27,13 @@ export const wrap = (connection: Connection) => ({
    */
 
   query: {
+    search: (
+      query: string
+    ): Promise<{
+      items: Array<User | Quiz>;
+      quizes: Quiz[];
+      users: User[];
+    }> => connection.sendCall("misc:search", { query }) as any,
     getFollowList: (
       username: string,
       isFollowing: boolean,
@@ -65,8 +72,10 @@ export const wrap = (connection: Connection) => ({
       connection.sendCall("user:unblock", { userId }),
     ban: (username: string, reason: string) =>
       connection.sendCall(`user:ban`, { username, reason }),
-    follow: (userId: string, value: boolean): Promise<any> =>
-      connection.sendCall("user:follow", { userId, value }),
+    follow: (userId: string): Promise<any> =>
+      connection.sendCall("user:follow", { userId }),
+    unFollow: (userId: string): Promise<any> =>
+      connection.sendCall("user:unfollow", { userId }),
     editProfile: (data: {
       displayName: string;
       username: string;

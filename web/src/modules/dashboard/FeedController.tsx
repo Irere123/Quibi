@@ -42,7 +42,7 @@ export const FeedController: React.FC = () => {
   }
 
   return (
-    <MiddlePanel stickyChildren={<FeedHeader content={<MyPeopleOnline />} />}>
+    <MiddlePanel>
       <div className={`flex flex-1 flex-col ${mb}`}>
         <div className="flex flex-col space-y-4">
           <Page />

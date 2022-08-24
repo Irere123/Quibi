@@ -44,6 +44,7 @@ export const SearchController: React.FC = () => {
     ? [...data.users.filter((u: any) => u.id !== user.id), ...data.quizes]
     : [];
 
+  console.log(results);
   return (
     <Downshift<any>
       onChange={(selection) => {

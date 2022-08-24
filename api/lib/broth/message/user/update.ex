@@ -29,13 +29,8 @@ defmodule Broth.Message.User.Update do
   @impl true
   def execute(changeset, state) do
     # TODO: make this a proper changeset-mediated alteration.
-    with {:ok, data} <- apply_action(changeset, :validate) do
-      {:ok, user} = Kousa.User.edit_profile(state.user.id, %{
-        "displayName" => data.displayName,
-        "bio" => data.bio
-      })
-      {:reply, user, %{state | user: user}}
-    else
+    case Kousa.User.update_with(changeset) do
+      {:ok, user} -> {:reply, user, %{state | user: user}}
       error -> error
     end
   end

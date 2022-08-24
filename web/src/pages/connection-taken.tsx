@@ -11,8 +11,7 @@ const ConnectionTaken: React.FC<ConnectionTakenProps> = () => {
     <div className="flex w-full h-full flex-col items-center justify-center p-8">
       <HeaderController title={t("header.connectionTaken")} />
       <h4 className="text-primary-100 mb-4">
-        Your connection was taken by an other client. Check if it is an browser
-        tab
+        {t("components.wsKilled.description")}
       </h4>
       <Button
         size="medium"
@@ -20,7 +19,7 @@ const ConnectionTaken: React.FC<ConnectionTakenProps> = () => {
           window.location.href = window.location.origin + "/dash";
         }}
       >
-        Reconnect
+        {t("components.wsKilled.reconnect")}
       </Button>
     </div>
   );

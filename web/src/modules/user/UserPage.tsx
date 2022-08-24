@@ -21,7 +21,7 @@ export const UserPage: PageComponent<UserPageProps> = ({ user, username }) => {
         <HeaderController
           embed={{ image: user.avatarUrl }}
           description={user.bio ? user.bio : undefined}
-          title={username}
+          title={`${user.displayName} (@${username})`}
         />
       ) : (
         <HeaderController />
@@ -38,7 +38,7 @@ export const UserPage: PageComponent<UserPageProps> = ({ user, username }) => {
 UserPage.getInitialProps = async ({ query }) => {
   const username = typeof query.username === "string" ? query.username : "";
   try {
-    const res = await fetch(`${apiBaseUrl}/users/${username}`);
+    const res = await fetch(`${apiBaseUrl}/user/${username}`);
     const { user }: { user: any | null } = await res.json();
     return { username, user };
   } catch {

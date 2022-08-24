@@ -2,6 +2,7 @@ import EctoEnum
 
 alias Broth.Message.Auth
 alias Broth.Message.User
+alias Broth.Message.Misc
 
 defenum(
   Broth.Message.Types.Operator,
@@ -17,6 +18,7 @@ defenum(
     {User.Unblock, 11},
     {User.Unfollow, 12},
     # auth and maintenance commands 192..254
-    {Auth.Request, 193}
+    {Auth.Request, 193},
+    {Misc.Search, 210}
   ]
 )

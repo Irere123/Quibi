@@ -2,11 +2,13 @@ import { useRouter } from "next/router";
 import React from "react";
 import { useConn } from "../../hooks/useConn";
 import { useTypeSafeQuery } from "../../hooks/useTypeSafeQuery";
+import { useTypeSafeTranslation } from "../../hooks/useTypeSafeTranslation";
 import { isServer } from "../../lib/isServer";
 import { InfoText } from "../../ui/InfoText";
 import { UserProfile } from "../../ui/UserProfile";
 
 export const UserProfileController: React.FC = () => {
+  const { t } = useTypeSafeTranslation();
   const { user } = useConn();
   const { query } = useRouter();
 
@@ -20,16 +22,14 @@ export const UserProfileController: React.FC = () => {
     [query.username as string]
   );
 
-  console.log(data);
-
   if (isLoading) {
     return <InfoText>Loading....</InfoText>;
   }
 
   if (!data || ("error" in data && data.error.includes("could not find"))) {
-    return <InfoText>User can not be found</InfoText>;
+    return <InfoText>{t("pages.viewUser.errors.default")}</InfoText>;
   } else if ("error" in data && data.error.includes("blocked")) {
-    return <InfoText>This user blocked you.</InfoText>;
+    return <InfoText>{t("pages.viewUser.errors.blocked")}</InfoText>;
   } else if ("error" in data) {
     return <InfoText>{data.error}</InfoText>;
   }

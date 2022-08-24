@@ -34,7 +34,7 @@ export const SettingsDropdown: React.FC<{
     >
       <BaseOverlay
         onActionButtonClicked={onActionButtonClicked}
-        actionButton={"Logout"}
+        actionButton={t("components.settingsDropdown.logOut.button")}
         overlay={currentOverlay}
       >
         <div className="flex flex-col">
@@ -46,20 +46,14 @@ export const SettingsDropdown: React.FC<{
             <SettingsIcon
               onClick={onCloseDropdown}
               icon={<AccountIcon />}
-              label={"Profile"}
+              label={t("components.settingsDropdown.profile")}
               transition
             />
           </ApiPreloadLink>
-          <SettingsIcon
-            icon={<SvgSettingsIcon />}
-            label={"Settings"}
-            onClick={() => {
-              push("/settings");
-            }}
-          />
+
           <SettingsIcon
             icon={<OutlineGlobe />}
-            label={"Languages"}
+            label={t("components.settingsDropdown.language")}
             trailingIcon={<ArrowLeftIcon />}
             transition
             onClick={() =>
@@ -73,7 +67,7 @@ export const SettingsDropdown: React.FC<{
               <SettingsIcon
                 onClick={onCloseDropdown}
                 icon={<Bug />}
-                label={"Report a bug"}
+                label={t("components.settingsDropdown.reportABug")}
                 transition
               />
             </a>
@@ -83,7 +77,7 @@ export const SettingsDropdown: React.FC<{
             <SettingsIcon
               onClick={() => push("/download")}
               icon={<DownloadIcon />}
-              label={"Download"}
+              label={t("components.settingsDropdown.downloadApp")}
               transition
             />
           ) : null}

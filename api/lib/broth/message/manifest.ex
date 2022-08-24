@@ -1,8 +1,10 @@
 defmodule Broth.Message.Manifest do
   alias Broth.Message.Auth
   alias Broth.Message.User
+  alias Broth.Message.Misc
 
   @actions %{
+    "misc:search" => Misc.Search,
     "auth:request" => Auth.Request,
     "user:get_info" => User.GetInfo,
     "user:ban" => User.Ban,
