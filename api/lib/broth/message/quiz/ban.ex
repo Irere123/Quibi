@@ -4,15 +4,14 @@ defmodule Broth.Message.Quiz.Ban do
   @primary_key false
   embedded_schema do
     field(:userId, :binary_id)
-    field(:shouldBanIp, :boolean, default: false)
   end
 
   alias Kousa.Utils.UUID
 
   def changeset(initializer \\ %__MODULE__{}, data) do
     initializer
-    |> cast(data, [:userId, :shouldBanIp])
-    |> validate_required([:userId, :shouldBanIp])
+    |> cast(data, [:userId])
+    |> validate_required([:userId])
     |> UUID.normalize(:userId)
   end
 
