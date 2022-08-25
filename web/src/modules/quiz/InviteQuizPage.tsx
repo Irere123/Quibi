@@ -77,17 +77,17 @@ const Page: React.FC<{
               </div>
             </ApiPreloadLink>
           </div>
-          <div className="flex block">
+          <div className="flex">
             <InviteButton
               onClick={() => {
-                conn.mutation.inviteToQuiz(user.id);
+                // conn.mutation.inviteToQuiz(user.id);
               }}
             />
           </div>
         </div>
       ))}
       {isLastPage && data.nextCursor ? (
-        <div className={`flex flex justify-center py-5`}>
+        <div className={`flex justify-center py-5`}>
           <Button
             size="small"
             onClick={() => {
@@ -118,7 +118,7 @@ export const InviteQuizPage: PageComponent<InviteQuizPageProps> = () => {
     );
   }
 
-  const { quiz } = data;
+  const { quiz } = data as any;
 
   const url = window.location.origin + `/quiz/${quiz.id}`;
 
@@ -140,7 +140,7 @@ export const InviteQuizPage: PageComponent<InviteQuizPageProps> = () => {
                 Share link to quiz
               </div>
             ) : null}
-            <div className={`flex mb-8 flex`}>
+            <div className={`flex mb-8`}>
               <Input readOnly ref={inputRef} value={url} className="mr-2" />
               <Button
                 size="small"

@@ -53,6 +53,12 @@ export const wrap = (connection: Connection) => ({
         isFollowing,
         cursor,
       }) as any,
+    getInviteList: (
+      cursor = 0
+    ): Promise<{
+      users: User[];
+      nextCursor: number | null;
+    }> => connection.sendCall("quiz:get_invite_list", { cursor }) as any,
     joinQuizAndGetInfo: (
       quizId: string
     ): Promise<JoinQuizAndGetInfoResponse | { error: string }> =>

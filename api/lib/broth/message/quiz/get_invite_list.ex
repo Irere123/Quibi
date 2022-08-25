@@ -17,11 +17,11 @@ defmodule Broth.Message.Quiz.GetInviteList do
   defmodule Reply do
     use Broth.Message.Push
 
-    @derive {Jason.Encoder, only: [:invites, :nextCursor]}
+    @derive {Jason.Encoder, only: [:users, :nextCursor]}
 
     @primary_key false
     embedded_schema do
-      embeds_many(:invites, Beef.Schemas.User)
+      embeds_many(:users, Beef.Schemas.User)
       field(:nextCursor, :integer)
       field(:initial, :boolean)
     end
@@ -30,7 +30,7 @@ defmodule Broth.Message.Quiz.GetInviteList do
   def execute(changeset, state) do
     with {:ok, request} <- apply_action(changeset, :validate),
          {users, nextCursor} <- Beef.Follows.fetch_invite_list(state.user.id, request.cursor) do
-      {:reply, %Reply{invites: users, nextCursor: nextCursor, initial: request.cursor == 0},
+      {:reply, %Reply{users: users, nextCursor: nextCursor, initial: request.cursor == 0},
        state}
     end
   end
