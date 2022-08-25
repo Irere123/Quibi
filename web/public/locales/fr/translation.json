@@ -82,7 +82,7 @@
       "whisper": "Whisper",
       "welcomeMessage": "Welcome to chat!",
       "quizDescription": "Quiz description",
-      "disabled": "room chat has been disabled",
+      "disabled": "Quiz chat has been disabled",
       "messageDeletion": {
         "message": "message",
         "retracted": "retracted",

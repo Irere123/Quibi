@@ -1,5 +1,6 @@
 import { Connection } from "./raw";
 import {
+  ChatMode,
   JoinQuizAndGetInfoResponse,
   Quiz,
   QuizChatMessageToken,
@@ -77,6 +78,14 @@ export const wrap = (connection: Connection) => ({
   mutation: {
     userUpdate: (data: Partial<User>): Promise<any> =>
       connection.sendCall("user:update", data),
+    quizUpdate: (data: {
+      name?: string;
+      privacy?: string;
+      chatThrottle?: number;
+      description?: string;
+      autoSpeaker?: boolean;
+      chatMode?: ChatMode;
+    }): Promise<any> => connection.sendCall("quiz:update", data),
     userBlock: (userId: string): Promise<any> =>
       connection.sendCall("user:block", { userId }),
     userUnblock: (userId: string): Promise<any> =>

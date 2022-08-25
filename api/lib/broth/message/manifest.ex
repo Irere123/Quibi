@@ -11,6 +11,7 @@ defmodule Broth.Message.Manifest do
     "quiz:join" => Quiz.Join,
     "quiz:get_top" => Quiz.GetTop,
     "quiz:leave" => Quiz.Leave,
+    "quiz:update" => Quiz.Update,
     "quiz_chat:ban" => QuizChat.Ban,
     "quiz_chat:unban" => QuizChat.Unban,
     "quiz_chat:send_msg" => QuizChat.Send,

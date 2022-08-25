@@ -34,7 +34,6 @@ export const useWsMainHandler = () => {
       }),
 
       conn.addListener<any>("invitation_to_quiz", (value) => {
-        console.log(value);
         invitedToQuizConfirm(value, push);
       }),
 
@@ -76,9 +75,62 @@ export const useWsMainHandler = () => {
 
         updateQuery(["joinQuizAndGetInfo", quizId], (data) => ({
           // @todo change to an error code
-          error: "room gone",
+          error: "quiz gone",
         }));
       }),
+
+      conn.addListener<any>(
+        "quiz_privacy_change",
+        ({ quizId, isPrivate, name }) => {
+          updateQuery(["joinQuizAndGetInfo", quizId], (data) =>
+            !data || "error" in data
+              ? data
+              : {
+                  ...data,
+                  quiz: {
+                    ...data.quiz,
+                    name,
+                    isPrivate,
+                  },
+                }
+          );
+        }
+      ),
+
+      conn.addListener<any>(
+        "quiz_chat_throttle_change",
+        ({ quizId, chatThrottle, name }) => {
+          updateQuery(["joinQuizAndGetInfo", quizId], (data) =>
+            !data || "error" in data
+              ? data
+              : {
+                  ...data,
+                  quiz: {
+                    ...data.quiz,
+                    name,
+                    chatThrottle,
+                  },
+                }
+          );
+        }
+      ),
+
+      conn.addListener<any>(
+        "quiz_chat_mode_changed",
+        ({ quizId, chatMode }) => {
+          updateQuery(["joinQuizAndGetInfo", quizId], (data) =>
+            !data || "error" in data
+              ? data
+              : {
+                  ...data,
+                  quiz: {
+                    ...data.quiz,
+                    chatMode,
+                  },
+                }
+          );
+        }
+      ),
 
       conn.addListener<any>("user_left_quiz", ({ userId, quizId }) => {
         updateQuery(["joinQuizAndGetInfo", quizId], (data) => {

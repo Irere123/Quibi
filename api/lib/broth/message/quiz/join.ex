@@ -51,7 +51,7 @@ defmodule Broth.Message.Quiz.Join do
                  activeSpeakerMap: activeSpeakerMap,
                  quizId: quiz_id,
                  autoSpeaker: autoSpeaker,
-                 chatMode: "default"
+                 chatMode: Onion.QuizChat.get(quiz_id, :chat_mode)
                }, state}
           end
       end

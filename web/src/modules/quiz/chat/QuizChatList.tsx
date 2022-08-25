@@ -92,7 +92,6 @@ export const QuizChatList: React.FC<ChatListProps> = ({ quiz }) => {
                       className={`block break-words overflow-hidden max-w-full items-start flex-1 text-primary-100`}
                       key={messages[index].id}
                     >
-                      <SingleUser src={messages[index].avatarUrl} size="xxs" />
                       <button
                         onClick={() => {
                           setData({

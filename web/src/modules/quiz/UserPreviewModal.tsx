@@ -146,8 +146,6 @@ export const UserPreviewModal: React.FC<JoinQuizAndGetInfoResponse> = ({
   const { data, setData } = useContext(UserPreviewModalContext);
   const conn = useConn();
 
-  console.log(users);
-
   return (
     <Modal
       variant="userPreview"

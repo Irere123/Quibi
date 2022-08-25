@@ -164,7 +164,6 @@ export const connect = (
       const message = JSON.parse(e.data);
 
       logger("in", message.op, message.d, message.fetchId, e.data);
-      console.log(message.d);
 
       if (message.op === "auth-good") {
         const connection: Connection = {
