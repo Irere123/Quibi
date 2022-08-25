@@ -26,6 +26,7 @@ defenum(
     {Quiz.Leave, 68},
     {Quiz.Update, 69},
     {Quiz.GetInviteList, 70},
+    {Quiz.GetBannedUsers, 71},
     # quiz chat commands and casts: 128..191
     {QuizChat.Ban, 129},
     {QuizChat.Send, 130},
