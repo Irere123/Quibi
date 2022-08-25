@@ -248,6 +248,7 @@ defmodule Onion.QuizChat do
 
       if can_chat do
         dispatch_message(payload, new_state)
+
         {:noreply,
          %{
            new_state
@@ -270,23 +271,9 @@ defmodule Onion.QuizChat do
   defp should_throttle?(_, _), do: false
 
   defp dispatch_message(payload, state) do
-    user_info =
-      payload.from
-      |> Beef.Users.get_by_id()
-      |> Map.take([:avatarUrl, :displayName, :username])
-
-    chat_msg =
-      payload
-      |> Map.take([:id, :sentAt, :tokens])
-      |> Map.merge(user_info)
-      |> Map.put(:userId, payload.from)
-
-    ws_fan(state.users, %{
-      d: %{
-        "msg" => chat_msg,
-        "userId" => payload.from
-      },
-      op: "new_quiz_chat_msg",
+    PubSub.broadcast("chat:" <> state.quiz_id, %Broth.Message{
+      operator: "chat:send",
+      payload: payload
     })
 
     :ok

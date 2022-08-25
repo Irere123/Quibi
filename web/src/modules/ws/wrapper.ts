@@ -1,5 +1,10 @@
 import { Connection } from "./raw";
-import { JoinQuizAndGetInfoResponse, Quiz, User } from "./types";
+import {
+  JoinQuizAndGetInfoResponse,
+  Quiz,
+  QuizChatMessageToken,
+  User,
+} from "./types";
 
 /**
  * Allows you to handle custom logic on websocket events
@@ -95,6 +100,17 @@ export const wrap = (connection: Connection) => ({
     }): Promise<{ error: string } | { quiz: Quiz }> =>
       connection.sendCall("quiz:create", data) as any,
 
-    leaveQuiz: () => connection.sendCall("quiz:leave", {}),
+    leaveQuiz: () => connection.sendCall("quiz:leave", {}, "user_left_quiz"),
+    deleteQuizChatMessage: (userId: string, messageId: string): Promise<void> =>
+      connection.sendCast("quiz_chat:delete", {
+        userId,
+        messageId,
+      }) as any,
+    sendQuizChatMsg: (ast: QuizChatMessageToken[]): Promise<void> =>
+      connection.send("send_quiz_chat_msg", { tokens: ast }) as any,
+    unbanFromQuizChat: (userId: string): Promise<void> =>
+      connection.sendCast("quiz_chat:unban", { userId }) as any,
+    banFromQuizChat: (userId: string): Promise<void> =>
+      connection.sendCast("quiz_chat:ban", { userId }) as any,
   },
 });

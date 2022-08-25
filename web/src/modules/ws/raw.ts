@@ -10,6 +10,7 @@ const connectionTimeout = 15000;
 
 export type Token = string;
 export type Ref = UUID;
+export type FetchID = UUID;
 export type Opcode = string;
 export type Logger = (
   direction: "in" | "out",
@@ -32,13 +33,32 @@ export type Listener<Data = unknown> = {
  */
 export type Connection = {
   close: () => void;
+  /**
+   * @deprecated
+   */
+  once: <Data = unknown>(
+    opcode: Opcode,
+    handler: ListenerHandler<Data>
+  ) => void;
   addListener: <Data = unknown>(
     opcode: Opcode,
     handler: ListenerHandler<Data>
   ) => () => void;
   user: User;
   initialCurrentQuizId?: string;
+  /**
+   * @deprecated
+   */
+  send: (opcode: Opcode, data: unknown, fetchId?: FetchID) => void;
   sendCast: (opcode: Opcode, data: unknown, ref?: Ref) => void;
+  /**
+   * @deprecated
+   */
+  fetch: (
+    opcode: Opcode,
+    data: unknown,
+    doneOpcode?: Opcode
+  ) => Promise<unknown>;
   sendCall: (
     opcode: Opcode,
     data: unknown,
@@ -85,7 +105,7 @@ export const connect = (
       connectionTimeout,
       WebSocket,
     });
-    const apiSend = (opcode: Opcode, data: unknown, ref?: Ref) => {
+    const api2Send = (opcode: Opcode, data: unknown, ref?: Ref) => {
       // tmp fix
       // this is to avoid ws events queuing up while socket is closed
       // then it reconnects and fires before auth goes off
@@ -98,6 +118,18 @@ export const connect = (
 
       socket.send(raw);
       logger("out", opcode, data, ref, raw);
+    };
+
+    const apiSend = (opcode: Opcode, data: unknown, fetchId?: FetchID) => {
+      if (socket.readyState !== socket.OPEN) {
+        return;
+      }
+      const raw = `{"op":"${opcode}","d":${JSON.stringify(data)}${
+        fetchId ? `,"fetchId":"${fetchId}"` : ""
+      }}`;
+
+      socket.send(raw);
+      logger("out", opcode, data, fetchId, raw);
     };
 
     const listeners: Listener[] = [];
@@ -131,11 +163,22 @@ export const connect = (
 
       const message = JSON.parse(e.data);
 
-      logger("in", message.op, message.p, message.fetchId, e.data);
+      logger("in", message.op, message.d, message.fetchId, e.data);
+      console.log(message.d);
 
-      if (message.op === "auth:request:reply") {
+      if (message.op === "auth-good") {
         const connection: Connection = {
           close: () => socket.close(),
+          once: (opcode, handler) => {
+            const listener = { opcode, handler } as Listener<unknown>;
+
+            listener.handler = (...params) => {
+              handler(...(params as Parameters<typeof handler>));
+              listeners.splice(listeners.indexOf(listener), 1);
+            };
+
+            listeners.push(listener);
+          },
           addListener: (opcode, handler) => {
             const listener = { opcode, handler } as Listener<unknown>;
 
@@ -143,18 +186,15 @@ export const connect = (
 
             return () => listeners.splice(listeners.indexOf(listener), 1);
           },
-          user: message.p.user,
-          sendCast: apiSend,
+          user: message.d.user,
+          send: apiSend,
+          sendCast: api2Send,
           sendCall: (
             opcode: Opcode,
             parameters: unknown,
             doneOpcode?: Opcode
           ) =>
             new Promise((resolveCall, rejectFetch) => {
-              // tmp fix
-              // this is to avoid ws events queuing up while socket is closed
-              // then it reconnects and fires before auth goes off
-              // and you get logged out
               if (socket.readyState !== socket.OPEN) {
                 rejectFetch(new Error("websocket not connected"));
 
@@ -181,7 +221,41 @@ export const connect = (
                 }, fetchTimeout);
               }
 
-              apiSend(opcode, parameters, ref || undefined);
+              api2Send(opcode, parameters, ref || undefined);
+            }),
+          fetch: (opcode: Opcode, parameters: unknown, doneOpcode?: Opcode) =>
+            new Promise((resolveFetch, rejectFetch) => {
+              // tmp fix
+              // this is to avoid ws events queuing up while socket is closed
+              // then it reconnects and fires before auth goes off
+              // and you get logged out
+              if (socket.readyState !== socket.OPEN) {
+                rejectFetch(new Error("websocket not connected"));
+
+                return;
+              }
+              const fetchId: FetchID | false = !doneOpcode && generateUuid();
+              let timeoutId: NodeJS.Timeout | null = null;
+              const unsubscribe = connection.addListener(
+                doneOpcode ?? "fetch_done",
+                (data, arrivedId) => {
+                  if (!doneOpcode && arrivedId !== fetchId) return;
+
+                  if (timeoutId) clearTimeout(timeoutId);
+
+                  unsubscribe();
+                  resolveFetch(data);
+                }
+              );
+
+              if (fetchTimeout) {
+                timeoutId = setTimeout(() => {
+                  unsubscribe();
+                  rejectFetch(new Error("timed out"));
+                }, fetchTimeout);
+              }
+
+              apiSend(opcode, parameters, fetchId || undefined);
             }),
         };
 
@@ -205,15 +279,11 @@ export const connect = (
         }
       }, heartbeatInterval);
 
-      apiSend(
-        "auth:request",
-        {
-          accessToken: token,
-          refreshToken,
-          currentQuizId: null,
-          ...getAuthOptions?.(),
-        },
-        generateUuid()
-      );
+      apiSend("auth", {
+        accessToken: token,
+        refreshToken,
+        currentQuizId: null,
+        ...getAuthOptions?.(),
+      });
     });
   });

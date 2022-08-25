@@ -65,7 +65,11 @@ export const QuizChatInput: React.FC<ChatInputProps> = ({ users }) => {
       return;
     }
 
-    if (Date.now() - lastMessageTimestamp <= 1000) {
+    if (
+      data &&
+      !("error" in data) &&
+      Date.now() - lastMessageTimestamp <= data.quiz.chatThrottle
+    ) {
       showErrorToast(t("modules.quizChat.waitAlert"), "info");
       return;
     }
@@ -85,7 +89,7 @@ export const QuizChatInput: React.FC<ChatInputProps> = ({ users }) => {
       return;
     }
 
-    conn.sendCall("send_quiz_chat_msg", messageData);
+    conn.send("send_quiz_chat_msg", messageData);
     setQueriedUsernames([]);
 
     setLastMessageTimestamp(Date.now());

@@ -41,13 +41,17 @@ export type User = {
   inserted_at: string;
 };
 
-export type Quiz = {
-  id: string;
+export type QuizDetails = {
   name: string;
-  description?: string;
+  chatThrottle: number;
+  isPrivate: boolean;
+  description: string;
+};
+
+export type Quiz = QuizDetails & {
+  id: string;
   creatorId: string;
   numPeopleInside: number;
-  isPrivate: boolean;
   peoplePreviewList: Array<UserPreview>;
   inserted_at: string;
   autoSpeaker: boolean;
@@ -63,3 +67,28 @@ export type QuizPermissions = {
 export type QuizUser = {
   quizPermissions?: QuizPermissions | null;
 } & User;
+
+export type QuizChatMessageToken<T extends string = string, V = unknown> = {
+  t: T;
+  v: V;
+};
+
+export type TextToken = QuizChatMessageToken<"text", string>;
+export type MentionToken = QuizChatMessageToken<"mention", string>;
+export type LinkToken = QuizChatMessageToken<"link", string>;
+export type EmoteToken = QuizChatMessageToken<"emote", string>;
+export type CodeBlockToken = QuizChatMessageToken<"block", string>;
+export type EmojiToken = QuizChatMessageToken<"emoji", string>;
+
+export type QuizMessage = {
+  id: UUID;
+  userId: UUID;
+  avatarUrl: string;
+  color: string;
+  displayName: string;
+  tokens: QuizChatMessageToken[];
+  username: string;
+  deleted?: boolean;
+  deleterId?: UUID;
+  sentAt: string;
+};

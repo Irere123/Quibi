@@ -42,7 +42,7 @@ export const useWsMainHandler = () => {
         invitedToQuizConfirm(value, push);
       }),
 
-      conn.addListener<any>("new_chat_msg", ({ msg }) => {
+      conn.addListener<any>("new_quiz_chat_msg", ({ msg }) => {
         const { open } = useQuizChatStore.getState();
         useQuizChatStore.getState().addMessage(msg);
         const { isQuizChatScrolledToTop } = useQuizChatStore.getState();

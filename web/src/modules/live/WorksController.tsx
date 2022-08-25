@@ -40,6 +40,7 @@ const Page = ({
     },
     [cursor]
   );
+
   if (isLoading) {
     return <CenterLoader />;
   }

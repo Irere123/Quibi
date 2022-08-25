@@ -164,6 +164,7 @@ defmodule Broth.Message do
       }
       |> add_reference(message)
       |> add_errors(message)
+      |> Broth.Translator.translate_outbound(message)
       |> Jason.Encode.map(opts)
     end
 

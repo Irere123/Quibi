@@ -120,8 +120,8 @@ defmodule Broth.SocketHandler do
   end
 
   def quiz_chat_impl(
-        {"chat:" <> _quiz_id,
-         %Broth.Message{payload: %Broth.Message.QuizChat.Send{from: from}}} = p1,
+        {"chat:" <> _quiz_id, %Broth.Message{payload: %Broth.Message.QuizChat.Send{from: from}}} =
+          p1,
         %__MODULE__{} = state
       ) do
     if Enum.any?(state.user_ids_i_am_blocking, &(&1 == from)) do
@@ -153,6 +153,7 @@ defmodule Broth.SocketHandler do
 
   def websocket_handle({:text, command_json}, state) do
     with {:ok, message_map!} <- Jason.decode(command_json),
+          message_map! = Broth.Translator.translate_inbound(message_map!),
          {:ok, message = %{errors: nil}} <- validate(message_map!, state),
          :ok <- auth_check(message, state) do
       # make the state adopt the version of the inbound message.
