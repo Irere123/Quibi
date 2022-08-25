@@ -1,5 +1,5 @@
 import { Connection } from "./raw";
-import { Quiz, User } from "./types";
+import { JoinQuizAndGetInfoResponse, Quiz, User } from "./types";
 
 /**
  * Allows you to handle custom logic on websocket events
@@ -47,6 +47,12 @@ export const wrap = (connection: Connection) => ({
         isFollowing,
         cursor,
       }) as any,
+    joinQuizAndGetInfo: (
+      quizId: string
+    ): Promise<JoinQuizAndGetInfoResponse | { error: string }> =>
+      connection.sendCall("quiz:join", { quizId }) as any,
+    getTopPublicQuizes: (cursor = 0): Promise<any> =>
+      connection.sendCall("quiz:get_top", { cursor }),
     getMyFollowing: (
       cursor = 0
     ): Promise<{
@@ -82,5 +88,13 @@ export const wrap = (connection: Connection) => ({
       bio: string;
     }): Promise<{ isUsernameTaken: boolean }> =>
       connection.sendCall("user:update", { data }) as any,
+    createQuiz: (data: {
+      name: string;
+      privacy: string;
+      description: string;
+    }): Promise<{ error: string } | { quiz: Quiz }> =>
+      connection.sendCall("quiz:create", data) as any,
+
+    leaveQuiz: () => connection.sendCall("quiz:leave", {}),
   },
 });

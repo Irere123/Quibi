@@ -13,11 +13,11 @@ export type JoinQuizAndGetInfoResponse = {
 };
 
 export type UUID = string;
+export type ChatMode = "default" | "disabled" | "follower_only";
 
 export type UserPreview = {
   id: UUID;
   displayName: string;
-  username: string;
   numFollowers: number;
   avatarUrl: string | null;
 };
@@ -50,6 +50,8 @@ export type Quiz = {
   isPrivate: boolean;
   peoplePreviewList: Array<UserPreview>;
   inserted_at: string;
+  autoSpeaker: boolean;
+  chatMode: ChatMode;
 };
 
 export type QuizPermissions = {

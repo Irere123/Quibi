@@ -22,6 +22,7 @@ defenum(
     {Quiz.Create, 64},
     {Quiz.Join, 65},
     {Quiz.GetTop, 66},
+    {Quiz.Leave, 67},
     # auth and maintenance commands 192..254
     {Auth.Request, 193},
     {Misc.Search, 210}

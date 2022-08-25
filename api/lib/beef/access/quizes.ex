@@ -42,7 +42,7 @@ defmodule Beef.Access.Quizes do
 
       _ ->
         cond do
-          # RoomBlocks.blocked?(quiz_id, user_id) ->
+          # QuizBlocks.blocked?(quiz_id, user_id) ->
           #   {:error, "you are blocked from the quiz"}
 
           true ->
@@ -87,12 +87,12 @@ defmodule Beef.Access.Quizes do
   """
   def get_next_creator_for_quiz(quiz_id) do
     from(u in User,
-      inner_join: rp in Beef.Schemas.QuizPermission,
-      on: rp.quizId == ^quiz_id and rp.userId == u.id and u.currentRoomId == ^quiz_id,
-      where: rp.isSpeaker == true,
+      inner_join: qp in Beef.Schemas.QuizPermission,
+      on: qp.quizId == ^quiz_id and qp.userId == u.id and u.currentQuizId == ^quiz_id,
+      where: qp.isSpeaker == true,
       limit: 1,
       order_by: [
-        asc: fragment(@user_order, rp.isMod)
+        asc: fragment(@user_order, qp.isMod)
       ]
     )
     |> Repo.one()

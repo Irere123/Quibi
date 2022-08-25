@@ -45,7 +45,7 @@ export const QuizChatInput: React.FC<ChatInputProps> = ({ users }) => {
 
   const data = useCurrentQuizFromCache();
 
-  if (data && !("error" in data) && data.quiz.chatMode) {
+  if (data && !("error" in data) && data.quiz.chatMode === "disabled") {
     return (
       <p className="my-4 text-center text-primary-300">
         {t("modules.quizChat.disabled")}
@@ -85,7 +85,7 @@ export const QuizChatInput: React.FC<ChatInputProps> = ({ users }) => {
       return;
     }
 
-    conn.send("send_quiz_chat_msg", messageData);
+    conn.sendCall("send_quiz_chat_msg", messageData);
     setQueriedUsernames([]);
 
     setLastMessageTimestamp(Date.now());

@@ -68,6 +68,66 @@ export const useWsMainHandler = () => {
           }))
         );
       }),
+
+      conn.addListener<any>("quiz_destroyed", ({ quizId }) => {
+        useCurrentQuizIdStore
+          .getState()
+          .setCurrentQuizId((id) => (id === quizId ? null : id));
+
+        updateQuery(["joinQuizAndGetInfo", quizId], (data) => ({
+          // @todo change to an error code
+          error: "room gone",
+        }));
+      }),
+
+      conn.addListener<any>("user_left_quiz", ({ userId, quizId }) => {
+        updateQuery(["joinQuizAndGetInfo", quizId], (data) => {
+          if (data && "error" in data) {
+            return data;
+          }
+
+          const { [userId]: _, ...asm } = data.activeSpeakerMap;
+          return {
+            ...data,
+            activeSpeakerMap: asm,
+            quiz: {
+              ...data.quiz,
+              peoplePreviewList: data.quiz.peoplePreviewList.filter(
+                (x) => x.id !== userId
+              ),
+              numPeopleInside: data.quiz.numPeopleInside - 1,
+            },
+            users: data.users.filter((x) => x.id !== userId),
+          };
+        });
+      }),
+
+      conn.addListener<any>("new_user_join_quiz", ({ user, quizId }) => {
+        updateQuery(["joinQuizAndGetInfo", quizId], (data) =>
+          !data || "error" in data
+            ? data
+            : {
+                ...data,
+                quiz: {
+                  ...data.quiz,
+                  peoplePreviewList:
+                    data.quiz.peoplePreviewList.length < 10
+                      ? [
+                          ...data.quiz.peoplePreviewList,
+                          {
+                            id: user.id,
+                            displayName: user.displayName,
+                            numFollowers: user.numFollowers,
+                            avatarUrl: user.avatarUrl,
+                          },
+                        ]
+                      : data.quiz.peoplePreviewList,
+                  numPeopleInside: data.quiz.numPeopleInside + 1,
+                },
+                users: [...data.users.filter((x) => x.id !== user.id), user],
+              }
+        );
+      }),
     ];
 
     return () => {

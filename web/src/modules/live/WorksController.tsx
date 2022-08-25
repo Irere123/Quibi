@@ -13,6 +13,8 @@ import { MiddlePanel } from "../layouts/GridPanels";
 import { useQuizChatStore } from "../quiz/chat/useQuizChatStore";
 import { CreateQuizModal } from "../quiz/CreateQuizModal";
 import { WebSocketContext } from "../ws/WebSocketProvider";
+import { useTypeSafeTranslation } from "../../hooks/useTypeSafeTranslation";
+import { CenterLoader } from "../../ui/CenterLoader";
 
 const Page = ({
   cursor,
@@ -23,22 +25,23 @@ const Page = ({
   isLastPage: boolean;
   onLoadMore: (o: number) => void;
 }) => {
+  const { conn } = useContext(WebSocketContext);
   const { currentQuizId } = useCurrentQuizIdStore();
   const { push } = useRouter();
-  const { data, isLoading } = useTypeSafeQuery(
+  const prefetch = useTypeSafePrefetch();
+  const { t } = useTypeSafeTranslation();
+  const { isLoading, data } = useTypeSafeQuery(
     ["getTopPublicQuizes", cursor],
     {
       staleTime: Infinity,
-      enabled: !isServer,
+      enabled: !isServer && !!conn,
       refetchOnMount: "always",
       refetchInterval: 10000,
     },
     [cursor]
   );
-  const prefetch = useTypeSafePrefetch();
-
   if (isLoading) {
-    return <InfoText>Loading...</InfoText>;
+    return <CenterLoader />;
   }
 
   if (!data) {
