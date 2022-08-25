@@ -9,6 +9,8 @@ defmodule Broth.Message.Manifest do
     "misc:search" => Misc.Search,
     "quiz:create" => Quiz.Create,
     "quiz:join" => Quiz.Join,
+    "quiz:ban" => Quiz.Ban,
+    "quiz:unban" => Quiz.Unban,
     "quiz:get_top" => Quiz.GetTop,
     "quiz:leave" => Quiz.Leave,
     "quiz:update" => Quiz.Update,
