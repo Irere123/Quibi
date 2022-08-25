@@ -73,7 +73,7 @@ defmodule Onion.UserSession do
 
   defp new_tokens_impl(tokens, state = %{pid: pid}) do
     # TODO: refactor this to not use ws-datastructures
-    if pid, do: Broth.SocketHandler.remote_send(pid, %{op: "new-tokens", d: tokens})
+    if pid, do: Broth.SocketHandler.remote_send(pid, %{op: "new-tokens", p: tokens})
     {:noreply, state}
   end
 

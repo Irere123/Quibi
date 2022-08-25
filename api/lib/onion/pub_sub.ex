@@ -10,7 +10,7 @@ defmodule Onion.PubSub do
 
   alias Phoenix.PubSub
 
-  @valid_classes ~w(chat user quiz_chat)
+  @valid_classes ~w(chat user)
 
   def subscribe(topic = <<class::binary-size(4), ?:>> <> _) when class in @valid_classes do
     PubSub.subscribe(__MODULE__, topic)

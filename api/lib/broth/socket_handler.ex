@@ -109,7 +109,7 @@ defmodule Broth.SocketHandler do
   ## QUIZ CHAT MESSAGES
 
   defp real_quiz_chat_impl(
-         {"quiz_chat:" <> _quiz_id, message},
+         {"chat:" <> _quiz_id, message},
          %__MODULE__{} = state
        ) do
     # TODO: make this guard against quiz_id or self_id when we put quiz into the state.
@@ -120,7 +120,7 @@ defmodule Broth.SocketHandler do
   end
 
   def quiz_chat_impl(
-        {"quiz_chat:" <> _quiz_id,
+        {"chat:" <> _quiz_id,
          %Broth.Message{payload: %Broth.Message.QuizChat.Send{from: from}}} = p1,
         %__MODULE__{} = state
       ) do
@@ -325,7 +325,7 @@ defmodule Broth.SocketHandler do
   def websocket_info(:auth_timeout, state), do: auth_timeout_impl(state)
   def websocket_info({:remote_send, message}, state), do: remote_send_impl(message, state)
   def websocket_info({:unsub, topic}, state), do: unsub_impl(topic, state)
-  def websocket_info(message = {"quiz_chat:" <> _, _}, state), do: quiz_chat_impl(message, state)
+  def websocket_info(message = {"chat:" <> _, _}, state), do: quiz_chat_impl(message, state)
 
   def websocket_info(message = {"user:update:" <> _, _}, state),
     do: user_update_impl(message, state)
