@@ -10,10 +10,7 @@ defmodule Broth.Translator.V0_1_0 do
 
   @operator_translations %{
     "send_quiz_chat_msg" => "quiz_chat:send_msg",
-    "delete_room_chat_message" => "quiz_chat:delete",
     "auth" => "auth:request",
-    "edit_profile" => "user:update",
-    "unban_from_room_chat" => "quiz_chat:unban"
   }
 
   @operators Map.keys(@operator_translations)
