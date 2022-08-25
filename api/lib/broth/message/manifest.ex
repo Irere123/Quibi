@@ -3,6 +3,7 @@ defmodule Broth.Message.Manifest do
   alias Broth.Message.User
   alias Broth.Message.Misc
   alias Broth.Message.Quiz
+  alias Broth.Message.QuizChat
 
   @actions %{
     "misc:search" => Misc.Search,
@@ -10,6 +11,10 @@ defmodule Broth.Message.Manifest do
     "quiz:join" => Quiz.Join,
     "quiz:get_top" => Quiz.GetTop,
     "quiz:leave" => Quiz.Leave,
+    "quiz_chat:ban" => QuizChat.Ban,
+    "quiz_chat:unban" => QuizChat.Unban,
+    "quiz_chat:send_msg" => QuizChat.Send,
+    "quiz_chat:delete" => QuizChat.Delete,
     "auth:request" => Auth.Request,
     "user:get_info" => User.GetInfo,
     "user:ban" => User.Ban,

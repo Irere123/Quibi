@@ -48,7 +48,7 @@ defmodule Onion.QuizSession do
     Process.put(:"$callers", init[:callers])
 
     # also launch a linked, supervised quiz.
-    # Onion.Chat.start_link_supervised(init)
+    Onion.QuizChat.start_link_supervised(init)
     {:ok, struct(State, init)}
   end
 
@@ -92,7 +92,7 @@ defmodule Onion.QuizSession do
   end
 
   defp set_quiz_creator_id_impl(id, %State{} = state) do
-    # Onion.Chat.set_quiz_creator_id(state.room_id, id)
+    Onion.QuizChat.set_quiz_creator_id(state.quiz_id, id)
     {:noreply, %{state | quiz_creator_id: id}}
   end
 
@@ -172,7 +172,7 @@ defmodule Onion.QuizSession do
   end
 
   defp join_quiz_impl(user_id, opts, state) do
-    # Onion.Chat.add_user(state.room_id, user_id)
+    Onion.QuizChat.add_user(state.quiz_id, user_id)
 
     unless opts[:no_fan] do
       ws_fan(state.users, %{
@@ -213,7 +213,7 @@ defmodule Onion.QuizSession do
   defp kick_from_quiz_impl(user_id, state) do
     users = Enum.filter(state.users, fn uid -> uid != user_id end)
 
-    # Onion.Chat.remove_user(state.room_id, user_id)
+    Onion.QuizChat.remove_user(state.quiz_id, user_id)
 
     ws_fan(users, %{
       op: "user_left_quiz",
@@ -232,7 +232,7 @@ defmodule Onion.QuizSession do
   defp leave_quiz_impl(user_id, state) do
     users = Enum.reject(state.users, &(&1 == user_id))
 
-    # Onion.Chat.remove_user(state.room_id, user_id)
+    Onion.QuizChat.remove_user(state.quiz_id, user_id)
 
     ws_fan(users, %{
       op: "user_left_quiz",

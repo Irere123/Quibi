@@ -4,6 +4,7 @@ alias Broth.Message.Auth
 alias Broth.Message.User
 alias Broth.Message.Misc
 alias Broth.Message.Quiz
+alias Broth.Message.QuizChat
 
 defenum(
   Broth.Message.Types.Operator,
@@ -19,10 +20,15 @@ defenum(
     {User.Unblock, 11},
     {User.Unfollow, 12},
     # quiz commands and casts: 64..127
-    {Quiz.Create, 64},
-    {Quiz.Join, 65},
-    {Quiz.GetTop, 66},
-    {Quiz.Leave, 67},
+    {Quiz.Create, 65},
+    {Quiz.Join, 66},
+    {Quiz.GetTop, 67},
+    {Quiz.Leave, 68},
+    # quiz chat commands and casts: 128..191
+    {QuizChat.Ban, 129},
+    {QuizChat.Send, 130},
+    {QuizChat.Delete, 131},
+    {QuizChat.Unban, 132},
     # auth and maintenance commands 192..254
     {Auth.Request, 193},
     {Misc.Search, 210}
