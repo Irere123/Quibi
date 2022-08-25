@@ -77,6 +77,13 @@ export const wrap = (connection: Connection) => ({
       connection.sendCall("user:get_info", {
         userIdOrUsername,
       }) as any,
+
+    getBlockedFromQuizUsers: (
+      cursor = 0
+    ): Promise<{
+      users: User[];
+      nextCursor: number | null;
+    }> => connection.sendCall("quiz:get_banned_users", { cursor }) as any,
   },
   /**
    * Allows you to call functions that mutate the ws state
@@ -127,5 +134,9 @@ export const wrap = (connection: Connection) => ({
       connection.sendCast("quiz_chat:unban", { userId }) as any,
     banFromQuizChat: (userId: string): Promise<void> =>
       connection.sendCast("quiz_chat:ban", { userId }) as any,
+    banFromQuiz: (userId: string) =>
+      connection.sendCast("quiz:ban", { userId }),
+    unbanFromQuiz: (userId: string) =>
+      connection.sendCall("quiz:unban", { userId }),
   },
 });
