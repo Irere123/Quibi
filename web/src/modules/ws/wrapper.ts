@@ -107,7 +107,7 @@ export const wrap = (connection: Connection) => ({
       username: string;
       bio: string;
     }): Promise<{ isUsernameTaken: boolean }> =>
-      connection.sendCall("user:update", { data }) as any,
+      connection.sendCall("user:update", data) as any,
     createQuiz: (data: {
       name: string;
       privacy: string;
