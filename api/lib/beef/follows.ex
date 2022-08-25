@@ -14,6 +14,16 @@ defmodule Beef.Follows do
   alias Beef.Schemas.User
   alias Beef.Schemas.Quiz
 
+  def get_followers_online_and_not_in_a_quiz(user_id) do
+    from(
+      f in Follow,
+      inner_join: u in User,
+      on: f.followerId == u.id,
+      where: f.userId == ^user_id and u.online == true and is_nil(u.currentQuizId)
+    )
+    |> Beef.Repo.all()
+  end
+
   def bulk_insert(follows) do
     Beef.Repo.insert_all(
       Follow,
@@ -32,6 +42,28 @@ defmodule Beef.Follows do
       |> Beef.Repo.one()
     )
   end
+
+  def fetch_invite_list(user_id, offset \\ 0) do
+    user = Beef.Users.get_by_id(user_id)
+
+    items =
+      from(
+        f in Follow,
+        inner_join: u in User,
+        on: f.followerId == u.id,
+        where:
+          f.userId == ^user_id and u.online == true and
+            (u.currentQuizId != ^user.currentQuizId or is_nil(u.currentQuizId)),
+        select: u,
+        limit: ^@fetch_limit,
+        offset: ^offset
+      )
+      |> Beef.Repo.all()
+
+    {Enum.slice(items, 0, -1 + @fetch_limit),
+     if(length(items) == @fetch_limit, do: -1 + offset + @fetch_limit, else: nil)}
+  end
+
 
   def get_followers(user_id, user_id_to_get_followers_for, offset \\ 20) do
     items =
