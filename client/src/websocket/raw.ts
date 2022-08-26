@@ -1,26 +1,26 @@
 import WebSocket from "isomorphic-ws";
 import ReconnectingWebSocket from "reconnecting-websocket";
 import { v4 as generateUuid } from "uuid";
-import { UUID } from "..";
+import { UUID, User } from "..";
 
 const heartbeatInterval = 8000;
-const apiUrl = "ws://localhost:4001/socket";
+const apiUrl = "wss://api.quibi.me/socket";
 const connectionTimeout = 15000;
 
 export type Token = string;
-export type FetchID = UUID;
 export type Ref = UUID;
+export type FetchID = UUID;
 export type Opcode = string;
 export type Logger = (
   direction: "in" | "out",
   opcode: Opcode,
   data?: unknown,
-  fetchId?: FetchID,
+  fetchId?: Ref,
   raw?: string
 ) => void;
 export type ListenerHandler<Data = unknown> = (
   data: Data,
-  fetchId?: FetchID
+  fetchId?: Ref
 ) => void;
 export type Listener<Data = unknown> = {
   opcode: Opcode;
@@ -32,6 +32,9 @@ export type Listener<Data = unknown> = {
  */
 export type Connection = {
   close: () => void;
+  /**
+   * @deprecated
+   */
   once: <Data = unknown>(
     opcode: Opcode,
     handler: ListenerHandler<Data>
@@ -40,8 +43,16 @@ export type Connection = {
     opcode: Opcode,
     handler: ListenerHandler<Data>
   ) => () => void;
+  user: User;
+  initialCurrentQuizId?: string;
+  /**
+   * @deprecated
+   */
   send: (opcode: Opcode, data: unknown, fetchId?: FetchID) => void;
   sendCast: (opcode: Opcode, data: unknown, ref?: Ref) => void;
+  /**
+   * @deprecated
+   */
   fetch: (
     opcode: Opcode,
     data: unknown,
@@ -59,9 +70,9 @@ export type Connection = {
 // when ws tries to reconnect it should use current tokens not the ones it initializes with
 /**
  * Creates a Connection object
- * @param token - Your dogehouse token
- * @param refreshToken - Your dogehouse refresh token
- * @returns Connection object
+ * @param {Token} token Your quibi token
+ * @param {Token} refreshToken Your quibi refresh token
+ * @returns {Promise<Connection>} Connection object
  */
 export const connect = (
   token: Token,
@@ -82,6 +93,7 @@ export const connect = (
     fetchTimeout?: number;
     waitToReconnect?: boolean;
     getAuthOptions?: () => Partial<{
+      currentQuizId: string | null;
       token: Token;
       refreshToken: Token;
     }>;
@@ -99,18 +111,15 @@ export const connect = (
       // and you get logged out
       if (socket.readyState !== socket.OPEN) return;
 
-      const raw = `{"v":"0.2.0", "op":"${opcode}","p":${JSON.stringify(data)}${
+      const raw = `{"v":"0.1.0", "op":"${opcode}","p":${JSON.stringify(data)}${
         ref ? `,"ref":"${ref}"` : ""
       }}`;
 
       socket.send(raw);
       logger("out", opcode, data, ref, raw);
     };
+
     const apiSend = (opcode: Opcode, data: unknown, fetchId?: FetchID) => {
-      // tmp fix
-      // this is to avoid ws events queuing up while socket is closed
-      // then it reconnects and fires before auth goes off
-      // and you get logged out
       if (socket.readyState !== socket.OPEN) {
         return;
       }
@@ -175,6 +184,7 @@ export const connect = (
 
             return () => listeners.splice(listeners.indexOf(listener), 1);
           },
+          user: message.d.user,
           send: apiSend,
           sendCast: api2Send,
           sendCall: (
@@ -183,16 +193,12 @@ export const connect = (
             doneOpcode?: Opcode
           ) =>
             new Promise((resolveCall, rejectFetch) => {
-              // tmp fix
-              // this is to avoid ws events queuing up while socket is closed
-              // then it reconnects and fires before auth goes off
-              // and you get logged out
               if (socket.readyState !== socket.OPEN) {
                 rejectFetch(new Error("websocket not connected"));
 
                 return;
               }
-              const ref: FetchID | false = !doneOpcode && generateUuid();
+              const ref: Ref | false = !doneOpcode && generateUuid();
               let timeoutId: NodeJS.Timeout | null = null;
               const unsubscribe = connection.addListener(
                 doneOpcode ?? opcode + ":reply",
@@ -274,6 +280,7 @@ export const connect = (
       apiSend("auth", {
         accessToken: token,
         refreshToken,
+        currentQuizId: null,
         ...getAuthOptions?.(),
       });
     });
