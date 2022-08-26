@@ -2,6 +2,10 @@
 // @ts-nocheck because internet is unpredictable
 
 import { Connection } from "./raw";
+import {
+  GetTopPublicQuizesResponse,
+  JoinQuizAndGetInfoResponse,
+} from "./responses";
 
 /**
  * Allows you to handle custom logic on websocket events
@@ -63,7 +67,7 @@ export const wrap = (connection: Connection) => ({
       items: Array<User | Quiz>;
       quizes: Quiz[];
       users: User[];
-    }> => connection.sendCall("misc:search", { query }) as any,
+    }> => connection.sendCall("misc:search", { query }),
     getFollowList: (
       username: string,
       isFollowing: boolean,
@@ -76,38 +80,38 @@ export const wrap = (connection: Connection) => ({
         username,
         isFollowing,
         cursor,
-      }) as any,
+      }),
     getInviteList: (
       cursor = 0
     ): Promise<{
       users: User[];
       nextCursor: number | null;
-    }> => connection.sendCall("quiz:get_invite_list", { cursor }) as any,
+    }> => connection.sendCall("quiz:get_invite_list", { cursor }),
     joinQuizAndGetInfo: (
       quizId: string
     ): Promise<JoinQuizAndGetInfoResponse | { error: string }> =>
-      connection.sendCall("quiz:join", { quizId }) as any,
-    getTopPublicQuizes: (cursor = 0): Promise<any> =>
+      connection.sendCall("quiz:join", { quizId }),
+    getTopPublicQuizes: (cursor = 0): Promise<GetTopPublicQuizesResponse> =>
       connection.sendCall("quiz:get_top", { cursor }),
     getMyFollowing: (
       cursor = 0
     ): Promise<{
       users: User[];
       nextCursor: number | null;
-    }> => connection.sendCall("user:get_following", { cursor }) as any,
+    }> => connection.sendCall("user:get_following", { cursor }),
     getUserProfile: (
       userIdOrUsername: string
     ): Promise<User | null | { error: string }> =>
       connection.sendCall("user:get_info", {
         userIdOrUsername,
-      }) as any,
+      }),
 
     getBlockedFromQuizUsers: (
       cursor = 0
     ): Promise<{
       users: User[];
       nextCursor: number | null;
-    }> => connection.sendCall("quiz:get_banned_users", { cursor }) as any,
+    }> => connection.sendCall("quiz:get_banned_users", { cursor }),
   },
   /**
    * Allows you to call functions that mutate the ws state
@@ -138,28 +142,30 @@ export const wrap = (connection: Connection) => ({
       username: string;
       bio: string;
     }): Promise<{ isUsernameTaken: boolean }> =>
-      connection.sendCall("user:update", data) as any,
+      connection.sendCall("user:update", data),
     createQuiz: (data: {
       name: string;
       privacy: string;
       description: string;
     }): Promise<{ error: string } | { quiz: Quiz }> =>
-      connection.sendCall("quiz:create", data) as any,
+      connection.sendCall("quiz:create", data),
 
-    leaveQuiz: () => connection.sendCall("quiz:leave", {}),
+    leaveQuiz: (): Promise<void> => connection.sendCall("quiz:leave", {}),
+    inviteToQuiz: (userId: string): Promise<void> =>
+      connection.sendCast("quiz:invite", { userId }),
     deleteQuizChatMessage: (userId: string, messageId: string): Promise<void> =>
       connection.sendCast("quiz_chat:delete", {
         userId,
         messageId,
-      }) as any,
+      }),
     sendQuizChatMsg: (ast: QuizChatMessageToken[]): Promise<void> =>
-      connection.send("send_quiz_chat_msg", { tokens: ast }) as any,
+      connection.send("send_quiz_chat_msg", { tokens: ast }),
     unbanFromQuizChat: (userId: string): Promise<void> =>
-      connection.sendCast("quiz_chat:unban", { userId }) as any,
+      connection.sendCast("quiz_chat:unban", { userId }),
     banFromQuizChat: (userId: string): Promise<void> =>
-      connection.sendCast("quiz_chat:ban", { userId }) as any,
+      connection.sendCast("quiz_chat:ban", { userId }),
     banFromQuiz: (userId: string): Promise<any> =>
-      connection.sendCast("quiz:ban", { userId }) as any,
+      connection.sendCast("quiz:ban", { userId }),
     unbanFromQuiz: (userId: string): Promise<any> =>
       connection.sendCall("quiz:unban", { userId }),
   },
