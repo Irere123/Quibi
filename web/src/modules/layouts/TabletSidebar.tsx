@@ -1,13 +1,10 @@
 import React from "react";
 import Link from "next/link";
 import {
-  AtIcon,
   BroadcastIcon,
   CalendarMonth,
   HomeIcon,
   Notification,
-  SchoolIcon,
-  SettingsIcon,
 } from "../../icons";
 import { BoxedIcon } from "../../ui/BoxedIcon";
 

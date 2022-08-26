@@ -1,7 +1,6 @@
 import React from "react";
 import avatar from "../../img/avatar.jpg";
 import { useCurrentQuizIdStore } from "../../stores/useCurentQuizIdStore";
-import { FollowSuggCard } from "../../ui/FollowSuggCard";
 import { UpcomingEventsCard } from "../../ui/UpcomingEventsCard";
 import { MinimizedQuizCardController } from "./MinimizedQuizCardController";
 

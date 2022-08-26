@@ -2,9 +2,8 @@ import React, { ReactElement, useEffect, useMemo, useState } from "react";
 import { BubbleText } from "./BubbleText";
 import { QuizCardHeading } from "./QuizCardHeading";
 
-import { FormattedDate } from "./FormattedDate";
 import { Tag } from "./Tag";
-import { MultipleUsers, SingleUser } from "./Avatars";
+import { MultipleUsers } from "./Avatars";
 import { differenceInMilliseconds, format, isPast, isToday } from "date-fns";
 import { TimeIcon } from "../icons";
 

@@ -6,12 +6,11 @@ import { useTypeSafeTranslation } from "../hooks/useTypeSafeTranslation";
 import {
   AccountIcon,
   ArrowLeftIcon,
-  SettingsIcon as SvgSettingsIcon,
   Bug,
   DownloadIcon,
   OutlineGlobe,
 } from "../icons";
-import { User } from "../modules/ws";
+import { User } from "@quibi/client";
 import { ApiPreloadLink } from "../shared-components/ApiPreloadLink";
 import { BaseOverlay } from "../ui/BaseOverlay";
 import { SettingsIcon } from "../ui/SettingsIcon";

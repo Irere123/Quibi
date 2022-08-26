@@ -1,9 +1,9 @@
 import React from "react";
-import { User } from "../modules/ws/types";
+import { BaseUser } from "@quibi/client";
 import { ProfileHeader } from "./ProfileHeader";
 
 interface UserProfileProps {
-  user: User;
+  user: BaseUser;
   isCurrentUser?: boolean;
 }
 

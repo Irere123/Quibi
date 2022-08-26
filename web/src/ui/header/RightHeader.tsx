@@ -1,25 +1,14 @@
 import React from "react";
-import Link from "next/link";
 import { useRouter } from "next/router";
-import {
-  AppsIcon,
-  DownloadIcon,
-  HomeIcon,
-  Notification,
-  SettingsIcon,
-} from "../../icons";
+import { AppsIcon } from "../../icons";
 import { SingleUser } from "../Avatars";
-import { Button } from "../Button";
 import { BoxedIcon } from "../BoxedIcon";
-import { ApiPreloadLink } from "../../shared-components/ApiPreloadLink";
 import { useConn } from "../../hooks/useConn";
-import { useScreenType } from "../../hooks/useScreenType";
 import { DropdownController } from "../DropdownController";
 import { SettingsDropdown } from "../SettingsDropdown";
 import { modalConfirm } from "../../shared-components/ConfirmModal";
 import { useCurrentQuizIdStore } from "../../stores/useCurentQuizIdStore";
 import { useTokenStore } from "../../modules/auth/useTokenStore";
-import { NotificationsDropdown } from "../NotificationsDropdown";
 import { useTypeSafeTranslation } from "../../hooks/useTypeSafeTranslation";
 
 export interface RightHeaderProps {

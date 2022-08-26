@@ -2,7 +2,6 @@ import React from "react";
 import { GenericNotification } from "./GenericNotification";
 import { SingleUser } from "../Avatars";
 import { Button } from "../Button";
-import { t } from "i18next";
 import { useTypeSafeTranslation } from "../../hooks/useTypeSafeTranslation";
 
 export interface FollowNotificationProps {

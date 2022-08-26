@@ -1,13 +1,12 @@
 /* eslint-disable @next/next/no-img-element */
 import normalizeUrl from "normalize-url";
+import { Quiz, User } from "@quibi/client";
 import React, { useContext, useEffect, useRef } from "react";
 import { useVirtual, VirtualItem } from "react-virtual";
 import { useConn } from "../../../hooks/useConn";
 import { useCurrentQuizInfo } from "../../../hooks/useCurrentQuizInfo";
 import { useTypeSafeTranslation } from "../../../hooks/useTypeSafeTranslation";
 import { emoteMap } from "../../../shared-components/EmoteData";
-import { SingleUser } from "../../../ui/Avatars";
-import { Quiz, User } from "../../ws";
 import { UserPreviewModalContext } from "../UserPreviewModalProvider";
 import { useQuizChatMentionStore } from "./useQuizChatMentionStore";
 import { useQuizChatStore } from "./useQuizChatStore";

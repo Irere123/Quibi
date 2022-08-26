@@ -1,4 +1,5 @@
 import React, { useContext } from "react";
+import { JoinQuizAndGetInfoResponse, QuizUser } from "@quibi/client";
 import { useConn } from "../../hooks/useConn";
 import { useCurrentQuizInfo } from "../../hooks/useCurrentQuizInfo";
 import { useTypeSafeMutation } from "../../hooks/useTypeSafeMutation";
@@ -7,9 +8,7 @@ import { useTypeSafeTranslation } from "../../hooks/useTypeSafeTranslation";
 import { Button } from "../../ui/Button";
 import { Modal } from "../../ui/Modal";
 import { Spinner } from "../../ui/Spinner";
-import { VerticalUserInfo } from "../../ui/VerticalUserInfo";
 import { VerticalUserInfoWithFollowButton } from "../user/VerticalUserInfoWithFollowButton";
-import { JoinQuizAndGetInfoResponse, QuizUser } from "../ws";
 import { QuizChatMessage, useQuizChatStore } from "./chat/useQuizChatStore";
 import { UserPreviewModalContext } from "./UserPreviewModalProvider";
 

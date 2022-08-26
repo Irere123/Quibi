@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { JoinQuizAndGetInfoResponse, Quiz } from "@quibi/client";
 import { useRouter } from "next/router";
 import { defaultQueryFn } from "../../lib/defaultQueryFn";
 import { isServer } from "../../lib/isServer";
@@ -8,7 +9,6 @@ import { WaitForWsAndAuth } from "../auth/WaitForWsAndAuth";
 import { MainLayout } from "../layouts/MainLayout";
 import { LeftPanel } from "../layouts/Panels";
 import { TabletSidebar } from "../layouts/TabletSidebar";
-import { JoinQuizAndGetInfoResponse, Quiz } from "../ws";
 import { QuizChatController } from "./QuizChatController";
 import { QuizOpenGraphPreview } from "./QuizOpenGraphPreview";
 import { QuizPageController } from "./QuizPageController";

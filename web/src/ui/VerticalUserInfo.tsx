@@ -5,10 +5,10 @@ import { kFormatter } from "../lib/kFormatter";
 import { ApiPreloadLink } from "../shared-components/ApiPreloadLink";
 import { SingleUser } from "./Avatars";
 import { HeaderController } from "../modules/display/HeaderController";
-import { User } from "../modules/ws";
+import { UserWithFollowInfo } from "@quibi/client";
 
 interface VerticalUserInfoProps {
-  user: User;
+  user: UserWithFollowInfo;
 }
 
 export const VerticalUserInfo: React.FC<VerticalUserInfoProps> = ({ user }) => {

@@ -3,9 +3,7 @@ import img from "../../img/avatar2.jpg";
 import { useScreenType } from "../../hooks/useScreenType";
 
 import { FeedCard } from "../../ui/FeedCard";
-import { FeedHeader } from "../../ui/FeedHeader";
 import { MiddlePanel } from "../layouts/GridPanels";
-import { MyPeopleOnline } from "./MyPeopleOnline";
 import { SchoolIcon } from "../../icons";
 
 const Page: React.FC = () => {
