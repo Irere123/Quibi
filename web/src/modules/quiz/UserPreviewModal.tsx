@@ -3,6 +3,7 @@ import { useConn } from "../../hooks/useConn";
 import { useCurrentQuizInfo } from "../../hooks/useCurrentQuizInfo";
 import { useTypeSafeMutation } from "../../hooks/useTypeSafeMutation";
 import { useTypeSafeQuery } from "../../hooks/useTypeSafeQuery";
+import { useTypeSafeTranslation } from "../../hooks/useTypeSafeTranslation";
 import { Button } from "../../ui/Button";
 import { Modal } from "../../ui/Modal";
 import { Spinner } from "../../ui/Spinner";
@@ -31,6 +32,7 @@ const UserPreview: React.FC<{
   onClose,
   message,
 }) => {
+  const { t } = useTypeSafeTranslation();
   const { mutateAsync: deleteQuizChatMessage } = useTypeSafeMutation(
     "deleteQuizChatMessage"
   );
@@ -60,6 +62,26 @@ const UserPreview: React.FC<{
     return <div className={`flex text-primary-100`}>This user is gone.</div>;
   }
 
+  if ("error" in data) {
+    const error = data.error;
+
+    let errorMessage = t("pages.viewUser.errors.default");
+
+    switch (error) {
+      case "blocked":
+        errorMessage = t("pages.viewUser.errors.blocked");
+        break;
+    }
+
+    return (
+      <div
+        className={`flex p-6 text-center items-center justify-center w-full font-bold text-primary-100`}
+      >
+        {errorMessage}
+      </div>
+    );
+  }
+
   const canDoModStuffOnThisUser = !isMe && (iAmCreator || iAmMod) && !isCreator;
 
   // [shouldShow, key, onClick, text]
@@ -68,23 +90,23 @@ const UserPreview: React.FC<{
       canDoModStuffOnThisUser &&
         !(id in bannedUserIdMap) &&
         (iAmCreator || !quizPermissions?.isMod),
-      "unbanFromChat",
-      () => {
-        onClose();
-        unbanFromQuizChat([id]);
-      },
-      "Unban from Chat",
-    ],
-    [
-      canDoModStuffOnThisUser &&
-        id in bannedUserIdMap &&
-        (iAmCreator || !quizPermissions?.isMod),
       "banFromChat",
       () => {
         onClose();
         banFromQuizChat([id]);
       },
       "Ban from Chat",
+    ],
+    [
+      canDoModStuffOnThisUser &&
+        id in bannedUserIdMap &&
+        (iAmCreator || !quizPermissions?.isMod),
+      "unbanFromChat",
+      () => {
+        onClose();
+        banFromQuizChat([id]);
+      },
+      "unban from Chat",
     ],
 
     [
