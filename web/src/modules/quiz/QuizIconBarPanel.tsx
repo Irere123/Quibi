@@ -47,7 +47,7 @@ export const QuizIconBarPanel: React.FC<QuizIconBarControllerProps> = ({
         onToggleChat={() => toggleOpen()}
         onLeaveQuiz={() => {
           modalConfirm("Are you sure want to leave", () => {
-            push("/explore");
+            push("/live");
             leaveQuiz();
           });
         }}

@@ -122,7 +122,7 @@ export const wrap = (connection: Connection) => ({
     }): Promise<{ error: string } | { quiz: Quiz }> =>
       connection.sendCall("quiz:create", data) as any,
 
-    leaveQuiz: () => connection.sendCall("quiz:leave", {}, "user_left_quiz"),
+    leaveQuiz: () => connection.sendCall("quiz:leave", {}),
     deleteQuizChatMessage: (userId: string, messageId: string): Promise<void> =>
       connection.sendCast("quiz_chat:delete", {
         userId,
@@ -134,9 +134,9 @@ export const wrap = (connection: Connection) => ({
       connection.sendCast("quiz_chat:unban", { userId }) as any,
     banFromQuizChat: (userId: string): Promise<void> =>
       connection.sendCast("quiz_chat:ban", { userId }) as any,
-    banFromQuiz: (userId: string) =>
-      connection.sendCast("quiz:ban", { userId }),
-    unbanFromQuiz: (userId: string) =>
+    banFromQuiz: (userId: string): Promise<any> =>
+      connection.sendCast("quiz:ban", { userId }) as any,
+    unbanFromQuiz: (userId: string): Promise<any> =>
       connection.sendCall("quiz:unban", { userId }),
   },
 });

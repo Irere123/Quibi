@@ -57,15 +57,16 @@ defmodule Beef.Access.Quizes do
 
   def get_top_public_quizes(user_id, offset \\ 0) do
     items =
-      from(q in Quiz,
-        left_join: qb in QuizBlock,
-        on: qb.quizId == q.id and qb.userId == ^user_id,
+      from(r in Quiz,
+        left_join: rb in QuizBlock,
+        on: rb.quizId == r.id and rb.userId == ^user_id,
         left_join: ub in UserBlock,
         on:
-          (q.creatorId == ub.userIdBlocked and ub.userId == ^user_id) or
-            (q.creatorId == ub.userId and ub.userIdBlocked == ^user_id),
-        where: is_nil(ub.userIdBlocked) and is_nil(qb.quizId) and q.isPrivate == false,
-        order_by: [desc: q.numPeopleInside],
+          (r.creatorId == ub.userIdBlocked and ub.userId == ^user_id) or
+            (r.creatorId == ub.userId and ub.userIdBlocked == ^user_id),
+        where:
+          is_nil(ub.userIdBlocked) and is_nil(rb.quizId) and r.isPrivate == false,
+        order_by: [desc: r.numPeopleInside],
         offset: ^offset,
         limit: ^@fetch_limit
       )

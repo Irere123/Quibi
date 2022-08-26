@@ -34,14 +34,14 @@ const UserPreview: React.FC<{
   const { mutateAsync: deleteQuizChatMessage } = useTypeSafeMutation(
     "deleteQuizChatMessage"
   );
-  const { mutateAsync: blockFromQuiz } = useTypeSafeMutation("blockFromQuiz");
+  const { mutateAsync: banFromQuiz } = useTypeSafeMutation("banFromQuiz");
   const { mutateAsync: banFromQuizChat } =
     useTypeSafeMutation("banFromQuizChat");
   const { mutateAsync: unbanFromQuizChat } =
     useTypeSafeMutation("unbanFromQuizChat");
   const { data, isLoading } = useTypeSafeQuery(["getUserProfile", id], {}, [
     id,
-  ]);
+  ]) as any;
 
   const bannedUserIdMap = useQuizChatStore((s) => s.bannedUserIdMap);
 
@@ -89,10 +89,10 @@ const UserPreview: React.FC<{
 
     [
       canDoModStuffOnThisUser && (iAmCreator || !quizPermissions?.isMod),
-      "blockFromQuiz",
+      "banFromQuiz",
       () => {
         onClose();
-        blockFromQuiz([id]);
+        banFromQuiz([id]);
       },
       "Ban from Quiz",
     ],

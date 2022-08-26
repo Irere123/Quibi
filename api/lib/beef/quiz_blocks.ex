@@ -43,6 +43,6 @@ defmodule Beef.QuizBlocks do
   def upsert(data) do
     %QuizBlock{}
     |> QuizBlock.insert_changeset(data)
-    |> Beef.Repo.insert(conflict_target: [:userId, :quizId])
+    |> Beef.Repo.insert(on_conflict: :nothing)
   end
 end
