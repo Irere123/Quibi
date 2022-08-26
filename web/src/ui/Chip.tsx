@@ -1,14 +1,14 @@
 import React from "react";
 
 const sizeClassnames = {
-  default: "py-2 px-3 text-md",
-  sm: "py-1 px-2 text-sm",
+  default: "h-6 py-2 px-3 text-md",
+  sm: "h-5.5 py-2 px-3 text-sm",
 };
 
 const variantClassnames = {
-  outlined: "",
-  filled: "bg-primary-800 rounded-20",
-  squared: "",
+  outlined: "border-2 border-primary-600 rounded-20",
+  filled: "bg-primary-800 rounded-20 hover:bg-primary-700",
+  squared: "bg-primary-800 rounded",
 };
 
 export interface ChipProps {

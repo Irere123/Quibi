@@ -1,6 +1,6 @@
 import React from "react";
 import { useRouter } from "next/router";
-import { AppsIcon } from "../../icons";
+import { PlusIcon } from "../../icons";
 import { SingleUser } from "../Avatars";
 import { BoxedIcon } from "../BoxedIcon";
 import { useConn } from "../../hooks/useConn";
@@ -30,7 +30,7 @@ const RightHeader: React.FC<RightHeaderProps> = ({ actionButton }) => {
   return (
     <div className="flex  space-x-4 items-center justify-end focus:outline-no-chrome w-full">
       <BoxedIcon circle={true}>
-        <AppsIcon />
+        <PlusIcon />
       </BoxedIcon>
 
       {actionButton}
