@@ -1,10 +1,18 @@
 defmodule Beef.Follows do
+  @moduledoc """
+  Context module for Follows.
+
+  This will eventually go away and be replaced
+  by using associations on users.
+  """
+
   import Ecto.Query
 
   @fetch_limit 21
 
   alias Beef.Schemas.Follow
   alias Beef.Schemas.User
+  alias Beef.Schemas.Quiz
 
   def get_followers_online_and_not_in_a_quiz(user_id) do
     from(
@@ -12,30 +20,6 @@ defmodule Beef.Follows do
       inner_join: u in User,
       on: f.followerId == u.id,
       where: f.userId == ^user_id and u.online == true and is_nil(u.currentQuizId)
-    )
-    |> Beef.Repo.all()
-  end
-
-  def get_followers_online(user_id) do
-    from(
-      f in Follow,
-      inner_join: u in User,
-      on: f.followerId == u.id,
-      where: f.userId == ^user_id and u.online == true,
-      order_by: [desc: u.last_online]
-    )
-    |> Beef.Repo.all()
-  end
-
-  def get_users_online(user_id) do
-    from(
-      u in User,
-      inner_join: f in Follow,
-      on: f.userId == u.id,
-      left_join: f2 in Follow,
-      on: f2.userId == ^user_id,
-      where: f.followerId == ^user_id and u.online == true,
-      order_by: [desc: u.last_online]
     )
     |> Beef.Repo.all()
   end
@@ -48,7 +32,8 @@ defmodule Beef.Follows do
     )
   end
 
-  def following_me?(user_id, user_id_to_check) do
+  # "guard".
+  def is_following_me(user_id, user_id_to_check) do
     not is_nil(
       from(
         f in Follow,
@@ -58,30 +43,27 @@ defmodule Beef.Follows do
     )
   end
 
-  # fetch all the users
-  def get_my_following(user_id, offset \\ 0, limit \\ 7) do
+  def fetch_invite_list(user_id, offset \\ 0) do
+    user = Beef.Users.get_by_id(user_id)
+
     items =
       from(
         f in Follow,
         inner_join: u in User,
-        on: f.userId == u.id,
-        left_join: f2 in Follow,
-        on: f2.userId == ^user_id and f2.followerId == u.id,
-        where: f.followerId == ^user_id,
-        select: %{
-          u
-          | followsYou: not is_nil(f2.userId),
-            youAreFollowing: true
-        },
-        limit: ^limit,
-        offset: ^offset,
-        order_by: [desc: u.online]
+        on: f.followerId == u.id,
+        where:
+          f.userId == ^user_id and u.online == true and
+            (u.currentQuizId != ^user.currentQuizId or is_nil(u.currentQuizId)),
+        select: u,
+        limit: ^@fetch_limit,
+        offset: ^offset
       )
       |> Beef.Repo.all()
 
     {Enum.slice(items, 0, -1 + @fetch_limit),
      if(length(items) == @fetch_limit, do: -1 + offset + @fetch_limit, else: nil)}
   end
+
 
   def get_followers(user_id, user_id_to_get_followers_for, offset \\ 20) do
     items =
@@ -96,6 +78,37 @@ defmodule Beef.Follows do
         limit: ^@fetch_limit,
         offset: ^offset,
         order_by: [desc: f.inserted_at]
+      )
+      |> Beef.Repo.all()
+
+    {Enum.slice(items, 0, -1 + @fetch_limit),
+     if(length(items) == @fetch_limit, do: -1 + offset + @fetch_limit, else: nil)}
+  end
+
+  # fetch all the users
+  def get_my_following(user_id, offset \\ 0) do
+    items =
+      from(
+        f in Follow,
+        inner_join: u in User,
+        on: f.userId == u.id,
+        left_join: f2 in Follow,
+        on: f2.userId == ^user_id and f2.followerId == u.id,
+        left_join: cq in Quiz,
+        on: u.currentQuizId == cq.id,
+        where:
+          f.followerId == ^user_id and
+            (is_nil(cq.isPrivate) or
+               cq.isPrivate == false),
+        select: %{
+          u
+          | currentQuiz: cq,
+            followsYou: not is_nil(f2.userId),
+            youAreFollowing: true
+        },
+        limit: ^@fetch_limit,
+        offset: ^offset,
+        order_by: [desc: u.online]
       )
       |> Beef.Repo.all()
 
@@ -185,25 +198,12 @@ defmodule Beef.Follows do
     end
   end
 
-  def fetch_invite_list(user_id, offset \\ 0) do
-    user = Beef.Users.get_by_id(user_id)
-
-    items =
-      from(
-        f in Follow,
-        inner_join: u in User,
-        on: f.followerId == u.id,
-        where:
-          f.userId == ^user_id and u.online == true and
-            (u.currentQuizId != ^user.currentQuizId or is_nil(u.currentQuizId)),
-        select: u,
-        limit: ^@fetch_limit,
-        offset: ^offset
-      )
-      |> Beef.Repo.all()
-
-    {Enum.slice(items, 0, -1 + @fetch_limit),
-     if(length(items) == @fetch_limit, do: -1 + offset + @fetch_limit, else: nil)}
+  def get_follow(me_id, other_user_id) do
+    from(f in Follow,
+      where: f.userId == ^me_id and f.followerId == ^other_user_id,
+      limit: 1
+    )
+    |> Beef.Repo.one()
   end
 
   def get_info(me_id, other_user_id) do

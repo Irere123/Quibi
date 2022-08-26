@@ -4,8 +4,8 @@ defmodule Beef.Queries.UserBlocks do
   """
 
   import Ecto.Query, warn: false
-  alias Beef.Schemas.User
   alias Beef.Schemas.UserBlock
+  alias Beef.Schemas.User
 
   def start do
     from(ub in UserBlock)

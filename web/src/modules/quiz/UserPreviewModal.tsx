@@ -1,14 +1,14 @@
 import React, { useContext } from "react";
+import { JoinQuizAndGetInfoResponse, QuizUser } from "@quibi/client";
 import { useConn } from "../../hooks/useConn";
 import { useCurrentQuizInfo } from "../../hooks/useCurrentQuizInfo";
 import { useTypeSafeMutation } from "../../hooks/useTypeSafeMutation";
 import { useTypeSafeQuery } from "../../hooks/useTypeSafeQuery";
+import { useTypeSafeTranslation } from "../../hooks/useTypeSafeTranslation";
 import { Button } from "../../ui/Button";
 import { Modal } from "../../ui/Modal";
 import { Spinner } from "../../ui/Spinner";
-import { VerticalUserInfo } from "../../ui/VerticalUserInfo";
 import { VerticalUserInfoWithFollowButton } from "../user/VerticalUserInfoWithFollowButton";
-import { JoinQuizAndGetInfoResponse, QuizUser } from "../ws";
 import { QuizChatMessage, useQuizChatStore } from "./chat/useQuizChatStore";
 import { UserPreviewModalContext } from "./UserPreviewModalProvider";
 
@@ -31,17 +31,18 @@ const UserPreview: React.FC<{
   onClose,
   message,
 }) => {
+  const { t } = useTypeSafeTranslation();
   const { mutateAsync: deleteQuizChatMessage } = useTypeSafeMutation(
     "deleteQuizChatMessage"
   );
-  const { mutateAsync: blockFromQuiz } = useTypeSafeMutation("blockFromQuiz");
+  const { mutateAsync: banFromQuiz } = useTypeSafeMutation("banFromQuiz");
   const { mutateAsync: banFromQuizChat } =
     useTypeSafeMutation("banFromQuizChat");
   const { mutateAsync: unbanFromQuizChat } =
     useTypeSafeMutation("unbanFromQuizChat");
   const { data, isLoading } = useTypeSafeQuery(["getUserProfile", id], {}, [
     id,
-  ]);
+  ]) as any;
 
   const bannedUserIdMap = useQuizChatStore((s) => s.bannedUserIdMap);
 
@@ -60,6 +61,26 @@ const UserPreview: React.FC<{
     return <div className={`flex text-primary-100`}>This user is gone.</div>;
   }
 
+  if ("error" in data) {
+    const error = data.error;
+
+    let errorMessage = t("pages.viewUser.errors.default");
+
+    switch (error) {
+      case "blocked":
+        errorMessage = t("pages.viewUser.errors.blocked");
+        break;
+    }
+
+    return (
+      <div
+        className={`flex p-6 text-center items-center justify-center w-full font-bold text-primary-100`}
+      >
+        {errorMessage}
+      </div>
+    );
+  }
+
   const canDoModStuffOnThisUser = !isMe && (iAmCreator || iAmMod) && !isCreator;
 
   // [shouldShow, key, onClick, text]
@@ -68,17 +89,6 @@ const UserPreview: React.FC<{
       canDoModStuffOnThisUser &&
         !(id in bannedUserIdMap) &&
         (iAmCreator || !quizPermissions?.isMod),
-      "unbanFromChat",
-      () => {
-        onClose();
-        unbanFromQuizChat([id]);
-      },
-      "Unban from Chat",
-    ],
-    [
-      canDoModStuffOnThisUser &&
-        id in bannedUserIdMap &&
-        (iAmCreator || !quizPermissions?.isMod),
       "banFromChat",
       () => {
         onClose();
@@ -86,13 +96,24 @@ const UserPreview: React.FC<{
       },
       "Ban from Chat",
     ],
+    [
+      canDoModStuffOnThisUser &&
+        id in bannedUserIdMap &&
+        (iAmCreator || !quizPermissions?.isMod),
+      "unbanFromChat",
+      () => {
+        onClose();
+        banFromQuizChat([id]);
+      },
+      "unban from Chat",
+    ],
 
     [
       canDoModStuffOnThisUser && (iAmCreator || !quizPermissions?.isMod),
-      "blockFromQuiz",
+      "banFromQuiz",
       () => {
         onClose();
-        blockFromQuiz([id]);
+        banFromQuiz([id]);
       },
       "Ban from Quiz",
     ],
@@ -145,8 +166,6 @@ export const UserPreviewModal: React.FC<JoinQuizAndGetInfoResponse> = ({
   const { isCreator: iAmCreator, isMod } = useCurrentQuizInfo();
   const { data, setData } = useContext(UserPreviewModalContext);
   const conn = useConn();
-
-  console.log(users);
 
   return (
     <Modal

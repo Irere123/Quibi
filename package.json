@@ -1,6 +1,6 @@
 {
   "name": "quibi",
-  "private": "true",
+  "private": true,
   "workspaces": {
     "packages": [
       "web",

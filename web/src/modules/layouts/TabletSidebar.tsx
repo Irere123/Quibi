@@ -1,11 +1,10 @@
 import React from "react";
 import Link from "next/link";
 import {
-  AtIcon,
-  CompassIcon,
+  BroadcastIcon,
+  CalendarMonth,
   HomeIcon,
-  SchoolIcon,
-  SettingsIcon,
+  Notification,
 } from "../../icons";
 import { BoxedIcon } from "../../ui/BoxedIcon";
 
@@ -21,33 +20,25 @@ export const TabletSidebar: React.FC<TabletSidebarProps> = ({}) => {
           </BoxedIcon>
         </a>
       </Link>
-      <Link href={"/explore"}>
+      <Link href={"/live"}>
         <a>
           <BoxedIcon circle>
-            <CompassIcon />
+            <BroadcastIcon />
           </BoxedIcon>
         </a>
       </Link>
-      <Link href={"/u/academic"}>
+      <Link href={"/events"}>
         <a>
           <BoxedIcon circle>
-            <SchoolIcon />
-          </BoxedIcon>
-        </a>
-      </Link>
-
-      <Link href={"/explore-rooms"}>
-        <a>
-          <BoxedIcon circle>
-            <AtIcon />
+            <CalendarMonth />
           </BoxedIcon>
         </a>
       </Link>
 
-      <Link href={"/settings"}>
+      <Link href={"/notifications"}>
         <a>
           <BoxedIcon circle>
-            <SettingsIcon />
+            <Notification />
           </BoxedIcon>
         </a>
       </Link>

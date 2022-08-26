@@ -12,7 +12,7 @@ defmodule Beef.QuizPermissions do
     |> Beef.Schemas.QuizPermission.insert_changeset(data)
     |> Beef.Repo.insert(
       on_conflict: [set: set],
-      conflict_target: [:userId, :quizId],
+      conflict_target: [:userId, :roomId],
       returning: returning
     )
   end
@@ -22,6 +22,20 @@ defmodule Beef.QuizPermissions do
       Beef.Repo.one(
         from(qp in Beef.Schemas.QuizPermission,
           where: qp.quizId == ^quiz_id and qp.userId == ^user_id and qp.isSpeaker == true
+        )
+      )
+    )
+  end
+
+  def listener?(user_id, quiz_id) do
+    not speaker?(user_id, quiz_id)
+  end
+
+  def mod?(user_id, quiz_id) do
+    not is_nil(
+      Beef.Repo.one(
+        from(qp in Beef.Schemas.QuizPermission,
+          where: qp.quizId == ^quiz_id and qp.userId == ^user_id and qp.isMod == true
         )
       )
     )

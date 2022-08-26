@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React from "react";
+import { JoinQuizAndGetInfoResponse } from "@quibi/client";
 import { useConn } from "../../hooks/useConn";
 import { useScreenType } from "../../hooks/useScreenType";
 import { useCurrentQuizIdStore } from "../../stores/useCurentQuizIdStore";
@@ -7,7 +8,6 @@ import { InfoText } from "../../ui/InfoText";
 import { Spinner } from "../../ui/Spinner";
 import { HeaderController } from "../display/HeaderController";
 import { MiddlePanel } from "../layouts/GridPanels";
-import { JoinQuizAndGetInfoResponse } from "../ws";
 import { useQuizChatStore } from "./chat/useQuizChatStore";
 import { QuizIconBarPanel } from "./QuizIconBarPanel";
 import { QuizInfoPanel } from "./QuizInfoPanel";

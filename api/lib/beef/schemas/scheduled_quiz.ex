@@ -1,9 +1,7 @@
 defmodule Beef.Schemas.ScheduledQuiz do
   use Ecto.Schema
-
   import Ecto.Changeset
   alias Beef.Schemas.User
-  alias Beef.Schemas.Quiz
   @timestamps_opts [type: :utc_datetime_usec]
 
   @derive {Jason.Encoder,
@@ -17,6 +15,7 @@ defmodule Beef.Schemas.ScheduledQuiz do
              :creator,
              :creatorId
            ]}
+
   @primary_key {:id, :binary_id, []}
   schema "scheduled_quizes" do
     field(:name, :string)
@@ -26,7 +25,7 @@ defmodule Beef.Schemas.ScheduledQuiz do
     field(:started, :boolean)
 
     belongs_to(:creator, User, foreign_key: :creatorId, type: :binary_id)
-    belongs_to(:quiz, Quiz, foreign_key: :quizId, type: :binary_id)
+    belongs_to(:quiz, Beef.Schemas.Quiz, foreign_key: :quizId, type: :binary_id)
 
     timestamps()
   end
@@ -39,6 +38,8 @@ defmodule Beef.Schemas.ScheduledQuiz do
         changeset
         |> add_error(field, "Date needs to be in the future")
       end
+    else
+      changeset
     end
   end
 
@@ -61,20 +62,21 @@ defmodule Beef.Schemas.ScheduledQuiz do
   def common_validation(attrs) do
     attrs
     |> validate_future_date(:scheduledFor)
-    |> validate_not_too_far_into_future_date(:scheduleFor)
+    |> validate_not_too_far_into_future_date(:scheduledFor)
     |> validate_length(:name, min: 2, max: 60)
     |> validate_length(:description, max: 200)
   end
 
-  def insert_changeset(quiz, attrs) do
-    quiz
+  @doc false
+  def insert_changeset(room, attrs) do
+    room
     |> cast(attrs, [:id, :name, :creatorId, :scheduledFor, :description])
     |> validate_required([:name, :creatorId, :scheduledFor])
     |> common_validation()
   end
 
-  def edit_changeset(quiz, attrs) do
-    quiz
+  def edit_changeset(room, attrs) do
+    room
     |> cast(attrs, [:id, :name, :scheduledFor, :description])
     |> validate_required([:name, :scheduledFor])
     |> common_validation()

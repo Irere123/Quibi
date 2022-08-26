@@ -1,32 +1,22 @@
 import React from "react";
-import Link from "next/link";
 import { useRouter } from "next/router";
-import {
-  AppsIcon,
-  DownloadIcon,
-  HomeIcon,
-  Notification,
-  SettingsIcon,
-} from "../../icons";
+import { PlusIcon } from "../../icons";
 import { SingleUser } from "../Avatars";
-import { Button } from "../Button";
 import { BoxedIcon } from "../BoxedIcon";
-import { ApiPreloadLink } from "../../shared-components/ApiPreloadLink";
 import { useConn } from "../../hooks/useConn";
-import { useScreenType } from "../../hooks/useScreenType";
 import { DropdownController } from "../DropdownController";
 import { SettingsDropdown } from "../SettingsDropdown";
 import { modalConfirm } from "../../shared-components/ConfirmModal";
 import { useCurrentQuizIdStore } from "../../stores/useCurentQuizIdStore";
 import { useTokenStore } from "../../modules/auth/useTokenStore";
-import { NotificationsDropdown } from "../NotificationsDropdown";
+import { useTypeSafeTranslation } from "../../hooks/useTypeSafeTranslation";
 
 export interface RightHeaderProps {
   actionButton?: React.ReactNode;
 }
 
 const RightHeader: React.FC<RightHeaderProps> = ({ actionButton }) => {
-  const screenType = useScreenType();
+  const { t } = useTypeSafeTranslation();
   const conn = useConn();
   const { pathname, push } = useRouter();
   let showHome = false;
@@ -40,7 +30,7 @@ const RightHeader: React.FC<RightHeaderProps> = ({ actionButton }) => {
   return (
     <div className="flex  space-x-4 items-center justify-end focus:outline-no-chrome w-full">
       <BoxedIcon circle={true}>
-        <AppsIcon />
+        <PlusIcon />
       </BoxedIcon>
 
       {actionButton}
@@ -52,14 +42,17 @@ const RightHeader: React.FC<RightHeaderProps> = ({ actionButton }) => {
         overlay={(close) => (
           <SettingsDropdown
             onActionButtonClicked={() => {
-              modalConfirm("Are you sure", () => {
-                conn.close();
-                useCurrentQuizIdStore.getState().setCurrentQuizId(null);
-                useTokenStore
-                  .getState()
-                  .setTokens({ accessToken: "", refreshToken: "" });
-                push("/logout");
-              });
+              modalConfirm(
+                t("components.settingsDropdown.logOut.modalSubtitle"),
+                () => {
+                  conn.close();
+                  useCurrentQuizIdStore.getState().setCurrentQuizId(null);
+                  useTokenStore
+                    .getState()
+                    .setTokens({ accessToken: "", refreshToken: "" });
+                  push("/logout");
+                }
+              );
             }}
             onCloseDropdown={close}
             user={conn.user}

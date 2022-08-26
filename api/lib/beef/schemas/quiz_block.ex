@@ -1,6 +1,5 @@
 defmodule Beef.Schemas.QuizBlock do
   use Ecto.Schema
-
   import Ecto.Changeset
   alias Beef.Schemas.User
   alias Beef.Schemas.Quiz
@@ -15,6 +14,7 @@ defmodule Beef.Schemas.QuizBlock do
     timestamps()
   end
 
+  @doc false
   def insert_changeset(quizBlock, attrs) do
     quizBlock
     |> cast(attrs, [:userId, :quizId, :modId])

@@ -1,16 +1,15 @@
 defmodule Onion.UserSession do
   use GenServer, restart: :temporary
-  require Logger
 
-  # TODO: change this
   defmodule State do
     defstruct user_id: nil,
-               ip: nil,
+              current_quiz_id: nil,
+              ip: nil,
               pid: nil,
               username: nil,
               display_name: nil,
               avatar_url: nil,
-              current_quiz_id: nil
+              banner_url: nil
   end
 
   #################################################################################
@@ -36,6 +35,8 @@ defmodule Onion.UserSession do
   def child_spec(init), do: %{super(init) | id: Keyword.get(init, :user_id)}
 
   def count, do: Registry.count(Onion.UserSessionRegistry)
+
+  def lookup(user_id), do: Registry.lookup(Onion.UserSessionRegistry, user_id)
 
   ###############################################################################
   ## INITIALIZATION BOILERPLATE
@@ -64,7 +65,7 @@ defmodule Onion.UserSession do
 
   defp send_ws_impl(_platform, msg, state = %{pid: pid}) do
     # TODO: refactor this to not use ws-datastructures
-    if pid, do: send(pid, {:remote_send, msg})
+    if pid, do: Broth.SocketHandler.remote_send(pid, msg)
     {:noreply, state}
   end
 
@@ -72,7 +73,7 @@ defmodule Onion.UserSession do
 
   defp new_tokens_impl(tokens, state = %{pid: pid}) do
     # TODO: refactor this to not use ws-datastructures
-    if pid, do: send(pid, {:remote_send, %{op: "new-tokens", d: tokens}})
+    if pid, do: Broth.SocketHandler.remote_send(pid, %{op: "new-tokens", p: tokens})
     {:noreply, state}
   end
 
@@ -102,42 +103,32 @@ defmodule Onion.UserSession do
     {:reply, Map.get(state, key), state}
   end
 
+  # temporary function that exists so that each user can only have
+  # one tenant websocket.
   def set_active_ws(user_id, pid), do: call(user_id, {:set_active_ws, pid})
 
   defp set_active_ws(pid, _reply, state) do
     if state.pid do
-      # if you want to maje it multi-connection ws come here
       # terminates another websocket that happened to have been
       # running.
-      send(state.pid, {:kill})
+      Process.exit(state.pid, :normal)
     else
       Beef.Users.set_online(state.user_id)
     end
 
     Process.monitor(pid)
-
     {:reply, :ok, %{state | pid: pid}}
   end
 
-  @all [{{:_, :"$1", :_}, [], [:"$1"]}]
-  def force_reconnects() do
-    Onion.UserSessionRegistry
-    |> Registry.select(@all)
-    |> Enum.each(&reconnect(&1))
-  end
-
-  def reconnect(user_pid), do: GenServer.cast(user_pid, {:reconnect})
-
-  defp reconnect_impl(state), do: {:noreply, state}
-
   ##############################################################################
   ## MESSAGING API.
+  ## TODO: change the first one to a call
 
   defp handle_disconnect(pid, state = %{pid: pid}) do
     Beef.Users.set_offline(state.user_id)
 
     if state.current_quiz_id do
-      Okra.Quiz.leave_quiz(state.user_id, state.current_quiz_id)
+      Kousa.Quiz.leave_quiz(state.user_id, state.current_quiz_id)
     end
 
     {:stop, :normal, state}
@@ -152,9 +143,6 @@ defmodule Onion.UserSession do
 
   def handle_cast({:send_ws, platform, msg}, state),
     do: send_ws_impl(platform, msg, state)
-
-  def handle_cast({:reconnect}, state),
-    do: reconnect_impl(state)
 
   def handle_cast({:new_tokens, tokens}, state), do: new_tokens_impl(tokens, state)
   def handle_cast({:set_state, info}, state), do: set_state_impl(info, state)

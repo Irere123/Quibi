@@ -3,10 +3,9 @@ import img from "../../img/avatar2.jpg";
 import { useScreenType } from "../../hooks/useScreenType";
 
 import { FeedCard } from "../../ui/FeedCard";
-import { FeedHeader } from "../../ui/FeedHeader";
 import { MiddlePanel } from "../layouts/GridPanels";
-import { MyPeopleOnline } from "./MyPeopleOnline";
-import { SchoolIcon } from "../../icons";
+import { CompassIcon, SchoolIcon } from "../../icons";
+import { Chip } from "../../ui/Chip";
 
 const Page: React.FC = () => {
   return (
@@ -42,7 +41,13 @@ export const FeedController: React.FC = () => {
   }
 
   return (
-    <MiddlePanel stickyChildren={<FeedHeader content={<MyPeopleOnline />} />}>
+    <MiddlePanel
+      stickyChildren={
+        <div className="flex items-center gap-2 mb-3">
+          <Chip label="Explore" icon={<CompassIcon />} />
+        </div>
+      }
+    >
       <div className={`flex flex-1 flex-col ${mb}`}>
         <div className="flex flex-col space-y-4">
           <Page />

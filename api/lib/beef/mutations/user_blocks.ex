@@ -2,6 +2,7 @@ defmodule Beef.Mutations.UserBlocks do
   @moduledoc """
     DB Mutation functions for UserBlocks
   """
+
   import Ecto.Query, warn: false
 
   alias Beef.Schemas.UserBlock

@@ -1,8 +1,10 @@
 defmodule Beef.Schemas.QuizPermission do
   use Ecto.Schema
   import Ecto.Changeset
-
   alias Beef.Schemas.Quiz
+
+  @timestamps_opts [type: :utc_datetime_usec]
+
   alias Beef.Schemas.User
 
   @derive {Jason.Encoder, only: [:isSpeaker, :isMod, :askedToSpeak]}

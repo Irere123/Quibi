@@ -1,12 +1,12 @@
 /* eslint-disable @next/next/no-img-element */
 import normalizeUrl from "normalize-url";
+import { Quiz, User } from "@quibi/client";
 import React, { useContext, useEffect, useRef } from "react";
 import { useVirtual, VirtualItem } from "react-virtual";
 import { useConn } from "../../../hooks/useConn";
 import { useCurrentQuizInfo } from "../../../hooks/useCurrentQuizInfo";
 import { useTypeSafeTranslation } from "../../../hooks/useTypeSafeTranslation";
 import { emoteMap } from "../../../shared-components/EmoteData";
-import { Quiz, User } from "../../ws";
 import { UserPreviewModalContext } from "../UserPreviewModalProvider";
 import { useQuizChatMentionStore } from "./useQuizChatMentionStore";
 import { useQuizChatStore } from "./useQuizChatStore";
@@ -16,7 +16,7 @@ interface ChatListProps {
   userMap: Record<string, User>;
 }
 
-export const QuizChatList: React.FC<ChatListProps> = ({ quiz, userMap }) => {
+export const QuizChatList: React.FC<ChatListProps> = ({ quiz }) => {
   const { t } = useTypeSafeTranslation();
   const { setData } = useContext(UserPreviewModalContext);
   const { messages, toggleFrozen } = useQuizChatStore();
@@ -26,12 +26,8 @@ export const QuizChatList: React.FC<ChatListProps> = ({ quiz, userMap }) => {
   const bottomRef = useRef<null | HTMLDivElement>(null);
   const chatListRef = useRef<null | HTMLDivElement>(null);
 
-  const {
-    isQuizChatScrolledToTop,
-    setIsQuizhatScrolledToTop,
-    message,
-    setMessage,
-  } = useQuizChatStore();
+  const { isQuizChatScrolledToTop, setIsQuizhatScrolledToTop } =
+    useQuizChatStore();
 
   // Only scroll into view if not manually scrolled to top
   useEffect(() => {
@@ -46,13 +42,6 @@ export const QuizChatList: React.FC<ChatListProps> = ({ quiz, userMap }) => {
     parentRef: chatListRef,
     estimateSize: React.useCallback(() => 20, []),
   });
-
-  const getBadgeIcon = (m: any) => {
-    const user = userMap[m.userId];
-    const isCreator = quiz.creatorId === user?.id;
-    let badge: React.ReactNode | null = null;
-    return <span style={{ marginRight: 4 }}>{badge}</span>;
-  };
 
   return (
     <div
@@ -81,9 +70,8 @@ export const QuizChatList: React.FC<ChatListProps> = ({ quiz, userMap }) => {
         }}
       >
         {rowVirtualizer.virtualItems.map(
-          ({ index: idx, start, measureRef, size }: VirtualItem) => {
+          ({ index: idx, start, measureRef }: VirtualItem) => {
             const index = messages.length - idx - 1;
-            const badgeIcon = getBadgeIcon(messages[index]);
             return (
               <div
                 ref={measureRef}
@@ -103,7 +91,6 @@ export const QuizChatList: React.FC<ChatListProps> = ({ quiz, userMap }) => {
                       className={`block break-words overflow-hidden max-w-full items-start flex-1 text-primary-100`}
                       key={messages[index].id}
                     >
-                      {badgeIcon}
                       <button
                         onClick={() => {
                           setData({

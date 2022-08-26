@@ -30,7 +30,7 @@ export const useGetRoomFromQueryParams = () => {
     }
     if (errMsg) {
       console.log(errMsg, isLoading);
-      showErrorToast(errMsg);
+      showErrorToast(errMsg, "error");
       push("/dash");
     }
   }, [noData, errMsg, isLoading, push]);

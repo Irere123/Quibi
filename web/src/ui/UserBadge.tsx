@@ -9,10 +9,10 @@ const badgeVariants = {
 const colorVariants = {
   white: "text-primary-100",
   grey: "text-primary-300",
-  black: "text-black",
+  black: "text-primary-900",
 };
 
-interface UserBadgeProps {
+export interface UserBadgeProps {
   variant?: keyof typeof badgeVariants;
   color?: keyof typeof colorVariants;
   className?: string;

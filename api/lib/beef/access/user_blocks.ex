@@ -2,7 +2,6 @@ defmodule Beef.Access.UserBlocks do
   @moduledoc """
     DB Access Functions for UserBlocks Table
   """
-
   alias Beef.Repo
   alias Beef.Queries.UserBlocks, as: Query
 

@@ -1,4 +1,4 @@
-import { wrap } from "../modules/ws";
+import { wrap } from "@quibi/client";
 import { useContext } from "react";
 import { WebSocketContext } from "../modules/ws/WebSocketProvider";
 

@@ -31,7 +31,7 @@ export const QuizSearchResult: React.FC<QuizSearchResultProps> = ({
           <span className="text-primary-100 font-bold flex-1 items-center">
             {quiz.displayName}
           </span>
-          <BubbleText>{kFormatter(quiz.userCount)}</BubbleText>
+          <BubbleText live>{kFormatter(quiz.userCount)}</BubbleText>
         </div>
         <span className="text-primary-300">
           {quiz.hosts

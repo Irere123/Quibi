@@ -9,8 +9,8 @@ defmodule Broth.Routes.DevOnly do
   plug(:dispatch)
 
   get "/test-info" do
-    env = Application.fetch_env!(:okra, :env)
-    staging? = Application.get_env(:okra, :staging?)
+    env = Application.fetch_env!(:kousa, :env)
+    staging? = Application.get_env(:kousa, :staging?)
 
     if env == :dev || staging? do
       username = fetch_query_params(conn).query_params["username"]
@@ -20,20 +20,21 @@ defmodule Broth.Routes.DevOnly do
       |> put_resp_content_type("application/json")
       |> send_resp(
         200,
-        Poison.encode!(
-          Okra.Utils.TokenUtils.create_tokens(
+        Jason.encode!(
+          Kousa.Utils.TokenUtils.create_tokens(
             if(is_nil(user),
               do:
                 Beef.Repo.insert!(
                   %User{
                     username: username,
-                    email: username <> "@test.com",
-                    googleId: "id:" <> username,
+                    email: "test@" <> username <> "test.com",
+                    githubAccessToken: "",
+                    githubId: "id:" <> username,
                     avatarUrl: "https://placekitten.com/200/200",
-                    bannerUrl: "https://placekitten.com/200/300",
+                    bannerUrl: "https://placekitten.com/1000/300",
                     displayName: String.capitalize(username),
                     bio:
-                      "This is some interesting info about the ex-founder of nothing, welcome to the bio of such a cool person !"
+                      "Hi, this is some info about me you created and I am a cat lover that why I post only cats maybe that wild right??????"
                   },
                   returning: true
                 ),
@@ -45,7 +46,7 @@ defmodule Broth.Routes.DevOnly do
     else
       conn
       |> put_resp_content_type("application/json")
-      |> send_resp(400, Poison.encode!(%{"error" => "no"}))
+      |> send_resp(400, Jason.encode!(%{"error" => "no"}))
     end
   end
 end

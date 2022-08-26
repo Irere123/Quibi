@@ -1,0 +1,31 @@
+version: "3"
+
+# We will be making use of docker-compose overloads, so be sure to check the other compose files before reporting a missing field
+# On local the containers will be built locally and tagged, able to be published.
+# On prod the compose file will pull from the docker registry
+
+services:
+  kousa:
+    restart: unless-stopped
+    labels:
+      me.quibi.description: "Backend Service"
+    depends_on:
+      - postgres
+
+  postgres:
+    image: postgres:13-alpine
+    restart: unless-stopped
+    labels:
+      me.quibi.description: "Postgres Database"
+    volumes:
+      - ./.docker/postgres:/var/lib/postgresql/data
+
+  adminer:
+    image: adminer
+    restart: unless-stopped
+    ports:
+      - 8080:8080
+    labels:
+      me.quibi.description: "Adminer Database"
+    depends_on:
+      - postgres

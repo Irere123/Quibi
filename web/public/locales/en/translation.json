@@ -93,7 +93,7 @@
       "whisper": "Whisper",
       "welcomeMessage": "Welcome to chat!",
       "quizDescription": "Quiz description",
-      "disabled": "room chat has been disabled",
+      "disabled": "Quiz chat has been disabled",
       "messageDeletion": {
         "message": "message",
         "retracted": "retracted",
@@ -102,6 +102,22 @@
     }
   },
   "components": {
+    "wsKilled": {
+      "description": "WebSocket was killed by the server. This usually happens when you open the website in another tab.",
+      "reconnect": "Reconnect"
+    },
+    "settingsDropdown": {
+      "profile": "Profile",
+      "language": "Language",
+      "reportABug": "Report A Bug",
+      "useOldVersion": "Use Old Version",
+      "logOut": {
+        "button": "Log out",
+        "modalSubtitle": "Are you sure you want to logout?"
+      },
+      "downloadApp": "Download App",
+      "developer": "Developer"
+    },
     "search": {
       "placeholder": "Search for schools, people or quizes",
       "placeholderShort": "Search"

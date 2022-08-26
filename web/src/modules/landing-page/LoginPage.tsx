@@ -7,8 +7,6 @@ import { useRouter } from "next/router";
 import { useTokenStore } from "../auth/useTokenStore";
 import { isServer } from "../../lib/isServer";
 import { useSaveTokensFromQueryParams } from "../auth/useSaveTokensFromQueryParams";
-import { modalPrompt } from "../../shared-components/PromptModal";
-import { useConn } from "../../hooks/useConn";
 import { WebSocketContext } from "../ws/WebSocketProvider";
 
 interface LoginButtonProps {

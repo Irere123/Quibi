@@ -23,7 +23,7 @@ export const useWsMainHandler = () => {
 
     const unsubs = [
       conn.addListener<any>("error", (message) => {
-        showErrorToast(message);
+        showErrorToast(message, "error");
       }),
 
       conn.addListener<any>("chat_user_unbanned", ({ userId }) => {
@@ -34,7 +34,6 @@ export const useWsMainHandler = () => {
       }),
 
       conn.addListener<any>("invitation_to_quiz", (value) => {
-        console.log(value);
         invitedToQuizConfirm(value, push);
       }),
 
@@ -42,7 +41,7 @@ export const useWsMainHandler = () => {
         invitedToQuizConfirm(value, push);
       }),
 
-      conn.addListener<any>("new_chat_msg", ({ msg }) => {
+      conn.addListener<any>("new_quiz_chat_msg", ({ msg }) => {
         const { open } = useQuizChatStore.getState();
         useQuizChatStore.getState().addMessage(msg);
         const { isQuizChatScrolledToTop } = useQuizChatStore.getState();
@@ -80,6 +79,59 @@ export const useWsMainHandler = () => {
         }));
       }),
 
+      conn.addListener<any>(
+        "quiz_privacy_change",
+        ({ quizId, isPrivate, name }) => {
+          updateQuery(["joinQuizAndGetInfo", quizId], (data) =>
+            !data || "error" in data
+              ? data
+              : {
+                  ...data,
+                  quiz: {
+                    ...data.quiz,
+                    name,
+                    isPrivate,
+                  },
+                }
+          );
+        }
+      ),
+
+      conn.addListener<any>(
+        "quiz_chat_throttle_change",
+        ({ quizId, chatThrottle, name }) => {
+          updateQuery(["joinQuizAndGetInfo", quizId], (data) =>
+            !data || "error" in data
+              ? data
+              : {
+                  ...data,
+                  quiz: {
+                    ...data.quiz,
+                    name,
+                    chatThrottle,
+                  },
+                }
+          );
+        }
+      ),
+
+      conn.addListener<any>(
+        "quiz_chat_mode_changed",
+        ({ quizId, chatMode }) => {
+          updateQuery(["joinQuizAndGetInfo", quizId], (data) =>
+            !data || "error" in data
+              ? data
+              : {
+                  ...data,
+                  quiz: {
+                    ...data.quiz,
+                    chatMode,
+                  },
+                }
+          );
+        }
+      ),
+
       conn.addListener<any>("user_left_quiz", ({ userId, quizId }) => {
         updateQuery(["joinQuizAndGetInfo", quizId], (data) => {
           if (data && "error" in data) {
@@ -93,31 +145,11 @@ export const useWsMainHandler = () => {
             quiz: {
               ...data.quiz,
               peoplePreviewList: data.quiz.peoplePreviewList.filter(
-                (x: any) => x.id !== userId
+                (x) => x.id !== userId
               ),
               numPeopleInside: data.quiz.numPeopleInside - 1,
             },
-            users: data.users.filter((x: any) => x.id !== userId),
-          };
-        });
-      }),
-
-      conn.addListener<any>("new_room_chat_msg", (message) => {
-        updateQuery(["getRoomMessages", message.roomId], (data) => {
-          if (data && "error" in data) {
-            return data;
-          }
-
-          console.log("ROOM:", data);
-          console.log("<M>:", message);
-
-          return {
-            messages: [
-              ...data.messages,
-              {
-                ...message,
-              },
-            ],
+            users: data.users.filter((x) => x.id !== userId),
           };
         });
       }),
@@ -137,17 +169,14 @@ export const useWsMainHandler = () => {
                           {
                             id: user.id,
                             displayName: user.displayName,
-                            avatarUrl: user.avatarUrl,
                             numFollowers: user.numFollowers,
+                            avatarUrl: user.avatarUrl,
                           },
                         ]
                       : data.quiz.peoplePreviewList,
                   numPeopleInside: data.quiz.numPeopleInside + 1,
                 },
-                users: [
-                  ...data.users.filter((x: any) => x.id !== user.id),
-                  user,
-                ],
+                users: [...data.users.filter((x) => x.id !== user.id), user],
               }
         );
       }),

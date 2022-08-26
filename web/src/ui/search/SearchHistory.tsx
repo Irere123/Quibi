@@ -1,6 +1,6 @@
 import React from "react";
 
-import { SearchIcon } from "../../icons";
+import { SearchIcon, TrashIcon } from "../../icons";
 
 export interface SearchHistoryProps {
   onClickToDeleteSearchHistory: React.MouseEventHandler<HTMLSpanElement>;
@@ -12,7 +12,11 @@ const SearchHistory: React.FC<SearchHistoryProps> = ({
   searchText,
 }) => {
   return (
-    <div className={"flex flex-row py-2 px-4 w-full"}>
+    <div
+      className={
+        "flex flex-row justify-center items-center gap-4 py-2 px-4 w-full"
+      }
+    >
       <div className={"flex flex-1 items-center group cursor-pointer"}>
         <SearchIcon
           className={"mr-4 group-hover:text-primary-100 text-primary-300"}
@@ -25,7 +29,7 @@ const SearchHistory: React.FC<SearchHistoryProps> = ({
         onClick={onClickToDeleteSearchHistory}
         className={"text-accent underline cursor-pointer"}
       >
-        Delete
+        <TrashIcon />
       </span>
     </div>
   );

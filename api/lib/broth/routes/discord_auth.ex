@@ -9,15 +9,19 @@ defmodule Broth.Routes.DiscordAuth do
 
   get "/web" do
     state =
-      %{
-        redirect_base_url: fetch_query_params(conn).query_params["redirect_after_base"]
-      }
-      |> Jason.encode!()
-      |> Base.encode64()
+      if Application.get_env(:kousa, :staging?) do
+        %{
+          redirect_base_url: fetch_query_params(conn).query_params["redirect_after_base"]
+        }
+        |> Jason.encode!()
+        |> Base.encode64()
+      else
+        "web"
+      end
 
     %{conn | params: Map.put(conn.params, "state", state)}
     |> Plug.Conn.put_private(:ueberauth_request_options, %{
-      callback_url: Application.get_env(:okra, :api_url) <> "/auth/discord/callback",
+      callback_url: Application.get_env(:kousa, :api_url) <> "/auth/discord/callback",
       options: [
         default_scope: "identify email",
         prompt: "none"
@@ -30,7 +34,7 @@ defmodule Broth.Routes.DiscordAuth do
     conn
     |> fetch_query_params()
     |> Plug.Conn.put_private(:ueberauth_request_options, %{
-      callback_url: Application.get_env(:okra, :api_url) <> "/auth/discord/callback",
+      callback_url: Application.get_env(:kousa, :api_url) <> "/auth/discord/callback",
       options: []
     })
     |> Ueberauth.Strategy.Discord.handle_callback!()
@@ -38,7 +42,7 @@ defmodule Broth.Routes.DiscordAuth do
   end
 
   def get_base_url(conn) do
-    with true <- Application.get_env(:okra, :staging?),
+    with true <- Application.get_env(:kousa, :staging?),
          state <- Map.get(conn.query_params, "state", ""),
          {:ok, json} <- Base.decode64(state),
          {:ok, %{"redirect_base_url" => redirect_base_url}} when is_binary(redirect_base_url) <-
@@ -46,7 +50,7 @@ defmodule Broth.Routes.DiscordAuth do
       redirect_base_url
     else
       _ ->
-        Application.fetch_env!(:okra, :web_url)
+        Application.fetch_env!(:kousa, :web_url)
     end
   end
 
@@ -83,17 +87,28 @@ defmodule Broth.Routes.DiscordAuth do
     try do
       {_, db_user} = Users.discord_find_or_create(user, access_token)
 
-      conn
-      |> Broth.Plugs.Redirect.redirect(
-        get_base_url(conn) <>
-          "/?accessToken=" <>
-          Okra.AccessToken.generate_and_sign!(%{"userId" => db_user.id}) <>
-          "&refreshToken=" <>
-          Okra.RefreshToken.generate_and_sign!(%{
-            "userId" => db_user.id,
-            "tokenVersion" => db_user.tokenVersion
-          })
-      )
+      if not is_nil(db_user.reasonForBan) do
+        conn
+        |> Broth.Plugs.Redirect.redirect(
+          get_base_url(conn) <>
+            "/?error=" <>
+            URI.encode(
+              "your account got banned, if you think this was a mistake, please send me an email at irereapps@gmail.com"
+            )
+        )
+      else
+        conn
+        |> Broth.Plugs.Redirect.redirect(
+          get_base_url(conn) <>
+            "/?accessToken=" <>
+            Kousa.AccessToken.generate_and_sign!(%{"userId" => db_user.id}) <>
+            "&refreshToken=" <>
+            Kousa.RefreshToken.generate_and_sign!(%{
+              "userId" => db_user.id,
+              "tokenVersion" => db_user.tokenVersion
+            })
+        )
+      end
     rescue
       e in RuntimeError ->
         conn

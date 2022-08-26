@@ -1,249 +1,185 @@
 defmodule Broth.Message do
-  alias Broth.SocketHandler
-  alias Beef.Follows
-  alias Okra.Quiz
-  alias Okra.Room
-  alias Okra.RoomChat
+  use Ecto.Schema
 
-  #######################################################################
-  #### HANDLER FUNCTIONS
+  alias Ecto.Changeset
+  import Changeset
 
-  def handler("set_auto_speaker", %{"value" => value}, state) do
-    Quiz.set_auto_speaker(state.user_id, value)
-    {:ok, state}
+  @primary_key false
+  embedded_schema do
+    field(:operator, Broth.Message.Types.Operator)
+    field(:payload, :map)
+    field(:reference, :binary_id)
+    field(:inbound_operator, :string)
+    field(:version, Kousa.Utils.Version)
+    # reply messages only
+    field(:errors, :map)
   end
 
-  def handler("set_quiz_chat_mode", %{"value" => value}, state) do
-    Quiz.set_chat_mode(state.user_id, value)
-
-    {:ok, state}
-  end
-
-  def handler("ban_from_quiz_chat", %{"userId" => user_id_to_ban}, state) do
-    Okra.QuizChat.ban_user(state.user_id, user_id_to_ban)
-    {:ok, state}
-  end
-
-  def handler("send_quiz_chat_msg", %{"tokens" => tokens}, state) do
-    Okra.QuizChat.send_msg(state.user_id, tokens)
-    {:ok, state}
-  end
-
-  def handler(
-        "delete_quiz_chat_message",
-        %{"messageId" => message_id, "userId" => user_id},
-        state
-      ) do
-    Okra.QuizChat.delete_message(state.user_id, message_id, user_id)
-    {:ok, state}
-  end
-
-  def handler("leave_quiz", _data, state) do
-    case Quiz.leave_quiz(state.user_id) do
-      {:ok, d} ->
-        {:reply, SocketHandler.prepare_socket_msg(%{op: "you_left_quiz", d: d}, state), state}
-
-      _ ->
-        {:ok, state}
-    end
-  end
-
-  def handler("invite_to_quiz", %{"userId" => user_id_to_invite}, state) do
-    Quiz.invite_to_quiz(state.user_id, user_id_to_invite)
-    {:ok, state}
-  end
-
-  def handler(
-        "block_from_quiz",
-        %{"userId" => user_id_to_block_from_quiz},
-        state
-      ) do
-    Quiz.block_from_quiz(state.user_id, user_id_to_block_from_quiz)
-    {:ok, state}
-  end
-
-  def handler("send_room_chat_msg", %{"message" => message, "roomId" => room_id}, state) do
-    case RoomChat.send_msg(state.user_id, room_id, message) do
-      {:ok, d} ->
-        {:reply, SocketHandler.prepare_socket_msg(%{op: "new_room_chat_msg", d: d}, state), state}
-
-      _ ->
-        {:ok, state}
-    end
-  end
-
-  #######################################################################
-  #### FETCH HANDLER FUNCTIONS
-
-  def f_handler("get_room_messages", %{"roomId" => room_id}, _state) do
-    messages = Beef.Messages.get_messages(room_id)
-
-    %{messages: messages}
-  end
-
-  def f_handler("create_room", data, state) do
-    case Room.create_room(state.user_id, data["roomName"], data["isPrivate"]) do
-      {:ok, d} ->
-        d
-
-      {:error, d} ->
-        d
-    end
-  end
-
-  def f_handler("create_quiz", data, state) do
-    case Quiz.create_quiz(
-           state.user_id,
-           data["name"],
-           data["description"] || "",
-           data["privacy"] == "private",
-           nil,
-           true
-         ) do
-      {:ok, d} ->
-        d
-
-      {:error, d} ->
-        %{
-          error: d
+  @type t :: %__MODULE__{
+          operator: module(),
+          payload: map(),
+          reference: Kousa.Utils.UUID.t(),
+          inbound_operator: String.t()
         }
+
+  @spec changeset(%{String.t() => Broth.json()}, Broth.SocketHandler.state()) :: Changeset.t()
+  @doc """
+  Primary validation function for all websocket messages.
+  """
+  def changeset(data, state) do
+    %__MODULE__{}
+    |> cast(data, [:inbound_operator])
+    |> Map.put(:params, data)
+    |> find(:operator)
+    |> find(:payload)
+    |> find(:reference, :optional)
+    |> cast_operator
+    |> cast_reference
+    |> cast_inbound_operator
+    |> cast_payload(state)
+    |> validate_calls_have_references
+    |> find(:version)
+    |> cast_version
+  end
+
+  @type message_field :: :operator | :payload | :reference
+
+  #########################################################################
+  # TODO: deprecate other forms, convert into them in "Translator".
+  # then collapse find into some simpler methods.
+
+  @valid_forms %{
+    operator: ~w(operator op),
+    payload: ~w(payload p d),
+    reference: ~w(reference ref fetchId),
+    version: ~w(version v)
+  }
+
+  defp find(changeset, field, optional \\ false)
+  defp find(changeset = %{valid?: false}, _, _), do: changeset
+
+  defp find(changeset, field, optional) when is_atom(field) do
+    find(changeset, field, @valid_forms[field], optional)
+  end
+
+  @spec find(Changeset.t(), message_field, [String.t()], :optional | false) :: Changeset.t()
+
+  defp find(changeset = %{params: params}, field, [form | _], _)
+       when is_map_key(params, form) do
+    %{changeset | params: Map.put(changeset.params, "#{field}", params[form])}
+  end
+
+  defp find(changeset, field, [_ | rest], optional), do: find(changeset, field, rest, optional)
+
+  defp find(changeset, field, [], optional) do
+    if optional do
+      changeset
+    else
+      add_error(changeset, field, "no #{field} present")
     end
   end
 
-  def f_handler("get_top_public_quizes", data, state) do
-    {quizes, next_cursor} =
-      Beef.Quizes.get_top_public_quizes(
-        state.user_id,
-        data["cursor"]
-      )
+  ############################################################################
 
-    %{quizes: quizes, nextCursor: next_cursor, initial: data["cursor"] == 0}
+  @operators Broth.Message.Manifest.actions()
+
+  defp cast_operator(changeset = %{valid?: false}), do: changeset
+
+  defp cast_operator(changeset = %{params: %{"operator" => op}}) do
+    if operator = @operators[op] do
+      changeset
+      |> put_change(:operator, operator)
+      |> put_change(:inbound_operator, op)
+    else
+      add_error(changeset, :operator, "#{op} is invalid")
+    end
   end
 
-  def f_handler("get_user_profile", %{"userIdOrUsername" => userIdOrUsername}, state) do
-    user =
-      case Ecto.UUID.cast(userIdOrUsername) do
-        {:ok, uuid} ->
-          Beef.Users.get_by_id_with_follow_info(state.user_id, uuid)
+  defp cast_reference(changeset = %{valid?: false}), do: changeset
 
-        _ ->
-          Beef.Users.get_by_username_with_follow_info(state.user_id, userIdOrUsername)
+  defp cast_reference(changeset = %{params: %{"reference" => reference}}) do
+    put_change(changeset, :reference, reference)
+  end
+
+  defp cast_reference(changeset), do: changeset
+
+  defp cast_inbound_operator(changeset) do
+    if get_field(changeset, :inbound_operator) do
+      changeset
+    else
+      inbound_operator = get_field(changeset, :operator)
+      put_change(changeset, :inbound_operator, inbound_operator)
+    end
+  end
+
+  defp cast_payload(changeset = %{valid?: false}, _), do: changeset
+
+  defp cast_payload(changeset, state) do
+    operator = get_field(changeset, :operator)
+
+    state
+    |> operator.initialize()
+    |> operator.changeset(changeset.params["payload"])
+    |> case do
+      inner_changeset = %{valid?: true} ->
+        put_change(changeset, :payload, inner_changeset)
+
+      inner_changeset = %{valid?: false} ->
+        errors = Kousa.Utils.Errors.changeset_errors(inner_changeset)
+        put_change(changeset, :errors, errors)
+    end
+  end
+
+  defp cast_version(changeset = %{valid?: false}), do: changeset
+
+  defp cast_version(changeset = %{params: params}) do
+    if Map.has_key?(params, "version") do
+      cast(changeset, params, [:version])
+    else
+      add_error(changeset, :version, "is required")
+    end
+  end
+
+  defp validate_calls_have_references(changeset = %{valid?: false}), do: changeset
+
+  defp validate_calls_have_references(changeset) do
+    operator = get_field(changeset, :operator)
+
+    # if the operator has a reply submodule then it must be a "call" message.
+    # verify that these
+    if function_exported?(operator, :reply_module, 0) do
+      validate_required(changeset, [:reference], message: "is required for #{inspect(operator)}")
+    else
+      changeset
+    end
+  end
+
+  # encoding will only happen on egress out to the websocket.
+  defimpl Jason.Encoder do
+    def encode(message, opts) do
+      %{
+        op: operator(message),
+        p: message.payload,
+        v: message.version
+      }
+      |> add_reference(message)
+      |> add_errors(message)
+      |> Broth.Translator.translate_outbound(message)
+      |> Jason.Encode.map(opts)
+    end
+
+    defp operator(%{operator: op}) when is_binary(op), do: op
+
+    defp operator(%{operator: op}) when is_atom(op) do
+      if function_exported?(op, :operator, 0) do
+        op.operator()
       end
-
-    case user do
-      nil ->
-        %{error: "could not find user"}
-
-      %{theyBlockedMe: true} ->
-        %{error: "blocked"}
-
-      _ ->
-        user
     end
-  end
 
-  def f_handler("edit_profile", %{"data" => data}, state) do
-    %{
-      isOk: Okra.User.edit_profile(state.user_id, data)
-    }
-  end
+    defp add_reference(map, %{reference: nil}), do: map
+    defp add_reference(map, %{reference: ref}), do: Map.put(map, :ref, ref)
 
-  def f_handler("search", %{"query" => query}, _state) do
-    quizes = Beef.Quizes.search_name(query)
-    users = Beef.Users.search_username(query)
-
-    items = Enum.concat(quizes, users)
-    %{items: items, users: users, quizes: quizes}
-  end
-
-  def f_handler("follow", %{"userId" => userId, "value" => value}, state) do
-    Okra.Follow.follow(state.user_id, userId, value)
-    %{}
-  end
-
-  def f_handler("get_invite_list", %{"cursor" => cursor}, state) do
-    {users, next_cursor} = Follows.fetch_invite_list(state.user_id, cursor)
-
-    %{users: users, nextCursor: next_cursor}
-  end
-
-  def f_handler("get_my_following", %{"limit" => limit}, state) do
-    {users, _} = Beef.Follows.get_my_following(state.user_id, 0, limit)
-    %{users: users}
-  end
-
-  def f_handler("block", %{"userId" => userId, "value" => value}, state) do
-    Okra.UserBlock.block(state.user_id, userId, value)
-    %{}
-  end
-
-  def f_handler("join_quiz_and_get_info", %{"quizId" => quiz_id_to_join}, state) do
-    case Okra.Quiz.join_quiz(state.user_id, quiz_id_to_join) do
-      %{error: err} ->
-        %{error: err}
-
-      %{quiz: quiz} ->
-        {quiz_id, users} = Beef.Users.get_users_in_current_quiz(state.user_id)
-
-        case Onion.QuizSession.lookup(quiz_id) do
-          [] ->
-            %{error: "Quiz no longer exists."}
-
-          _ ->
-            {chatMode, autoSpeaker, activeSpeakerMap} =
-              if quiz_id do
-                Onion.QuizSession.get_maps(quiz_id)
-              else
-                {%{}, false, %{}}
-              end
-
-            %{
-              quiz: quiz,
-              users: users,
-              activeSpeakerMap: activeSpeakerMap,
-              quizId: quiz_id,
-              autoSpeaker: autoSpeaker,
-              chatMode: chatMode
-            }
-        end
-
-      _ ->
-        %{error: "you should never see this, email this to @irere_emmanauel"}
-    end
-  end
-
-  def f_handler(
-        "edit_quiz",
-        %{
-          "name" => name,
-          "description" => description,
-          "privacy" => privacy
-        },
-        state
-      ) do
-    case Okra.Quiz.edit_quiz(
-           state.user_id,
-           name,
-           description,
-           privacy == "private"
-         ) do
-      {:error, message} ->
-        %{
-          error: message
-        }
-
-      _ ->
-        true
-    end
-  end
-
-  def f_handler("get_my_rooms", _data, state) do
-    rooms = Okra.Room.get_my_rooms(state.user_id)
-
-    %{rooms: rooms}
-  end
-
-  def f_handler("get_room_info", %{"roomId" => room_id}, _state) do
-    Beef.Rooms.get_room_by_id(room_id)
+    defp add_errors(map, %{errors: nil}), do: map
+    defp add_errors(map, %{errors: e}), do: Map.put(map, :e, e)
   end
 end

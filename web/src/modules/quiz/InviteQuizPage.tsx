@@ -1,11 +1,8 @@
-import { useRouter } from "next/router";
 import React, { useRef, useState } from "react";
 import { useWrappedConn } from "../../hooks/useConn";
-import { useTypeSafePrefetch } from "../../hooks/useTypeSafePrefetch";
 import { useTypeSafeQuery } from "../../hooks/useTypeSafeQuery";
 import { isServer } from "../../lib/isServer";
 import { ApiPreloadLink } from "../../shared-components/ApiPreloadLink";
-import { useCurrentQuizIdStore } from "../../stores/useCurentQuizIdStore";
 import { PageComponent } from "../../types/PageComponent";
 import { SingleUser } from "../../ui/Avatars";
 import { Button } from "../../ui/Button";
@@ -23,7 +20,6 @@ const InviteButton: React.FC<{ onClick: () => void }> = ({ onClick }) => {
   return (
     <Button
       size="small"
-      color="secondary"
       disabled={invited}
       onClick={() => {
         onClick();
@@ -40,7 +36,7 @@ const Page: React.FC<{
   isLastPage: boolean;
   isOnlyPage: boolean;
   onLoadMore: (o: number) => void;
-}> = ({ cursor, isLastPage, isOnlyPage, onLoadMore }) => {
+}> = ({ cursor, isLastPage, onLoadMore }) => {
   const conn = useWrappedConn();
 
   const { isLoading, data } = useTypeSafeQuery(
@@ -77,7 +73,7 @@ const Page: React.FC<{
               </div>
             </ApiPreloadLink>
           </div>
-          <div className="flex block">
+          <div className="flex">
             <InviteButton
               onClick={() => {
                 conn.mutation.inviteToQuiz(user.id);
@@ -87,7 +83,7 @@ const Page: React.FC<{
         </div>
       ))}
       {isLastPage && data.nextCursor ? (
-        <div className={`flex flex justify-center py-5`}>
+        <div className={`flex justify-center py-5`}>
           <Button
             size="small"
             onClick={() => {
@@ -118,7 +114,7 @@ export const InviteQuizPage: PageComponent<InviteQuizPageProps> = () => {
     );
   }
 
-  const { quiz } = data;
+  const { quiz } = data as any;
 
   const url = window.location.origin + `/quiz/${quiz.id}`;
 
@@ -140,7 +136,7 @@ export const InviteQuizPage: PageComponent<InviteQuizPageProps> = () => {
                 Share link to quiz
               </div>
             ) : null}
-            <div className={`flex mb-8 flex`}>
+            <div className={`flex mb-8`}>
               <Input readOnly ref={inputRef} value={url} className="mr-2" />
               <Button
                 size="small"

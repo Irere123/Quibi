@@ -1,12 +1,11 @@
-import React from "react";
 import create from "zustand";
 import { combine } from "zustand/middleware";
-import { ToastDurations } from "../../ui/ErrorToast";
+import { AlertDurations, AlertTypes } from "../../ui/Alert";
 
 type Toast = {
   id: string;
-  button?: React.ReactNode;
-  duration?: ToastDurations;
+  type?: AlertTypes;
+  duration?: AlertDurations;
   message: string;
 };
 

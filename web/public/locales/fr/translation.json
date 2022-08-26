@@ -82,7 +82,7 @@
       "whisper": "Whisper",
       "welcomeMessage": "Welcome to chat!",
       "quizDescription": "Quiz description",
-      "disabled": "room chat has been disabled",
+      "disabled": "Quiz chat has been disabled",
       "messageDeletion": {
         "message": "message",
         "retracted": "retracted",
@@ -91,6 +91,22 @@
     }
   },
   "components": {
+    "wsKilled": {
+      "description": "Le WebSocket a été fermé par le serveur. Cela arrive souvent quand vous ouvrez le site dans une autre fenêtre.",
+      "reconnect": "Se reconnecter"
+    },
+    "settingsDropdown": {
+      "profile": "Profil",
+      "language": "Language",
+      "reportABug": "Signaler un problème",
+      "useOldVersion": "Utiliser l'ancienne version",
+      "logOut": {
+        "button": "Se déconnecter",
+        "modalSubtitle": "Êtes vous sur de vouloir vous déconnecter ?"
+      },
+      "downloadApp": "Télécharger",
+      "developer": "Developer"
+    },
     "search": {
       "placeholder": "Chercher des ecoles, personnes ou questions",
       "placeholderShort": "Chercher"

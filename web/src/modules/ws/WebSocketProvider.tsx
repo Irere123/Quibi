@@ -1,9 +1,9 @@
 import React, { ReactChild, useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/router";
-import { raw, User } from ".";
+import { raw, User } from "@quibi/client";
 import { useTokenStore } from "../auth/useTokenStore";
-import { apiUrl } from "./raw";
 import { useCurrentQuizIdStore } from "../../stores/useCurentQuizIdStore";
+import { apiBaseUrl } from "../../lib/constants";
 
 interface WebSocketProvoderProps {
   shouldConnect: boolean;
@@ -33,7 +33,7 @@ export const WebSocketProvider: React.FC<WebSocketProvoderProps> = ({
       raw
         .connect("", "", {
           waitToReconnect: true,
-          url: apiUrl,
+          url: apiBaseUrl.replace("http", "ws") + "/socket",
           getAuthOptions: () => {
             const { accessToken, refreshToken } = useTokenStore.getState();
 

@@ -64,7 +64,7 @@ export const InvitedToJoinQuizModal: React.FC<Props> = () => {
       onRequestClose={() => close()}
       title={
         options?.type === "someone_you_follow_created_a_quiz"
-          ? t("modals.invitedToJoinQuizModal.QuizInviteFrom")
+          ? t("modals.invitedToJoinQuizModal.justStarted")
           : t("modals.invitedToJoinQuizModal.QuizInviteFrom")
       }
     >
@@ -75,7 +75,7 @@ export const InvitedToJoinQuizModal: React.FC<Props> = () => {
               <SingleUser size="md" src={options.avatarUrl} />
               <div className={`flex ml-2 flex-col`}>
                 <div className={`flex font-bold`}>{options.displayName}</div>
-                <div className={`flex my-1 flex`}>
+                <div className={`flex my-1`}>
                   <div className="flex">@{options.username}</div>
                 </div>
               </div>

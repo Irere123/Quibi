@@ -1,13 +1,17 @@
-defmodule Okra.MixProject do
+defmodule Kousa.MixProject do
   use Mix.Project
 
   def project do
     [
-      app: :okra,
+      app: :kousa,
       version: "0.1.0",
       elixir: "~> 1.12",
       start_permanent: Mix.env() == :prod,
       deps: deps(),
+      preferred_cli_env: [
+        coveralls: :test,
+        "coveralls.html": :test
+      ],
       elixirc_paths: elixirc_paths(Mix.env()),
       aliases: aliases()
     ]
@@ -15,11 +19,15 @@ defmodule Okra.MixProject do
 
   def application do
     dev_only_apps = List.wrap(if Mix.env() == :dev, do: :remix)
+    test_only_apps = List.wrap(if Mix.env() == :test, do: :websockex)
 
     [
+      mod: {Kousa, []},
+      # moved logger to 2nd position to kill this error
+      # calling logger:remove_handler(default) failed: :error {:badmatch, {:error, {:not_found, :default}}}
       extra_applications:
-        [:ueberauth_google, :logger, :ueberauth_facebook, :prometheus_ex] ++ dev_only_apps,
-      mod: {Okra, []}
+        [:logger, :ueberauth_google, :ueberauth_github, :prometheus_ex] ++
+          dev_only_apps ++ test_only_apps
     ]
   end
 
@@ -41,6 +49,7 @@ defmodule Okra.MixProject do
       {:postgrex, ">= 0.16.3"},
       {:remix, "~> 0.0.2", only: :dev},
       {:ueberauth, "~> 0.7"},
+      {:ueberauth_github, "~> 0.7"},
       {:oauther, "~> 1.3"},
       {:extwitter, "~> 0.13.0"},
       {:ueberauth_twitter, "~> 0.4.1"},

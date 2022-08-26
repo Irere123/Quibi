@@ -1,11 +1,11 @@
 import normalizeUrl from "normalize-url";
-import { User } from "../modules/ws";
+import { BaseUser } from "@quibi/client";
 import { linkRegex, codeBlockRegex } from "./constants";
 
 export const createQuizChatMessage = (
   message: string,
-  mentions: User[],
-  roomUsers: User[] = []
+  mentions: BaseUser[],
+  quizUsers: BaseUser[] = []
 ) => {
   const tokens = [] as unknown as [
     {

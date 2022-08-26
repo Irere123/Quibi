@@ -1,10 +1,10 @@
 import React, { useEffect } from "react";
+import { User } from "@quibi/client";
 import { mentionRegex } from "../../../lib/constants";
 import { useConn } from "../../../hooks/useConn";
 import { SingleUser } from "../../../ui/Avatars";
 import { useQuizChatMentionStore } from "./useQuizChatMentionStore";
 import { useQuizChatStore } from "./useQuizChatStore";
-import { User } from "../../ws";
 
 interface QuizChatMentionsProps {
   users: any[];

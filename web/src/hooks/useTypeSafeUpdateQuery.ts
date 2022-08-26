@@ -1,4 +1,4 @@
-import { wrap } from "../modules/ws";
+import { wrap } from "@quibi/client";
 import { useCallback } from "react";
 import { useQueryClient } from "react-query";
 import { Await } from "../types/util-types";

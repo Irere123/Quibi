@@ -2,6 +2,7 @@ import React from "react";
 import { GenericNotification } from "./GenericNotification";
 import { SingleUser } from "../Avatars";
 import { Button } from "../Button";
+import { useTypeSafeTranslation } from "../../hooks/useTypeSafeTranslation";
 
 export interface FollowNotificationProps {
   userAvatarSrc: string;
@@ -20,6 +21,7 @@ export const FollowNotification: React.FC<FollowNotificationProps> = ({
   time,
   following = false,
 }) => {
+  const { t } = useTypeSafeTranslation();
   const icon = <SingleUser src={userAvatarSrc} size="sm" isOnline={isOnline} />;
 
   const notificationMsg = (
@@ -40,7 +42,9 @@ export const FollowNotification: React.FC<FollowNotificationProps> = ({
       color={following ? "secondary" : "primary"}
       style={{ width: "90px" }}
     >
-      {following ? "Following" : "Follow back"}
+      {following
+        ? t("pages.viewUser.followingHim")
+        : t("pages.viewUser.followHim")}
     </Button>
   );
 

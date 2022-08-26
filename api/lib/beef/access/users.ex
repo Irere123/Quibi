@@ -1,19 +1,20 @@
 defmodule Beef.Access.Users do
   import Ecto.Query, warn: false
 
-  alias Beef.Repo
   alias Beef.Queries.Users, as: Query
-  alias Beef.Schemas.User
+  alias Beef.Repo
   alias Beef.Quizes
+  alias Beef.Schemas.User
 
   def get(user_id) do
     Repo.get(User, user_id)
   end
 
-  def get_by_username(username) do
+  def find_by_github_ids(ids) do
     Query.start()
-    |> Query.filter_by_username(username)
-    |> Repo.one()
+    |> Query.filter_by_github_ids(ids)
+    |> Query.select_id()
+    |> Repo.all()
   end
 
   def search_username(<<first_letter>> <> rest) when first_letter == ?@ do
@@ -24,9 +25,22 @@ defmodule Beef.Access.Users do
     search_str = start_of_username <> "%"
 
     Query.start()
-    |> where([u], ilike(u.username, ^search_str) or ilike(u.displayName, ^search_str))
+    # here
+    |> where([u], ilike(u.username, ^search_str))
+    |> order_by([u], desc: u.numFollowers)
     |> limit([], 15)
     |> Repo.all()
+  end
+
+  def get_by_id_with_follow_info(me_id, them_id) do
+    Query.start()
+    |> Query.filter_by_id(them_id)
+    |> select([u], u)
+    |> Query.follow_info(me_id)
+    |> Query.i_blocked_them_info(me_id)
+    |> Query.they_blocked_me_info(me_id)
+    |> Query.limit_one()
+    |> Repo.one()
   end
 
   def get_by_id(user_id) do
@@ -44,32 +58,9 @@ defmodule Beef.Access.Users do
     |> Repo.one()
   end
 
-  @fetch_limit 16
-  def search(query, offset) do
-    query_with_percent = "%" <> query <> "%"
-
-    items =
-      from(u in User,
-        where:
-          ilike(u.username, ^query_with_percent) or
-            ilike(u.displayName, ^query_with_percent),
-        limit: @fetch_limit,
-        offset: ^offset
-      )
-      |> Repo.all()
-
-    {Enum.slice(items, 0, -1 + @fetch_limit),
-     if(length(items) == @fetch_limit, do: -1 + offset + @fetch_limit, else: nil)}
-  end
-
-  def get_by_id_with_follow_info(me_id, them_id) do
+  def get_by_username(username) do
     Query.start()
-    |> Query.filter_by_id(them_id)
-    |> select([u], u)
-    |> Query.follow_info(me_id)
-    |> Query.i_blocked_them_info(me_id)
-    |> Query.they_blocked_me_info(me_id)
-    |> Query.limit_one()
+    |> Query.filter_by_username(username)
     |> Repo.one()
   end
 
@@ -84,25 +75,33 @@ defmodule Beef.Access.Users do
     |> Repo.one()
   end
 
-  def get_current_quiz(user_id) do
-    quiz_id = get_current_quiz_id(user_id)
-
-    case quiz_id do
-      nil -> nil
-      id -> Quizes.get_quiz_by_id(id)
-    end
+  def get_by_id_with_current_quiz(user_id) do
+    from(u in User,
+      left_join: a0 in assoc(u, :currentQuiz),
+      where: u.id == ^user_id,
+      limit: 1,
+      preload: [
+        currentQuiz: a0
+      ]
+    )
+    |> Repo.one()
   end
 
-  def get_current_quiz_id(user_id) do
+  def get_ip(user_id) do
+    # DO NOT COPY/PASTE THIS FUNCTION
     try do
-      Onion.UserSession.get_current_quiz_id(user_id)
+      Onion.UserSession.get(user_id, :ip)
     catch
       _, _ ->
         case get_by_id(user_id) do
           nil -> nil
-          %{currentRoomId: id} -> id
+          %{ip: ip} -> ip
         end
     end
+  end
+
+  def get_by_api_key(api_key) do
+    Repo.get_by(User, apiKey: api_key)
   end
 
   def get_users_in_current_quiz(user_id) do
@@ -114,9 +113,9 @@ defmodule Beef.Access.Users do
         {current_quiz_id,
          from(u in User,
            where: u.currentQuizId == ^current_quiz_id,
-           left_join: qp in Beef.Schemas.QuizPermission,
-           on: qp.userId == u.id and qp.quizId == u.currentQuizId,
-           select: %{u | quizPermissions: qp}
+           left_join: rp in Beef.Schemas.QuizPermission,
+           on: rp.userId == u.id and rp.quizId == u.currentQuizId,
+           select: %{u | quizPermissions: rp}
          )
          |> Repo.all()}
 
@@ -125,13 +124,39 @@ defmodule Beef.Access.Users do
     end
   end
 
+  # NB: Anything that touches Gen will have to be refactored away
+  # out of the database layer, but we are keeping it here for now
+  # to keep the transition smooth.
   def tuple_get_current_quiz_id(user_id) do
+    # DO NOT COPY/PASTE THIS FUNCTION
     case Onion.UserSession.get_current_quiz_id(user_id) do
       {:ok, nil} ->
         {nil, nil}
 
       x ->
         {:ok, x}
+    end
+  end
+
+  def get_current_quiz(user_id) do
+    quiz_id = get_current_quiz_id(user_id)
+
+    case quiz_id do
+      nil -> nil
+      id -> Quizes.get_quiz_by_id(id)
+    end
+  end
+
+  def get_current_quiz_id(user_id) do
+    # DO NOT COPY/PASTE THIS FUNCTION
+    try do
+      Onion.UserSession.get_current_quiz_id(user_id)
+    catch
+      _, _ ->
+        case get_by_id(user_id) do
+          nil -> nil
+          %{currentQuizId: id} -> id
+        end
     end
   end
 end

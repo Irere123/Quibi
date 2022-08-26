@@ -1,8 +1,10 @@
 import Config
 
-database_url = "postgres://postgres:postgres@localhost/quibi_repo_test"
+database_url =
+  System.get_env("DATABASE_URL") ||
+    "postgres://postgres:postgres@localhost/quibi_repo2_test"
 
-config :okra, Beef.Repo,
+config :kousa, Beef.Repo,
   url: database_url,
   pool: Ecto.Adapters.SQL.Sandbox
 
@@ -14,8 +16,11 @@ if System.get_env("GITHUB_ACTIONS") do
     password: "postgres"
 end
 
-config :okra,
+config :kousa,
   web_url: System.get_env("WEB_URL") || "http://localhost:3000",
   api_url: System.get_env("API_URL") || "http://localhost:4001",
-  access_token_secret: "thisistheaccesstokenfortest",
-  refresh_token_secret: "thisistherefreshtokenfortest"
+  access_token_secret: "thisisthescreetacesstokenscertr",
+  refresh_token_secret: "thisistherefreshtokensecret",
+  irere_github_id: "notreallyireregithubid"
+
+config :kousa, websocket_auth_timeout: 50

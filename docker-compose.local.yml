@@ -1,0 +1,33 @@
+version: "3"
+
+services:
+  #backend
+  kousa:
+    build: ./api
+    environment:
+      - DATABASE_URL=postgresql://postgres:postgres@postgres/quibi_repo2
+      - IRERE_GITHUB_ID=benawad
+      - DISCORD_CLIENT_ID=1002860531092299866
+      - DISCORD_CLIENT_SECRET=ClkMDtgicZnGqzjL6kH8rLF1TH51LlLT
+      - GOOGLE_CLIENT_ID=1022380030031-7ttj98r440qo8amanjpssv8r4pdk2heq.apps.googleusercontent.com
+      - GOOGLE_CLIENT_SECRET=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
+      - GITHUB_CLIENT_ID=5d5xxxxxxab70
+      - GITHUB_CLIENT_SECRET=48xxxxxxxxxxxxd1cd5
+      - TWITTER_API_KEY=zAzhaCUlZSmzOxLNirD63g4D0
+      - TWITTER_SECRET_KEY=6UTIrg80iQbVHXP7JUbVq84sVqye6TShn70ad11jQuVk2wTpZP
+      - TWITTER_BEARER_TOKEN=AAAAAAAAAAAAAAAAAAAAAD4tfQEAAAAAh8bUZXRtP4Ln2%2BVQ3RxkdwG9FQQ%3DXeiAYeJLkEBaALASCKRTpobOA3G9Ny9s7xuyXklQy8qIGzlfNY
+      - SENTRY_DSN=SIJHFIUSDHIF
+      - ACCESS_TOKEN_SECRET=oneuthateuhathoeuthuaonehntoauhaeuheae
+      - REFRESH_TOKEN_SECRET=zzaneuthaonueheaouhnaoehunstasenuthanu
+      - SECRET_KEY_BASE=rewuirewuwejksdkjy373y7eds7uiewiu3273wyisdhyuewyue7yhuiehdsikswj
+      - WEB_URL=http://localhost:3000
+      - API_URL=http://localhost:4001
+      - PORT=4001
+    ports:
+      - 4001:4001
+  postgres:
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRE_DB=postgres
+  adminer:

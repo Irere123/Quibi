@@ -32,10 +32,14 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
   const [showEditProfileModal, setShowEditProfileModal] = useState(false);
   const { mutateAsync: follow, isLoading: followLoading } =
     useTypeSafeMutation("follow");
+  const { mutateAsync: unfollow, isLoading: unfollowLoading } =
+    useTypeSafeMutation("unFollow");
   const { mutateAsync: block, isLoading: blockLoading } =
-    useTypeSafeMutation("block");
+    useTypeSafeMutation("userBlock");
+  const { mutateAsync: unblock, isLoading: unblockLoading } =
+    useTypeSafeMutation("userUnblock");
   const preloadPush = usePreloadPush();
-  const update = useTypeSafeUpdateQuery();
+  const updater = useTypeSafeUpdateQuery();
 
   return (
     <div className="bg-primary-800 rounded-lg relative">
@@ -46,7 +50,7 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
           isOpen={showEditProfileModal}
           onRequestClose={() => setShowEditProfileModal(!showEditProfileModal)}
           onEdit={(d) => {
-            update(["getUserProfile", d.username], (x) =>
+            updater(["getUserProfile", d.username], (x) =>
               !x ? x : { ...x, ...d }
             );
             if (d.username !== username) {
@@ -92,19 +96,30 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
             {!isCurrentUser && (
               <Button
                 size="small"
-                loading={blockLoading}
+                loading={blockLoading || unblockLoading}
                 color={user.iBlockedThem ? "secondary" : "primary"}
                 onClick={async () => {
-                  await block([user.id, !user.iBlockedThem]);
-
-                  update(["getUserProfile", username], (u) =>
-                    !u
-                      ? u
-                      : {
-                          ...u,
-                          iBlockedThem: !user.iBlockedThem,
-                        }
-                  );
+                  if (user.iBlockedThem) {
+                    await unblock([user.id]);
+                    updater(["getUserProfile", username], (u) =>
+                      !u
+                        ? u
+                        : {
+                            ...u,
+                            iBlockedThem: false,
+                          }
+                    );
+                  } else {
+                    await block([user.id]);
+                    updater(["getUserProfile", username], (u) =>
+                      !u
+                        ? u
+                        : {
+                            ...u,
+                            iBlockedThem: true,
+                          }
+                    );
+                  }
                 }}
               >
                 {user.iBlockedThem
@@ -115,21 +130,32 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
             {!isCurrentUser && (
               <Button
                 onClick={async () => {
-                  await follow([user.id, !user.youAreFollowing]);
-
-                  update(["getUserProfile", username], (u) =>
-                    !u
-                      ? u
-                      : {
-                          ...u,
-                          numFollowers:
-                            u.numFollowers + (user.youAreFollowing ? -1 : 1),
-                          youAreFollowing: !user.youAreFollowing,
-                        }
-                  );
+                  if (!user.youAreFollowing) {
+                    await follow([user.id]);
+                    updater(["getUserProfile", username], (u) =>
+                      !u || "error" in u
+                        ? u
+                        : {
+                            ...u,
+                            numFollowers: u.numFollowers + 1,
+                            youAreFollowing: !user.youAreFollowing,
+                          }
+                    );
+                  } else {
+                    await unfollow([user.id]);
+                    updater(["getUserProfile", username], (u) =>
+                      !u || "error" in u
+                        ? u
+                        : {
+                            ...u,
+                            numFollowers: u.numFollowers - 1,
+                            youAreFollowing: !user.youAreFollowing,
+                          }
+                    );
+                  }
                 }}
                 size="small"
-                loading={followLoading}
+                loading={followLoading || unfollowLoading}
                 color={user.youAreFollowing ? "secondary" : "primary"}
                 icon={user.youAreFollowing ? null : <Friends />}
               >

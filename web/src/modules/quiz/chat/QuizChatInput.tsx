@@ -45,7 +45,7 @@ export const QuizChatInput: React.FC<ChatInputProps> = ({ users }) => {
 
   const data = useCurrentQuizFromCache();
 
-  if (data && !("error" in data) && data.quiz.chatMode) {
+  if (data && !("error" in data) && data.quiz.chatMode === "disabled") {
     return (
       <p className="my-4 text-center text-primary-300">
         {t("modules.quizChat.disabled")}
@@ -61,12 +61,16 @@ export const QuizChatInput: React.FC<ChatInputProps> = ({ users }) => {
     if (!me) return;
 
     if (me.id in useQuizChatStore.getState().bannedUserIdMap) {
-      showErrorToast(t("modules.quizChat.bannedAlert"));
+      showErrorToast(t("modules.quizChat.bannedAlert"), "error");
       return;
     }
 
-    if (Date.now() - lastMessageTimestamp <= 1000) {
-      showErrorToast(t("modules.quizChat.waitAlert"));
+    if (
+      data &&
+      !("error" in data) &&
+      Date.now() - lastMessageTimestamp <= data.quiz.chatThrottle
+    ) {
+      showErrorToast(t("modules.quizChat.waitAlert"), "info");
       return;
     }
 

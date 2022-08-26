@@ -1,19 +1,19 @@
 defmodule Beef.QuizBlocks do
   import Ecto.Query
-  alias Okra.Utils.Pagination
+  alias Kousa.Utils.Pagination
   alias Beef.Schemas.User
   alias Beef.Schemas.QuizBlock
   alias Beef.Repo
 
   def unban(quiz_id, user_id) do
-    from(qb in QuizBlock, where: qb.userId == ^user_id and qb.quizId == ^quiz_id)
+    from(rb in QuizBlock, where: rb.userId == ^user_id and rb.quizId == ^quiz_id)
     |> Repo.delete_all()
   end
 
   def blocked?(quiz_id, user_id) do
     not is_nil(
-      from(qb in QuizBlock,
-        where: qb.userId == ^user_id and qb.quizId == ^quiz_id,
+      from(rb in QuizBlock,
+        where: rb.userId == ^user_id and rb.quizId == ^quiz_id,
         limit: 1
       )
       |> Beef.Repo.one()
@@ -24,9 +24,9 @@ defmodule Beef.QuizBlocks do
 
   def get_blocked_users(quiz_id, offset) do
     from(u in User,
-      inner_join: qb in QuizBlock,
-      on: u.id == qb.userId,
-      where: qb.quizId == ^quiz_id,
+      inner_join: rb in QuizBlock,
+      on: u.id == rb.userId,
+      where: rb.quizId == ^quiz_id,
       offset: ^offset,
       limit: @fetch_limit
     )
@@ -35,6 +35,12 @@ defmodule Beef.QuizBlocks do
   end
 
   def insert(data) do
+    %QuizBlock{}
+    |> QuizBlock.insert_changeset(data)
+    |> Beef.Repo.insert(on_conflict: :nothing)
+  end
+
+  def upsert(data) do
     %QuizBlock{}
     |> QuizBlock.insert_changeset(data)
     |> Beef.Repo.insert(on_conflict: :nothing)

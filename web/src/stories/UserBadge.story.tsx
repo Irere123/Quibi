@@ -1,13 +1,14 @@
 import React from "react";
 import { Story } from "@storybook/react";
-import { UserBadge } from "../ui/UserBadge";
+import { UserBadge, UserBadgeProps } from "../ui/UserBadge";
 import { Discord } from "../icons";
+import { toEnum } from "./utils/toEnum";
 
 export default {
   title: "UserBadge",
 };
 
-const TheUserBadge: Story = () => {
+const TheUserBadge: Story<UserBadgeProps> = ({ color, variant }) => {
   return (
     <div className="flex flex-row">
       <div className="flex">
@@ -17,8 +18,8 @@ const TheUserBadge: Story = () => {
         <UserBadge>ƉS</UserBadge>
       </div>
       <div className="flex">
-        <UserBadge variant="secondary">
-          <Discord style={{ color: "#FFF" }} width={12} />
+        <UserBadge variant={variant} color={color}>
+          <Discord width={12} />
         </UserBadge>
       </div>
     </div>
@@ -26,3 +27,8 @@ const TheUserBadge: Story = () => {
 };
 
 export const Main = TheUserBadge.bind({});
+
+Main.argTypes = {
+  variant: toEnum(["primary", "secondary"]),
+  color: toEnum(["black", "grey", "white"]),
+};

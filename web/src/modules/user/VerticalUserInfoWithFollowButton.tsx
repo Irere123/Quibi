@@ -1,4 +1,5 @@
 import React from "react";
+import { UserWithFollowInfo } from "@quibi/client";
 import { useConn } from "../../hooks/useConn";
 import { useTypeSafeMutation } from "../../hooks/useTypeSafeMutation";
 import { useTypeSafeTranslation } from "../../hooks/useTypeSafeTranslation";
@@ -6,18 +7,19 @@ import { useTypeSafeUpdateQuery } from "../../hooks/useTypeSafeUpdateQuery";
 import { Friends } from "../../icons";
 import { Button } from "../../ui/Button";
 import { VerticalUserInfo } from "../../ui/VerticalUserInfo";
-import { User } from "../ws";
 
 interface VerticalUserInfoControllerProps {
-  user: User;
+  user: UserWithFollowInfo;
   idOrUsernameUsedForQuery: string;
 }
 
 export const VerticalUserInfoWithFollowButton: React.FC<
   VerticalUserInfoControllerProps
 > = ({ idOrUsernameUsedForQuery, user }) => {
-  const { mutateAsync, isLoading: followLoading } =
+  const { mutateAsync: follow, isLoading: followLoading } =
     useTypeSafeMutation("follow");
+  const { mutateAsync: unfollow, isLoading: unfollowLoading } =
+    useTypeSafeMutation("unFollow");
   const conn = useConn();
   const updater = useTypeSafeUpdateQuery();
   const { t } = useTypeSafeTranslation();
@@ -29,19 +31,31 @@ export const VerticalUserInfoWithFollowButton: React.FC<
         {/* @todo add real icon */}
         {user.id !== conn.user.id ? (
           <Button
-            loading={followLoading}
+            loading={followLoading || unfollowLoading}
             onClick={async () => {
-              await mutateAsync([user.id, !user.youAreFollowing]);
-              updater(["getUserProfile", idOrUsernameUsedForQuery], (u) =>
-                !u
-                  ? u
-                  : {
-                      ...u,
-                      numFollowers:
-                        u.numFollowers + (user.youAreFollowing ? -1 : 1),
-                      youAreFollowing: !user.youAreFollowing,
-                    }
-              );
+              if (!user.youAreFollowing) {
+                await follow([user.id]);
+                updater(["getUserProfile", idOrUsernameUsedForQuery], (u) =>
+                  !u
+                    ? u
+                    : {
+                        ...u,
+                        numFollowers: u.numFollowers + 1,
+                        youAreFollowing: !user.youAreFollowing,
+                      }
+                );
+              } else {
+                await unfollow([user.id]);
+                updater(["getUserProfile", idOrUsernameUsedForQuery], (u) =>
+                  !u
+                    ? u
+                    : {
+                        ...u,
+                        numFollowers: u.numFollowers - 1,
+                        youAreFollowing: !user.youAreFollowing,
+                      }
+                );
+              }
             }}
             size="small"
             color={user.youAreFollowing ? "secondary" : "primary"}

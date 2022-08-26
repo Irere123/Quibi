@@ -1,12 +1,10 @@
 defmodule Beef.Schemas.AttendingScheduledQuiz do
   use Ecto.Schema
-
   import Ecto.Changeset
   alias Beef.Schemas.User
   alias Beef.Schemas.ScheduledQuiz
   @timestamps_opts [type: :utc_datetime_usec]
 
-  @derive {Jason.Encoder, only: [:userId, :scheduledQuizId]}
   @primary_key false
   schema "attending_scheduled_quizes" do
     belongs_to(:user, User, foreign_key: :userId, type: :binary_id)

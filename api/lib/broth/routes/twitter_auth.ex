@@ -4,7 +4,7 @@ defmodule Broth.Routes.TwitterAuth do
 
   require Logger
   alias Beef.Users
-  alias Okra.Utils.Urls
+  alias Kousa.Utils.Urls
   alias Broth.Plugs.Redirect
 
   plug(:put_secret_key_base)
@@ -19,13 +19,13 @@ defmodule Broth.Routes.TwitterAuth do
   plug(:dispatch)
 
   def put_secret_key_base(conn, _) do
-    put_in(conn.secret_key_base, Application.get_env(:okra, :secret_key_base))
+    put_in(conn.secret_key_base, Application.get_env(:kousa, :secret_key_base))
   end
 
   get "/web" do
     token =
       ExTwitter.request_token(
-        Application.get_env(:okra, :api_url) <>
+        Application.get_env(:kousa, :api_url) <>
           "/auth/twitter/callback"
       )
 
@@ -34,9 +34,9 @@ defmodule Broth.Routes.TwitterAuth do
     conn
     |> fetch_session()
     |> put_session(
-      :redirect_to_next,
+      :redirect_to_beta,
       Enum.any?(conn.req_headers, fn {k, v} ->
-        k == "referer" and Urls.next_site_url?(v)
+        k == "referer" and Urls.is_beta_site_url(v)
       end)
     )
     |> Redirect.redirect(authenticate_url)
@@ -62,7 +62,6 @@ defmodule Broth.Routes.TwitterAuth do
                access_token_secret: access_token.oauth_token_secret
              ),
            %ExTwitter.Model.User{
-             screen_name: username,
              description: bio,
              name: displayName,
              id_str: twitterId,
@@ -72,7 +71,6 @@ defmodule Broth.Routes.TwitterAuth do
            } <- ExTwitter.verify_credentials(include_email: true),
            {_, db_user} <-
              Users.twitter_find_or_create(%{
-               username: username,
                bio: bio,
                displayName: displayName,
                twitterId: twitterId,
@@ -80,17 +78,28 @@ defmodule Broth.Routes.TwitterAuth do
                email: email,
                avatarUrl: avatarUrl
              }) do
-        conn
-        |> Redirect.redirect(
-          base_url <>
-            "/?accessToken=" <>
-            Okra.AccessToken.generate_and_sign!(%{"userId" => db_user.id}) <>
-            "&refreshToken=" <>
-            Okra.RefreshToken.generate_and_sign!(%{
-              "userId" => db_user.id,
-              "tokenVersion" => db_user.tokenVersion
-            })
-        )
+        if not is_nil(db_user.reasonForBan) do
+          conn
+          |> Redirect.redirect(
+            base_url <>
+              "/?error=" <>
+              URI.encode(
+                "your account got banned, if you think this was a mistake, please send me an email at irereapps@gmail.com"
+              )
+          )
+        else
+          conn
+          |> Redirect.redirect(
+            base_url <>
+              "/?accessToken=" <>
+              Kousa.AccessToken.generate_and_sign!(%{"userId" => db_user.id}) <>
+              "&refreshToken=" <>
+              Kousa.RefreshToken.generate_and_sign!(%{
+                "userId" => db_user.id,
+                "tokenVersion" => db_user.tokenVersion
+              })
+          )
+        end
       else
         x ->
           IO.inspect(x)
@@ -99,7 +108,9 @@ defmodule Broth.Routes.TwitterAuth do
           |> Redirect.redirect(
             base_url <>
               "/?error=" <>
-              URI.encode("twitter login callback failed for some reason, tell ben to check logs")
+              URI.encode(
+                "twitter login callback failed for some reason, tell irere to check logs"
+              )
           )
       end
     rescue
@@ -119,12 +130,12 @@ defmodule Broth.Routes.TwitterAuth do
   end
 
   def get_base_url(conn) do
-    case conn |> get_session(:redirect_to_next) do
+    case conn |> get_session(:redirect_to_beta) do
       true ->
-        "https://next.dogehouse.tv"
+        "https://beta.quibi.me"
 
       _ ->
-        Application.fetch_env!(:okra, :web_url)
+        Application.fetch_env!(:kousa, :web_url)
     end
   end
 end

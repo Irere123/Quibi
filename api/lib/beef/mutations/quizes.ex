@@ -20,10 +20,6 @@ defmodule Beef.Mutations.Quizes do
     |> Repo.update_all([])
   end
 
-  def delete_quiz_by_id(quiz_id) do
-    %Quiz{id: quiz_id} |> Repo.delete()
-  end
-
   def join_quiz(quiz, user_id) do
     user = Users.set_current_quiz(user_id, quiz.id, quiz.isPrivate, true)
 
@@ -52,6 +48,92 @@ defmodule Beef.Mutations.Quizes do
     end
 
     user
+  end
+
+  def increment_quiz_people_count(quiz_id) do
+    from(u in Quiz,
+      where: u.id == ^quiz_id,
+      update: [
+        inc: [
+          numPeopleInside: 1
+        ]
+      ]
+    )
+    |> Repo.update_all([])
+  end
+
+  def increment_quiz_people_count(quiz_id, new_people_list) do
+    from(u in Quiz,
+      where: u.id == ^quiz_id,
+      update: [
+        inc: [
+          numPeopleInside: 1
+        ],
+        set: [
+          peoplePreviewList: ^new_people_list
+        ]
+      ]
+    )
+    |> Repo.update_all([])
+  end
+
+  def delete_quiz_by_id(quiz_id) do
+    %Quiz{id: quiz_id} |> Repo.delete()
+  end
+
+  def decrement_quiz_people_count(quiz_id, new_people_list) do
+    from(r in Quiz,
+      where: r.id == ^quiz_id,
+      update: [
+        inc: [
+          numPeopleInside: -1
+        ],
+        set: [
+          peoplePreviewList: ^new_people_list
+        ]
+      ]
+    )
+    |> Beef.Repo.update_all([])
+  end
+
+  def set_quiz_owner_and_dec(quiz_id, user_id, new_people_list) do
+    from(u in Quiz,
+      where: u.id == ^quiz_id,
+      update: [
+        set: [
+          creatorId: ^user_id,
+          peoplePreviewList: ^new_people_list
+        ],
+        inc: [
+          numPeopleInside: -1
+        ]
+      ]
+    )
+    |> Repo.update_all([])
+  end
+
+  def replace_quiz_owner(user_id, new_creator_id) do
+    from(r in Quiz,
+      where: r.creatorId == ^user_id,
+      update: [
+        set: [
+          creatorId: ^new_creator_id
+        ]
+      ]
+    )
+    |> Repo.update_all([])
+  end
+
+  # trusts that the user is in the quiz
+  def kick_from_quiz(user_id, quiz_id) do
+    quiz = Beef.Quizes.get_quiz_by_id(quiz_id)
+    Beef.Users.set_user_left_current_quiz(user_id)
+    new_people_list = Enum.filter(quiz.peoplePreviewList, fn x -> x.id != user_id end)
+
+    decrement_quiz_people_count(
+      quiz.id,
+      new_people_list
+    )
   end
 
   # trusts that the user is in the quiz
@@ -86,72 +168,26 @@ defmodule Beef.Mutations.Quizes do
     end
   end
 
-  def increment_quiz_people_count(quiz_id) do
-    from(q in Quiz,
-      where: q.id == ^quiz_id,
-      update: [
-        inc: [
-          numPeopleInside: 1
-        ]
-      ]
-    )
-    |> Beef.Repo.update_all([])
-  end
-
-  def set_quiz_owner_and_dec(quiz_id, user_id, new_people_list) do
-    from(q in Quiz,
-      where: q.id == ^quiz_id,
-      update: [
-        set: [
-          creatorId: ^user_id,
-          peoplePreviewList: ^new_people_list
-        ],
-        inc: [
-          numPeopleInside: -1
-        ]
-      ]
-    )
-    |> Repo.update_all([])
-  end
-
-  def increment_quiz_people_count(quiz_id, new_people_list) do
-    from(q in Quiz,
-      where: q.id == ^quiz_id,
-      update: [
-        inc: [
-          numPeopleInside: 1
-        ],
-        set: [
-          peoplePreviewList: ^new_people_list
-        ]
-      ]
-    )
-    |> Beef.Repo.update_all([])
-  end
-
-  def decrement_quiz_people_count(quiz_id, new_people_list) do
-    from(q in Quiz,
-      where: q.id == ^quiz_id,
-      update: [
-        inc: [
-          numPeopleInside: -1
-        ],
-        set: [
-          peoplePreviewList: ^new_people_list
-        ]
-      ]
-    )
-    |> Beef.Repo.update_all([])
-  end
-
   def raw_insert(data, peoplePreviewList) do
     %Quiz{peoplePreviewList: peoplePreviewList}
     |> Quiz.insert_changeset(data)
     |> Repo.insert(returning: true)
   end
 
+  def update_name(user_id, name) do
+    from(r in Quiz,
+      where: r.creatorId == ^user_id,
+      update: [
+        set: [
+          name: ^name
+        ]
+      ]
+    )
+    |> Repo.update_all([])
+  end
+
   def create(data) do
-    user = Users.get_by_id(data.creatorId)
+    user = Beef.Users.get_by_id(data.creatorId)
 
     peoplePreviewList = [
       %{
@@ -173,41 +209,15 @@ defmodule Beef.Mutations.Quizes do
           resp
       end
 
-    # IO.inspect(resp)
-
     case resp do
       {:ok, quiz} ->
-        Users.set_current_quiz(data.creatorId, quiz.id)
+        Beef.Users.set_current_quiz(data.creatorId, quiz.id)
 
       _ ->
         nil
     end
 
     resp
-  end
-
-  def replace_quiz_owner(user_id, new_creator_id) do
-    from(q in Quiz,
-      where: q.creatorId == ^user_id,
-      update: [
-        set: [
-          creatorId: ^new_creator_id
-        ]
-      ]
-    )
-    |> Repo.update_all([])
-  end
-
-  # trusts that the user is in the quiz
-  def kick_from_quiz(user_id, quiz_id) do
-    quiz = Beef.Quizes.get_quiz_by_id(quiz_id)
-    Beef.Users.set_user_left_current_quiz(user_id)
-    new_people_list = Enum.filter(quiz.peoplePreviewList, fn x -> x.id != user_id end)
-
-    decrement_quiz_people_count(
-      quiz.id,
-      new_people_list
-    )
   end
 
   def edit(quiz_id, data) do

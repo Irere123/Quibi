@@ -14,7 +14,7 @@ const sizeClassnames = {
 
 const colorClassnames = {
   primary:
-    "text-black bg-accent transition duration-200 ease-in-out hover:bg-accent-hover disabled:text-accent-disabled disabled:bg-accent-hover",
+    "text-black bg-accent transition duration-200 ease-in-out disabled:bg-accent-hover",
   secondary:
     "text-primary-100 bg-primary-700 hover:bg-primary-600 disabled:text-primary-300",
   "secondary-800":
@@ -22,8 +22,6 @@ const colorClassnames = {
   "primary-300":
     "text-primary-100 bg-primary-700 hover:bg-primary-600 disabled:text-primary-300",
   transparent: "text-button bg-transparent",
-  "accent-secondary":
-    "text-primary-100 bg-secondary hover:bg-secondary-washed-out disabled:text-secondary-washed-out",
 };
 
 export type ButtonProps = DetailedHTMLProps<

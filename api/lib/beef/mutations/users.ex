@@ -2,19 +2,20 @@ defmodule Beef.Mutations.Users do
   import Ecto.Query, warn: false
 
   alias Beef.Repo
-  alias Beef.Schemas.User
   alias Beef.Queries.Users, as: Query
+  alias Beef.Schemas.User
   alias Beef.QuizPermissions
 
-  def delete(user_id) do
-    %User{id: user_id} |> Repo.delete()
-  end
-
   def edit_profile(user_id, data) do
+    # TODO: make this not perform a db query
     user_id
     |> Beef.Users.get_by_id()
     |> User.edit_changeset(data)
     |> Repo.update()
+  end
+
+  def delete(user_id) do
+    %User{id: user_id} |> Repo.delete()
   end
 
   def bulk_insert(users) do
@@ -25,18 +26,33 @@ defmodule Beef.Mutations.Users do
     )
   end
 
-  def set_online(user_id) do
+  def inc_num_following(user_id, n) do
     Query.start()
     |> Query.filter_by_id(user_id)
-    |> Query.update_set_online_true()
+    |> Query.inc_num_following_by_n(n)
     |> Repo.update_all([])
   end
 
-  def set_offline(user_id) do
+  def set_reason_for_ban(user_id, reason_for_ban) do
     Query.start()
     |> Query.filter_by_id(user_id)
-    |> Query.update_set_online_false()
-    |> Query.update_set_last_online_to_now()
+    |> Query.update_reason_for_ban(reason_for_ban)
+    |> Repo.update_all([])
+  end
+
+  def set_ip(user_id, ip) do
+    Query.start()
+    |> Query.filter_by_id(user_id)
+    |> Query.update_set_ip(ip)
+    |> Repo.update_all([])
+  end
+
+  def set_user_left_current_quiz(user_id) do
+    Onion.UserSession.set_current_quiz_id(user_id, nil)
+
+    Query.start()
+    |> Query.filter_by_id(user_id)
+    |> Query.update_set_current_quiz_nil()
     |> Repo.update_all([])
   end
 
@@ -73,56 +89,19 @@ defmodule Beef.Mutations.Users do
     end
   end
 
-  def set_user_left_current_quiz(user_id) do
-    Onion.UserSession.set_current_quiz_id(user_id, nil)
-
+  def set_online(user_id) do
     Query.start()
     |> Query.filter_by_id(user_id)
-    |> Query.update_set_current_quiz_nil()
+    |> Query.update_set_online_true()
     |> Repo.update_all([])
   end
 
-  def google_find_or_create(user) do
-    googleId = user["sub"]
-
-    db_user =
-      from(u in User, where: u.googleId == ^googleId, limit: 1)
-      |> Repo.one()
-
-    if db_user do
-      if is_nil(db_user.googleId) do
-        from(u in User,
-          where: u.id == ^db_user.id,
-          update: [
-            set: [
-              googleId: ^googleId
-            ]
-          ]
-        )
-        |> Repo.update_all([])
-      end
-
-      {:find, db_user}
-    else
-      {:create,
-       Repo.insert!(
-         %User{
-           username: Okra.Utils.Random.big_ascii_id(),
-           email: if(user["email"] == "", do: nil, else: user["email"]),
-           googleId: googleId,
-           avatarUrl: user["picture"],
-           bannerUrl: user["picture"],
-           displayName:
-             if(is_nil(user["name"]) or String.trim(user["name"]) == "",
-               do: "Novice",
-               else: user["name"]
-             ),
-           bio: user["bio"],
-           hasLoggedIn: true
-         },
-         returning: true
-       )}
-    end
+  def set_offline(user_id) do
+    Query.start()
+    |> Query.filter_by_id(user_id)
+    |> Query.update_set_online_false()
+    |> Query.update_set_last_online_to_now()
+    |> Repo.update_all([])
   end
 
   def twitter_find_or_create(user) do
@@ -139,7 +118,6 @@ defmodule Beef.Mutations.Users do
           where: u.id == ^db_user.id,
           update: [
             set: [
-              displayName: ^user.displayName,
               twitterId: ^user.twitterId
             ]
           ]
@@ -152,7 +130,7 @@ defmodule Beef.Mutations.Users do
       {:create,
        Repo.insert!(
          %User{
-           username: user.username,
+           username: Kousa.Utils.Random.big_ascii_id(),
            email: if(user.email == "", do: nil, else: user.email),
            twitterId: user.twitterId,
            avatarUrl: user.avatarUrl,
@@ -162,8 +140,54 @@ defmodule Beef.Mutations.Users do
                do: "Novice",
                else: user.displayName
              ),
-           bio: user.bio,
-           hasLoggedIn: true
+           bio: user.bio
+         },
+         returning: true
+       )}
+    end
+  end
+
+  def github_find_or_create(user, github_access_token) do
+    githubId = Integer.to_string(user["id"])
+
+    db_user =
+      from(u in User,
+        where: u.githubId == ^githubId,
+        limit: 1
+      )
+      |> Repo.one()
+
+    if db_user do
+      if is_nil(db_user.githubId) do
+        from(u in User,
+          where: u.id == ^db_user.id,
+          update: [
+            set: [
+              githubId: ^githubId,
+              githubAccessToken: ^github_access_token
+            ]
+          ]
+        )
+        |> Repo.update_all([])
+      end
+
+      {:find, db_user}
+    else
+      {:create,
+       Repo.insert!(
+         %User{
+           username: Kousa.Utils.Random.big_ascii_id(),
+           githubId: githubId,
+           email: if(user["email"] == "", do: nil, else: user["email"]),
+           githubAccessToken: github_access_token,
+           avatarUrl: user["avatar_url"],
+           bannerUrl: user["banner_url"],
+           displayName:
+             if(is_nil(user["name"]) or String.trim(user["name"]) == "",
+               do: "Novice",
+               else: user["name"]
+             ),
+           bio: user["bio"]
          },
          returning: true
        )}
@@ -199,13 +223,12 @@ defmodule Beef.Mutations.Users do
       {:create,
        Repo.insert!(
          %User{
-           username: user["username"],
+           username: Kousa.Utils.Random.big_ascii_id(),
            discordId: discordId,
            email: if(user["email"] == "", do: nil, else: user["email"]),
            discordAccessToken: discord_access_token,
-           avatarUrl: Okra.Discord.get_avatar_url(user),
-           displayName: Okra.Utils.Random.big_ascii_id(),
-           hasLoggedIn: true
+           avatarUrl: Kousa.Discord.get_avatar_url(user),
+           displayName: user["username"]
          },
          returning: true
        )}

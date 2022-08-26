@@ -6,7 +6,10 @@ interface TextToken {
   t: "text";
   v: string;
 }
-
+interface MentionToken {
+  t: "mention";
+  v: string;
+}
 interface LinkToken {
   t: "link";
   v: string;
@@ -22,17 +25,18 @@ interface EmoteToken {
   v: string;
 }
 
-interface MentionToken {
-  t: "mention";
+interface EmojiToken {
+  t: "emoji";
   v: string;
 }
 
 export type QuizChatMessageToken =
   | TextToken
+  | MentionToken
   | LinkToken
   | BlockToken
-  | MentionToken
-  | EmoteToken;
+  | EmoteToken
+  | EmojiToken;
 
 const colors = [
   "#ff2366",

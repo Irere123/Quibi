@@ -1,4 +1,5 @@
 import React from "react";
+import { BaseUser } from "@quibi/client";
 import { apiBaseUrl } from "../../lib/constants";
 import { PageComponent } from "../../types/PageComponent";
 import { WaitForWsAndAuth } from "../auth/WaitForWsAndAuth";
@@ -6,12 +7,11 @@ import { HeaderController } from "../display/HeaderController";
 import { MiddlePanel } from "../layouts/GridPanels";
 import { MainLayout } from "../layouts/MainLayout";
 import { LeftPanel, RightPanel } from "../layouts/Panels";
-import { User } from "../ws/types";
 import { UserProfileController } from "./UserProfileController";
 
 interface UserPageProps {
   username: string;
-  user: User | null;
+  user: BaseUser | null;
 }
 
 export const UserPage: PageComponent<UserPageProps> = ({ user, username }) => {
@@ -21,7 +21,7 @@ export const UserPage: PageComponent<UserPageProps> = ({ user, username }) => {
         <HeaderController
           embed={{ image: user.avatarUrl }}
           description={user.bio ? user.bio : undefined}
-          title={username}
+          title={`${user.displayName} (@${username})`}
         />
       ) : (
         <HeaderController />
@@ -38,7 +38,7 @@ export const UserPage: PageComponent<UserPageProps> = ({ user, username }) => {
 UserPage.getInitialProps = async ({ query }) => {
   const username = typeof query.username === "string" ? query.username : "";
   try {
-    const res = await fetch(`${apiBaseUrl}/users/${username}`);
+    const res = await fetch(`${apiBaseUrl}/user/${username}`);
     const { user }: { user: any | null } = await res.json();
     return { username, user };
   } catch {

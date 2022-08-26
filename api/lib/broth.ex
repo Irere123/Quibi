@@ -1,32 +1,51 @@
 defmodule Broth do
   import Plug.Conn
 
-  alias Broth.Routes.Stats
   alias Broth.Routes.DevOnly
-  alias Broth.Routes.Users
-  alias Broth.Routes.Quiz
-  alias Broth.Routes.GoogleAuth
+  alias Broth.Routes.GitHubAuth
   alias Broth.Routes.TwitterAuth
   alias Broth.Routes.DiscordAuth
-
+  alias Broth.Routes.Stats
+  alias Broth.Routes.User
   use Plug.Router
+
+  if Mix.env() == :test do
+    plug(:set_callers)
+
+    defp get_callers(%Plug.Conn{req_headers: req_headers}) do
+      {_, request_bin} = Enum.find(req_headers, fn {key, _} -> key == "user-agent" end)
+
+      List.wrap(
+        if is_binary(request_bin) do
+          request_bin
+          |> Base.decode16!()
+          |> :erlang.binary_to_term()
+        end
+      )
+    end
+
+    defp set_callers(conn, _params) do
+      Process.put(:"$callers", get_callers(conn))
+      conn
+    end
+  end
+
   use Sentry.PlugCapture
-  plug(Okra.Metric.PrometheusExporter)
+  plug(Kousa.Metric.PrometheusExporter)
   plug(Broth.Plugs.Cors)
   plug(:match)
   plug(:dispatch)
 
+  forward("/auth/twitter", to: TwitterAuth)
+  forward("/auth/discord", to: DiscordAuth)
+  forward("/auth/github", to: GitHubAuth)
+  forward("/dev", to: DevOnly)
+  forward("/stats", to: Stats)
+  forward("/user", to: User)
+
   options _ do
     send_resp(conn, 200, "")
   end
-
-  forward("/auth/twitter", to: TwitterAuth)
-  forward("/auth/discord", to: DiscordAuth)
-  forward("/auth/google", to: GoogleAuth)
-  forward("/dev", to: DevOnly)
-  forward("/users", to: Users)
-  forward("/quiz", to: Quiz)
-  forward("/stats", to: Stats)
 
   get _ do
     send_resp(conn, 404, "not found")

@@ -1,10 +1,10 @@
 defmodule Beef.Schemas.UserBlock do
   use Ecto.Schema
   import Ecto.Changeset
+  @timestamps_opts [type: :utc_datetime_usec]
 
   alias Beef.Schemas.User
 
-  @derive {Jason.Encoder, only: [:userId, :userIdBlocked]}
   @primary_key false
   schema "user_blocks" do
     belongs_to(:user, User, foreign_key: :userId, type: :binary_id)

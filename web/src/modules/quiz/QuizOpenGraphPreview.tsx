@@ -1,7 +1,7 @@
 import React, { ReactNode } from "react";
+import { Quiz } from "@quibi/client";
 import { isServer } from "../../lib/isServer";
 import { HeaderController } from "../display/HeaderController";
-import { Quiz } from "../ws";
 
 interface QuizOpenGraphPreviewProps {
   quiz: Quiz | null | undefined;

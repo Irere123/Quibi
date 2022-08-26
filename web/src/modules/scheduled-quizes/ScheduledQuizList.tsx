@@ -31,7 +31,7 @@ export const ScheduledQuizList: React.FC = () => {
                 </BoxedIcon>
                 <BoxedIcon
                   className="text-accent"
-                  onClick={() => push("/explore")}
+                  onClick={() => push("/live")}
                 >
                   <CompassIcon />
                 </BoxedIcon>

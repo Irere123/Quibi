@@ -1,4 +1,4 @@
-defmodule Onion.Supervisors.QuizChat do
+defmodule Onion.Supervisors.Chat do
   use Supervisor
 
   def start_link(init_arg) do

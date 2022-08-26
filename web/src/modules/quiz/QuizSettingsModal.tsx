@@ -1,12 +1,12 @@
-import React, { useState } from "react";
+import React from "react";
+import { ChatMode } from "@quibi/client";
 import { useWrappedConn } from "../../hooks/useConn";
 import { useTypeSafeQuery } from "../../hooks/useTypeSafeQuery";
 import { useTypeSafeUpdateQuery } from "../../hooks/useTypeSafeUpdateQuery";
-import { ChatBubble } from "../../icons";
 import { InfoText } from "../../ui/InfoText";
 import { Modal } from "../../ui/Modal";
-import { NativeCheckbox } from "../../ui/NativeCheckbox";
 import { NativeRadio } from "../../ui/NativeRadio";
+import { NativeSelect } from "../../ui/NativeSelect";
 import { Spinner } from "../../ui/Spinner";
 import { BlockedFromQuizUsers } from "./BlockedFromQuizUsers";
 
@@ -42,6 +42,21 @@ export const QuizSettingsModal: React.FC<Props> = ({
     );
   }
 
+  const options = [
+    {
+      label: "Enabled",
+      value: "default",
+    },
+    {
+      label: "Disabled",
+      value: "disabled",
+    },
+    {
+      label: "Follower only",
+      value: "follower_only",
+    },
+  ];
+
   return (
     <Modal title="Settings" isOpen={!!quizId} onRequestClose={onRequestClose}>
       {!data || "error" in data ? (
@@ -55,23 +70,36 @@ export const QuizSettingsModal: React.FC<Props> = ({
             onClick={() => {
               const autoSpeaker = !data.autoSpeaker;
               updater(["joinQuizAndGetInfo", quizId!], (d) =>
-                !d ? d : { ...d, autoSpeaker }
+                !d || "error" in d
+                  ? d
+                  : { ...d, quiz: { ...d.quiz, autoSpeaker } }
               );
-              conn.mutation.setAutoSpeaker(autoSpeaker);
+              conn.mutation.quizUpdate({ autoSpeaker });
             }}
           />
-          <NativeRadio
-            subtitle="Allow people to chat"
-            title="Chat"
-            checked={data.chatMode}
-            onClick={() => {
-              const chatMode = !data.chatMode;
-              updater(["joinQuizAndGetInfo", quizId!], (d) =>
-                !d ? d : { ...d, chatMode }
-              );
-              conn.mutation.setQuizChatMode(chatMode);
-            }}
-          />
+          {/* chat disabled */}
+          <label className={`mt-2`} htmlFor="chat-mode">
+            <div className={`text-primary-100 mb-1`}>Chat mode</div>
+            <NativeSelect
+              value={data.quiz.chatMode}
+              onChange={(e) => {
+                const chatMode = e.target.value as ChatMode;
+                updater(["joinQuizAndGetInfo", data.quiz.id], (d) => {
+                  return !d || "error" in d
+                    ? d
+                    : { ...d, quiz: { ...d.quiz, chatMode } };
+                });
+                conn.mutation.quizUpdate({ chatMode });
+              }}
+              id="chat-mode"
+            >
+              {options.map((o) => (
+                <option key={o.value} value={o.value}>
+                  {o.label}&nbsp;&nbsp;&nbsp;
+                </option>
+              ))}
+            </NativeSelect>
+          </label>
           <BlockedFromQuizUsers />
         </div>
       )}

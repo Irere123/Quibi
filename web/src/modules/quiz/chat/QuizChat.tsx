@@ -1,5 +1,5 @@
 import React, { useMemo } from "react";
-import { Quiz, QuizUser } from "../../ws";
+import { Quiz, QuizUser } from "@quibi/client";
 import { QuizChatHeader } from "./QuizChatHeader";
 import { QuizChatInput } from "./QuizChatInput";
 import { QuizChatList } from "./QuizChatList";
